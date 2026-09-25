@@ -14,9 +14,9 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 
 - `fetch_champions.py` — generates `data/champions.json` (raw base stats, types, abilities).
 - `check_roster.py` — checks `new_in_mc` tags against Showdown's roster (exit 1 on mismatch). Run after `fetch_champions.py`; update `MC_COMMIT` for a new regulation.
-- `fetch_reference.py` — generates `data/items.json` (165 legal held items) and `data/types.json` (18-type chart) from Pokémon Showdown.
+- `fetch_reference.py` — generates `data/items.json` (165 legal held items), `data/types.json` (18-type chart) and `data/abilities.json` (216 abilities with descriptions) from Showdown and PokéAPI.
 - `fetch_moves.py` — generates `data/learnsets.json` and `data/moves.json` from Pokémon Showdown's `champions` mod, with PP from Serebii (run after `fetch_champions.py`).
-- `lookup.py` — offline lookup: `python3 lookup.py baxcalibur -n jolly -s attack=32,speed=32`, `--moves` for the movepool, `--learns "fake out" --type grass --new` to filter, `--item focus` to search items. Also shows type weaknesses. See its docstring.
+- `lookup.py` — offline lookup: `python3 lookup.py baxcalibur -n jolly -s attack=32,speed=32`, `--moves` for the movepool, `--learns "fake out" --type grass --new` to filter, `--item focus` to search items, `--ability regenerator` for ability text and who has it. Also shows type weaknesses. See its docstring.
 - `data/rules.json` — hand-maintained battle rules and regulation dates (level 50, one Mega, etc.).
 - `stats.py` — computes level-50 battle stats from raw base stats at lookup time (`python3 stats.py baxcalibur jolly speed=32,attack=32`). Raw data stays raw; nothing derived is saved.
 
@@ -29,6 +29,7 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 
 ## Known gaps
 
+- Ability descriptions are main-series text (e.g. Ice Body still says "hail"). `champions_override` marks abilities Showdown's Champions mod overrides; that can be a real change (Regenerator) or an implementation detail (Berserk).
 - Anything PokéAPI lists may not be legal in M-C. Over-inclusion is intentional; filter at lookup time.
 
 ## Each new regulation

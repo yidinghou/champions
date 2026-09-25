@@ -8,6 +8,7 @@
     python3 lookup.py --learns "fake out" --type grass --new       # combine filters
     python3 lookup.py --type ghost/fire                # dual type (or --type ghost --type fire)
     python3 lookup.py --item "focus"                   # search legal held items
+    python3 lookup.py --ability regenerator            # ability text + who has it
 
 Each Pokémon also shows its type matchups (weak to / resists / immune).
 
@@ -74,10 +75,15 @@ def fmt_matchups(groups):
     return "\n".join(f"  {label}: {', '.join(groups[m])}" for m, label in labels if m in groups)
 
 
-def show(form, moves, learnsets, chart, args):
+def show(form, moves, learnsets, chart, abilities, args):
     tag = "  [new in M-C]" if form["new_in_mc"] else ""
     print(f"{form['name']}  {'/'.join(form['types'])}{tag}")
-    print(f"  abilities: {', '.join(form['abilities'])}")
+    print("  abilities:")
+    for slug in form["abilities"]:
+        a = abilities.get(slug, {})
+        flags = (" (hidden)" if slug == form.get("hidden_ability") else "") + (
+            " [Champions override]" if a.get("champions_override") else "")
+        print(f"    {a.get('name', slug)}{flags}: {a.get('short_desc') or '(no description)'}")
     print(f"  base:  {fmt_stats(form['stats'])}   (BST {sum(form['stats'].values())})")
     sp = parse_sp(args.sp) if args.sp else None
     print(fmt_matchups(matchups(form["types"], chart)))
@@ -102,6 +108,7 @@ def main():
     ap.add_argument("-s", "--sp", help="Stat Points, e.g. attack=32,speed=32 (max 32 each, 66 total)")
     ap.add_argument("--moves", action="store_true", help="list the full movepool")
     ap.add_argument("--item", help="search legal held items by name")
+    ap.add_argument("--ability", help="search abilities by name and list who has them")
     ap.add_argument("--learns", help="only forms that learn this move")
     ap.add_argument("--type", action="append", metavar="TYPE",
                     help="only forms with this type; repeat or use ghost/fire for a dual type (must have all)")
@@ -120,7 +127,20 @@ def main():
         print(f"{len(hits)} matches")
         return
 
+    if args.ability:
+        abilities = load("abilities.json")["abilities"]
+        hits = {k: v for k, v in abilities.items() if norm(args.ability) in norm(v["name"])}
+        for slug, v in sorted(hits.items(), key=lambda kv: kv[1]["name"]):
+            flag = " [Champions override]" if v["champions_override"] else ""
+            print(f"{v['name']}{flag}: {v['short_desc']}")
+            who = [f["name"] + (" (hidden)" if f.get("hidden_ability") == slug else "") for f in forms if slug in f["abilities"]]
+            print(f"  {len(who)} forms: {', '.join(who)}\n")
+        if not hits:
+            sys.exit(f"no ability matching {args.ability!r}")
+        return
+
     chart = load("types.json")["chart"]
+    abilities = load("abilities.json")["abilities"]
     filtering = args.learns or args.type or args.new
     if not args.name and not filtering:
         ap.print_help()
@@ -149,7 +169,7 @@ def main():
         print(f"{len(forms)} matches")
     else:
         for f in forms:
-            show(f, moves, learnsets, chart, args)
+            show(f, moves, learnsets, chart, abilities, args)
             print()
 
 

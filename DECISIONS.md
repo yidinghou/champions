@@ -32,3 +32,7 @@ Our hand list disagreed with the official "24 new Pokémon". Showdown's champion
 Showdown's compiled `items.js` has names/descriptions but drops availability flags, so `fetch_reference.py` reads `isNonstandard` from the base `items.ts`, overlays the champions mod's overrides (null = available, e.g. Mega Stones), and keeps items with no flag. Result: 165 legal items.
 **Cross-check:** Serebii's Champions items page lists the same 165, in both directions. Notably not legal: Assault Vest, Choice Band, Lagging Tail.
 Type chart: 18 types from `typechart.js` (Stellar dropped, Tera-only).
+
+## 009 — Ability text from PokéAPI, override flag from Showdown (2026-09-25)
+Showdown's compiled `abilities.js` nests objects in a way that's fragile to parse without a JS engine. PokéAPI's ability endpoint has descriptions keyed by the same slugs we already store, and `is_hidden` per Pokémon (now saved as `hidden_ability`). Showdown's champions mod only supplies a `champions_override` flag for 7 abilities (Berserk, Emergency Exit, Healer, Natural Cure, Regenerator, Run Away, Unseen Fist).
+**Limits:** descriptions are main-series text, and the flag doesn't say what changed. Verify a flagged ability in-game or on Serebii before relying on it.

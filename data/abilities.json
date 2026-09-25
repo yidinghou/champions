@@ -1,0 +1,1086 @@
+{
+ "fetched_at": "2026-09-25T14:03:42+00:00",
+ "source": "smogon/pokemon-showdown (items.ts + champions mod, typechart.js)",
+ "abilities": {
+  "adaptability": {
+   "name": "Adaptability",
+   "short_desc": "Increases the same-type attack bonus from 1.5\u00d7 to 2\u00d7.",
+   "champions_override": false
+  },
+  "aerilate": {
+   "name": "Aerilate",
+   "short_desc": "Turns the bearer's Normal moves into Flying moves and strengthens them to 1.3\u00d7 their power.",
+   "champions_override": false
+  },
+  "aftermath": {
+   "name": "Aftermath",
+   "short_desc": "Damages the attacker for 1/4 its max HP when knocked out by a contact move.",
+   "champions_override": false
+  },
+  "analytic": {
+   "name": "Analytic",
+   "short_desc": "Strengthens moves to 1.3\u00d7 their power when moving last.",
+   "champions_override": false
+  },
+  "anger-point": {
+   "name": "Anger Point",
+   "short_desc": "Raises Attack to the maximum of six stages upon receiving a critical hit.",
+   "champions_override": false
+  },
+  "anticipation": {
+   "name": "Anticipation",
+   "short_desc": "Notifies all trainers upon entering battle if an opponent has a super-effective move, Self-Destruct, Explosion, or a one-hit KO move.",
+   "champions_override": false
+  },
+  "armor-tail": {
+   "name": "Armor Tail",
+   "short_desc": "Prevents the opponent from using any moves that have priority, such as Quick Attack.",
+   "champions_override": false
+  },
+  "aroma-veil": {
+   "name": "Aroma Veil",
+   "short_desc": "Protects allies against moves that affect their mental state.",
+   "champions_override": false
+  },
+  "aura-guard": {
+   "name": "Aura Guard",
+   "short_desc": "A Pok\u00e9mon with Aura Guard takes half damage from moves that make contact.",
+   "champions_override": false
+  },
+  "battle-armor": {
+   "name": "Battle Armor",
+   "short_desc": "Protects against critical hits.",
+   "champions_override": false
+  },
+  "battle-bond": {
+   "name": "Battle Bond",
+   "short_desc": "Transforms this Pok\u00e9mon into Ash-Greninja after fainting an opponent.  Water Shuriken's power is 20 and always hits three times.",
+   "champions_override": false
+  },
+  "berserk": {
+   "name": "Berserk",
+   "short_desc": "Raises this Pok\u00e9mon's Special Attack by one stage every time its HP drops below half.",
+   "champions_override": true
+  },
+  "big-pecks": {
+   "name": "Big Pecks",
+   "short_desc": "Protects against Defense drops.",
+   "champions_override": false
+  },
+  "blaze": {
+   "name": "Blaze",
+   "short_desc": "Strengthens Fire moves to inflict 1.5\u00d7 damage at 1/3 max HP or less.",
+   "champions_override": false
+  },
+  "bulletproof": {
+   "name": "Bulletproof",
+   "short_desc": "Protects against bullet, ball, and bomb-based moves.",
+   "champions_override": false
+  },
+  "cheek-pouch": {
+   "name": "Cheek Pouch",
+   "short_desc": "Restores HP upon eating a Berry, in addition to the Berry's effect.",
+   "champions_override": false
+  },
+  "chlorophyll": {
+   "name": "Chlorophyll",
+   "short_desc": "Doubles Speed during strong sunlight.",
+   "champions_override": false
+  },
+  "clear-body": {
+   "name": "Clear Body",
+   "short_desc": "Prevents stats from being lowered by other Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "cloud-nine": {
+   "name": "Cloud Nine",
+   "short_desc": "Negates all effects of weather, but does not prevent the weather itself.",
+   "champions_override": false
+  },
+  "competitive": {
+   "name": "Competitive",
+   "short_desc": "Raises Special Attack by two stages upon having any stat lowered.",
+   "champions_override": false
+  },
+  "compound-eyes": {
+   "name": "Compound Eyes",
+   "short_desc": "Increases moves' accuracy to 1.3\u00d7.",
+   "champions_override": false
+  },
+  "contrary": {
+   "name": "Contrary",
+   "short_desc": "Inverts stat changes.",
+   "champions_override": false
+  },
+  "corrosion": {
+   "name": "Corrosion",
+   "short_desc": "This Pok\u00e9mon can inflict poison on Poison and Steel Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "cud-chew": {
+   "name": "Cud Chew",
+   "short_desc": "Causes the Pok\u00e9mon to reuse an already consumed Berry at the end of the next turn.",
+   "champions_override": false
+  },
+  "curious-medicine": {
+   "name": "Curious Medicine",
+   "short_desc": "Resets all stat changes upon entering battlefield.",
+   "champions_override": false
+  },
+  "cursed-body": {
+   "name": "Cursed Body",
+   "short_desc": "Has a 30% chance of Disabling any move that hits the Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "cute-charm": {
+   "name": "Cute Charm",
+   "short_desc": "Has a 30% chance of infatuating attacking Pok\u00e9mon on contact.",
+   "champions_override": false
+  },
+  "damp": {
+   "name": "Damp",
+   "short_desc": "Prevents Self-Destruct, Explosion, and Aftermath from working while the Pok\u00e9mon is in battle.",
+   "champions_override": false
+  },
+  "defiant": {
+   "name": "Defiant",
+   "short_desc": "Raises Attack two stages upon having any stat lowered.",
+   "champions_override": false
+  },
+  "disguise": {
+   "name": "Disguise",
+   "short_desc": "Prevents the first instance of battle damage.",
+   "champions_override": false
+  },
+  "dragonize": {
+   "name": "Dragonize",
+   "short_desc": "The Pok\u00e9mon's Normal-type moves become Dragon-type moves and their power is boosted by 20%.",
+   "champions_override": false
+  },
+  "drizzle": {
+   "name": "Drizzle",
+   "short_desc": "Summons rain that lasts indefinitely upon entering battle.",
+   "champions_override": false
+  },
+  "drought": {
+   "name": "Drought",
+   "short_desc": "Summons strong sunlight that lasts indefinitely upon entering battle.",
+   "champions_override": false
+  },
+  "dry-skin": {
+   "name": "Dry Skin",
+   "short_desc": "Causes 1/8 max HP in damage each turn during strong sunlight, but heals for 1/8 max HP during rain.  Increases damage from Fire moves to 1.25\u00d7, but absorbs Water moves, healing for 1/4 max HP.",
+   "champions_override": false
+  },
+  "early-bird": {
+   "name": "Early Bird",
+   "short_desc": "Makes sleep pass twice as quickly.",
+   "champions_override": false
+  },
+  "earth-eater": {
+   "name": "Earth Eater",
+   "short_desc": "Restores HP when hit by a Ground-type move.",
+   "champions_override": false
+  },
+  "eelevate": {
+   "name": "Eelevate",
+   "short_desc": "The Pok\u00e9mon floats off the ground, making it immune to Ground-type moves, as well as the Spikes, Toxic Spikes, and Sticky Web statuses. When the Pok\u00e9mon knocks out a target with an attack, its highest stat is boosted by 1 stage.",
+   "champions_override": false
+  },
+  "effect-spore": {
+   "name": "Effect Spore",
+   "short_desc": "Has a 30% chance of inflcting either paralysis, poison, or sleep on attacking Pok\u00e9mon on contact.",
+   "champions_override": false
+  },
+  "electric-surge": {
+   "name": "Electric Surge",
+   "short_desc": "When this Pok\u00e9mon enters battle, it changes the terrain to Electric Terrain.",
+   "champions_override": false
+  },
+  "electromorphosis": {
+   "name": "Electromorphosis",
+   "short_desc": "When hit by an attack, the power of the next Electric-type move it uses is doubled.",
+   "champions_override": false
+  },
+  "emergency-exit": {
+   "name": "Emergency Exit",
+   "short_desc": "This Pok\u00e9mon automatically switches out when its HP drops below half.",
+   "champions_override": true
+  },
+  "fairy-aura": {
+   "name": "Fairy Aura",
+   "short_desc": "Strengthens Fairy moves to 1.33\u00d7 their power for all friendly and opposing Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "filter": {
+   "name": "Filter",
+   "short_desc": "Decreases damage taken from super-effective moves by 1/4.",
+   "champions_override": false
+  },
+  "fire-mane": {
+   "name": "Fire Mane",
+   "short_desc": "Boosts the power of the Pok\u00e9mon's Fire-type moves by 50%.",
+   "champions_override": false
+  },
+  "flame-body": {
+   "name": "Flame Body",
+   "short_desc": "Has a 30% chance of burning attacking Pok\u00e9mon on contact.",
+   "champions_override": false
+  },
+  "flash-fire": {
+   "name": "Flash Fire",
+   "short_desc": "Protects against Fire moves.  Once one has been blocked, the Pok\u00e9mon's own Fire moves inflict 1.5\u00d7 damage until it leaves battle.",
+   "champions_override": false
+  },
+  "flower-veil": {
+   "name": "Flower Veil",
+   "short_desc": "Protects friendly Grass Pok\u00e9mon from having their stats lowered by other Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "fluffy": {
+   "name": "Fluffy",
+   "short_desc": "Damage from contact moves is halved.  Damage from Fire moves is doubled.",
+   "champions_override": false
+  },
+  "forecast": {
+   "name": "Forecast",
+   "short_desc": "Changes Castform's type and form to match the weather.",
+   "champions_override": false
+  },
+  "forewarn": {
+   "name": "Forewarn",
+   "short_desc": "Reveals the opponents' strongest move upon entering battle.",
+   "champions_override": false
+  },
+  "friend-guard": {
+   "name": "Friend Guard",
+   "short_desc": "Decreases all direct damage taken by friendly Pok\u00e9mon to 0.75\u00d7.",
+   "champions_override": false
+  },
+  "frisk": {
+   "name": "Frisk",
+   "short_desc": "Reveals an opponent's held item upon entering battle.",
+   "champions_override": false
+  },
+  "fur-coat": {
+   "name": "Fur Coat",
+   "short_desc": "Halves damage from physical attacks.",
+   "champions_override": false
+  },
+  "gale-wings": {
+   "name": "Gale Wings",
+   "short_desc": "Raises Flying moves' priority by one stage.",
+   "champions_override": false
+  },
+  "gluttony": {
+   "name": "Gluttony",
+   "short_desc": "Makes the Pok\u00e9mon eat any held Berry triggered by low HP below 1/2 its max HP.",
+   "champions_override": false
+  },
+  "good-as-gold": {
+   "name": "Good as Gold",
+   "short_desc": "Gives immunity to status moves.",
+   "champions_override": false
+  },
+  "gooey": {
+   "name": "Gooey",
+   "short_desc": "Lowers attacking Pok\u00e9mon's Speed by one stage on contact.",
+   "champions_override": false
+  },
+  "grass-pelt": {
+   "name": "Grass Pelt",
+   "short_desc": "Boosts Defense while Grassy Terrain is in effect.",
+   "champions_override": false
+  },
+  "grassy-surge": {
+   "name": "Grassy Surge",
+   "short_desc": "When this Pok\u00e9mon enters battle, it changes the terrain to Grassy Terrain.",
+   "champions_override": false
+  },
+  "guard-dog": {
+   "name": "Guard Dog",
+   "short_desc": "Boosts Attack if intimidated, and prevents being forced to switch out.",
+   "champions_override": false
+  },
+  "guts": {
+   "name": "Guts",
+   "short_desc": "Increases Attack to 1.5\u00d7 with a major status ailment.",
+   "champions_override": false
+  },
+  "harvest": {
+   "name": "Harvest",
+   "short_desc": "Has a 50% chance of restoring a used Berry after each turn if the Pok\u00e9mon has held no items in the meantime.",
+   "champions_override": false
+  },
+  "healer": {
+   "name": "Healer",
+   "short_desc": "Has a 30% chance of curing each adjacent ally of any major status ailment after each turn.",
+   "champions_override": true
+  },
+  "heatproof": {
+   "name": "Heatproof",
+   "short_desc": "Halves damage from Fire moves and burns.",
+   "champions_override": false
+  },
+  "heavy-metal": {
+   "name": "Heavy Metal",
+   "short_desc": "Doubles the Pok\u00e9mon's weight.",
+   "champions_override": false
+  },
+  "hospitality": {
+   "name": "Hospitality",
+   "short_desc": "When a Pok\u00e9mon with Hospitality enters a battle, it restores HP for an ally by 25%.",
+   "champions_override": false
+  },
+  "huge-power": {
+   "name": "Huge Power",
+   "short_desc": "Doubles Attack in battle.",
+   "champions_override": false
+  },
+  "hunger-switch": {
+   "name": "Hunger Switch",
+   "short_desc": "Causes Morpeko to change its form each turn, alternating between Full Belly Mode and Hangry Mode",
+   "champions_override": false
+  },
+  "hustle": {
+   "name": "Hustle",
+   "short_desc": "Strengthens physical moves to inflict 1.5\u00d7 damage, but decreases their accuracy to 0.8\u00d7.",
+   "champions_override": false
+  },
+  "hydration": {
+   "name": "Hydration",
+   "short_desc": "Cures any major status ailment after each turn during rain.",
+   "champions_override": false
+  },
+  "hyper-cutter": {
+   "name": "Hyper Cutter",
+   "short_desc": "Prevents Attack from being lowered by other Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "ice-body": {
+   "name": "Ice Body",
+   "short_desc": "Heals for 1/16 max HP after each turn during hail.  Protects against hail damage.",
+   "champions_override": false
+  },
+  "illuminate": {
+   "name": "Illuminate",
+   "short_desc": "Doubles the wild encounter rate.",
+   "champions_override": false
+  },
+  "illusion": {
+   "name": "Illusion",
+   "short_desc": "Takes the appearance of the last conscious party Pok\u00e9mon upon being sent out until hit by a damaging move.",
+   "champions_override": false
+  },
+  "immunity": {
+   "name": "Immunity",
+   "short_desc": "Prevents poison.",
+   "champions_override": false
+  },
+  "imposter": {
+   "name": "Imposter",
+   "short_desc": "Transforms upon entering battle.",
+   "champions_override": false
+  },
+  "infiltrator": {
+   "name": "Infiltrator",
+   "short_desc": "Bypasses Light Screen, Reflect, and Safeguard.",
+   "champions_override": false
+  },
+  "innards-out": {
+   "name": "Innards Out",
+   "short_desc": "When this Pok\u00e9mon faints from an opponent's move, that opponent takes damage equal to the HP this Pok\u00e9mon had remaining.",
+   "champions_override": false
+  },
+  "inner-focus": {
+   "name": "Inner Focus",
+   "short_desc": "Prevents flinching.",
+   "champions_override": false
+  },
+  "insomnia": {
+   "name": "Insomnia",
+   "short_desc": "Prevents sleep.",
+   "champions_override": false
+  },
+  "intimidate": {
+   "name": "Intimidate",
+   "short_desc": "Lowers opponents' Attack one stage upon entering battle.",
+   "champions_override": false
+  },
+  "iron-fist": {
+   "name": "Iron Fist",
+   "short_desc": "Strengthens punch-based moves to 1.2\u00d7 their power.",
+   "champions_override": false
+  },
+  "justified": {
+   "name": "Justified",
+   "short_desc": "Raises Attack one stage upon taking damage from a Dark move.",
+   "champions_override": false
+  },
+  "keen-eye": {
+   "name": "Keen Eye",
+   "short_desc": "Prevents accuracy from being lowered.",
+   "champions_override": false
+  },
+  "klutz": {
+   "name": "Klutz",
+   "short_desc": "Prevents the Pok\u00e9mon from using its held item in battle.",
+   "champions_override": false
+  },
+  "leaf-guard": {
+   "name": "Leaf Guard",
+   "short_desc": "Protects against major status ailments during strong sunlight.",
+   "champions_override": false
+  },
+  "levitate": {
+   "name": "Levitate",
+   "short_desc": "Evades Ground moves.",
+   "champions_override": false
+  },
+  "libero": {
+   "name": "Libero",
+   "short_desc": "Libero changes the Pok\u00e9mon's type to that of its previously used attack.",
+   "champions_override": false
+  },
+  "light-metal": {
+   "name": "Light Metal",
+   "short_desc": "Halves the Pok\u00e9mon's weight.",
+   "champions_override": false
+  },
+  "lightning-rod": {
+   "name": "Lightning Rod",
+   "short_desc": "Redirects single-target Electric moves to this Pok\u00e9mon where possible.  Absorbs Electric moves, raising Special Attack one stage.",
+   "champions_override": false
+  },
+  "limber": {
+   "name": "Limber",
+   "short_desc": "Prevents paralysis.",
+   "champions_override": false
+  },
+  "liquid-ooze": {
+   "name": "Liquid Ooze",
+   "short_desc": "Damages opponents using leeching moves for as much as they would heal.",
+   "champions_override": false
+  },
+  "liquid-voice": {
+   "name": "Liquid Voice",
+   "short_desc": "Sound-based moves become Water-type.",
+   "champions_override": false
+  },
+  "long-reach": {
+   "name": "Long Reach",
+   "short_desc": "This Pok\u00e9mon's moves do not make contact.",
+   "champions_override": false
+  },
+  "magic-bounce": {
+   "name": "Magic Bounce",
+   "short_desc": "Reflects most non-damaging moves back at their user.",
+   "champions_override": false
+  },
+  "magic-guard": {
+   "name": "Magic Guard",
+   "short_desc": "Protects against damage not directly caused by a move.",
+   "champions_override": false
+  },
+  "magician": {
+   "name": "Magician",
+   "short_desc": "Steals the target's held item when the bearer uses a damaging move.",
+   "champions_override": false
+  },
+  "magma-armor": {
+   "name": "Magma Armor",
+   "short_desc": "Prevents freezing.",
+   "champions_override": false
+  },
+  "marvel-scale": {
+   "name": "Marvel Scale",
+   "short_desc": "Increases Defense to 1.5\u00d7 with a major status ailment.",
+   "champions_override": false
+  },
+  "mega-launcher": {
+   "name": "Mega Launcher",
+   "short_desc": "Strengthens aura and pulse moves to 1.5\u00d7 their power.",
+   "champions_override": false
+  },
+  "mega-sol": {
+   "name": "Mega Sol",
+   "short_desc": "The Pok\u00e9mon can use its moves as if the weather were harsh sunlight.",
+   "champions_override": false
+  },
+  "merciless": {
+   "name": "Merciless",
+   "short_desc": "This Pok\u00e9mon's moves critical hit against poisoned targets.",
+   "champions_override": false
+  },
+  "mimicry": {
+   "name": "Mimicry",
+   "short_desc": "Changes type depending on the terrain.",
+   "champions_override": false
+  },
+  "minus": {
+   "name": "Minus",
+   "short_desc": "Increases Special Attack to 1.5\u00d7 when a friendly Pok\u00e9mon has Plus or Minus.",
+   "champions_override": false
+  },
+  "mirror-armor": {
+   "name": "Mirror Armor",
+   "short_desc": "Reflects any stat-lowering effects.",
+   "champions_override": false
+  },
+  "mold-breaker": {
+   "name": "Mold Breaker",
+   "short_desc": "Bypasses targets' abilities if they could hinder or prevent a move.",
+   "champions_override": false
+  },
+  "moody": {
+   "name": "Moody",
+   "short_desc": "Raises a random stat two stages and lowers another one stage after each turn.",
+   "champions_override": false
+  },
+  "motor-drive": {
+   "name": "Motor Drive",
+   "short_desc": "Absorbs Electric moves, raising Speed one stage.",
+   "champions_override": false
+  },
+  "moxie": {
+   "name": "Moxie",
+   "short_desc": "Raises Attack one stage upon KOing a Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "multiscale": {
+   "name": "Multiscale",
+   "short_desc": "Halves damage taken from full HP.",
+   "champions_override": false
+  },
+  "mummy": {
+   "name": "Mummy",
+   "short_desc": "Changes attacking Pok\u00e9mon's abilities to Mummy on contact.",
+   "champions_override": false
+  },
+  "natural-cure": {
+   "name": "Natural Cure",
+   "short_desc": "Cures any major status ailment upon switching out.",
+   "champions_override": true
+  },
+  "no-guard": {
+   "name": "No Guard",
+   "short_desc": "Ensures all moves used by and against the Pok\u00e9mon hit.",
+   "champions_override": false
+  },
+  "oblivious": {
+   "name": "Oblivious",
+   "short_desc": "Prevents infatuation and protects against Captivate.",
+   "champions_override": false
+  },
+  "opportunist": {
+   "name": "Opportunist",
+   "short_desc": "Copies stat boosts by the opponent.",
+   "champions_override": false
+  },
+  "overcoat": {
+   "name": "Overcoat",
+   "short_desc": "Protects against damage from weather.",
+   "champions_override": false
+  },
+  "overgrow": {
+   "name": "Overgrow",
+   "short_desc": "Strengthens Grass moves to inflict 1.5\u00d7 damage at 1/3 max HP or less.",
+   "champions_override": false
+  },
+  "own-tempo": {
+   "name": "Own Tempo",
+   "short_desc": "Prevents confusion.",
+   "champions_override": false
+  },
+  "parental-bond": {
+   "name": "Parental Bond",
+   "short_desc": "Lets the bearer hit twice with damaging moves.  The second hit has half power.",
+   "champions_override": false
+  },
+  "pickpocket": {
+   "name": "Pickpocket",
+   "short_desc": "Steals attacking Pok\u00e9mon's held items on contact.",
+   "champions_override": false
+  },
+  "pickup": {
+   "name": "Pickup",
+   "short_desc": "Picks up other Pok\u00e9mon's used and Flung held items.  May also pick up an item after battle.",
+   "champions_override": false
+  },
+  "piercing-drill": {
+   "name": "Piercing Drill",
+   "short_desc": "When the Pok\u00e9mon uses contact moves, it can hit even targets that are protecting themselves.",
+   "champions_override": false
+  },
+  "pixilate": {
+   "name": "Pixilate",
+   "short_desc": "Turns the bearer's Normal moves into Fairy moves and strengthens them to 1.3\u00d7 their power.",
+   "champions_override": false
+  },
+  "plus": {
+   "name": "Plus",
+   "short_desc": "Increases Special Attack to 1.5\u00d7 when a friendly Pok\u00e9mon has Plus or Minus.",
+   "champions_override": false
+  },
+  "poison-heal": {
+   "name": "Poison Heal",
+   "short_desc": "Heals for 1/8 max HP after each turn when poisoned in place of damage.",
+   "champions_override": false
+  },
+  "poison-point": {
+   "name": "Poison Point",
+   "short_desc": "Has a 30% chance of poisoning attacking Pok\u00e9mon on contact.",
+   "champions_override": false
+  },
+  "poison-touch": {
+   "name": "Poison Touch",
+   "short_desc": "Has a 30% chance of poisoning target Pok\u00e9mon upon contact.",
+   "champions_override": false
+  },
+  "prankster": {
+   "name": "Prankster",
+   "short_desc": "Raises non-damaging moves' priority by one stage.",
+   "champions_override": false
+  },
+  "pressure": {
+   "name": "Pressure",
+   "short_desc": "Increases the PP cost of moves targetting the Pok\u00e9mon by one.",
+   "champions_override": false
+  },
+  "protean": {
+   "name": "Protean",
+   "short_desc": "Changes the bearer's type to match each move it uses.",
+   "champions_override": false
+  },
+  "psychic-surge": {
+   "name": "Psychic Surge",
+   "short_desc": "When this Pok\u00e9mon enters battle, it changes the terrain to Psychic Terrain.",
+   "champions_override": false
+  },
+  "punk-rock": {
+   "name": "Punk Rock",
+   "short_desc": "Boosts sound-based moves and halves damage from the same moves.",
+   "champions_override": false
+  },
+  "pure-power": {
+   "name": "Pure Power",
+   "short_desc": "Doubles Attack in battle.",
+   "champions_override": false
+  },
+  "purifying-salt": {
+   "name": "Purifying Salt",
+   "short_desc": "Protects from status conditions and halves damage from Ghost-type moves.",
+   "champions_override": false
+  },
+  "queenly-majesty": {
+   "name": "Queenly Majesty",
+   "short_desc": "Opposing Pok\u00e9mon cannot use priority attacks.",
+   "champions_override": false
+  },
+  "quick-draw": {
+   "name": "Quick Draw",
+   "short_desc": "Enables the Pok\u00e9mon to move first occasionally.",
+   "champions_override": false
+  },
+  "quick-feet": {
+   "name": "Quick Feet",
+   "short_desc": "Increases Speed to 1.5\u00d7 with a major status ailment.",
+   "champions_override": false
+  },
+  "rain-dish": {
+   "name": "Rain Dish",
+   "short_desc": "Heals for 1/16 max HP after each turn during rain.",
+   "champions_override": false
+  },
+  "rattled": {
+   "name": "Rattled",
+   "short_desc": "Raises Speed one stage upon being hit by a Dark, Ghost, or Bug move.",
+   "champions_override": false
+  },
+  "receiver": {
+   "name": "Receiver",
+   "short_desc": "When an ally faints, this Pok\u00e9mon gains its Ability.",
+   "champions_override": false
+  },
+  "reckless": {
+   "name": "Reckless",
+   "short_desc": "Strengthens recoil moves to 1.2\u00d7 their power.",
+   "champions_override": false
+  },
+  "refrigerate": {
+   "name": "Refrigerate",
+   "short_desc": "Turns the bearer's Normal moves into Ice moves and strengthens them to 1.3\u00d7 their power.",
+   "champions_override": false
+  },
+  "regenerator": {
+   "name": "Regenerator",
+   "short_desc": "Heals for 1/3 max HP upon switching out.",
+   "champions_override": true
+  },
+  "ripen": {
+   "name": "Ripen",
+   "short_desc": "Doubles the effect of berries.",
+   "champions_override": false
+  },
+  "rivalry": {
+   "name": "Rivalry",
+   "short_desc": "Increases damage inflicted to 1.25\u00d7 against Pok\u00e9mon of the same gender, but decreases damage to 0.75\u00d7 against the opposite gender.",
+   "champions_override": false
+  },
+  "rock-head": {
+   "name": "Rock Head",
+   "short_desc": "Protects against recoil damage.",
+   "champions_override": false
+  },
+  "rough-skin": {
+   "name": "Rough Skin",
+   "short_desc": "Damages attacking Pok\u00e9mon for 1/8 their max HP on contact.",
+   "champions_override": false
+  },
+  "run-away": {
+   "name": "Run Away",
+   "short_desc": "Ensures success fleeing from wild battles.",
+   "champions_override": true
+  },
+  "sand-force": {
+   "name": "Sand Force",
+   "short_desc": "Strengthens Rock, Ground, and Steel moves to 1.3\u00d7 their power during a sandstorm.  Protects against sandstorm damage.",
+   "champions_override": false
+  },
+  "sand-rush": {
+   "name": "Sand Rush",
+   "short_desc": "Doubles Speed during a sandstorm.  Protects against sandstorm damage.",
+   "champions_override": false
+  },
+  "sand-spit": {
+   "name": "Sand Spit",
+   "short_desc": "Creates a sandstorm when hit by an attack.",
+   "champions_override": false
+  },
+  "sand-stream": {
+   "name": "Sand Stream",
+   "short_desc": "Summons a sandstorm that lasts indefinitely upon entering battle.",
+   "champions_override": false
+  },
+  "sand-veil": {
+   "name": "Sand Veil",
+   "short_desc": "Increases evasion to 1.25\u00d7 during a sandstorm.  Protects against sandstorm damage.",
+   "champions_override": false
+  },
+  "sap-sipper": {
+   "name": "Sap Sipper",
+   "short_desc": "Absorbs Grass moves, raising Attack one stage.",
+   "champions_override": false
+  },
+  "scrappy": {
+   "name": "Scrappy",
+   "short_desc": "Lets the Pok\u00e9mon's Normal and Fighting moves hit Ghost Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "screen-cleaner": {
+   "name": "Screen Cleaner",
+   "short_desc": "Nullifies effects of Light Screen, Reflect, and Aurora Veil.",
+   "champions_override": false
+  },
+  "seed-sower": {
+   "name": "Seed Sower",
+   "short_desc": "Turns the ground into Grassy Terrain when the Pok\u00e9mon is hit by an attack.",
+   "champions_override": false
+  },
+  "shadow-tag": {
+   "name": "Shadow Tag",
+   "short_desc": "Prevents opponents from fleeing or switching out.",
+   "champions_override": false
+  },
+  "sharpness": {
+   "name": "Sharpness",
+   "short_desc": "Powers up slicing moves.",
+   "champions_override": false
+  },
+  "shed-skin": {
+   "name": "Shed Skin",
+   "short_desc": "Has a 33% chance of curing any major status ailment after each turn.",
+   "champions_override": false
+  },
+  "sheer-force": {
+   "name": "Sheer Force",
+   "short_desc": "Strengthens moves with extra effects to 1.3\u00d7 their power, but prevents their extra effects.",
+   "champions_override": false
+  },
+  "shell-armor": {
+   "name": "Shell Armor",
+   "short_desc": "Protects against critical hits.",
+   "champions_override": false
+  },
+  "shield-dust": {
+   "name": "Shield Dust",
+   "short_desc": "Protects against incoming moves' extra effects.",
+   "champions_override": false
+  },
+  "skill-link": {
+   "name": "Skill Link",
+   "short_desc": "Extends two-to-five-hit moves and Triple Kick to their full length every time.",
+   "champions_override": false
+  },
+  "slush-rush": {
+   "name": "Slush Rush",
+   "short_desc": "During Hail, this Pok\u00e9mon has double Speed.",
+   "champions_override": false
+  },
+  "sniper": {
+   "name": "Sniper",
+   "short_desc": "Strengthens critical hits to inflict 3\u00d7 damage rather than 2\u00d7.",
+   "champions_override": false
+  },
+  "snow-cloak": {
+   "name": "Snow Cloak",
+   "short_desc": "Increases evasion to 1.25\u00d7 during hail.  Protects against hail damage.",
+   "champions_override": false
+  },
+  "snow-warning": {
+   "name": "Snow Warning",
+   "short_desc": "Summons hail that lasts indefinitely upon entering battle.",
+   "champions_override": false
+  },
+  "solar-power": {
+   "name": "Solar Power",
+   "short_desc": "Increases Special Attack to 1.5\u00d7 but costs 1/8 max HP after each turn during strong sunlight.",
+   "champions_override": false
+  },
+  "solid-rock": {
+   "name": "Solid Rock",
+   "short_desc": "Decreases damage taken from super-effective moves by 1/4.",
+   "champions_override": false
+  },
+  "soundproof": {
+   "name": "Soundproof",
+   "short_desc": "Protects against sound-based moves.",
+   "champions_override": false
+  },
+  "speed-boost": {
+   "name": "Speed Boost",
+   "short_desc": "Raises Speed one stage after each turn.",
+   "champions_override": false
+  },
+  "spicy-spray": {
+   "name": "Spicy Spray",
+   "short_desc": "When the Pok\u00e9mon takes damage from a move, it burns the attacker.",
+   "champions_override": false
+  },
+  "stakeout": {
+   "name": "Stakeout",
+   "short_desc": "This Pok\u00e9mon's moves have double power against Pok\u00e9mon that switched in this turn.",
+   "champions_override": false
+  },
+  "stall": {
+   "name": "Stall",
+   "short_desc": "Makes the Pok\u00e9mon move last within its move's priority bracket.",
+   "champions_override": false
+  },
+  "stalwart": {
+   "name": "Stalwart",
+   "short_desc": "Ignores moves and abilities that draw in moves.",
+   "champions_override": false
+  },
+  "stamina": {
+   "name": "Stamina",
+   "short_desc": "Raises this Pok\u00e9mon's Defense by one stage when it takes damage from a move.",
+   "champions_override": false
+  },
+  "stance-change": {
+   "name": "Stance Change",
+   "short_desc": "Changes Aegislash to Blade Forme before using a damaging move, or Shield Forme before using King\u2019s Shield.",
+   "champions_override": false
+  },
+  "static": {
+   "name": "Static",
+   "short_desc": "Has a 30% chance of paralyzing attacking Pok\u00e9mon on contact.",
+   "champions_override": false
+  },
+  "steadfast": {
+   "name": "Steadfast",
+   "short_desc": "Raises Speed one stage upon flinching.",
+   "champions_override": false
+  },
+  "steely-spirit": {
+   "name": "Steely Spirit",
+   "short_desc": "Powers up ally Pok\u00e9mon's Steel-type moves.",
+   "champions_override": false
+  },
+  "stench": {
+   "name": "Stench",
+   "short_desc": "Has a 10% chance of making target Pok\u00e9mon flinch with each hit.",
+   "champions_override": false
+  },
+  "sticky-hold": {
+   "name": "Sticky Hold",
+   "short_desc": "Prevents a held item from being removed by other Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "strong-jaw": {
+   "name": "Strong Jaw",
+   "short_desc": "Strengthens biting moves to 1.5\u00d7 their power.",
+   "champions_override": false
+  },
+  "sturdy": {
+   "name": "Sturdy",
+   "short_desc": "Prevents being KOed from full HP, leaving 1 HP instead.  Protects against the one-hit KO moves regardless of HP.",
+   "champions_override": false
+  },
+  "suction-cups": {
+   "name": "Suction Cups",
+   "short_desc": "Prevents being forced out of battle by other Pok\u00e9mon's moves.",
+   "champions_override": false
+  },
+  "super-luck": {
+   "name": "Super Luck",
+   "short_desc": "Raises moves' critical hit rates one stage.",
+   "champions_override": false
+  },
+  "supersweet-syrup": {
+   "name": "Supersweet Syrup",
+   "short_desc": "Once per battle, when a Pok\u00e9mon with Supersweet Syrup enters the battle, it lowers the evasion stat of all adjacent opponents by one stage. ",
+   "champions_override": false
+  },
+  "supreme-overlord": {
+   "name": "Supreme Overlord",
+   "short_desc": "Attack and Special Attack are boosted for each party Pok\u00e9mon that has been defeated.",
+   "champions_override": false
+  },
+  "surge-surfer": {
+   "name": "Surge Surfer",
+   "short_desc": "Doubles this Pok\u00e9mon's Speed on Electric Terrain.",
+   "champions_override": false
+  },
+  "swarm": {
+   "name": "Swarm",
+   "short_desc": "Strengthens Bug moves to inflict 1.5\u00d7 damage at 1/3 max HP or less.",
+   "champions_override": false
+  },
+  "sweet-veil": {
+   "name": "Sweet Veil",
+   "short_desc": "Prevents friendly Pok\u00e9mon from sleeping.",
+   "champions_override": false
+  },
+  "swift-swim": {
+   "name": "Swift Swim",
+   "short_desc": "Doubles Speed during rain.",
+   "champions_override": false
+  },
+  "symbiosis": {
+   "name": "Symbiosis",
+   "short_desc": "Passes the bearer's held item to an ally when the ally uses up its item.",
+   "champions_override": false
+  },
+  "synchronize": {
+   "name": "Synchronize",
+   "short_desc": "Copies burns, paralysis, and poison received onto the Pok\u00e9mon that inflicted them.",
+   "champions_override": false
+  },
+  "tangled-feet": {
+   "name": "Tangled Feet",
+   "short_desc": "Doubles evasion when confused.",
+   "champions_override": false
+  },
+  "technician": {
+   "name": "Technician",
+   "short_desc": "Strengthens moves of 60 base power or less to 1.5\u00d7 their power.",
+   "champions_override": false
+  },
+  "telepathy": {
+   "name": "Telepathy",
+   "short_desc": "Protects against friendly Pok\u00e9mon's damaging moves.",
+   "champions_override": false
+  },
+  "thermal-exchange": {
+   "name": "Thermal Exchange",
+   "short_desc": "Raises Attack when hit by a Fire-type move. Cannot be burned.",
+   "champions_override": false
+  },
+  "thick-fat": {
+   "name": "Thick Fat",
+   "short_desc": "Halves damage from Fire and Ice moves.",
+   "champions_override": false
+  },
+  "torrent": {
+   "name": "Torrent",
+   "short_desc": "Strengthens Water moves to inflict 1.5\u00d7 damage at 1/3 max HP or less.",
+   "champions_override": false
+  },
+  "tough-claws": {
+   "name": "Tough Claws",
+   "short_desc": "Strengthens moves that make contact to 1.33\u00d7 their power.",
+   "champions_override": false
+  },
+  "toxic-debris": {
+   "name": "Toxic Debris",
+   "short_desc": "Scatters poison spikes at the feet of the opposing team when the Pok\u00e9mon takes damage from physical moves.",
+   "champions_override": false
+  },
+  "trace": {
+   "name": "Trace",
+   "short_desc": "Copies an opponent's ability upon entering battle.",
+   "champions_override": false
+  },
+  "unaware": {
+   "name": "Unaware",
+   "short_desc": "Ignores other Pok\u00e9mon's stat modifiers for damage and accuracy calculation.",
+   "champions_override": false
+  },
+  "unburden": {
+   "name": "Unburden",
+   "short_desc": "Doubles Speed upon using or losing a held item.",
+   "champions_override": false
+  },
+  "unnerve": {
+   "name": "Unnerve",
+   "short_desc": "Prevents opposing Pok\u00e9mon from eating held Berries.",
+   "champions_override": false
+  },
+  "unseen-fist": {
+   "name": "Unseen Fist",
+   "short_desc": "Contact moves can strike through Protect/Detect.",
+   "champions_override": true
+  },
+  "vital-spirit": {
+   "name": "Vital Spirit",
+   "short_desc": "Prevents sleep.",
+   "champions_override": false
+  },
+  "volt-absorb": {
+   "name": "Volt Absorb",
+   "short_desc": "Absorbs Electric moves, healing for 1/4 max HP.",
+   "champions_override": false
+  },
+  "wandering-spirit": {
+   "name": "Wandering Spirit",
+   "short_desc": "Swaps abilities with opponents on contact.",
+   "champions_override": false
+  },
+  "water-absorb": {
+   "name": "Water Absorb",
+   "short_desc": "Absorbs Water moves, healing for 1/4 max HP.",
+   "champions_override": false
+  },
+  "water-bubble": {
+   "name": "Water Bubble",
+   "short_desc": "Halves damage from Fire moves, doubles damage of Water moves, and prevents burns.",
+   "champions_override": false
+  },
+  "weak-armor": {
+   "name": "Weak Armor",
+   "short_desc": "Raises Speed and lowers Defense by one stage each upon being hit by a physical move.",
+   "champions_override": false
+  },
+  "white-smoke": {
+   "name": "White Smoke",
+   "short_desc": "Prevents stats from being lowered by other Pok\u00e9mon.",
+   "champions_override": false
+  },
+  "zero-to-hero": {
+   "name": "Zero to Hero",
+   "short_desc": "Transforms into its Hero Form when switching out.",
+   "champions_override": false
+  }
+ }
+}

@@ -65,6 +65,7 @@ def fetch_species(name):
             "types": [t["type"]["name"] for t in sorted(p["types"], key=lambda t: t["slot"])],
             "stats": {s["stat"]["name"]: s["base_stat"] for s in p["stats"]},
             "abilities": [a["ability"]["name"] for a in p["abilities"]],
+            "hidden_ability": next((a["ability"]["name"] for a in p["abilities"] if a["is_hidden"]), None),
         })
     return forms
 
