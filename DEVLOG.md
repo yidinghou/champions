@@ -14,3 +14,4 @@ Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.
 - Current season: Regulation M-C (Sept 9 – Dec 2, 2026), Ranked Season M-6.
 
 ## Open
+- Nothing outstanding. Ideas: a team builder (item clause, one Mega, no duplicate dex numbers per `data/rules.json`), a damage calculator, abilities text (currently PokéAPI slugs only).
