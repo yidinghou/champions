@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+"""Look things up in the local Champions data (no network).
+
+    python3 lookup.py baxcalibur                       # every form matching the name
+    python3 lookup.py baxcalibur -n jolly -s attack=32,speed=32   # level-50 stats
+    python3 lookup.py rillaboom --moves                # + full movepool
+    python3 lookup.py --learns "fake out"              # who learns a move
+    python3 lookup.py --learns "fake out" --type grass --new       # combine filters
+
+Filters (--learns, --type, --new) list matching forms one per line.
+Data comes from fetch_champions.py and fetch_moves.py.
+"""
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+
+from stats import STATS, level50
+
+DATA = Path(__file__).parent / "data"
+ABBR = {"hp": "HP", "attack": "Atk", "defense": "Def", "special-attack": "SpA",
+        "special-defense": "SpD", "speed": "Spe"}
+
+
+def norm(s):
+    return re.sub(r"[^a-z0-9]", "", s.lower())
+
+
+def load(name):
+    return json.loads((DATA / name).read_text())
+
+
+def find_forms(query, forms):
+    """Exact form name, else every form of that species, else substring matches."""
+    q = query.lower().replace(" ", "-")
+    for hit in ([f for f in forms if f["name"] == q],
+                [f for f in forms if f["species"] == q],
+                [f for f in forms if q in f["name"]]):
+        if hit:
+            return hit
+    return []
+
+
+def parse_sp(text):
+    try:
+        return {k: int(v) for k, v in (p.split("=") for p in text.split(","))}
+    except ValueError:
+        sys.exit(f"bad --sp {text!r}; expected e.g. attack=32,speed=32")
+
+
+def fmt_stats(stats):
+    return "  ".join(f"{ABBR[s]} {stats[s]}" for s in STATS)
+
+
+def show(form, moves, learnsets, args):
+    tag = "  [new in M-C]" if form["new_in_mc"] else ""
+    print(f"{form['name']}  {'/'.join(form['types'])}{tag}")
+    print(f"  abilities: {', '.join(form['abilities'])}")
+    print(f"  base:  {fmt_stats(form['stats'])}   (BST {sum(form['stats'].values())})")
+    sp = parse_sp(args.sp) if args.sp else None
+    label = f"lv50 {args.nature}" + (f", SP {args.sp}" if args.sp else ", no SP")
+    print(f"  {label}:  {fmt_stats(level50(form['stats'], args.nature, sp))}")
+    pool = learnsets.get(form["name"], [])
+    if not args.moves:
+        print(f"  moves: {len(pool)}  (--moves to list)")
+        return
+    print(f"  moves ({len(pool)}):")
+    rows = sorted((moves[m] for m in pool if m in moves), key=lambda m: (m["category"], m["type"], m["name"]))
+    for m in rows:
+        power = m["base_power"] or "--"
+        acc = "--" if m["accuracy"] is True else m["accuracy"]
+        print(f"    {m['name']:<20} {m['type']:<9} {m['category']:<8} pow {power!s:>3}  acc {acc!s:>3}  pp {m['pp']}")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("name", nargs="?", help="Pokémon or form name, e.g. baxcalibur, garchomp-mega-z")
+    ap.add_argument("-n", "--nature", default="hardy", help="nature for level-50 stats (default: hardy, neutral)")
+    ap.add_argument("-s", "--sp", help="Stat Points, e.g. attack=32,speed=32 (max 32 each, 66 total)")
+    ap.add_argument("--moves", action="store_true", help="list the full movepool")
+    ap.add_argument("--learns", help="only forms that learn this move")
+    ap.add_argument("--type", help="only forms with this type")
+    ap.add_argument("--new", action="store_true", help="only forms new in Regulation M-C")
+    args = ap.parse_args()
+
+    forms = load("champions.json")["pokemon"]
+    moves = load("moves.json")["moves"]
+    learnsets = load("learnsets.json")["learnsets"]
+
+    filtering = args.learns or args.type or args.new
+    if not args.name and not filtering:
+        ap.print_help()
+        return
+    if args.name:
+        forms = find_forms(args.name, forms)
+        if not forms:
+            sys.exit(f"no Pokémon matching {args.name!r}")
+    if args.learns:
+        mid = norm(args.learns)
+        if mid not in moves:
+            sys.exit(f"unknown move {args.learns!r}")
+        forms = [f for f in forms if mid in learnsets.get(f["name"], [])]
+    if args.type:
+        forms = [f for f in forms if args.type.lower() in f["types"]]
+    if args.new:
+        forms = [f for f in forms if f["new_in_mc"]]
+
+    if filtering and not args.name:
+        for f in forms:
+            print(f"{f['name']:<28} {'/'.join(f['types']):<16} {fmt_stats(f['stats'])}")
+        print(f"{len(forms)} matches")
+    else:
+        for f in forms:
+            show(f, moves, learnsets, args)
+            print()
+
+
+if __name__ == "__main__":
+    main()

@@ -14,6 +14,7 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 
 - `fetch_champions.py` — generates `data/champions.json` (raw base stats, types, abilities).
 - `fetch_moves.py` — generates `data/learnsets.json` and `data/moves.json` from Pokémon Showdown's `champions` mod, with PP from Serebii (run after `fetch_champions.py`).
+- `lookup.py` — offline lookup: `python3 lookup.py baxcalibur -n jolly -s attack=32,speed=32`, `--moves` for the movepool, `--learns "fake out" --type grass --new` to filter. See its docstring.
 - `data/rules.json` — hand-maintained battle rules and regulation dates (level 50, one Mega, etc.).
 - `stats.py` — computes level-50 battle stats from raw base stats at lookup time (`python3 stats.py baxcalibur jolly speed=32,attack=32`). Raw data stays raw; nothing derived is saved.
 
