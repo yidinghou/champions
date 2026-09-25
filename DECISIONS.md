@@ -23,3 +23,7 @@ PokéAPI has no Champions learnsets (Megas have zero moves). Options considered:
 ## 006 — Champions PP from Serebii (2026-09-25)
 Showdown doesn't model Champions PP, and Serebii's values differ from main series for 411 of 510 moves (e.g. Acrobatics 16 vs 15, Assurance 12 vs 10). So `fetch_moves.py` reads PP from Serebii's Champions moves page: one request, ~280 KB, robots.txt allows it.
 **Trade-off:** this is the one field that depends on scraping HTML. If the page layout changes the fetch prints "no PP" and leaves `pp` null rather than guessing. Everything else stays on Showdown.
+
+## 007 — Guard M-C tags with Showdown's roster (2026-09-25)
+Our hand list disagreed with the official "24 new Pokémon". Showdown's champions mod flips newly legal Pokémon from Past/Illegal to legal in the commit that ships a regulation, so `check_roster.py` diffs legality before/after that commit. Result: 35 added forms (29 non-Mega + 6 Megas); Game8's list had missed Farfetch'd, Sirfetch'd and non-Alolan Persian, and the multi-form species (Toxtricity, Indeedee, Squawkabilly, Alolan Persian).
+`NEW_IN_MC` stays hand-maintained (exact form names) but the check fails loudly if it drifts. Deriving it automatically was rejected: it would make the PokéAPI fetch depend on Showdown.

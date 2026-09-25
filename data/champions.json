@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-25T13:24:18+00:00",
+ "fetched_at": "2026-09-25T13:54:12+00:00",
  "source": "https://pokeapi.co/api/v2/pokedex/champions",
  "species_count": 231,
  "pokemon": [
@@ -915,7 +915,7 @@
    "dex_id": 53,
    "is_default": false,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "dark"
    ],
@@ -1178,7 +1178,7 @@
    "dex_id": 83,
    "is_default": true,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "normal",
     "flying"
@@ -7600,7 +7600,7 @@
    "dex_id": 849,
    "is_default": false,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "electric",
     "poison"
@@ -7745,7 +7745,7 @@
    "dex_id": 865,
    "is_default": true,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "fighting"
    ],
@@ -7932,7 +7932,7 @@
    "dex_id": 876,
    "is_default": false,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "psychic",
     "normal"
@@ -8372,7 +8372,7 @@
    "dex_id": 931,
    "is_default": false,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "normal",
     "flying"
@@ -8397,7 +8397,7 @@
    "dex_id": 931,
    "is_default": false,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "normal",
     "flying"
@@ -8422,7 +8422,7 @@
    "dex_id": 931,
    "is_default": false,
    "is_mega": false,
-   "new_in_mc": false,
+   "new_in_mc": true,
    "types": [
     "normal",
     "flying"

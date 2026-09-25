@@ -13,6 +13,7 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 ## Files
 
 - `fetch_champions.py` — generates `data/champions.json` (raw base stats, types, abilities).
+- `check_roster.py` — checks `new_in_mc` tags against Showdown's roster (exit 1 on mismatch). Run after `fetch_champions.py`; update `MC_COMMIT` for a new regulation.
 - `fetch_moves.py` — generates `data/learnsets.json` and `data/moves.json` from Pokémon Showdown's `champions` mod, with PP from Serebii (run after `fetch_champions.py`).
 - `lookup.py` — offline lookup: `python3 lookup.py baxcalibur -n jolly -s attack=32,speed=32`, `--moves` for the movepool, `--learns "fake out" --type grass --new` to filter. See its docstring.
 - `data/rules.json` — hand-maintained battle rules and regulation dates (level 50, one Mega, etc.).
@@ -23,15 +24,14 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 ## Where the data comes from
 
 - **Roster and stats:** [PokéAPI](https://pokeapi.co/api/v2/pokedex/champions) `champions` pokédex (community-contributed, no auth). It lists everything in the game but has **no regulation/season info**.
-- **Regulation M-C additions:** hand-maintained in `NEW_IN_MC` / `NEW_MEGAS_MC` in `fetch_champions.py`, taken from the [official announcement](https://www.pokemon.com/us/news/get-ready-for-regulation-set-m-c-in-pokemon-champions) (source of truth). Cross-checked against [Game8](https://game8.co/games/Pokemon-Champions/archives/618064).
+- **Regulation M-C additions:** hand-maintained `NEW_IN_MC` in `fetch_champions.py` (exact form names), verified by `check_roster.py` against Pokémon Showdown's champions roster. The [official announcement](https://www.pokemon.com/us/news/get-ready-for-regulation-set-m-c-in-pokemon-champions) is the source of truth for rules and dates.
 
 ## Known gaps
 
-- Official post says 24 new Pokémon; Game8 lists ~22 and our list has 21 species + 6 Megas. Unresolved.
-- Multi-form species (Toxtricity, Indeedee, Squawkabilly) only tag the default form as `new_in_mc`.
 - Anything PokéAPI lists may not be legal in M-C. Over-inclusion is intentional; filter at lookup time.
 
 ## Each new regulation
 
-1. Read the official announcement, update the two sets in `fetch_champions.py`.
-2. Re-run the script and review the `data/champions.json` diff.
+1. Read the official announcement; update `NEW_IN_MC` in `fetch_champions.py` and `MC_COMMIT` in `check_roster.py` (the Showdown commit that shipped it).
+2. Run `fetch_champions.py`, then `check_roster.py` until it passes, then `fetch_moves.py`.
+3. Review the `data/` diff.

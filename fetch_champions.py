@@ -6,7 +6,8 @@ Stdlib only. Safe to re-run any time; it overwrites the output file.
 
 Data note: PokeAPI lists every Pokemon in the Champions game, but has NO
 regulation/season info. We tag the Regulation M-C additions ourselves (see
-NEW_IN_MC) from the official announcement, which is our source of truth:
+NEW_IN_MC). Sources: the official announcement, cross-checked with
+check_roster.py against Pokemon Showdown:
 https://www.pokemon.com/us/news/get-ready-for-regulation-set-m-c-in-pokemon-champions
 """
 import json
@@ -19,18 +20,17 @@ from pathlib import Path
 API = "https://pokeapi.co/api/v2"
 OUT = Path(__file__).parent / "data" / "champions.json"
 
-# Hand-maintained. Species names as PokeAPI spells them. Update per regulation.
-# Game8 lists 22 new Pokemon, the official post says 24 -- unresolved, so this
-# is likely incomplete. Extra data is fine; we filter at lookup time.
+# Hand-maintained: exact PokeAPI form names added in Regulation M-C. Update per regulation.
+# check_roster.py verifies this against Pokemon Showdown's roster and exits 1 on any mismatch.
 NEW_IN_MC = {
-    "wigglytuff", "persian", "mr-mime", "swalot", "salamence", "gogoat",
-    "golisopod", "rillaboom", "cinderace", "inteleon", "thievul", "toxtricity",
-    "grapploct", "perrserker", "pincurchin", "indeedee", "arboliva",
-    "squawkabilly", "mabosstiff", "baxcalibur", "pawmot",
-}
-NEW_MEGAS_MC = {
-    "salamence-mega", "golisopod-mega", "baxcalibur-mega",
-    "absol-mega-z", "garchomp-mega-z", "lucario-mega-z",
+    "absol-mega-z", "arboliva", "baxcalibur", "baxcalibur-mega", "cinderace",
+    "farfetchd", "garchomp-mega-z", "gogoat", "golisopod", "golisopod-mega",
+    "grapploct", "indeedee-female", "indeedee-male", "inteleon", "lucario-mega-z",
+    "mabosstiff", "mr-mime", "pawmot", "perrserker", "persian", "persian-alola",
+    "pincurchin", "rillaboom", "salamence", "salamence-mega", "sirfetchd",
+    "squawkabilly-blue-plumage", "squawkabilly-green-plumage",
+    "squawkabilly-white-plumage", "squawkabilly-yellow-plumage", "swalot", "thievul",
+    "toxtricity-amped", "toxtricity-low-key", "wigglytuff",
 }
 
 
@@ -61,7 +61,7 @@ def fetch_species(name):
             "dex_id": species["id"],
             "is_default": v["is_default"],
             "is_mega": "-mega" in p["name"],
-            "new_in_mc": p["name"] in NEW_MEGAS_MC or (v["is_default"] and name in NEW_IN_MC),
+            "new_in_mc": p["name"] in NEW_IN_MC,
             "types": [t["type"]["name"] for t in sorted(p["types"], key=lambda t: t["slot"])],
             "stats": {s["stat"]["name"]: s["base_stat"] for s in p["stats"]},
             "abilities": [a["ability"]["name"] for a in p["abilities"]],

@@ -3,6 +3,7 @@
 Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.md`; open work at the bottom.
 
 ## 2026-09-25
+- Added `check_roster.py`. Showdown says M-C added 35 forms; our list had 27. Missing: Farfetch'd, Sirfetch'd, and the extra forms of Toxtricity, Indeedee, Squawkabilly and Persian. That explains the official "24" vs Game8's 22 (decision 007). `NEW_IN_MC` is now exact form names and the check passes.
 - Added `lookup.py`: name lookup with level-50 stats (nature and SP options), movepool, and filters by move/type/new-in-M-C.
 - Researched Champions moves. PokéAPI has none; Showdown's `champions` mod does (decision 005). Built `fetch_moves.py` -> `data/learnsets.json` (380 forms) and `data/moves.json` (510 moves). Matches Serebii on move count and Rillaboom's pool. PP comes from Serebii's Champions page (decision 006): Showdown lacks it and main-series PP is wrong for 411/510 moves.
 - Confirmed the Stat Point formula in-game (`6ddc803`, decision 004).
@@ -12,7 +13,4 @@ Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.
 - Current season: Regulation M-C (Sept 9 – Dec 2, 2026), Ranked Season M-6.
 
 ## Open
-- Official says 24 new Pokémon in M-C; our list has 21 species + 6 Megas. Find the missing ones.
-- Multi-form species (Toxtricity, Indeedee, Squawkabilly) only tag the default form as `new_in_mc`.
 - Items and type chart not yet in the data (Showdown `items.ts` is the likely source).
-- Cross-check Showdown `formats-data.ts` against our M-C roster.
