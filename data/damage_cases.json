@@ -1,0 +1,12 @@
+{
+  "_format": "Each case: attacker, move, defender, optional opts (same names as calc.py flags with underscores: atk_nature, atk_sp, def_nature, def_sp, boost, def_boost, crit, spread, burn, weather, item, ability, def_ability), and expected min/max damage in HP. Use expected_pct [min, max] instead if you only know the % of the defender's HP (the game shows %). source says where the number came from: in-game, calculator, or hand. Set skip: true to park a case.",
+  "cases": [
+    {
+      "name": "Garchomp Earthquake vs Baxcalibur (neutral, no investment)",
+      "source": "hand",
+      "how": "A=150 (Garchomp Atk 130, hardy, no SP), D=112, BP 100: (22*100*150//112)//50+2 = 60; roll 85%: 51, STAB x1.5 = 76; roll 100%: 60 * 1.5 = 90",
+      "attacker": "garchomp", "move": "earthquake", "defender": "baxcalibur",
+      "expected": [76, 90]
+    }
+  ]
+}

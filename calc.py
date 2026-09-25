@@ -148,6 +148,22 @@ def calculate(att, move, dfn, chart, items, args):
     return dmg, d_stats["hp"], notes, eff
 
 
+def damage(attacker, move, defender, **opts):
+    """Programmatic entry point (used by tests). opts mirror the CLI flags with underscores:
+    atk_nature, atk_sp, def_nature, def_sp, boost, def_boost, crit, spread, burn, weather, item,
+    ability, def_ability. Returns (rolls, defender_hp, notes, type_effectiveness)."""
+    args = argparse.Namespace(atk_nature="hardy", atk_sp=None, def_nature="hardy", def_sp=None, boost=0,
+                              def_boost=0, crit=False, spread=False, burn=False, weather=None, item=None,
+                              ability="", def_ability="")
+    unknown = set(opts) - set(vars(args))
+    if unknown:
+        raise TypeError(f"unknown option(s): {', '.join(sorted(unknown))}")
+    vars(args).update(opts)
+    forms = load("champions.json")["pokemon"]
+    return calculate(pick_form(attacker, forms), load("moves.json")["moves"][norm(move)],
+                     pick_form(defender, forms), load("types.json")["chart"], load("items.json")["items"], args)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("attacker")
