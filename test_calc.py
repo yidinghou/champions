@@ -1,7 +1,7 @@
 """Hand-computed checks for calc.py. Run: python3 -m unittest test_calc"""
 import unittest
 
-from calc import rolls, stage, type_multiplier
+from calc import poke_round, rolls, stage, type_multiplier
 from lookup import load
 
 
@@ -14,9 +14,14 @@ class DamageMath(unittest.TestCase):
         self.assertEqual((min(r), max(r), len(r)), (76, 90, 16))  # floor(90*85/100)=76
 
     def test_modifier_order_floors_each_step(self):
-        # 90 -> spread x0.75 = 67 -> roll 100% = 67 -> STAB x1.5 = 100
-        r = rolls(90, [("spread", 0.75), ("random", None), ("stab", 1.5)])
+        # 90 -> spread x0.75 = 67.5 rounds half down to 67 -> roll 100% = 67 -> STAB x1.5 = 100.5 -> 100
+        r = rolls(90, [("spread", 3072), ("random", None), ("stab", 6144)])
         self.assertEqual(max(r), 100)
+
+    def test_poke_round_is_half_down(self):
+        self.assertEqual(poke_round(90, 3072), 67)   # 67.5 rounds down
+        self.assertEqual(poke_round(91, 3072), 68)   # 68.25 -> 68
+        self.assertEqual(poke_round(3, 2048), 1)     # 1.5 rounds down
 
     def test_stages(self):
         self.assertEqual(stage(1), 1.5)

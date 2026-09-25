@@ -10,7 +10,8 @@ Prints the min-max damage over the 16 random rolls, as % of the defender's max H
 Modeled: STAB, type effectiveness, crit, spread (doubles), burn, stat stages, sun/rain, and the small
 item/ability tables below. NOT modeled: terrain, screens, most abilities/items, multi-hit and
 variable-power moves (base power is used as listed), Tera/Z-move effects. Check the notes line in
-the output for what was applied. Not yet verified against in-game numbers.
+the output for what was applied. Verified against Pikalytics' Champions calculator (21 cases in
+data/damage_cases.json, all 16 rolls each); not yet checked against in-game damage.
 """
 import argparse
 import re
@@ -23,9 +24,11 @@ LEVEL = 50
 # Moves whose attacking/defending stat differs from their category.
 USES_DEFENSE_AS_ATTACK = {"bodypress"}
 HITS_PHYSICAL_DEF = {"psyshock", "psystrike", "secretsword"}  # special moves that target Defense
-# Attacker items: (multiplier, condition). Type-boost items (1.2x, e.g. Charcoal) are parsed from item text.
-FLAT_ITEMS = {"lifeorb": 1.3, "musclebadge": 1.1, "muscleband": 1.1, "wiseglasses": 1.1}
-CATEGORY_ITEMS = {"muscleband": "Physical", "wiseglasses": "Special", "choiceband": "Physical", "choicespecs": "Special"}
+# Modifiers are in 4096ths, like the game. Type-boost items (Charcoal etc., 4915) are parsed from item text.
+# Life Orb and Expert Belt multiply final damage; Muscle Band / Wise Glasses multiply base power.
+FINAL_ITEMS = {"lifeorb": 5324}
+BP_ITEMS = {"muscleband": ("Physical", 4505), "wiseglasses": ("Special", 4505)}
+TYPE_BOOST = 4915
 # Attacker abilities that double the Attack stat.
 DOUBLE_ATTACK = {"huge-power", "pure-power"}
 
@@ -61,18 +64,36 @@ def type_multiplier(move_type, def_types, chart):
     return m
 
 
+def poke_round(value, num):
+    """value * num / 4096 rounded half down, as the game does for modifiers."""
+    q, r = divmod(value * num, 4096)
+    return q + 1 if r > 2048 else q
+
+
 def rolls(base_damage, modifiers):
-    """Apply modifiers in game order with a floor after each step; returns the 16 random rolls."""
+    """Apply modifiers in game order; returns the 16 random rolls.
+    modifiers: (name, value) pairs. random splits the 16 rolls; crit floors x1.5; effectiveness and
+    burn floor; everything else (spread, weather, stab, item) is a 4096ths modifier with poke_round."""
     out = []
     for r in range(85, 101):
         d = base_damage
-        for name, mult in modifiers:
+        for name, val in modifiers:
             if name == "random":
                 d = d * r // 100
+            elif name == "crit":
+                d = d * 3 // 2
+            elif name == "effectiveness":
+                d = int(d * val)
+            elif name == "burn":
+                d //= 2
             else:
-                d = int(d * mult)
+                d = poke_round(d, val)
         out.append(max(d, 1))
     return out
+
+
+def eff_preview(move, dfn, chart):
+    return type_multiplier(move["type"], dfn["types"], chart)
 
 
 def calculate(att, move, dfn, chart, items, args):
@@ -96,53 +117,60 @@ def calculate(att, move, dfn, chart, items, args):
     if args.ability in DOUBLE_ATTACK and cat == "Physical":
         A *= 2
         notes.append(f"{args.ability} doubles Attack")
+    bp_mods = []
     if args.ability == "technician" and power <= 60:
-        power = int(power * 1.5)
+        bp_mods.append(6144)
         notes.append("Technician: power x1.5")
+    if args.def_ability == "thick-fat" and move["type"] in ("Fire", "Ice"):
+        A = poke_round(A, 2048)
+        notes.append("Thick Fat: attack x0.5")
+
+    final_mods = []
+    if args.item:
+        iid = norm(args.item)
+        if iid not in items:
+            sys.exit(f"unknown or illegal item {args.item!r}")
+        iname = items[iid]["name"]
+        boost = re.search(r"(\w+)-type attacks have 1\.2×", items[iid]["short_desc"] or "")
+        if iid == "expertbelt":
+            if eff_preview(move, dfn, chart) > 1:
+                final_mods.append(4915); notes.append("Expert Belt x1.2")
+        elif boost and boost.group(1) == move["type"]:
+            bp_mods.append(TYPE_BOOST); notes.append(f"{iname}: power x1.2")
+        elif iid in BP_ITEMS and BP_ITEMS[iid][0] == cat:
+            bp_mods.append(BP_ITEMS[iid][1]); notes.append(f"{iname}: power x1.1")
+        elif iid in FINAL_ITEMS:
+            final_mods.append(FINAL_ITEMS[iid]); notes.append(f"{iname} x{FINAL_ITEMS[iid] / 4096:.1f}")
+        else:
+            notes.append(f"{iname} has no effect here (or isn't modeled)")
+    for m in bp_mods:
+        power = poke_round(power, m)
 
     base = (22 * power * A // D) // 50 + 2  # floor(2*50/5+2) = 22 at level 50
 
     mods = []
     if args.spread:
-        mods.append(("spread", 0.75)); notes.append("spread x0.75")
+        mods.append(("spread", 3072)); notes.append("spread x0.75")
     if args.weather:
         if args.weather == "sun" and move["type"] == "Fire" or args.weather == "rain" and move["type"] == "Water":
-            mods.append(("weather", 1.5)); notes.append(f"{args.weather} x1.5")
+            mods.append(("weather", 6144)); notes.append(f"{args.weather} x1.5")
         elif args.weather == "sun" and move["type"] == "Water" or args.weather == "rain" and move["type"] == "Fire":
-            mods.append(("weather", 0.5)); notes.append(f"{args.weather} x0.5")
+            mods.append(("weather", 2048)); notes.append(f"{args.weather} x0.5")
     if args.crit:
-        mods.append(("crit", 1.5)); notes.append("crit x1.5")
+        mods.append(("crit", None)); notes.append("crit x1.5")
     mods.append(("random", None))
 
-    stab = 1
     if move["type"].lower() in att["types"]:
-        stab = 2 if args.ability == "adaptability" else 1.5
-        mods.append(("stab", stab)); notes.append(f"STAB x{stab}")
+        stab = 8192 if args.ability == "adaptability" else 6144
+        mods.append(("stab", stab)); notes.append(f"STAB x{stab / 4096:g}")
     eff = type_multiplier(move["type"], dfn["types"], chart)
     if args.def_ability == "levitate" and move["type"] == "Ground":
         eff = 0; notes.append("Levitate: immune to Ground")
-    if args.def_ability == "thick-fat" and move["type"] in ("Fire", "Ice"):
-        mods.append(("thickfat", 0.5)); notes.append("Thick Fat x0.5")
     mods.append(("effectiveness", eff))
     if args.burn and cat == "Physical":
-        mods.append(("burn", 0.5)); notes.append("burn x0.5")
+        mods.append(("burn", None)); notes.append("burn x0.5")
 
-    if args.item:
-        iid = norm(args.item)
-        if iid not in items:
-            sys.exit(f"unknown or illegal item {args.item!r}")
-        need = CATEGORY_ITEMS.get(iid)
-        desc = items[iid]["short_desc"] or ""
-        boost = re.search(r"(\w+)-type attacks have 1\.2×", desc)
-        if iid == "expertbelt":
-            if eff > 1:
-                mods.append(("item", 1.2)); notes.append("Expert Belt x1.2")
-        elif boost and boost.group(1) == move["type"]:
-            mods.append(("item", 1.2)); notes.append(f"{items[iid]['name']} x1.2")
-        elif iid in FLAT_ITEMS and (need is None or need == cat):
-            mods.append(("item", FLAT_ITEMS[iid])); notes.append(f"{items[iid]['name']} x{FLAT_ITEMS[iid]}")
-        else:
-            notes.append(f"{items[iid]['name']} has no effect here (or isn't modeled)")
+    mods += [("item", m) for m in final_mods]
 
     dmg = rolls(base, mods) if eff else [0] * 16
     return dmg, d_stats["hp"], notes, eff

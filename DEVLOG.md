@@ -3,6 +3,7 @@
 Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.md`; open work at the bottom.
 
 ## 2026-09-25
+- Verified `calc.py` against Pikalytics: 20 site cases, all rolls match after fixing 4096-rounding and base-power item mods (decision 011). Saved `tools/pikalytics_harness.js` to regenerate.
 - Damage tests are data-driven: `data/damage_cases.json` + `test_damage_cases.py`, using a new `calc.damage()` function.
 - Added `calc.py` damage calculator and `test_calc.py` (decision 010). Not yet checked against in-game damage.
 - Abilities: `data/abilities.json` (216, PokéAPI text, 7 flagged as overridden in Showdown's Champions mod), `hidden_ability` on each form, and `lookup.py` shows ability text plus `--ability` search (decision 009).
@@ -19,5 +20,5 @@ Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.
 
 ## Open
 - Verify the 7 overridden abilities (what actually changed in Champions).
-- Verify `calc.py`: add real hits to `data/damage_cases.json` (only one hand-worked case so far).
+- Check a few hits in-game too (Pikalytics is third-party). Untested modifiers: terrain, screens, most abilities/items.
 - Ideas: a team builder (item clause, one Mega, no duplicate dex numbers per `data/rules.json`) with team-wide type coverage.

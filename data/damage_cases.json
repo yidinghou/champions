@@ -1,12 +1,660 @@
 {
-  "_format": "Each case: attacker, move, defender, optional opts (same names as calc.py flags with underscores: atk_nature, atk_sp, def_nature, def_sp, boost, def_boost, crit, spread, burn, weather, item, ability, def_ability), and expected min/max damage in HP. Use expected_pct [min, max] instead if you only know the % of the defender's HP (the game shows %). source says where the number came from: in-game, calculator, or hand. Set skip: true to park a case.",
-  "cases": [
-    {
-      "name": "Garchomp Earthquake vs Baxcalibur (neutral, no investment)",
-      "source": "hand",
-      "how": "A=150 (Garchomp Atk 130, hardy, no SP), D=112, BP 100: (22*100*150//112)//50+2 = 60; roll 85%: 51, STAB x1.5 = 76; roll 100%: 60 * 1.5 = 90",
-      "attacker": "garchomp", "move": "earthquake", "defender": "baxcalibur",
-      "expected": [76, 90]
-    }
-  ]
+ "_format": "Each case: attacker, move, defender, optional opts (same names as calc.py flags with underscores: atk_nature, atk_sp, def_nature, def_sp, boost, def_boost, crit, spread, burn, weather, item, ability, def_ability), and expected min/max damage in HP. Use expected_pct [min, max] instead if you only know the % of the defender's HP (the game shows %). source says where the number came from: in-game, calculator, or hand. Set skip: true to park a case. 'rolls' (optional) is the full sorted list of 16 damage rolls and is compared exactly.",
+ "cases": [
+  {
+   "name": "Garchomp Earthquake vs Baxcalibur (neutral, no investment)",
+   "source": "hand",
+   "how": "A=150 (Garchomp Atk 130, hardy, no SP), D=112, BP 100: (22*100*150//112)//50+2 = 60; roll 85%: 51, STAB x1.5 = 76; roll 100%: 60 * 1.5 = 90",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "expected": [
+    76,
+    90
+   ]
+  },
+  {
+   "name": "neutral (no SP, neutral nature)",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {},
+   "expected": [
+    76,
+    90
+   ],
+   "rolls": [
+    76,
+    76,
+    78,
+    78,
+    79,
+    81,
+    81,
+    82,
+    82,
+    84,
+    85,
+    85,
+    87,
+    87,
+    88,
+    90
+   ]
+  },
+  {
+   "name": "SP + nature on attack",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "atk_nature": "adamant",
+    "atk_sp": "attack=32"
+   },
+   "expected": [
+    102,
+    120
+   ],
+   "rolls": [
+    102,
+    102,
+    103,
+    105,
+    106,
+    108,
+    108,
+    109,
+    111,
+    112,
+    114,
+    114,
+    115,
+    117,
+    118,
+    120
+   ]
+  },
+  {
+   "name": "4x effective, both sides invested",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "baxcalibur",
+   "move": "icicle crash",
+   "defender": "garchomp",
+   "opts": {
+    "atk_nature": "jolly",
+    "atk_sp": "attack=32",
+    "def_nature": "impish",
+    "def_sp": "hp=32,defense=32"
+   },
+   "expected": [
+    232,
+    280
+   ],
+   "rolls": [
+    232,
+    240,
+    240,
+    244,
+    244,
+    252,
+    252,
+    256,
+    256,
+    264,
+    264,
+    268,
+    268,
+    276,
+    276,
+    280
+   ]
+  },
+  {
+   "name": "resisted + STAB (Grassy Glide, no terrain)",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "rillaboom",
+   "move": "grassy glide",
+   "defender": "baxcalibur",
+   "opts": {},
+   "expected": [
+    21,
+    24
+   ],
+   "rolls": [
+    21,
+    21,
+    21,
+    21,
+    21,
+    21,
+    22,
+    22,
+    22,
+    23,
+    23,
+    23,
+    24,
+    24,
+    24,
+    24
+   ]
+  },
+  {
+   "name": "crit + super effective",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "crit": true
+   },
+   "expected": [
+    186,
+    218
+   ],
+   "rolls": [
+    186,
+    186,
+    188,
+    192,
+    192,
+    194,
+    198,
+    200,
+    200,
+    204,
+    206,
+    210,
+    210,
+    212,
+    216,
+    218
+   ]
+  },
+  {
+   "name": "spread move in doubles",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "spread": true
+   },
+   "expected": [
+    57,
+    67
+   ],
+   "rolls": [
+    57,
+    57,
+    58,
+    58,
+    60,
+    60,
+    60,
+    61,
+    61,
+    63,
+    63,
+    64,
+    64,
+    66,
+    66,
+    67
+   ]
+  },
+  {
+   "name": "Life Orb",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "item": "lifeorb"
+   },
+   "expected": [
+    99,
+    117
+   ],
+   "rolls": [
+    99,
+    99,
+    101,
+    101,
+    103,
+    105,
+    105,
+    107,
+    107,
+    109,
+    110,
+    110,
+    113,
+    113,
+    114,
+    117
+   ]
+  },
+  {
+   "name": "burned attacker",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "burn": true
+   },
+   "expected": [
+    38,
+    45
+   ],
+   "rolls": [
+    38,
+    38,
+    39,
+    39,
+    39,
+    40,
+    40,
+    41,
+    41,
+    42,
+    42,
+    42,
+    43,
+    43,
+    44,
+    45
+   ]
+  },
+  {
+   "name": "+2 attack vs +1 defense",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "boost": 2,
+    "def_boost": 1
+   },
+   "expected": [
+    102,
+    120
+   ],
+   "rolls": [
+    102,
+    102,
+    103,
+    105,
+    106,
+    108,
+    108,
+    109,
+    111,
+    112,
+    114,
+    114,
+    115,
+    117,
+    118,
+    120
+   ]
+  },
+  {
+   "name": "sun boosts Fire",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "incineroar",
+   "move": "flare blitz",
+   "defender": "rillaboom",
+   "opts": {
+    "weather": "sun"
+   },
+   "expected": [
+    252,
+    296
+   ],
+   "rolls": [
+    252,
+    254,
+    258,
+    260,
+    264,
+    266,
+    270,
+    272,
+    276,
+    278,
+    282,
+    284,
+    288,
+    290,
+    294,
+    296
+   ]
+  },
+  {
+   "name": "rain weakens Fire",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "incineroar",
+   "move": "flare blitz",
+   "defender": "rillaboom",
+   "opts": {
+    "weather": "rain"
+   },
+   "expected": [
+    84,
+    98
+   ],
+   "rolls": [
+    84,
+    84,
+    84,
+    86,
+    86,
+    86,
+    90,
+    90,
+    90,
+    92,
+    92,
+    92,
+    96,
+    96,
+    96,
+    98
+   ]
+  },
+  {
+   "name": "special move, Mega attacker, SpD investment",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "salamence-mega",
+   "move": "dragon pulse",
+   "defender": "baxcalibur",
+   "opts": {
+    "atk_nature": "modest",
+    "atk_sp": "special-attack=32",
+    "def_sp": "special-defense=32"
+   },
+   "expected": [
+    134,
+    158
+   ],
+   "rolls": [
+    134,
+    134,
+    138,
+    138,
+    140,
+    140,
+    144,
+    144,
+    146,
+    146,
+    150,
+    150,
+    152,
+    152,
+    156,
+    158
+   ]
+  },
+  {
+   "name": "type-boost item (Charcoal)",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "incineroar",
+   "move": "flare blitz",
+   "defender": "rillaboom",
+   "opts": {
+    "item": "charcoal"
+   },
+   "expected": [
+    200,
+    236
+   ],
+   "rolls": [
+    200,
+    200,
+    204,
+    206,
+    210,
+    212,
+    212,
+    216,
+    218,
+    222,
+    224,
+    224,
+    228,
+    230,
+    234,
+    236
+   ]
+  },
+  {
+   "name": "Body Press uses Defense",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "kingambit",
+   "move": "body press",
+   "defender": "baxcalibur",
+   "opts": {
+    "atk_sp": "defense=32"
+   },
+   "expected": [
+    94,
+    112
+   ],
+   "rolls": [
+    94,
+    96,
+    96,
+    98,
+    98,
+    100,
+    100,
+    102,
+    104,
+    104,
+    106,
+    106,
+    108,
+    108,
+    110,
+    112
+   ]
+  },
+  {
+   "name": "Expert Belt on super effective",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, abilities forced neutral: Baxcalibur Ice Body, Rillaboom Overgrow, Garchomp Sand Veil)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "item": "expertbelt"
+   },
+   "expected": [
+    146,
+    175
+   ],
+   "rolls": [
+    146,
+    151,
+    151,
+    154,
+    154,
+    158,
+    158,
+    161,
+    161,
+    166,
+    166,
+    168,
+    168,
+    173,
+    173,
+    175
+   ]
+  },
+  {
+   "name": "Adaptability STAB x2",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "dragalge",
+   "move": "sludge bomb",
+   "defender": "rillaboom",
+   "opts": {
+    "ability": "adaptability"
+   },
+   "expected": [
+    180,
+    212
+   ],
+   "rolls": [
+    180,
+    180,
+    184,
+    184,
+    188,
+    188,
+    192,
+    192,
+    196,
+    196,
+    200,
+    200,
+    204,
+    204,
+    208,
+    212
+   ]
+  },
+  {
+   "name": "Huge Power doubles Attack",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "azumarill",
+   "move": "play rough",
+   "defender": "baxcalibur",
+   "opts": {
+    "ability": "huge-power"
+   },
+   "expected": [
+    128,
+    152
+   ],
+   "rolls": [
+    128,
+    128,
+    132,
+    132,
+    134,
+    134,
+    138,
+    138,
+    140,
+    140,
+    144,
+    144,
+    146,
+    146,
+    150,
+    152
+   ]
+  },
+  {
+   "name": "Technician boosts weak moves",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "scizor",
+   "move": "bullet punch",
+   "defender": "baxcalibur",
+   "opts": {
+    "ability": "technician"
+   },
+   "expected": [
+    92,
+    110
+   ],
+   "rolls": [
+    92,
+    92,
+    96,
+    96,
+    96,
+    98,
+    98,
+    102,
+    102,
+    102,
+    104,
+    104,
+    104,
+    108,
+    108,
+    110
+   ]
+  },
+  {
+   "name": "Thick Fat halves Fire damage",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "incineroar",
+   "move": "flare blitz",
+   "defender": "snorlax",
+   "opts": {
+    "def_ability": "thick-fat"
+   },
+   "expected": [
+    54,
+    64
+   ],
+   "rolls": [
+    54,
+    54,
+    55,
+    55,
+    57,
+    57,
+    58,
+    58,
+    58,
+    60,
+    60,
+    61,
+    61,
+    63,
+    63,
+    64
+   ]
+  },
+  {
+   "name": "Levitate blocks Ground (site gives 0 with or without the ability on Rotom, so this is a weak check)",
+   "source": "pikalytics 2026-09-25 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "rotom",
+   "opts": {
+    "def_ability": "levitate"
+   },
+   "expected": [
+    0,
+    0
+   ],
+   "rolls": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  }
+ ]
 }

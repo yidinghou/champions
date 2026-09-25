@@ -21,6 +21,8 @@ class DamageCases(unittest.TestCase):
                     got = [round(min(rolls) / hp * 100), round(max(rolls) / hp * 100)]
                     want = c["expected_pct"]
                 self.assertEqual(got, want, f"{c['name']} [{c['source']}] applied: {'; '.join(notes)}")
+                if "rolls" in c:
+                    self.assertEqual(sorted(rolls), c["rolls"], f"{c['name']}: all 16 rolls")
 
 
 if __name__ == "__main__":

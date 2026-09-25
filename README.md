@@ -30,7 +30,7 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 
 ## Known gaps
 
-- `calc.py` models STAB, type effectiveness, crit, spread, burn, stages, sun/rain and a few items/abilities only, and hasn't been checked against in-game damage yet.
+- `calc.py` models STAB, type effectiveness, crit, spread, burn, stages, sun/rain and a few items/abilities only, and matches Pikalytics' Champions calculator on 20 cases (`data/damage_cases.json`, regenerate with `tools/pikalytics_harness.js`) but hasn't been checked against in-game damage.
 - Ability descriptions are main-series text (e.g. Ice Body still says "hail"). `champions_override` marks abilities Showdown's Champions mod overrides; that can be a real change (Regenerator) or an implementation detail (Berserk).
 - Anything PokéAPI lists may not be legal in M-C. Over-inclusion is intentional; filter at lookup time.
 

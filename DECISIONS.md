@@ -40,4 +40,9 @@ Showdown's compiled `abilities.js` nests objects in a way that's fragile to pars
 ## 010 — Own damage calculator, small modeled surface (2026-09-25)
 Built `calc.py` on the standard Gen 9 formula (level 50) using our own stats, moves, types and items, instead of wrapping Showdown's calc. It applies modifiers in game order with a floor after each step, and prints which modifiers it used so unmodeled effects are visible rather than silently wrong.
 **Modeled:** STAB (incl. Adaptability), type effectiveness, crit, spread, burn, stat stages, sun/rain, Life Orb, Expert Belt, type-boost items, Huge/Pure Power, Technician, Levitate, Thick Fat.
-**Not modeled:** terrain, screens, most abilities and items, multi-hit and variable-power moves. Unverified in-game: compare a few real hits before trusting it.
+**Not modeled:** terrain, screens, most abilities and items, multi-hit and variable-power moves. 
+
+## 011 — Pikalytics' Champions calculator is the source of truth for damage (2026-09-25)
+The user picked https://www.pikalytics.com/damage-calculator (a Smogon-calc UI with a Champions ruleset, Stat Points as the EV field). We drive it in a browser via `tools/pikalytics_harness.js` and store its results, including all 16 rolls, as `data/damage_cases.json`; `test_damage_cases.py` runs our calculator against them.
+**Result:** 20 site cases (each modifier: STAB, SP, nature, 4x/resisted, crit, spread, Life Orb, burn, stages, sun/rain, special, type-boost item, Body Press, Expert Belt, Adaptability, Huge Power, Technician, Thick Fat, Levitate) match exactly. The first run had 3 off-by-one failures, all items: the game applies modifiers in 4096ths with half-down rounding, and type-boost items (Charcoal) boost base power, not final damage. Fixed in `calc.py` (`poke_round`, `bp_mods`).
+**Limits:** the site's Blank Sets have junk default abilities (see the harness header); Levitate isn't a discriminating check (Rotom takes 0 from Earthquake on the site either way); it's a third-party site, not the game. Still unchecked in-game.
