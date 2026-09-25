@@ -6,9 +6,12 @@
     python3 lookup.py rillaboom --moves                # + full movepool
     python3 lookup.py --learns "fake out"              # who learns a move
     python3 lookup.py --learns "fake out" --type grass --new       # combine filters
+    python3 lookup.py --item "focus"                   # search legal held items
+
+Each Pokémon also shows its type matchups (weak to / resists / immune).
 
 Filters (--learns, --type, --new) list matching forms one per line.
-Data comes from fetch_champions.py and fetch_moves.py.
+Data comes from fetch_champions.py, fetch_moves.py and fetch_reference.py.
 """
 import argparse
 import json
@@ -53,12 +56,30 @@ def fmt_stats(stats):
     return "  ".join(f"{ABBR[s]} {stats[s]}" for s in STATS)
 
 
-def show(form, moves, learnsets, args):
+def matchups(types, chart):
+    """Group attacking types by damage multiplier against a defender with these types."""
+    groups = {}
+    for att in chart:
+        mult = 1
+        for t in types:
+            mult *= chart[att][t.capitalize()]
+        if mult != 1:
+            groups.setdefault(mult, []).append(att.lower())
+    return groups
+
+
+def fmt_matchups(groups):
+    labels = [(4, "weak x4"), (2, "weak x2"), (0.5, "resists x0.5"), (0.25, "resists x0.25"), (0, "immune")]
+    return "\n".join(f"  {label}: {', '.join(groups[m])}" for m, label in labels if m in groups)
+
+
+def show(form, moves, learnsets, chart, args):
     tag = "  [new in M-C]" if form["new_in_mc"] else ""
     print(f"{form['name']}  {'/'.join(form['types'])}{tag}")
     print(f"  abilities: {', '.join(form['abilities'])}")
     print(f"  base:  {fmt_stats(form['stats'])}   (BST {sum(form['stats'].values())})")
     sp = parse_sp(args.sp) if args.sp else None
+    print(fmt_matchups(matchups(form["types"], chart)))
     label = f"lv50 {args.nature}" + (f", SP {args.sp}" if args.sp else ", no SP")
     print(f"  {label}:  {fmt_stats(level50(form['stats'], args.nature, sp))}")
     pool = learnsets.get(form["name"], [])
@@ -79,6 +100,7 @@ def main():
     ap.add_argument("-n", "--nature", default="hardy", help="nature for level-50 stats (default: hardy, neutral)")
     ap.add_argument("-s", "--sp", help="Stat Points, e.g. attack=32,speed=32 (max 32 each, 66 total)")
     ap.add_argument("--moves", action="store_true", help="list the full movepool")
+    ap.add_argument("--item", help="search legal held items by name")
     ap.add_argument("--learns", help="only forms that learn this move")
     ap.add_argument("--type", help="only forms with this type")
     ap.add_argument("--new", action="store_true", help="only forms new in Regulation M-C")
@@ -88,6 +110,15 @@ def main():
     moves = load("moves.json")["moves"]
     learnsets = load("learnsets.json")["learnsets"]
 
+    if args.item:
+        items = load("items.json")["items"]
+        hits = [v for v in items.values() if norm(args.item) in norm(v["name"])]
+        for v in sorted(hits, key=lambda v: v["name"]):
+            print(f"{v['name']:<22} {v['short_desc'] or ''}")
+        print(f"{len(hits)} matches")
+        return
+
+    chart = load("types.json")["chart"]
     filtering = args.learns or args.type or args.new
     if not args.name and not filtering:
         ap.print_help()
@@ -112,7 +143,7 @@ def main():
         print(f"{len(forms)} matches")
     else:
         for f in forms:
-            show(f, moves, learnsets, args)
+            show(f, moves, learnsets, chart, args)
             print()
 
 

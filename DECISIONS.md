@@ -27,3 +27,8 @@ Showdown doesn't model Champions PP, and Serebii's values differ from main serie
 ## 007 — Guard M-C tags with Showdown's roster (2026-09-25)
 Our hand list disagreed with the official "24 new Pokémon". Showdown's champions mod flips newly legal Pokémon from Past/Illegal to legal in the commit that ships a regulation, so `check_roster.py` diffs legality before/after that commit. Result: 35 added forms (29 non-Mega + 6 Megas); Game8's list had missed Farfetch'd, Sirfetch'd and non-Alolan Persian, and the multi-form species (Toxtricity, Indeedee, Squawkabilly, Alolan Persian).
 `NEW_IN_MC` stays hand-maintained (exact form names) but the check fails loudly if it drifts. Deriving it automatically was rejected: it would make the PokéAPI fetch depend on Showdown.
+
+## 008 — Items and type chart from Showdown; legality = base flag + champions override (2026-09-25)
+Showdown's compiled `items.js` has names/descriptions but drops availability flags, so `fetch_reference.py` reads `isNonstandard` from the base `items.ts`, overlays the champions mod's overrides (null = available, e.g. Mega Stones), and keeps items with no flag. Result: 165 legal items.
+**Cross-check:** Serebii's Champions items page lists the same 165, in both directions. Notably not legal: Assault Vest, Choice Band, Lagging Tail.
+Type chart: 18 types from `typechart.js` (Stellar dropped, Tera-only).
