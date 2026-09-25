@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 """Cross-check our new_in_mc tags against Pokemon Showdown's Champions roster.
 
-Run:  python3 check_roster.py      (after fetch_champions.py; exits 1 on mismatch)
+Run:  champions check-roster     (after `champions fetch champions`; exits 1 on mismatch)
 
 Showdown's champions mod marks a Pokemon legal when its formats-data.ts entry has
 no isNonstandard and tier != "Illegal". The commit that shipped a regulation flips
@@ -17,7 +16,7 @@ from pathlib import Path
 REPO = "smogon/pokemon-showdown"
 MC_COMMIT = "812501ede865eea397cd6e9a6f040d73ff57cc84"  # "Add Champions Regulation M-C"
 RAW = f"https://raw.githubusercontent.com/{REPO}/%s/data/mods/champions/formats-data.ts"
-DATA = Path(__file__).parent / "data" / "champions.json"
+DATA = Path(__file__).parent.parent / "data" / "champions.json"
 
 
 def fetch(url):

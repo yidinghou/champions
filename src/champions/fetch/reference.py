@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 """Refresh data/items.json, data/types.json and data/abilities.json.
 
-Run:  python3 fetch_reference.py      (stdlib only)
+Run:  champions fetch reference     (stdlib only)
 
 Items: Showdown marks availability with `isNonstandard` in data/items.ts ("Past" = not
 obtainable). The champions mod overrides that per item (null = available, e.g. Mega Stones).
@@ -22,7 +21,7 @@ from pathlib import Path
 
 SD = "https://raw.githubusercontent.com/smogon/pokemon-showdown/master"
 PLAY = "https://play.pokemonshowdown.com/data"
-DATA = Path(__file__).parent / "data"
+DATA = Path(__file__).parent.parent / "data"
 POKEAPI = "https://pokeapi.co/api/v2"
 MULT = {0: 1, 1: 2, 2: 0.5, 3: 0}
 

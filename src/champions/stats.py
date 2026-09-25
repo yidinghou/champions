@@ -4,7 +4,7 @@ Champions uses Stat Points (SP) instead of EVs/IVs: 66 SP total, max 32 per stat
 stat at level 50, fixed 31 IVs. Nature ("Stat Alignment") is applied AFTER SP are added.
 Formula per champsdex.com; total/cap/+1 per SP also on Game8. Confirmed in-game by the user.
 
-    python3 stats.py baxcalibur jolly speed=32,attack=32
+    champions stats baxcalibur jolly speed=32,attack=32
 """
 import json
 import sys
@@ -63,8 +63,12 @@ def load(name):
     raise KeyError(name)
 
 
-if __name__ == "__main__":
+def main():
     mon = load(sys.argv[1])
     nature = sys.argv[2] if len(sys.argv) > 2 else "hardy"
     sp = {k: int(v) for k, v in (p.split("=") for p in sys.argv[3].split(","))} if len(sys.argv) > 3 else None
     print(mon["name"], nature, list(level50(mon["stats"], nature, sp).values()))
+
+
+if __name__ == "__main__":
+    main()

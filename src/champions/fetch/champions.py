@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 """Refresh data/champions.json from PokeAPI's `champions` pokedex.
 
-Run:  python3 fetch_champions.py
+Run:  champions fetch champions
 Stdlib only. Safe to re-run any time; it overwrites the output file.
 
 Data note: PokeAPI lists every Pokemon in the Champions game, but has NO
@@ -18,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 API = "https://pokeapi.co/api/v2"
-OUT = Path(__file__).parent / "data" / "champions.json"
+OUT = Path(__file__).parent.parent / "data" / "champions.json"
 
 # Hand-maintained: exact PokeAPI form names added in Regulation M-C. Update per regulation.
 # check_roster.py verifies this against Pokemon Showdown's roster and exits 1 on any mismatch.

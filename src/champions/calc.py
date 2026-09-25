@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
 """Damage calculator: level 50, Gen 9 formula, offline.
 
-    python3 calc.py garchomp earthquake baxcalibur
-    python3 calc.py garchomp earthquake baxcalibur --atk-nature jolly --atk-sp attack=32 \\
+    champions calc garchomp earthquake baxcalibur
+    champions calc garchomp earthquake baxcalibur --atk-nature jolly --atk-sp attack=32 \\
         --def-nature impish --def-sp hp=32,defense=32 --spread --item lifeorb
-    python3 calc.py garchomp-mega-z dragonclaw salamence-mega --crit --boost 1
+    champions calc garchomp-mega-z dragonclaw salamence-mega --crit --boost 1
 
 Prints the min-max damage over the 16 random rolls, as % of the defender's max HP, and hits to KO.
 Modeled: STAB, type effectiveness, crit, spread (doubles), burn, stat stages, sun/rain, and the small
@@ -17,8 +16,8 @@ import argparse
 import re
 import sys
 
-from lookup import find_forms, load, norm
-from stats import level50
+from .lookup import find_forms, load, norm
+from .stats import level50
 
 LEVEL = 50
 # Moves whose attacking/defending stat differs from their category.

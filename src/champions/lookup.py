@@ -1,14 +1,13 @@
-#!/usr/bin/env python3
 """Look things up in the local Champions data (no network).
 
-    python3 lookup.py baxcalibur                       # every form matching the name
-    python3 lookup.py baxcalibur -n jolly -s attack=32,speed=32   # level-50 stats
-    python3 lookup.py rillaboom --moves                # + full movepool
-    python3 lookup.py --learns "fake out"              # who learns a move
-    python3 lookup.py --learns "fake out" --type grass --new       # combine filters
-    python3 lookup.py --type ghost/fire                # dual type (or --type ghost --type fire)
-    python3 lookup.py --item "focus"                   # search legal held items
-    python3 lookup.py --ability regenerator            # ability text + who has it
+    champions lookup baxcalibur                       # every form matching the name
+    champions lookup baxcalibur -n jolly -s attack=32,speed=32   # level-50 stats
+    champions lookup rillaboom --moves                # + full movepool
+    champions lookup --learns "fake out"              # who learns a move
+    champions lookup --learns "fake out" --type grass --new       # combine filters
+    champions lookup --type ghost/fire                # dual type (or --type ghost --type fire)
+    champions lookup --item "focus"                   # search legal held items
+    champions lookup --ability regenerator            # ability text + who has it
 
 Each Pokémon also shows its type matchups (weak to / resists / immune).
 
@@ -21,7 +20,7 @@ import re
 import sys
 from pathlib import Path
 
-from stats import STATS, level50
+from .stats import STATS, level50
 
 DATA = Path(__file__).parent / "data"
 ABBR = {"hp": "HP", "attack": "Atk", "defense": "Def", "special-attack": "SpA",

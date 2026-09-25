@@ -1,11 +1,11 @@
-"""Data-driven damage checks. Add real hits to data/damage_cases.json; run: python3 -m unittest test_damage_cases -v"""
+"""Data-driven damage checks. Add real hits to data/damage_cases.json; run: python3 -m unittest tests.test_damage_cases -v"""
 import json
 import unittest
-from pathlib import Path
 
-from calc import damage
+from champions.calc import damage
+from champions.lookup import DATA
 
-CASES = json.loads((Path(__file__).parent / "data" / "damage_cases.json").read_text())["cases"]
+CASES = json.loads((DATA / "damage_cases.json").read_text())["cases"]
 
 
 class DamageCases(unittest.TestCase):

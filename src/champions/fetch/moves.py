@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 """Refresh data/moves.json and data/learnsets.json from Pokemon Showdown.
 
-Run:  python3 fetch_moves.py      (after fetch_champions.py; stdlib only)
+Run:  champions fetch moves     (after `champions fetch champions`; stdlib only)
 
 Sources (see DECISIONS.md 005):
 - Learnsets: smogon/pokemon-showdown data/mods/champions/learnsets.ts
@@ -24,7 +23,7 @@ RAW = "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/mod
 MOVES_JSON = "https://play.pokemonshowdown.com/data/moves.json"
 COMMITS = "https://api.github.com/repos/smogon/pokemon-showdown/commits?per_page=1&path=data/mods/champions/learnsets.ts"
 SEREBII_MOVES = "https://www.serebii.net/pokemonchampions/moves.shtml"
-DATA = Path(__file__).parent / "data"
+DATA = Path(__file__).parent.parent / "data"
 
 
 def fetch(url):

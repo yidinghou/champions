@@ -1,8 +1,8 @@
-"""Hand-computed checks for calc.py. Run: python3 -m unittest test_calc"""
+"""Hand-computed checks for calc.py. Run: python3 -m unittest tests.test_calc"""
 import unittest
 
-from calc import poke_round, rolls, stage, type_multiplier
-from lookup import load
+from champions.calc import poke_round, rolls, stage, type_multiplier
+from champions.lookup import load
 
 
 class DamageMath(unittest.TestCase):
