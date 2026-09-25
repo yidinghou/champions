@@ -27,7 +27,7 @@
       "per_sp": 5,
       "change_alignment": 500
     },
-    "status": "Formula from champsdex.com, totals from Game8; not verified in-game. Note the champsdex worked example mislabels Jolly (it is +Spe/-SpA).",
+    "status": "Formula from champsdex.com, totals from Game8. Confirmed correct in-game by the user (Jolly Baxcalibur, 32 SP max per stat). Note the champsdex worked example mislabels Jolly (it is +Spe/-SpA).",
     "sources": [
       "https://champsdex.com/posts/pokemon-champions-ev-iv-stats-guide-2026/",
       "https://game8.co/games/Pokemon-Champions/archives/538683"

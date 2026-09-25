@@ -16,7 +16,7 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 - `data/rules.json` — hand-maintained battle rules and regulation dates (level 50, one Mega, etc.).
 - `stats.py` — computes level-50 battle stats from raw base stats at lookup time (`python3 stats.py baxcalibur jolly speed=32,attack=32`). Raw data stays raw; nothing derived is saved.
 
-`stats.py` uses Champions' Stat Point system (66 SP, max 32 per stat, +1 each at level 50, nature applied after). Formula comes from champsdex.com and totals from Game8; unverified in-game. Details in `data/rules.json`.
+`stats.py` uses Champions' Stat Point system (66 SP, max 32 per stat, +1 each at level 50, nature applied after). Formula comes from champsdex.com and totals from Game8; confirmed in-game by the user. Details in `data/rules.json`.
 
 ## Where the data comes from
 
