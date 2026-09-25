@@ -13,7 +13,7 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 ## Files
 
 - `fetch_champions.py` — generates `data/champions.json` (raw base stats, types, abilities).
-- `fetch_moves.py` — generates `data/learnsets.json` and `data/moves.json` from Pokémon Showdown's `champions` mod (run after `fetch_champions.py`).
+- `fetch_moves.py` — generates `data/learnsets.json` and `data/moves.json` from Pokémon Showdown's `champions` mod, with PP from Serebii (run after `fetch_champions.py`).
 - `data/rules.json` — hand-maintained battle rules and regulation dates (level 50, one Mega, etc.).
 - `stats.py` — computes level-50 battle stats from raw base stats at lookup time (`python3 stats.py baxcalibur jolly speed=32,attack=32`). Raw data stays raw; nothing derived is saved.
 
@@ -26,7 +26,6 @@ Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base s
 
 ## Known gaps
 
-- Move PP in `moves.json` is main-series (`pp_main_series`), not Champions'. Showdown doesn't model it.
 - Official post says 24 new Pokémon; Game8 lists ~22 and our list has 21 species + 6 Megas. Unresolved.
 - Multi-form species (Toxtricity, Indeedee, Squawkabilly) only tag the default form as `new_in_mc`.
 - Anything PokéAPI lists may not be legal in M-C. Over-inclusion is intentional; filter at lookup time.

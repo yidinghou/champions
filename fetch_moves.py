@@ -7,8 +7,10 @@ Sources (see DECISIONS.md 005):
 - Learnsets: smogon/pokemon-showdown data/mods/champions/learnsets.ts
 - Moves: Showdown's compiled main-series moves.json, with the champions mod's
   moves.ts *overrides* merged on top. That file only lists what differs from
-  main series, e.g. a changed basePower or pp. (isNonstandard "Past" overrides are ignored: the
+  main series, e.g. a changed basePower. (isNonstandard "Past" overrides are ignored: the
   champions learnsets already exclude unusable moves.)
+- PP: Serebii's Champions moves page (one request). Showdown doesn't model
+  Champions PP, and Serebii's values differ from main series for most moves.
 Showdown ids are lowercase alphanumeric ("doubleedge"). Learnsets are keyed by
 OUR form names from champions.json.
 """
@@ -21,17 +23,26 @@ from pathlib import Path
 RAW = "https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/mods/champions"
 MOVES_JSON = "https://play.pokemonshowdown.com/data/moves.json"
 COMMITS = "https://api.github.com/repos/smogon/pokemon-showdown/commits?per_page=1&path=data/mods/champions/learnsets.ts"
+SEREBII_MOVES = "https://www.serebii.net/pokemonchampions/moves.shtml"
 DATA = Path(__file__).parent / "data"
 
 
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": "champions-notes/0.1"})
     with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read().decode()
+        return r.read().decode("utf-8", errors="replace")  # Serebii pages aren't always UTF-8
 
 
 def norm(name):
     return re.sub(r"[^a-z0-9]", "", name.lower())
+
+
+def fetch_pp():
+    """{showdown_id: PP} from Serebii's Champions moves table (columns: type, category, PP, power, accuracy)."""
+    html = fetch(SEREBII_MOVES)
+    rows = re.findall(
+        r'attackdex-champions/([^"]+?)\.shtml">[^<]+</a>.*?<td class="cen">\s*(\d+|--)\s*</td>', html, re.S)
+    return {norm(slug): int(pp) for slug, pp in rows if pp != "--"}
 
 
 def parse_learnsets(ts):
@@ -89,6 +100,7 @@ def main():
             unmatched.append(f["name"])
 
     base = json.loads(fetch(MOVES_JSON))
+    pp = fetch_pp()
     overrides = parse_move_overrides(fetch(f"{RAW}/moves.ts"))
     used = {m for moves in by_form.values() for m in moves}
     moves = {}
@@ -102,7 +114,7 @@ def main():
             "category": merged.get("category"),
             "base_power": merged.get("basePower"),
             "accuracy": merged.get("accuracy"),
-            "pp_main_series": merged.get("pp"),  # NOT Champions PP; Showdown does not model it
+            "pp": pp.get(mid),  # Serebii (Showdown has no Champions PP)
             "priority": merged.get("priority"),
             "target": merged.get("target"),
             "short_desc": b.get("shortDesc"),
@@ -125,6 +137,9 @@ def main():
     print(f"{len(by_form)}/{len(forms)} forms with learnsets, {len(moves)} moves")
     if unmatched:
         print("no learnset for:", ", ".join(unmatched))
+    no_pp = [m for m in moves if moves[m]["pp"] is None]
+    if no_pp:
+        print("no PP from Serebii for:", ", ".join(no_pp))
     missing = [m for m in moves if m not in base]
     if missing:
         print("moves missing from base moves.json:", ", ".join(missing))

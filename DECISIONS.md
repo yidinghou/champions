@@ -20,4 +20,6 @@ PokéAPI has no Champions learnsets (Megas have zero moves). Options considered:
 **Chose A:** official, open-source, updated the same day M-C shipped, no Node dependency. Serebii scraping is the fallback if A breaks.
 **Caveat:** the mod's `moves.ts` only holds *overrides* on the main-series moves, so we merge it onto Showdown's compiled `moves.json`.
 
-**Known gap:** Showdown doesn't model Champions PP. Serebii shows different values (e.g. Acrobatics 16 vs main-series 15), so `moves.json` calls it `pp_main_series`. Cross-check: 510 moves and Rillaboom's 67-move pool match Serebii exactly.
+## 006 — Champions PP from Serebii (2026-09-25)
+Showdown doesn't model Champions PP, and Serebii's values differ from main series for 411 of 510 moves (e.g. Acrobatics 16 vs 15, Assurance 12 vs 10). So `fetch_moves.py` reads PP from Serebii's Champions moves page: one request, ~280 KB, robots.txt allows it.
+**Trade-off:** this is the one field that depends on scraping HTML. If the page layout changes the fetch prints "no PP" and leaves `pp` null rather than guessing. Everything else stays on Showdown.
