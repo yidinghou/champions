@@ -3,6 +3,7 @@
 Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.md`; open work at the bottom.
 
 ## 2026-09-25
+- `lookup.py --type` now takes dual types (`ghost/fire` or repeated flags) and rejects unknown types; before, a second `--type` silently overrode the first.
 - Added `fetch_reference.py` (items, type chart) and taught `lookup.py` weaknesses and `--item` search. 165 legal items match Serebii's list exactly (decision 008).
 - Added `check_roster.py`. Showdown says M-C added 35 forms; our list had 27. Missing: Farfetch'd, Sirfetch'd, and the extra forms of Toxtricity, Indeedee, Squawkabilly and Persian. That explains the official "24" vs Game8's 22 (decision 007). `NEW_IN_MC` is now exact form names and the check passes.
 - Added `lookup.py`: name lookup with level-50 stats (nature and SP options), movepool, and filters by move/type/new-in-M-C.

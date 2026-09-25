@@ -6,6 +6,7 @@
     python3 lookup.py rillaboom --moves                # + full movepool
     python3 lookup.py --learns "fake out"              # who learns a move
     python3 lookup.py --learns "fake out" --type grass --new       # combine filters
+    python3 lookup.py --type ghost/fire                # dual type (or --type ghost --type fire)
     python3 lookup.py --item "focus"                   # search legal held items
 
 Each Pokémon also shows its type matchups (weak to / resists / immune).
@@ -102,7 +103,8 @@ def main():
     ap.add_argument("--moves", action="store_true", help="list the full movepool")
     ap.add_argument("--item", help="search legal held items by name")
     ap.add_argument("--learns", help="only forms that learn this move")
-    ap.add_argument("--type", help="only forms with this type")
+    ap.add_argument("--type", action="append", metavar="TYPE",
+                    help="only forms with this type; repeat or use ghost/fire for a dual type (must have all)")
     ap.add_argument("--new", action="store_true", help="only forms new in Regulation M-C")
     args = ap.parse_args()
 
@@ -133,7 +135,11 @@ def main():
             sys.exit(f"unknown move {args.learns!r}")
         forms = [f for f in forms if mid in learnsets.get(f["name"], [])]
     if args.type:
-        forms = [f for f in forms if args.type.lower() in f["types"]]
+        wanted = {t.lower() for arg in args.type for t in re.split(r"[/,]", arg) if t}
+        unknown = wanted - {t.lower() for t in chart}
+        if unknown:
+            sys.exit(f"unknown type: {', '.join(sorted(unknown))}")
+        forms = [f for f in forms if wanted <= set(f["types"])]
     if args.new:
         forms = [f for f in forms if f["new_in_mc"]]
 
