@@ -10,6 +10,14 @@ python3 fetch_champions.py   # stdlib only, Python 3.8+, ~1 min
 
 Writes `data/champions.json` (~143 KB: 231 species, 380 forms with types, base stats, abilities). The file is committed on purpose: it's small, and diffs show what changed between regulations.
 
+## Files
+
+- `fetch_champions.py` — generates `data/champions.json` (raw base stats, types, abilities).
+- `data/rules.json` — hand-maintained battle rules and regulation dates (level 50, one Mega, etc.).
+- `stats.py` — computes level-50 battle stats from raw base stats at lookup time (`python3 stats.py baxcalibur jolly`). Raw data stays raw; nothing derived is saved.
+
+**Assumption:** `stats.py` uses main-series rules (31 IV, 0 EV, natures). How Champions handles stat investment is unconfirmed; see the `stats` TODO in `data/rules.json`.
+
 ## Where the data comes from
 
 - **Roster and stats:** [PokéAPI](https://pokeapi.co/api/v2/pokedex/champions) `champions` pokédex (community-contributed, no auth). It lists everything in the game but has **no regulation/season info**.

@@ -1,0 +1,29 @@
+{
+  "_note": "Hand-maintained (not generated). Add to this as we learn more, e.g. how Champions handles stat investment.",
+  "battle": {
+    "level": 50,
+    "level_note": "All Pokemon are auto-set to level 50 in battle (Game8).",
+    "one_mega_evolution_per_battle": true,
+    "no_duplicate_dex_numbers_per_team": true,
+    "no_duplicate_held_items": true,
+    "formats": {
+      "singles": {"team_size": "3-6"},
+      "doubles": {"team_size": "4-6", "bring": 4}
+    }
+  },
+  "stats": {
+    "status": "TODO: unverified how Champions handles IVs/EVs/natures. stats.py assumes main-series rules (31 IV, 0 EV, neutral nature) until confirmed."
+  },
+  "regulations": {
+    "M-C": {
+      "starts": "2026-09-09T02:00:00Z",
+      "ends": "2026-12-02T05:59:00Z",
+      "ranked_season": "M-6 (Sept 9 - Oct 7, 2026)",
+      "eligibility": "Everything eligible in earlier regulations, plus additions. See NEW_IN_MC in fetch_champions.py.",
+      "sources": [
+        "https://www.pokemon.com/us/news/get-ready-for-regulation-set-m-c-in-pokemon-champions",
+        "https://game8.co/games/Pokemon-Champions/archives/618064"
+      ]
+    }
+  }
+}
