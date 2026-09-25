@@ -1,9 +1,10 @@
 """Compute battle stats from base stats. Reads data/champions.json (raw) at call time.
 
-ASSUMPTION: main-series stat rules (IVs, EVs, natures) at level 50. Champions may
-handle stat investment differently -- see data/rules.json "stats". Update here once confirmed.
+Champions uses Stat Points (SP) instead of EVs/IVs: 66 SP total, max 32 per stat, each SP = +1
+stat at level 50, fixed 31 IVs. Nature ("Stat Alignment") is applied AFTER SP are added.
+Formula per champsdex.com; total/cap/+1 per SP also on Game8. Not yet verified in-game.
 
-    python3 stats.py baxcalibur jolly     # or: python3 stats.py garchomp-mega-z
+    python3 stats.py baxcalibur jolly speed=32,attack=32
 """
 import json
 import sys
@@ -29,19 +30,25 @@ _UP_DOWN = {
 NEUTRAL = {"hardy", "docile", "serious", "bashful", "quirky"}
 
 
-def level50(base, nature="hardy", iv=31, ev=0):
-    """base: dict of the six base stats. ev applies to every stat (0-252)."""
+MAX_SP_TOTAL, MAX_SP_PER_STAT = 66, 32
+
+
+def level50(base, nature="hardy", sp=None):
+    """base: dict of the six base stats. sp: dict of stat -> Stat Points (default none)."""
     nature = nature.lower()
     if nature not in _UP_DOWN and nature not in NEUTRAL:
         raise ValueError(f"unknown nature: {nature}")
+    sp = sp or {}
+    if sum(sp.values()) > MAX_SP_TOTAL or any(v > MAX_SP_PER_STAT for v in sp.values()):
+        raise ValueError(f"SP over limit ({MAX_SP_TOTAL} total, {MAX_SP_PER_STAT} per stat)")
     up, down = _UP_DOWN.get(nature, (None, None))
     out = {}
     for s in STATS:
-        core = (2 * base[s] + iv + ev // 4) * LEVEL // 100
+        core = (2 * base[s] + 31) * LEVEL // 100
         if s == "hp":
-            out[s] = core + LEVEL + 10
+            out[s] = core + LEVEL + 10 + sp.get(s, 0)
         else:
-            out[s] = core + 5
+            out[s] = core + 5 + sp.get(s, 0)
             if s == up:
                 out[s] = out[s] * 110 // 100
             elif s == down:
@@ -59,4 +66,5 @@ def load(name):
 if __name__ == "__main__":
     mon = load(sys.argv[1])
     nature = sys.argv[2] if len(sys.argv) > 2 else "hardy"
-    print(mon["name"], nature, list(level50(mon["stats"], nature).values()))
+    sp = {k: int(v) for k, v in (p.split("=") for p in sys.argv[3].split(","))} if len(sys.argv) > 3 else None
+    print(mon["name"], nature, list(level50(mon["stats"], nature, sp).values()))

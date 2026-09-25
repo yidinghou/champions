@@ -1,5 +1,5 @@
 {
-  "_note": "Hand-maintained (not generated). Add to this as we learn more, e.g. how Champions handles stat investment.",
+  "_note": "Hand-maintained (not generated). Add to this as we learn more..",
   "battle": {
     "level": 50,
     "level_note": "All Pokemon are auto-set to level 50 in battle (Game8).",
@@ -7,12 +7,31 @@
     "no_duplicate_dex_numbers_per_team": true,
     "no_duplicate_held_items": true,
     "formats": {
-      "singles": {"team_size": "3-6"},
-      "doubles": {"team_size": "4-6", "bring": 4}
+      "singles": {
+        "team_size": "3-6"
+      },
+      "doubles": {
+        "team_size": "4-6",
+        "bring": 4
+      }
     }
   },
   "stats": {
-    "status": "TODO: unverified how Champions handles IVs/EVs/natures. stats.py assumes main-series rules (31 IV, 0 EV, neutral nature) until confirmed."
+    "system": "Stat Points (SP) replace EVs/IVs",
+    "sp_total": 66,
+    "sp_per_stat_max": 32,
+    "sp_effect": "+1 to the stat at level 50",
+    "ivs": "none; effectively fixed at 31",
+    "nature": "called Stat Alignment; +10%/-10%, applied after SP are added",
+    "cost_vp": {
+      "per_sp": 5,
+      "change_alignment": 500
+    },
+    "status": "Formula from champsdex.com, totals from Game8; not verified in-game. Note the champsdex worked example mislabels Jolly (it is +Spe/-SpA).",
+    "sources": [
+      "https://champsdex.com/posts/pokemon-champions-ev-iv-stats-guide-2026/",
+      "https://game8.co/games/Pokemon-Champions/archives/538683"
+    ]
   },
   "regulations": {
     "M-C": {
