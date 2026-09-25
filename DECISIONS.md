@@ -36,3 +36,8 @@ Type chart: 18 types from `typechart.js` (Stellar dropped, Tera-only).
 ## 009 — Ability text from PokéAPI, override flag from Showdown (2026-09-25)
 Showdown's compiled `abilities.js` nests objects in a way that's fragile to parse without a JS engine. PokéAPI's ability endpoint has descriptions keyed by the same slugs we already store, and `is_hidden` per Pokémon (now saved as `hidden_ability`). Showdown's champions mod only supplies a `champions_override` flag for 7 abilities (Berserk, Emergency Exit, Healer, Natural Cure, Regenerator, Run Away, Unseen Fist).
 **Limits:** descriptions are main-series text, and the flag doesn't say what changed. Verify a flagged ability in-game or on Serebii before relying on it.
+
+## 010 — Own damage calculator, small modeled surface (2026-09-25)
+Built `calc.py` on the standard Gen 9 formula (level 50) using our own stats, moves, types and items, instead of wrapping Showdown's calc. It applies modifiers in game order with a floor after each step, and prints which modifiers it used so unmodeled effects are visible rather than silently wrong.
+**Modeled:** STAB (incl. Adaptability), type effectiveness, crit, spread, burn, stat stages, sun/rain, Life Orb, Expert Belt, type-boost items, Huge/Pure Power, Technician, Levitate, Thick Fat.
+**Not modeled:** terrain, screens, most abilities and items, multi-hit and variable-power moves. Unverified in-game: compare a few real hits before trusting it.

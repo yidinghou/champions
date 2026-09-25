@@ -3,6 +3,7 @@
 Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.md`; open work at the bottom.
 
 ## 2026-09-25
+- Added `calc.py` damage calculator and `test_calc.py` (decision 010). Not yet checked against in-game damage.
 - Abilities: `data/abilities.json` (216, PokéAPI text, 7 flagged as overridden in Showdown's Champions mod), `hidden_ability` on each form, and `lookup.py` shows ability text plus `--ability` search (decision 009).
 - `lookup.py --type` now takes dual types (`ghost/fire` or repeated flags) and rejects unknown types; before, a second `--type` silently overrode the first.
 - Added `fetch_reference.py` (items, type chart) and taught `lookup.py` weaknesses and `--item` search. 165 legal items match Serebii's list exactly (decision 008).
@@ -17,4 +18,5 @@ Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.
 
 ## Open
 - Verify the 7 overridden abilities (what actually changed in Champions).
-- Nothing outstanding. Ideas: a team builder (item clause, one Mega, no duplicate dex numbers per `data/rules.json`), a damage calculator.
+- Verify `calc.py` against a few in-game hits.
+- Ideas: a team builder (item clause, one Mega, no duplicate dex numbers per `data/rules.json`) with team-wide type coverage.
