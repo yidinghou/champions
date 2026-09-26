@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-25T13:50:36+00:00",
+ "fetched_at": "2026-09-26T17:49:44+00:00",
  "source": "smogon/pokemon-showdown data/mods/champions",
  "learnsets_source_commit": {
   "sha": "d3de52a178",
@@ -15,6 +15,13 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -27,6 +34,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Defense by 2.",
    "champions_overrides": null
   },
@@ -39,6 +51,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Sp. Def by 2.",
    "champions_overrides": null
   },
@@ -51,6 +70,14 @@
    "pp": 16,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "contact",
+    "distance",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if the user has no held item.",
    "champions_overrides": null
   },
@@ -63,6 +90,10 @@
    "pp": 20,
    "priority": 0,
    "target": "adjacentAllyOrSelf",
+   "flags": [
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Raises a random stat of the user or an ally by 2.",
    "champions_overrides": null
   },
@@ -75,6 +106,15 @@
    "pp": 20,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "contact",
+    "distance",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "This move does not check accuracy.",
    "champions_overrides": null
   },
@@ -87,6 +127,11 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub"
+   ],
+   "multihit": null,
    "short_desc": "The target makes its move right after the user.",
    "champions_overrides": null
   },
@@ -99,6 +144,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Speed by 2.",
    "champions_overrides": null
   },
@@ -111,6 +161,14 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio. Hits adjacent foes.",
    "champions_overrides": null
   },
@@ -123,6 +181,14 @@
    "pp": 16,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "distance",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -135,6 +201,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "100% confuse target that had a stat rise this turn.",
    "champions_overrides": null
   },
@@ -147,6 +221,10 @@
    "pp": 16,
    "priority": 2,
    "target": "self",
+   "flags": [
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "User and ally swap positions; using again can fail.",
    "champions_overrides": null
   },
@@ -159,6 +237,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Sp. Def by 2.",
    "champions_overrides": null
   },
@@ -171,6 +254,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to raise all stats by 1 (not acc/eva).",
    "champions_overrides": null
   },
@@ -183,6 +272,11 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": {
     "basePower": 90
@@ -197,6 +291,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": null
   },
@@ -209,6 +310,13 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -221,6 +329,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 1/16 max HP per turn.",
    "champions_overrides": null
   },
@@ -233,6 +346,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "dance",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to raise the user's Speed by 1.",
    "champions_overrides": null
   },
@@ -245,6 +366,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -257,6 +385,11 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Defense and Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -269,6 +402,11 @@
    "pp": 20,
    "priority": 0,
    "target": "adjacentAlly",
+   "flags": [
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Raises an ally's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -281,6 +419,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if target was damaged this turn.",
    "champions_overrides": null
   },
@@ -293,6 +438,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "A target of the opposite gender gets infatuated.",
    "champions_overrides": null
   },
@@ -305,6 +458,15 @@
    "pp": 20,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "bullet",
+    "distance",
+    "metronome",
+    "mirror",
+    "protect",
+    "pulse"
+   ],
+   "multihit": null,
    "short_desc": "This move does not check accuracy.",
    "champions_overrides": null
   },
@@ -317,6 +479,11 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Morpeko: Electric; Hangry: Dark; 100% +1 Spe.",
    "champions_overrides": null
   },
@@ -329,6 +496,11 @@
    "pp": 20,
    "priority": 0,
    "target": "allySide",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, damage to allies halved. Snow only.",
    "champions_overrides": null
   },
@@ -341,6 +513,13 @@
    "pp": 12,
    "priority": -4,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if user is damaged by the target.",
    "champions_overrides": null
   },
@@ -353,6 +532,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% confusion. User loses 50% max HP if miss.",
    "champions_overrides": null
   },
@@ -365,6 +551,14 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Attack by 1.",
    "champions_overrides": null
   },
@@ -377,6 +571,11 @@
    "pp": 8,
    "priority": 4,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "Protects from moves. Contact: poison.",
    "champions_overrides": {
     "pp": 5
@@ -391,6 +590,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "50% psn. 2\u00d7 power if target already poisoned.",
    "champions_overrides": null
   },
@@ -403,6 +608,10 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "User switches, passing stat changes and more.",
    "champions_overrides": null
   },
@@ -415,6 +624,16 @@
    "pp": 8,
    "priority": -3,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "failcopycat",
+    "failinstruct",
+    "failmefirst",
+    "noassist",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Burns on contact with the user before it moves.",
    "champions_overrides": {
     "basePower": 120,
@@ -430,6 +649,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "All healthy allies aid in damaging the target.",
    "champions_overrides": null
   },
@@ -442,6 +668,16 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "failcopycat",
+    "failinstruct",
+    "failmefirst",
+    "failmimic",
+    "noassist",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Cannot be selected until the user eats a Berry.",
    "champions_overrides": null
   },
@@ -454,6 +690,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "User loses 50% max HP. Maximizes Attack.",
    "champions_overrides": null
   },
@@ -466,6 +707,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps and damages the target for 4-5 turns.",
    "champions_overrides": null
   },
@@ -478,6 +726,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -490,6 +746,15 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "heal",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 50% of the damage dealt.",
    "champions_overrides": null
   },
@@ -502,6 +767,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Attack by 1.",
    "champions_overrides": null
   },
@@ -514,6 +785,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "recharge"
+   ],
+   "multihit": null,
    "short_desc": "User cannot move next turn.",
    "champions_overrides": null
   },
@@ -526,6 +804,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio. 10% chance to burn.",
    "champions_overrides": null
   },
@@ -538,6 +823,13 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to freeze foe(s). Can't miss in Snow.",
    "champions_overrides": null
   },
@@ -550,6 +842,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Prevents the target from switching out.",
    "champions_overrides": null
   },
@@ -562,6 +860,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Uses user's Def stat as Atk in damage calculation.",
    "champions_overrides": null
   },
@@ -574,6 +878,15 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "minimize",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to paralyze the target.",
    "champions_overrides": null
   },
@@ -586,6 +899,15 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Hits 2-5 times in one turn.",
    "champions_overrides": {
     "basePower": 30
@@ -600,6 +922,14 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect. Hits adjacent Pokemon.",
    "champions_overrides": null
   },
@@ -612,6 +942,19 @@
    "pp": 8,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "charge",
+    "contact",
+    "distance",
+    "failinstruct",
+    "gravity",
+    "metronome",
+    "mirror",
+    "noassist",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Bounces turn 1. Hits turn 2. 30% paralyze.",
    "champions_overrides": null
   },
@@ -624,6 +967,14 @@
    "pp": 16,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "contact",
+    "distance",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 33% recoil.",
    "champions_overrides": null
   },
@@ -636,6 +987,12 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the foe(s) Attack by 1.",
    "champions_overrides": null
   },
@@ -648,6 +1005,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Destroys screens, unless the target is immune.",
    "champions_overrides": null
   },
@@ -660,6 +1024,13 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect. Hits adjacent Pokemon.",
    "champions_overrides": null
   },
@@ -672,6 +1043,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User steals and eats the target's Berry.",
    "champions_overrides": null
   },
@@ -684,6 +1062,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -696,6 +1082,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Attack and Defense by 1.",
    "champions_overrides": null
   },
@@ -708,6 +1099,13 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance lower adjacent Pkmn Speed by 1.",
    "champions_overrides": null
   },
@@ -720,6 +1118,14 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -732,6 +1138,16 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Hits 2-5 times in one turn.",
    "champions_overrides": null
   },
@@ -744,6 +1160,12 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% burns a target that had a stat rise this turn.",
    "champions_overrides": null
   },
@@ -756,6 +1178,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "defrost",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User's Fire type becomes typeless; must be Fire.",
    "champions_overrides": null
   },
@@ -768,6 +1197,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Sp. Atk and Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -780,6 +1214,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "Sets a layer of Spikes on the opposing side.",
    "champions_overrides": null
   },
@@ -792,6 +1234,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "+1 SpD, user's next Electric move 2\u00d7 power.",
    "champions_overrides": null
   },
@@ -804,6 +1251,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "70% chance to raise the user's Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -816,6 +1269,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Attack by 2.",
    "champions_overrides": null
   },
@@ -828,6 +1289,11 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Attack by 1.",
    "champions_overrides": null
   },
@@ -840,6 +1306,8 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [],
+   "multihit": null,
    "short_desc": "Starts Snow. User switches out.",
    "champions_overrides": null
   },
@@ -852,6 +1320,15 @@
    "pp": 12,
    "priority": -6,
    "target": "normal",
+   "flags": [
+    "contact",
+    "failcopycat",
+    "metronome",
+    "mirror",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Forces the target to switch to a random ally.",
    "champions_overrides": null
   },
@@ -864,6 +1341,14 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Defense by 1.",
    "champions_overrides": null
   },
@@ -876,6 +1361,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "dance",
+    "snatch",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "User loses 33% of its max HP. +1 to all stats.",
    "champions_overrides": {
     "accuracy": true
@@ -890,6 +1381,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Resets all of the target's stat stages to 0.",
    "champions_overrides": null
   },
@@ -902,6 +1399,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Defense and Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -914,6 +1418,12 @@
    "pp": 12,
    "priority": 0,
    "target": "adjacentAlly",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Raises an ally's Attack and Defense by 1.",
    "champions_overrides": null
   },
@@ -926,6 +1436,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises user's Attack, Defense, accuracy by 1.",
    "champions_overrides": null
   },
@@ -938,6 +1453,13 @@
    "pp": 12,
    "priority": 0,
    "target": "scripted",
+   "flags": [
+    "contact",
+    "failmefirst",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "If hit by an attack, returns 1.5\u00d7 damage.",
    "champions_overrides": null
   },
@@ -950,6 +1472,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Confuses the target.",
    "champions_overrides": null
   },
@@ -962,6 +1491,15 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "failencore",
+    "failinstruct",
+    "failmimic",
+    "noassist",
+    "nosleeptalk"
+   ],
+   "multihit": null,
    "short_desc": "Uses the last move used in the battle.",
    "champions_overrides": null
   },
@@ -974,6 +1512,14 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Removes adjacent Pokemon's held items.",
    "champions_overrides": null
   },
@@ -986,6 +1532,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Defense and Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -998,6 +1549,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Defense by 3.",
    "champions_overrides": null
   },
@@ -1010,6 +1566,14 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "powder",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Speed by 2.",
    "champions_overrides": null
   },
@@ -1022,6 +1586,14 @@
    "pp": 20,
    "priority": -5,
    "target": "scripted",
+   "flags": [
+    "contact",
+    "failcopycat",
+    "failmefirst",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "If hit by physical attack, returns double damage.",
    "champions_overrides": null
   },
@@ -1034,6 +1606,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "mirror"
+   ],
+   "multihit": null,
    "short_desc": "Swaps user's field effects with the opposing side.",
    "champions_overrides": null
   },
@@ -1046,6 +1623,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "failcopycat",
+    "failmefirst",
+    "mirror",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "If the user has no item, it steals the target's.",
    "champions_overrides": null
   },
@@ -1058,6 +1644,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": {
     "accuracy": 95
@@ -1072,6 +1665,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": null
   },
@@ -1084,6 +1684,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio. 10% chance to poison.",
    "champions_overrides": null
   },
@@ -1096,6 +1704,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to lower the target's Defense by 1.",
    "champions_overrides": null
   },
@@ -1108,6 +1724,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "50% chance to lower the target's Defense by 1.",
    "champions_overrides": null
   },
@@ -1120,6 +1743,11 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Curses if Ghost, else -1 Spe, +1 Atk, +1 Def.",
    "champions_overrides": {
     "tracksTarget": true
@@ -1134,6 +1762,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Ignores the target's stat stage changes.",
    "champions_overrides": null
   },
@@ -1146,6 +1781,14 @@
    "pp": 16,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "distance",
+    "metronome",
+    "mirror",
+    "protect",
+    "pulse"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -1158,6 +1801,12 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect. Hits adjacent foes.",
    "champions_overrides": null
   },
@@ -1170,6 +1819,10 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim"
+   ],
+   "multihit": null,
    "short_desc": "Raises the target's Attack and Sp. Atk by 2.",
    "champions_overrides": null
   },
@@ -1182,6 +1835,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "-1 evasion; ends user and target hazards/terrain.",
    "champions_overrides": null
   },
@@ -1194,6 +1855,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "bypasssub",
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "If an opponent knocks out the user, it also faints.",
    "champions_overrides": null
   },
@@ -1206,6 +1873,11 @@
    "pp": 8,
    "priority": 4,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "Prevents moves from affecting the user this turn.",
    "champions_overrides": null
   },
@@ -1218,6 +1890,18 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "charge",
+    "contact",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "noassist",
+    "nonsky",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Digs underground turn 1, strikes turn 2.",
    "champions_overrides": null
   },
@@ -1230,6 +1914,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "50% chance to sleep, poison, or paralyze target.",
    "champions_overrides": null
   },
@@ -1242,6 +1933,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "For 4 turns, disables the target's last move used.",
    "champions_overrides": null
   },
@@ -1254,6 +1953,12 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to paralyze adjacent Pokemon.",
    "champions_overrides": null
   },
@@ -1266,6 +1971,19 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "charge",
+    "contact",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "noassist",
+    "nonsky",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Dives underwater turn 1, strikes turn 2.",
    "champions_overrides": null
   },
@@ -1278,6 +1996,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 33% recoil.",
    "champions_overrides": null
   },
@@ -1290,6 +2015,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": 2,
    "short_desc": "Hits 2 times in one turn.",
    "champions_overrides": null
   },
@@ -1302,6 +2034,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User's Electric type: typeless; must be Electric.",
    "champions_overrides": null
   },
@@ -1314,6 +2052,11 @@
    "pp": 16,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's evasiveness by 1.",
    "champions_overrides": null
   },
@@ -1326,6 +2069,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Sp. Atk by 2.",
    "champions_overrides": null
   },
@@ -1338,6 +2087,12 @@
    "pp": 16,
    "priority": 0,
    "target": "adjacentAlly",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Ally: Crit ratio +1, or +2 if ally is Dragon type.",
    "champions_overrides": null
   },
@@ -1350,6 +2105,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -1362,6 +2124,12 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "dance",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Attack and Speed by 1.",
    "champions_overrides": null
   },
@@ -1374,6 +2142,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "noparentalbond",
+    "protect"
+   ],
+   "multihit": 2,
    "short_desc": "Hits twice. Doubles: Tries to hit each foe once.",
    "champions_overrides": null
   },
@@ -1386,6 +2161,14 @@
    "pp": 12,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "distance",
+    "metronome",
+    "mirror",
+    "protect",
+    "pulse"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -1398,6 +2181,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "minimize",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -1410,6 +2201,15 @@
    "pp": 12,
    "priority": -6,
    "target": "normal",
+   "flags": [
+    "contact",
+    "failcopycat",
+    "metronome",
+    "mirror",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Forces the target to switch to a random ally.",
    "champions_overrides": null
   },
@@ -1422,6 +2222,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "heal",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 75% of the damage dealt.",
    "champions_overrides": null
   },
@@ -1434,6 +2242,15 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "heal",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 50% of the damage dealt.",
    "champions_overrides": null
   },
@@ -1446,6 +2263,14 @@
    "pp": 20,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "contact",
+    "distance",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -1458,6 +2283,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": null
   },
@@ -1470,6 +2302,11 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Speed by 1.",
    "champions_overrides": null
   },
@@ -1482,6 +2319,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": 2,
    "short_desc": "Hits 2 times in one turn.",
    "champions_overrides": null
   },
@@ -1494,6 +2338,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to confuse the target.",
    "champions_overrides": null
   },
@@ -1506,6 +2358,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -1518,6 +2377,13 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Hits adjacent Pokemon. Double damage on Dig.",
    "champions_overrides": null
   },
@@ -1530,6 +2396,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Sp. Atk by 2.",
    "champions_overrides": null
   },
@@ -1542,6 +2415,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Removes 3 PP from the target's last move.",
    "champions_overrides": null
   },
@@ -1554,6 +2435,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "nonsky"
+   ],
+   "multihit": null,
    "short_desc": "5 turns. Grounded: +Electric power, can't sleep.",
    "champions_overrides": null
   },
@@ -1566,6 +2452,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Changes the target's move to Electric this turn.",
    "champions_overrides": null
   },
@@ -1578,6 +2471,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the faster the user is than the target.",
    "champions_overrides": null
   },
@@ -1590,6 +2490,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "charge",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Raises Sp. Atk by 1, hits turn 2. Rain: no charge.",
    "champions_overrides": null
   },
@@ -1602,6 +2509,12 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the foe(s) Speed by 1.",
    "champions_overrides": null
   },
@@ -1614,6 +2527,15 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "failencore",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Target repeats its last move for its next 3 turns.",
    "champions_overrides": null
   },
@@ -1626,6 +2548,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "noparentalbond",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's HP to the user's HP.",
    "champions_overrides": null
   },
@@ -1638,6 +2568,11 @@
    "pp": 12,
    "priority": 4,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "User survives attacks this turn with at least 1 HP.",
    "champions_overrides": null
   },
@@ -1650,6 +2585,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -1662,6 +2604,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "The target's Ability changes to match the user's.",
    "champions_overrides": null
   },
@@ -1674,6 +2624,12 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Less power as user's HP decreases. Hits foe(s).",
    "champions_overrides": null
   },
@@ -1686,6 +2642,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User on Psychic Terrain: 1.5\u00d7 power, hits foes.",
    "champions_overrides": null
   },
@@ -1698,6 +2660,13 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "noparentalbond",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Hits adjacent Pokemon. The user faints.",
    "champions_overrides": null
   },
@@ -1710,6 +2679,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -1722,6 +2697,13 @@
    "pp": 8,
    "priority": 2,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Nearly always goes first.",
    "champions_overrides": null
   },
@@ -1734,6 +2716,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if user is burn/poison/paralyzed.",
    "champions_overrides": null
   },
@@ -1746,6 +2735,12 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror"
+   ],
+   "multihit": null,
    "short_desc": "Prevents all Pokemon from switching next turn.",
    "champions_overrides": null
   },
@@ -1758,6 +2753,13 @@
    "pp": 12,
    "priority": 3,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Hits first. First turn out only. 100% flinch chance.",
    "champions_overrides": null
   },
@@ -1770,6 +2772,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Sp. Def by 2.",
    "champions_overrides": null
   },
@@ -1782,6 +2792,15 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "dance",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Attack by 2.",
    "champions_overrides": null
   },
@@ -1794,6 +2813,12 @@
    "pp": 12,
    "priority": 2,
    "target": "normal",
+   "flags": [
+    "failcopycat",
+    "mirror",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "Nullifies Detect, Protect, and Quick/Wide Guard.",
    "champions_overrides": null
   },
@@ -1806,6 +2831,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Raises user's Attack by 3 if this KOes the target.",
    "champions_overrides": null
   },
@@ -1818,6 +2850,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has a 30% chance this move's power is doubled.",
    "champions_overrides": null
   },
@@ -1830,6 +2868,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "dance",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "50% chance to raise the user's Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -1842,6 +2887,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "noparentalbond",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Does damage equal to the user's HP. User faints.",
    "champions_overrides": null
   },
@@ -1854,6 +2905,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to burn the target.",
    "champions_overrides": null
   },
@@ -1866,6 +2923,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to burn. 10% chance to flinch.",
    "champions_overrides": null
   },
@@ -1878,6 +2943,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Defense by 1.",
    "champions_overrides": {
     "basePower": 90
@@ -1892,6 +2964,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to burn the target.",
    "champions_overrides": null
   },
@@ -1904,6 +2984,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps and damages the target for 4-5 turns.",
    "champions_overrides": null
   },
@@ -1916,6 +3002,13 @@
    "pp": 12,
    "priority": 2,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Nearly always goes first. First turn out only.",
    "champions_overrides": {
     "basePower": 100
@@ -1930,6 +3023,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "OHKOs the target. Fails if user is a lower level.",
    "champions_overrides": null
   },
@@ -1942,6 +3042,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the less HP the user has left.",
    "champions_overrides": null
   },
@@ -1954,6 +3061,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to raise the user's Speed by 1.",
    "champions_overrides": null
   },
@@ -1966,6 +3080,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to burn the target.",
    "champions_overrides": null
   },
@@ -1978,6 +3098,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "defrost",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 33% recoil. 10% chance to burn. Thaws user.",
    "champions_overrides": null
   },
@@ -1990,6 +3118,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -2002,6 +3136,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Raises the target's Sp. Atk by 1 and confuses it.",
    "champions_overrides": null
   },
@@ -2014,6 +3156,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "noparentalbond",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Flings the user's item at the target. Power varies.",
    "champions_overrides": null
   },
@@ -2026,6 +3176,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User switches out after damaging the target.",
    "champions_overrides": null
   },
@@ -2038,6 +3195,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Always results in a critical hit; no accuracy check.",
    "champions_overrides": null
   },
@@ -2050,6 +3213,19 @@
    "pp": 16,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "charge",
+    "contact",
+    "distance",
+    "failinstruct",
+    "gravity",
+    "metronome",
+    "mirror",
+    "noassist",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Flies up on first turn, then strikes the next turn.",
    "champions_overrides": null
   },
@@ -2062,6 +3238,17 @@
    "pp": 12,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "contact",
+    "distance",
+    "gravity",
+    "metronome",
+    "minimize",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Combines Flying in its type effectiveness.",
    "champions_overrides": null
   },
@@ -2074,6 +3261,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -2086,6 +3280,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's critical hit ratio by 2.",
    "champions_overrides": null
   },
@@ -2098,6 +3297,17 @@
    "pp": 20,
    "priority": -3,
    "target": "normal",
+   "flags": [
+    "contact",
+    "failcopycat",
+    "failinstruct",
+    "failmefirst",
+    "noassist",
+    "nosleeptalk",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "Fails if the user takes damage before it hits.",
    "champions_overrides": null
   },
@@ -2110,6 +3320,11 @@
    "pp": 20,
    "priority": 2,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "The foes' moves target the user on the turn used.",
    "champions_overrides": null
   },
@@ -2122,6 +3337,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Adds Grass to the target's type(s).",
    "champions_overrides": null
   },
@@ -2134,6 +3357,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Uses target's Attack stat in damage calculation.",
    "champions_overrides": null
   },
@@ -2146,6 +3376,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to freeze. Super effective on Water.",
    "champions_overrides": null
   },
@@ -2158,6 +3394,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect",
+    "recharge"
+   ],
+   "multihit": null,
    "short_desc": "User cannot move next turn.",
    "champions_overrides": null
   },
@@ -2170,6 +3414,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Always results in a critical hit.",
    "champions_overrides": null
   },
@@ -2182,6 +3432,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "futuremove",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Hits two turns after being used.",
    "champions_overrides": null
   },
@@ -2194,6 +3450,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Nullifies the target's Ability.",
    "champions_overrides": null
   },
@@ -2206,6 +3470,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "heal",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 50% of the damage dealt.",
    "champions_overrides": null
   },
@@ -2218,6 +3489,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "recharge"
+   ],
+   "multihit": null,
    "short_desc": "User cannot move next turn.",
    "champions_overrides": null
   },
@@ -2230,6 +3509,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "cantusetwice",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Cannot be selected the turn after it's used.",
    "champions_overrides": null
   },
@@ -2242,6 +3528,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User takes sure-hit 2\u00d7 damage until its next turn.",
    "champions_overrides": null
   },
@@ -2254,6 +3547,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Paralyzes the target.",
    "champions_overrides": null
   },
@@ -2266,6 +3566,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the heavier the target.",
    "champions_overrides": null
   },
@@ -2278,6 +3586,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User on Grassy Terrain: +1 priority.",
    "champions_overrides": null
   },
@@ -2290,6 +3605,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "nonsky"
+   ],
+   "multihit": null,
    "short_desc": "5 turns. Grounded: +Grass power, +1/16 max HP.",
    "champions_overrides": null
   },
@@ -2302,6 +3622,11 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Target: 100% -1 Def. During Gravity: 1.5\u00d7 power.",
    "champions_overrides": {
     "basePower": 90
@@ -2316,6 +3641,11 @@
    "pp": 8,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "nonsky"
+   ],
+   "multihit": null,
    "short_desc": "5 turns: no Ground immunities, 1.67\u00d7 accuracy.",
    "champions_overrides": null
   },
@@ -2328,6 +3658,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
    "champions_overrides": {
     "type": "Grass"
@@ -2342,6 +3677,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Averages Defense and Sp. Def stats with target.",
    "champions_overrides": null
   },
@@ -2354,6 +3695,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Swaps Defense and Sp. Def changes with target.",
    "champions_overrides": null
   },
@@ -2366,6 +3715,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "OHKOs the target. Fails if user is a lower level.",
    "champions_overrides": null
   },
@@ -2378,6 +3734,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to poison the target.",
    "champions_overrides": null
   },
@@ -2390,6 +3752,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the slower the user than the target.",
    "champions_overrides": null
   },
@@ -2402,6 +3772,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Speed by 1.",
    "champions_overrides": null
   },
@@ -2414,6 +3792,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the more HP the target has left.",
    "champions_overrides": null
   },
@@ -2426,6 +3811,11 @@
    "pp": 20,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Eliminates all stat changes.",
    "champions_overrides": null
   },
@@ -2438,6 +3828,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Defense and Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -2450,6 +3848,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 1/2 recoil.",
    "champions_overrides": null
   },
@@ -2462,6 +3867,14 @@
    "pp": 8,
    "priority": 0,
    "target": "allyTeam",
+   "flags": [
+    "bypasssub",
+    "distance",
+    "metronome",
+    "snatch",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Cures the user's party of all status conditions.",
    "champions_overrides": null
   },
@@ -2474,6 +3887,12 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "User faints. Next hurt Pokemon is fully healed.",
    "champions_overrides": null
   },
@@ -2486,6 +3905,16 @@
    "pp": 12,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "allyanim",
+    "distance",
+    "heal",
+    "metronome",
+    "protect",
+    "pulse",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Heals the target by 50% of its max HP.",
    "champions_overrides": null
   },
@@ -2498,6 +3927,15 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "minimize",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the heavier the user than the target.",
    "champions_overrides": null
   },
@@ -2510,6 +3948,13 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to burn the foe(s).",
    "champions_overrides": null
   },
@@ -2522,6 +3967,15 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "minimize",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the heavier the user than the target.",
    "champions_overrides": null
   },
@@ -2534,6 +3988,12 @@
    "pp": 20,
    "priority": 5,
    "target": "adjacentAlly",
+   "flags": [
+    "bypasssub",
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "One adjacent ally's move power is 1.5\u00d7 this turn.",
    "champions_overrides": null
   },
@@ -2546,6 +4006,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if the target has a status ailment.",
    "champions_overrides": null
   },
@@ -2558,6 +4024,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -2570,6 +4043,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "gravity",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User is hurt by 50% of its max HP if it misses.",
    "champions_overrides": null
   },
@@ -2582,6 +4063,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "OHKOs the target. Fails if user is a lower level.",
    "champions_overrides": null
   },
@@ -2594,6 +4082,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "heal",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 50% of the damage dealt.",
    "champions_overrides": null
   },
@@ -2606,6 +4102,12 @@
    "pp": 20,
    "priority": 0,
    "target": "allies",
+   "flags": [
+    "metronome",
+    "snatch",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's and ally's Attack by 1.",
    "champions_overrides": null
   },
@@ -2618,6 +4120,14 @@
    "pp": 12,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "distance",
+    "metronome",
+    "mirror",
+    "protect",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to confuse target. Can't miss in rain.",
    "champions_overrides": null
   },
@@ -2630,6 +4140,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "recharge"
+   ],
+   "multihit": null,
    "short_desc": "User cannot move next turn.",
    "champions_overrides": null
   },
@@ -2642,6 +4159,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -2654,6 +4177,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "recharge"
+   ],
+   "multihit": null,
    "short_desc": "User cannot move next turn.",
    "champions_overrides": null
   },
@@ -2666,6 +4196,14 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect. Hits adjacent foes.",
    "champions_overrides": null
   },
@@ -2678,6 +4216,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Causes the target to fall asleep.",
    "champions_overrides": null
   },
@@ -2690,6 +4235,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to freeze the target.",
    "champions_overrides": null
   },
@@ -2702,6 +4253,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to freeze. 10% chance to flinch.",
    "champions_overrides": null
   },
@@ -2714,6 +4273,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Speed by 1.",
    "champions_overrides": null
   },
@@ -2726,6 +4293,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to freeze the target.",
    "champions_overrides": null
   },
@@ -2738,6 +4313,12 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -2750,6 +4331,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Ends the effects of terrain.",
    "champions_overrides": null
   },
@@ -2762,6 +4350,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -2774,6 +4368,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Hits 2-5 times in one turn.",
    "champions_overrides": null
   },
@@ -2786,6 +4389,13 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the foe(s) Speed by 1.",
    "champions_overrides": null
   },
@@ -2798,6 +4408,13 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mustpressure",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "No foe can use any move known by the user.",
    "champions_overrides": null
   },
@@ -2810,6 +4427,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% burn. 2\u00d7 power if target is already statused.",
    "champions_overrides": {
     "basePower": 65
@@ -2824,6 +4447,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to burn the target.",
    "champions_overrides": null
   },
@@ -2836,6 +4465,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps and damages the target for 4-5 turns.",
    "champions_overrides": null
   },
@@ -2848,6 +4484,12 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "nonsky",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Traps/grounds user; heals 1/16 max HP per turn.",
    "champions_overrides": null
   },
@@ -2860,6 +4502,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "failinstruct",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "The target immediately uses its last used move.",
    "champions_overrides": null
   },
@@ -2872,6 +4521,11 @@
    "pp": 16,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Defense by 2.",
    "champions_overrides": null
   },
@@ -2884,6 +4538,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -2896,6 +4557,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to lower the target's Defense by 1.",
    "champions_overrides": null
   },
@@ -2908,6 +4576,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Prevents both user and target from switching out.",
    "champions_overrides": null
   },
@@ -2920,6 +4596,13 @@
    "pp": 16,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -2932,6 +4615,12 @@
    "pp": 8,
    "priority": 4,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "failinstruct",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "Protects from damaging attacks. Contact: -1 Atk.",
    "champions_overrides": {
     "pp": 5
@@ -2946,6 +4635,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "1.5\u00d7 damage if foe holds an item. Removes item.",
    "champions_overrides": null
   },
@@ -2958,6 +4654,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "This move does not check accuracy.",
    "champions_overrides": null
   },
@@ -2970,6 +4674,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "2\u00d7 power if the user had a stat lowered this turn.",
    "champions_overrides": null
   },
@@ -2982,6 +4693,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Fails unless each known move has been used.",
    "champions_overrides": null
   },
@@ -2994,6 +4712,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "+50 power for each time a party member fainted.",
    "champions_overrides": null
   },
@@ -3006,6 +4730,12 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to burn adjacent Pokemon.",
    "champions_overrides": null
   },
@@ -3018,6 +4748,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": null
   },
@@ -3030,6 +4768,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Sp. Atk by 2.",
    "champions_overrides": null
   },
@@ -3042,6 +4786,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "heal",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 50% of the damage dealt.",
    "champions_overrides": null
   },
@@ -3054,6 +4806,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "1/8 of target's HP is restored to user every turn.",
    "champions_overrides": null
   },
@@ -3066,6 +4825,12 @@
    "pp": 12,
    "priority": 0,
    "target": "allies",
+   "flags": [
+    "bypasssub",
+    "heal",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user and its allies by 1/4 their max HP.",
    "champions_overrides": null
   },
@@ -3078,6 +4843,11 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 1/2 recoil.",
    "champions_overrides": null
   },
@@ -3090,6 +4860,11 @@
    "pp": 20,
    "priority": 0,
    "target": "allySide",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, special damage to allies is halved.",
    "champions_overrides": null
   },
@@ -3102,6 +4877,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to lower the target's Defense by 1.",
    "champions_overrides": null
   },
@@ -3114,6 +4896,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User's next move will not miss the target.",
    "champions_overrides": null
   },
@@ -3126,6 +4914,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the heavier the target.",
    "champions_overrides": null
   },
@@ -3138,6 +4933,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Speed by 1.",
    "champions_overrides": null
   },
@@ -3150,6 +4952,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Sp. Def by 2.",
    "champions_overrides": null
   },
@@ -3162,6 +4970,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Attack by 1.",
    "champions_overrides": null
   },
@@ -3174,6 +4989,14 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -3186,6 +5009,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "powder",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Changes the target's type to Psychic.",
    "champions_overrides": null
   },
@@ -3198,6 +5030,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "mirror"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, all held items have no effect.",
    "champions_overrides": null
   },
@@ -3210,6 +5047,13 @@
    "pp": 20,
    "priority": 0,
    "target": "allySide",
+   "flags": [
+    "bypasssub",
+    "distance",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises Def, Sp. Def of allies with Plus/Minus by 1.",
    "champions_overrides": null
   },
@@ -3222,6 +5066,12 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "gravity",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, the user has immunity to Ground.",
    "champions_overrides": null
   },
@@ -3234,6 +5084,11 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Sp. Atk by 1. Hits foe(s).",
    "champions_overrides": {
     "accuracy": 95
@@ -3248,6 +5103,14 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "defrost",
+    "heal",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% burn. Recovers 50% dmg dealt. Thaws foe(s).",
    "champions_overrides": null
   },
@@ -3260,6 +5123,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Prevents the target from switching out.",
    "champions_overrides": null
   },
@@ -3272,6 +5141,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -3284,6 +5160,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -3296,6 +5179,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers target's Attack, Sp. Atk by 2. User faints.",
    "champions_overrides": null
   },
@@ -3308,6 +5197,13 @@
    "pp": 12,
    "priority": 0,
    "target": "scripted",
+   "flags": [
+    "failmefirst",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "If hit by an attack, returns 1.5\u00d7 damage.",
    "champions_overrides": null
   },
@@ -3320,6 +5216,16 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Sp. Def by 2.",
    "champions_overrides": null
   },
@@ -3332,6 +5238,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "failinstruct",
+    "mirror",
+    "protect",
+    "recharge"
+   ],
+   "multihit": null,
    "short_desc": "User cannot move next turn.",
    "champions_overrides": {
     "basePower": 170
@@ -3346,6 +5259,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "charge",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2.",
    "champions_overrides": null
   },
@@ -3358,6 +5278,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to raise the user's Attack by 1.",
    "champions_overrides": null
   },
@@ -3370,6 +5298,12 @@
    "pp": 8,
    "priority": 0,
    "target": "adjacentAllyOrSelf",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user by 50% of its max HP.",
    "champions_overrides": {
     "target": "adjacentAllyOrSelf"
@@ -3384,6 +5318,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's evasiveness by 2.",
    "champions_overrides": null
   },
@@ -3396,6 +5335,12 @@
    "pp": 20,
    "priority": -5,
    "target": "scripted",
+   "flags": [
+    "failmefirst",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "If hit by special attack, returns double damage.",
    "champions_overrides": null
   },
@@ -3408,6 +5353,12 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User faints. User on Misty Terrain: 1.5\u00d7 power.",
    "champions_overrides": null
   },
@@ -3420,6 +5371,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "nonsky"
+   ],
+   "multihit": null,
    "short_desc": "5 turns. Can't status,-Dragon power vs grounded.",
    "champions_overrides": null
   },
@@ -3432,6 +5388,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to lower the target's Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -3444,6 +5406,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user by a weather-dependent amount.",
    "champions_overrides": null
   },
@@ -3456,6 +5424,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user by a weather-dependent amount.",
    "champions_overrides": null
   },
@@ -3468,6 +5442,13 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Poisons foes, frees user from hazards/bind/leech.",
    "champions_overrides": null
   },
@@ -3480,6 +5461,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to make the target flinch.",
    "champions_overrides": {
     "basePower": 120
@@ -3494,6 +5481,13 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to lower the foe(s) accuracy by 1.",
    "champions_overrides": null
   },
@@ -3506,6 +5500,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Speed by 1.",
    "champions_overrides": null
   },
@@ -3518,6 +5518,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's accuracy by 1.",
    "champions_overrides": null
   },
@@ -3530,6 +5536,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -3542,6 +5554,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Sp. Atk by 2.",
    "champions_overrides": null
   },
@@ -3554,6 +5571,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "40% chance to lower the target's accuracy by 1.",
    "champions_overrides": {
     "basePower": 90
@@ -3568,6 +5591,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Does damage equal to the user's level.",
    "champions_overrides": null
   },
@@ -3580,6 +5609,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": {
     "pp": 20
@@ -3594,6 +5631,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Attack and Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -3606,6 +5652,11 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises all stats by 1 (not acc/eva). Traps user.",
    "champions_overrides": null
   },
@@ -3618,6 +5669,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to paralyze the target.",
    "champions_overrides": null
   },
@@ -3630,6 +5688,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps target, lowers Def and SpD by 1 each turn.",
    "champions_overrides": null
   },
@@ -3642,6 +5706,14 @@
    "pp": 12,
    "priority": 0,
    "target": "randomNormal",
+   "flags": [
+    "contact",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lasts 2-3 turns. Confuses the user afterwards.",
    "champions_overrides": null
   },
@@ -3654,6 +5726,13 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "bypasssub",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect. Hits foe(s).",
    "champions_overrides": null
   },
@@ -3666,6 +5745,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Sp. Atk by 2.",
    "champions_overrides": null
   },
@@ -3678,6 +5763,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Shares HP of user and target equally.",
    "champions_overrides": null
   },
@@ -3690,6 +5782,13 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "heal",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User recovers 50% of the damage dealt.",
    "champions_overrides": null
   },
@@ -3702,6 +5801,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Lowers target's Atk, Sp. Atk by 1. User switches.",
    "champions_overrides": null
   },
@@ -3714,6 +5822,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if the user moves after the target.",
    "champions_overrides": null
   },
@@ -3726,6 +5841,13 @@
    "pp": 8,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "bypasssub",
+    "distance",
+    "metronome",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "All active Pokemon will faint in 3 turns.",
    "champions_overrides": null
   },
@@ -3738,6 +5860,13 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect. Hits adjacent Pokemon.",
    "champions_overrides": null
   },
@@ -3750,6 +5879,15 @@
    "pp": 12,
    "priority": 0,
    "target": "randomNormal",
+   "flags": [
+    "contact",
+    "dance",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lasts 2-3 turns. Confuses the user afterwards.",
    "champions_overrides": null
   },
@@ -3762,6 +5900,16 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "charge",
+    "contact",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "noassist",
+    "nosleeptalk"
+   ],
+   "multihit": null,
    "short_desc": "Disappears turn 1. Hits turn 2. Breaks protection.",
    "champions_overrides": null
   },
@@ -3774,6 +5922,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Hits 2-5 times in one turn.",
    "champions_overrides": null
   },
@@ -3786,6 +5943,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to lower the target's Attack by 1.",
    "champions_overrides": null
   },
@@ -3798,6 +5962,14 @@
    "pp": 20,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "contact",
+    "distance",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User steals and eats the target's Berry.",
    "champions_overrides": null
   },
@@ -3810,6 +5982,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "50% chance to badly poison the target.",
    "champions_overrides": null
   },
@@ -3822,6 +6002,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to poison the target.",
    "champions_overrides": null
   },
@@ -3834,6 +6021,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "powder",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Poisons the target.",
    "champions_overrides": null
   },
@@ -3846,6 +6041,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "If the target is an ally, heals 50% of its max HP.",
    "champions_overrides": null
   },
@@ -3858,6 +6061,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Fails if the target has no held item.",
    "champions_overrides": null
   },
@@ -3870,6 +6079,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": 10,
    "short_desc": "Hits 10 times. Each hit can miss.",
    "champions_overrides": null
   },
@@ -3882,6 +6098,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Speed by 1.",
    "champions_overrides": null
   },
@@ -3894,6 +6116,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -3906,6 +6134,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Averages Attack and Sp. Atk stats with target.",
    "champions_overrides": null
   },
@@ -3918,6 +6152,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Swaps Attack and Sp. Atk stat stages with target.",
    "champions_overrides": null
   },
@@ -3930,6 +6172,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Switches user's Attack and Defense stats.",
    "champions_overrides": null
   },
@@ -3942,6 +6189,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": " + 20 power for each of the user's stat boosts.",
    "champions_overrides": null
   },
@@ -3954,6 +6208,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -3966,6 +6227,11 @@
    "pp": 8,
    "priority": 4,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "Prevents moves from affecting the user this turn.",
    "champions_overrides": {
     "pp": 5
@@ -3980,6 +6246,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -3992,6 +6264,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Destroys screens, unless the target is immune.",
    "champions_overrides": null
   },
@@ -4004,6 +6284,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "For 2 turns, the target is prevented from healing.",
    "champions_overrides": null
   },
@@ -4016,6 +6304,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "nonsky"
+   ],
+   "multihit": null,
    "short_desc": "5 turns. Grounded: +Psychic power, priority-safe.",
    "champions_overrides": null
   },
@@ -4028,6 +6321,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": null
   },
@@ -4040,6 +6340,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "Copies the target's current stat stages.",
    "champions_overrides": null
   },
@@ -4052,6 +6358,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to raise the user's Defense by 1.",
    "champions_overrides": {
     "basePower": 90
@@ -4066,6 +6379,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Damages target based on Defense, not Sp. Def.",
    "champions_overrides": null
   },
@@ -4078,6 +6397,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "defrost",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to burn the target. Thaws user.",
    "champions_overrides": null
   },
@@ -4090,6 +6416,11 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Forces the target to move last this turn.",
    "champions_overrides": null
   },
@@ -4102,6 +6433,13 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -4114,6 +6452,10 @@
    "pp": 16,
    "priority": 3,
    "target": "allySide",
+   "flags": [
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Protects allies from priority attacks this turn.",
    "champions_overrides": null
   },
@@ -4126,6 +6468,12 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "dance",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Sp. Atk, Sp. Def, Speed by 1.",
    "champions_overrides": null
   },
@@ -4138,6 +6486,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "+50 power for each time user was hit. Max 6 hits.",
    "champions_overrides": null
   },
@@ -4150,6 +6505,12 @@
    "pp": 20,
    "priority": 2,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "noassist",
+    "powder"
+   ],
+   "multihit": null,
    "short_desc": "The foes' moves target the user on the turn used.",
    "champions_overrides": null
   },
@@ -4162,6 +6523,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Destroys screens. Type depends on user's form.",
    "champions_overrides": null
   },
@@ -4174,6 +6541,11 @@
    "pp": 12,
    "priority": 0,
    "target": "randomNormal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lasts 2-3 turns. Confuses the user afterwards.",
    "champions_overrides": null
   },
@@ -4186,6 +6558,10 @@
    "pp": 8,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, heavy rain powers Water moves.",
    "champions_overrides": null
   },
@@ -4198,6 +6574,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Free user from hazards/bind/Leech Seed; +1 Spe.",
    "champions_overrides": null
   },
@@ -4210,6 +6593,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "50% chance to lower the target's Defense by 1.",
    "champions_overrides": null
   },
@@ -4222,6 +6613,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user by 50% of its max HP.",
    "champions_overrides": null
   },
@@ -4234,6 +6631,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Restores the item the user last used.",
    "champions_overrides": null
   },
@@ -4246,6 +6648,11 @@
    "pp": 20,
    "priority": 0,
    "target": "allySide",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, physical damage to allies is halved.",
    "champions_overrides": null
   },
@@ -4258,6 +6665,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User becomes the same type as the target.",
    "champions_overrides": null
   },
@@ -4270,6 +6684,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "User sleeps 2 turns and restores HP and status.",
    "champions_overrides": null
   },
@@ -4282,6 +6702,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power the less HP the user has left.",
    "champions_overrides": null
   },
@@ -4294,6 +6721,11 @@
    "pp": 1,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "nosketch"
+   ],
+   "multihit": null,
    "short_desc": "Revives a fainted Pokemon to 50% HP.",
    "champions_overrides": null
   },
@@ -4306,6 +6738,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "2\u00d7 power if target is grounded in Electric Terrain.",
    "champions_overrides": null
   },
@@ -4318,6 +6756,17 @@
    "pp": 20,
    "priority": -6,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "failcopycat",
+    "metronome",
+    "mirror",
+    "noassist",
+    "reflectable",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Forces the target to switch to a random ally.",
    "champions_overrides": null
   },
@@ -4330,6 +6779,16 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Hits 2-5 times in one turn.",
    "champions_overrides": null
   },
@@ -4342,6 +6801,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Speed by 2.",
    "champions_overrides": null
   },
@@ -4354,6 +6818,12 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to make the foe(s) flinch.",
    "champions_overrides": null
   },
@@ -4366,6 +6836,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Speed by 1.",
    "champions_overrides": null
   },
@@ -4378,6 +6854,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect",
+    "recharge"
+   ],
+   "multihit": null,
    "short_desc": "User cannot move next turn.",
    "champions_overrides": null
   },
@@ -4390,6 +6874,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "User replaces its Ability with the target's.",
    "champions_overrides": null
   },
@@ -4402,6 +6892,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals 50% HP. Flying-type removed 'til turn ends.",
    "champions_overrides": null
   },
@@ -4414,6 +6910,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if others used Round this turn.",
    "champions_overrides": null
   },
@@ -4426,6 +6930,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "Ignores the target's stat stage changes.",
    "champions_overrides": null
   },
@@ -4438,6 +6950,11 @@
    "pp": 20,
    "priority": 0,
    "target": "allySide",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, protects user's party from status.",
    "champions_overrides": null
   },
@@ -4450,6 +6967,11 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Deals 1/8 max HP each turn; 1/4 on Steel, Water.",
    "champions_overrides": null
   },
@@ -4462,6 +6984,11 @@
    "pp": 8,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, a sandstorm rages. Rock: 1.5\u00d7 SpD.",
    "champions_overrides": {
     "pp": 5
@@ -4476,6 +7003,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps and damages the target for 4-5 turns.",
    "champions_overrides": null
   },
@@ -4488,6 +7021,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "defrost",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to burn the target. Thaws target.",
    "champions_overrides": null
   },
@@ -4500,6 +7040,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Hits 2-5 times. User: -1 Def, +1 Spe after last hit.",
    "champions_overrides": null
   },
@@ -4512,6 +7061,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Speed by 2.",
    "champions_overrides": null
   },
@@ -4524,6 +7081,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "defrost",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to burn the target. Thaws target.",
    "champions_overrides": null
   },
@@ -4536,6 +7100,16 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Defense by 2.",
    "champions_overrides": null
   },
@@ -4548,6 +7122,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -4560,6 +7141,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Does damage equal to the user's level.",
    "champions_overrides": null
   },
@@ -4572,6 +7161,13 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "noparentalbond",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Hits adjacent Pokemon. The user faints.",
    "champions_overrides": null
   },
@@ -4584,6 +7180,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to lower the target's Sp. Def by 1.",
    "champions_overrides": null
   },
@@ -4596,6 +7199,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": null
   },
@@ -4608,6 +7218,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "This move does not check accuracy.",
    "champions_overrides": null
   },
@@ -4620,6 +7238,13 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -4632,6 +7257,8 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [],
+   "multihit": null,
    "short_desc": "User takes 1/2 its max HP to pass a substitute.",
    "champions_overrides": null
   },
@@ -4644,6 +7271,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "OHKOs non-Ice targets. Fails if user's lower level.",
    "champions_overrides": null
   },
@@ -4656,6 +7289,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% psn. Physical+contact if it would be stronger.",
    "champions_overrides": null
   },
@@ -4668,6 +7307,11 @@
    "pp": 16,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Lowers Def, SpD by 1; raises Atk, SpA, Spe by 2.",
    "champions_overrides": null
   },
@@ -4680,6 +7324,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Defense by 2.",
    "champions_overrides": null
   },
@@ -4692,6 +7341,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Speed by 2 and Attack by 1.",
    "champions_overrides": null
   },
@@ -4704,6 +7358,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "The target's Ability becomes Simple.",
    "champions_overrides": null
   },
@@ -4716,6 +7378,15 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Causes the target to fall asleep.",
    "champions_overrides": null
   },
@@ -4728,6 +7399,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "The user and the target trade Abilities.",
    "champions_overrides": null
   },
@@ -4740,6 +7419,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower target's Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -4752,6 +7438,16 @@
    "pp": 8,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "charge",
+    "distance",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Charges, then hits turn 2. 30% flinch. High crit.",
    "champions_overrides": null
   },
@@ -4764,6 +7460,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user by 50% of its max HP.",
    "champions_overrides": null
   },
@@ -4776,6 +7478,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": {
     "basePower": 80
@@ -4790,6 +7500,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "powder",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Causes the target to fall asleep.",
    "champions_overrides": null
   },
@@ -4802,6 +7520,15 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "failencore",
+    "failinstruct",
+    "failmimic",
+    "noassist",
+    "nosleeptalk"
+   ],
+   "multihit": null,
    "short_desc": "User must be asleep. Uses another known move.",
    "champions_overrides": null
   },
@@ -4814,6 +7541,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to poison the target.",
    "champions_overrides": null
   },
@@ -4826,6 +7560,12 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to poison adjacent Pokemon.",
    "champions_overrides": null
   },
@@ -4838,6 +7578,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Removes the target's Ground immunity.",
    "champions_overrides": null
   },
@@ -4850,6 +7597,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "This move does not check accuracy.",
    "champions_overrides": null
   },
@@ -4862,6 +7616,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps and damages the target for 4-5 turns.",
    "champions_overrides": {
     "type": "Steel"
@@ -4876,6 +7636,13 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "bypasssub",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the foe(s) Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -4888,6 +7655,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio. Cannot be redirected.",
    "champions_overrides": {
     "basePower": 85
@@ -4902,6 +7675,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "User must be asleep. 30% chance to flinch target.",
    "champions_overrides": null
   },
@@ -4914,6 +7694,8 @@
    "pp": 8,
    "priority": 0,
    "target": "all",
+   "flags": [],
+   "multihit": null,
    "short_desc": "For 5 turns, snow falls. Ice: 1.5\u00d7 Def.",
    "champions_overrides": {
     "pp": 5
@@ -4928,6 +7710,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Changes the target's type to Water.",
    "champions_overrides": null
   },
@@ -4940,6 +7730,15 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "charge",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "nosleeptalk",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Charges turn 1. Hits turn 2. No charge in sunlight.",
    "champions_overrides": null
   },
@@ -4952,6 +7751,17 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "charge",
+    "contact",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "nosleeptalk",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "Charges turn 1. Hits turn 2. No charge in sunlight.",
    "champions_overrides": null
   },
@@ -4964,6 +7774,14 @@
    "pp": 12,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "The target is cured of its burn.",
    "champions_overrides": null
   },
@@ -4976,6 +7794,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Swaps Speed stat with target.",
    "champions_overrides": null
   },
@@ -4988,6 +7814,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Raises target's Atk by 2 and lowers its Def by 2.",
    "champions_overrides": null
   },
@@ -5000,6 +7832,13 @@
    "pp": 20,
    "priority": 0,
    "target": "foeSide",
+   "flags": [
+    "metronome",
+    "mustpressure",
+    "nonsky",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Hurts grounded foes on switch-in. Max 3 layers.",
    "champions_overrides": null
   },
@@ -5012,6 +7851,11 @@
    "pp": 8,
    "priority": 4,
    "target": "self",
+   "flags": [
+    "failcopycat",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "Protects from moves. Contact: loses 1/8 max HP.",
    "champions_overrides": {
     "pp": 5
@@ -5026,6 +7870,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -5038,6 +7888,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Prevents the target from switching out.",
    "champions_overrides": {
     "basePower": 90
@@ -5052,6 +7908,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the PP of the target's last move by 4.",
    "champions_overrides": null
   },
@@ -5064,6 +7928,11 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "More power with more uses of Stockpile.",
    "champions_overrides": null
   },
@@ -5076,6 +7945,12 @@
    "pp": 20,
    "priority": 0,
    "target": "foeSide",
+   "flags": [
+    "metronome",
+    "mustpressure",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Hurts foes on switch-in. Factors Rock weakness.",
    "champions_overrides": null
   },
@@ -5088,6 +7963,11 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User loses 50% max HP.",
    "champions_overrides": null
   },
@@ -5100,6 +7980,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Fails if there is no terrain active. Ends the terrain.",
    "champions_overrides": null
   },
@@ -5112,6 +7999,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to raise the user's Defense by 1.",
    "champions_overrides": null
   },
@@ -5124,6 +8018,11 @@
    "pp": 20,
    "priority": 0,
    "target": "foeSide",
+   "flags": [
+    "metronome",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers Speed of grounded foes by 1 on switch-in.",
    "champions_overrides": null
   },
@@ -5136,6 +8035,11 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises user's Defense, Sp. Def by 1. Max 3 uses.",
    "champions_overrides": null
   },
@@ -5148,6 +8052,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if the user's last move failed.",
    "champions_overrides": null
   },
@@ -5160,6 +8071,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "Sets Stealth Rock on the target's side.",
    "champions_overrides": null
   },
@@ -5172,6 +8091,12 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High critical hit ratio.",
    "champions_overrides": null
   },
@@ -5184,6 +8109,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": " + 20 power for each of the user's stat boosts.",
    "champions_overrides": null
   },
@@ -5196,6 +8127,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Always results in a critical hit.",
    "champions_overrides": null
   },
@@ -5208,6 +8146,14 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "heal",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "User heals HP=target's Atk stat. Lowers Atk by 1.",
    "champions_overrides": {
     "pp": 5
@@ -5222,6 +8168,13 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the foe(s) Speed by 2.",
    "champions_overrides": null
   },
@@ -5234,6 +8187,12 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the foe(s) Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -5246,6 +8205,11 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Must hold Berry to use. User eats Berry, Def +2.",
    "champions_overrides": null
   },
@@ -5258,6 +8222,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "powder",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Paralyzes the target.",
    "champions_overrides": null
   },
@@ -5270,6 +8242,12 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "metronome",
+    "nonsky",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "User takes 1/4 its max HP to put in a substitute.",
    "champions_overrides": null
   },
@@ -5282,6 +8260,13 @@
    "pp": 8,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first. Fails if target is not attacking.",
    "champions_overrides": null
   },
@@ -5294,6 +8279,10 @@
    "pp": 8,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, intense sunlight powers Fire moves.",
    "champions_overrides": null
   },
@@ -5306,6 +8295,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "minimize",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User is hurt by 50% of its max HP if it misses.",
    "champions_overrides": null
   },
@@ -5318,6 +8315,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Does damage equal to 1/2 target's current HP.",
    "champions_overrides": null
   },
@@ -5330,6 +8334,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the user's Attack and Defense by 1.",
    "champions_overrides": null
   },
@@ -5342,6 +8353,13 @@
    "pp": 16,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "metronome",
+    "mirror",
+    "nonsky",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Hits adjacent Pokemon. Double damage on Dive.",
    "champions_overrides": null
   },
@@ -5354,6 +8372,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Raises the target's Attack by 2 and confuses it.",
    "champions_overrides": null
   },
@@ -5366,6 +8392,12 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user based on uses of Stockpile.",
    "champions_overrides": null
   },
@@ -5378,6 +8410,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Causes the target to become confused.",
    "champions_overrides": null
   },
@@ -5390,6 +8429,13 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the foe(s) evasiveness by 2.",
    "champions_overrides": null
   },
@@ -5402,6 +8448,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "failcopycat",
+    "mirror",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User switches its held item with the target's.",
    "champions_overrides": null
   },
@@ -5414,6 +8468,12 @@
    "pp": 20,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "dance",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Raises the user's Attack by 2.",
    "champions_overrides": null
   },
@@ -5426,6 +8486,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Heals the user by a weather-dependent amount.",
    "champions_overrides": null
   },
@@ -5438,6 +8504,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Target's Speed is lowered by 1 stage for 3 turns.",
    "champions_overrides": {
     "accuracy": 90
@@ -5452,6 +8525,16 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Hits 2-5 times in one turn.",
    "champions_overrides": null
   },
@@ -5464,6 +8547,12 @@
    "pp": 16,
    "priority": 0,
    "target": "allySide",
+   "flags": [
+    "metronome",
+    "snatch",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "For 4 turns, allies' Speed is doubled.",
    "champions_overrides": null
   },
@@ -5476,6 +8565,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Target can't use status moves its next 3 turns.",
    "champions_overrides": null
   },
@@ -5488,6 +8585,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Attack and Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -5500,6 +8603,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "bypasssub",
+    "metronome"
+   ],
+   "multihit": null,
    "short_desc": "All active Pokemon consume held Berries.",
    "champions_overrides": null
   },
@@ -5512,6 +8620,13 @@
    "pp": 20,
    "priority": 0,
    "target": "allAdjacent",
+   "flags": [
+    "dance",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Confuses adjacent Pokemon.",
    "champions_overrides": null
   },
@@ -5524,6 +8639,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if the user's last move failed.",
    "champions_overrides": null
   },
@@ -5536,6 +8658,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "pulse"
+   ],
+   "multihit": null,
    "short_desc": "User on terrain: power doubles, type varies.",
    "champions_overrides": null
   },
@@ -5548,6 +8677,15 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "failcopycat",
+    "failmefirst",
+    "mirror",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "If the user has no item, it steals the target's.",
    "champions_overrides": null
   },
@@ -5560,6 +8698,14 @@
    "pp": 12,
    "priority": 0,
    "target": "randomNormal",
+   "flags": [
+    "contact",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Lasts 2-3 turns. Confuses the user afterwards.",
    "champions_overrides": null
   },
@@ -5572,6 +8718,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "For 2 turns, the target cannot use sound moves.",
    "champions_overrides": null
   },
@@ -5584,6 +8737,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to paralyze. Can't miss in rain.",
    "champions_overrides": null
   },
@@ -5596,6 +8755,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to paralyze the target.",
    "champions_overrides": null
   },
@@ -5608,6 +8773,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bite",
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to paralyze. 10% chance to flinch.",
    "champions_overrides": null
   },
@@ -5620,6 +8793,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "punch"
+   ],
+   "multihit": null,
    "short_desc": "10% chance to paralyze the target.",
    "champions_overrides": null
   },
@@ -5632,6 +8813,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Paralyzes the target.",
    "champions_overrides": null
   },
@@ -5644,6 +8832,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Attack and Defense by 1.",
    "champions_overrides": null
   },
@@ -5656,6 +8852,8 @@
    "pp": 12,
    "priority": 0,
    "target": "self",
+   "flags": [],
+   "multihit": null,
    "short_desc": "User +1 Atk, Spe. Clears all substitutes/hazards.",
    "champions_overrides": null
   },
@@ -5668,6 +8866,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Inverts the target's stat stages.",
    "champions_overrides": null
   },
@@ -5680,6 +8886,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to raise the user's Sp. Atk by 1.",
    "champions_overrides": null
   },
@@ -5692,6 +8906,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bypasssub",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Target can't select the same move twice in a row.",
    "champions_overrides": null
   },
@@ -5704,6 +8926,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Badly poisons the target. Poison types can't miss.",
    "champions_overrides": null
   },
@@ -5716,6 +8945,13 @@
    "pp": 20,
    "priority": 0,
    "target": "foeSide",
+   "flags": [
+    "metronome",
+    "mustpressure",
+    "nonsky",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Poisons grounded foes on switch-in. Max 2 layers.",
    "champions_overrides": null
   },
@@ -5728,6 +8964,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Lowers the target's Speed by 1 and poisons it.",
    "champions_overrides": null
   },
@@ -5740,6 +8983,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to raise the user's Speed by 1.",
    "champions_overrides": null
   },
@@ -5752,6 +9001,15 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "failcopycat",
+    "failencore",
+    "failinstruct",
+    "failmimic",
+    "noassist"
+   ],
+   "multihit": null,
    "short_desc": "Copies target's stats, moves, types, and Ability.",
    "champions_overrides": null
   },
@@ -5764,6 +9022,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to paralyze or burn or freeze target.",
    "champions_overrides": null
   },
@@ -5776,6 +9040,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "failcopycat",
+    "mirror",
+    "noassist",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User switches its held item with the target's.",
    "champions_overrides": null
   },
@@ -5788,6 +9060,14 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Adds Ghost to the target's type(s).",
    "champions_overrides": null
   },
@@ -5800,6 +9080,11 @@
    "pp": 8,
    "priority": -7,
    "target": "all",
+   "flags": [
+    "metronome",
+    "mirror"
+   ],
+   "multihit": null,
    "short_desc": "Goes last. For 5 turns, turn order is reversed.",
    "champions_overrides": null
   },
@@ -5812,6 +9097,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "High crit. Target: 50% -1 Defense, 30% flinch.",
    "champions_overrides": null
   },
@@ -5824,6 +9115,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": 3,
    "short_desc": "Hits 3 times. Each hit can miss, but power rises.",
    "champions_overrides": null
   },
@@ -5836,6 +9134,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to lower the target's Attack by 1.",
    "champions_overrides": {
     "basePower": 85
@@ -5850,6 +9155,11 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "mirror",
+    "protect"
+   ],
+   "multihit": 2,
    "short_desc": "Hits 2 times in one turn.",
    "champions_overrides": null
   },
@@ -5862,6 +9172,13 @@
    "pp": 16,
    "priority": 3,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% flinch. Fails unless target using priority attack.",
    "champions_overrides": null
   },
@@ -5874,6 +9191,16 @@
    "pp": 12,
    "priority": 0,
    "target": "randomNormal",
+   "flags": [
+    "bypasssub",
+    "failinstruct",
+    "metronome",
+    "mirror",
+    "nosleeptalk",
+    "protect",
+    "sound"
+   ],
+   "multihit": null,
    "short_desc": "Lasts 3 turns. Active Pokemon cannot fall asleep.",
    "champions_overrides": null
   },
@@ -5886,6 +9213,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User switches out after damaging the target.",
    "champions_overrides": null
   },
@@ -5898,6 +9232,12 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Usually goes first.",
    "champions_overrides": null
   },
@@ -5910,6 +9250,12 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles if the target is poisoned.",
    "champions_overrides": null
   },
@@ -5922,6 +9268,12 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "User switches out after damaging the target.",
    "champions_overrides": null
   },
@@ -5934,6 +9286,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 33% recoil. 10% chance to paralyze target.",
    "champions_overrides": null
   },
@@ -5946,6 +9305,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -5958,6 +9324,14 @@
    "pp": 20,
    "priority": 0,
    "target": "any",
+   "flags": [
+    "distance",
+    "metronome",
+    "mirror",
+    "protect",
+    "pulse"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to confuse the target.",
    "champions_overrides": null
   },
@@ -5970,6 +9344,15 @@
    "pp": 20,
    "priority": 1,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": [
+    2,
+    5
+   ],
    "short_desc": "Usually goes first. Hits 2-5 times in one turn.",
    "champions_overrides": null
   },
@@ -5982,6 +9365,12 @@
    "pp": 8,
    "priority": 0,
    "target": "allAdjacentFoes",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Less power as user's HP decreases. Hits foe(s).",
    "champions_overrides": null
   },
@@ -5994,6 +9383,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 33% recoil.",
    "champions_overrides": null
   },
@@ -6006,6 +9402,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Power doubles and type varies in each weather.",
    "champions_overrides": null
   },
@@ -6018,6 +9421,12 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps and damages the target for 4-5 turns.",
    "champions_overrides": null
   },
@@ -6030,6 +9439,17 @@
    "pp": 20,
    "priority": -6,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "bypasssub",
+    "failcopycat",
+    "metronome",
+    "mirror",
+    "noassist",
+    "reflectable",
+    "wind"
+   ],
+   "multihit": null,
    "short_desc": "Forces the target to switch to a random ally.",
    "champions_overrides": null
   },
@@ -6042,6 +9462,10 @@
    "pp": 12,
    "priority": 3,
    "target": "allySide",
+   "flags": [
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Protects allies from multi-target moves this turn.",
    "champions_overrides": null
   },
@@ -6054,6 +9478,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 1/4 recoil.",
    "champions_overrides": null
   },
@@ -6066,6 +9497,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Burns the target.",
    "champions_overrides": null
   },
@@ -6078,6 +9516,12 @@
    "pp": 8,
    "priority": 0,
    "target": "self",
+   "flags": [
+    "heal",
+    "metronome",
+    "snatch"
+   ],
+   "multihit": null,
    "short_desc": "Next turn, 50% of the user's max HP is restored.",
    "champions_overrides": {
     "pp": 5
@@ -6092,6 +9536,11 @@
    "pp": 12,
    "priority": 0,
    "target": "all",
+   "flags": [
+    "metronome",
+    "mirror"
+   ],
+   "multihit": null,
    "short_desc": "For 5 turns, all Defense and Sp. Def stats switch.",
    "champions_overrides": null
   },
@@ -6104,6 +9553,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Has 33% recoil.",
    "champions_overrides": null
   },
@@ -6116,6 +9572,14 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "allyanim",
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "The target's Ability becomes Insomnia.",
    "champions_overrides": null
   },
@@ -6128,6 +9592,13 @@
    "pp": 20,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "Traps and damages the target for 4-5 turns.",
    "champions_overrides": null
   },
@@ -6140,6 +9611,14 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect",
+    "slicing"
+   ],
+   "multihit": null,
    "short_desc": "No additional effect.",
    "champions_overrides": null
   },
@@ -6152,6 +9631,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "metronome",
+    "mirror",
+    "protect",
+    "reflectable"
+   ],
+   "multihit": null,
    "short_desc": "Puts the target to sleep after 1 turn.",
    "champions_overrides": null
   },
@@ -6164,6 +9650,13 @@
    "pp": 8,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "bullet",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "100% chance to paralyze the target.",
    "champions_overrides": null
   },
@@ -6176,6 +9669,13 @@
    "pp": 16,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "20% chance to make the target flinch.",
    "champions_overrides": null
   },
@@ -6188,6 +9688,13 @@
    "pp": 12,
    "priority": 0,
    "target": "normal",
+   "flags": [
+    "contact",
+    "metronome",
+    "mirror",
+    "protect"
+   ],
+   "multihit": null,
    "short_desc": "30% chance to make the target flinch.",
    "champions_overrides": null
   }

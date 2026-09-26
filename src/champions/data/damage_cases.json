@@ -1,5 +1,5 @@
 {
- "_format": "Each case: attacker, move, defender, optional opts (same names as calc.py flags with underscores: atk_nature, atk_sp, def_nature, def_sp, boost, def_boost, crit, spread, burn, weather, item, ability, def_ability), and expected min/max damage in HP. Use expected_pct [min, max] instead if you only know the % of the defender's HP (the game shows %). source says where the number came from: in-game, calculator, or hand. Set skip: true to park a case. 'rolls' (optional) is the full sorted list of 16 damage rolls and is compared exactly.",
+ "_format": "Each case: attacker, move, defender, optional opts (same names as calc.py flags with underscores: atk_nature, atk_sp, def_nature, def_sp, boost, def_boost, crit, spread, burn, weather, item, ability, def_ability, def_item, helping_hand, terrain, screen, doubles, hits), and expected min/max damage in HP. Use expected_pct [min, max] instead if you only know the % of the defender's HP (the game shows %). source says where the number came from: in-game, calculator, or hand. Set skip: true to park a case. 'rolls' (optional) is the full sorted list of 16 damage rolls and is compared exactly.",
  "cases": [
   {
    "name": "Garchomp Earthquake vs Baxcalibur (neutral, no investment)",
@@ -654,6 +654,741 @@
     0,
     0,
     0
+   ]
+  },
+  {
+   "name": "Tough Claws x1.3 on contact moves",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "ability": "tough-claws"
+   },
+   "expected": [
+    158,
+    188
+   ],
+   "rolls": [
+    158,
+    162,
+    162,
+    164,
+    168,
+    168,
+    170,
+    170,
+    174,
+    176,
+    176,
+    180,
+    182,
+    182,
+    186,
+    188
+   ]
+  },
+  {
+   "name": "Multiscale halves damage at full HP",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "def_ability": "multiscale"
+   },
+   "expected": [
+    38,
+    45
+   ],
+   "rolls": [
+    38,
+    38,
+    39,
+    39,
+    39,
+    40,
+    40,
+    41,
+    41,
+    42,
+    42,
+    42,
+    43,
+    43,
+    44,
+    45
+   ]
+  },
+  {
+   "name": "Haban Berry halves a super-effective Dragon hit",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "def_item": "habanberry"
+   },
+   "expected": [
+    61,
+    73
+   ],
+   "rolls": [
+    61,
+    63,
+    63,
+    64,
+    64,
+    66,
+    66,
+    67,
+    67,
+    69,
+    69,
+    70,
+    70,
+    72,
+    72,
+    73
+   ]
+  },
+  {
+   "name": "Reflect in singles (x0.5)",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "screen": true
+   },
+   "expected": [
+    38,
+    45
+   ],
+   "rolls": [
+    38,
+    38,
+    39,
+    39,
+    39,
+    40,
+    40,
+    41,
+    41,
+    42,
+    42,
+    42,
+    43,
+    43,
+    44,
+    45
+   ]
+  },
+  {
+   "name": "Reflect in doubles (x2/3)",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "screen": true,
+    "doubles": true
+   },
+   "expected": [
+    81,
+    97
+   ],
+   "rolls": [
+    81,
+    84,
+    84,
+    85,
+    85,
+    88,
+    88,
+    89,
+    89,
+    92,
+    92,
+    93,
+    93,
+    96,
+    96,
+    97
+   ]
+  },
+  {
+   "name": "Grassy Terrain halves Earthquake",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "terrain": "grassy"
+   },
+   "expected": [
+    39,
+    46
+   ],
+   "rolls": [
+    39,
+    39,
+    39,
+    40,
+    40,
+    40,
+    42,
+    42,
+    42,
+    43,
+    43,
+    43,
+    45,
+    45,
+    45,
+    46
+   ]
+  },
+  {
+   "name": "Grassy Terrain boosts Grass moves x1.3",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "rillaboom",
+   "move": "wood hammer",
+   "defender": "garchomp",
+   "opts": {
+    "terrain": "grassy"
+   },
+   "expected": [
+    111,
+    132
+   ],
+   "rolls": [
+    111,
+    112,
+    114,
+    115,
+    117,
+    118,
+    120,
+    120,
+    121,
+    123,
+    124,
+    126,
+    127,
+    129,
+    130,
+    132
+   ]
+  },
+  {
+   "name": "Pixilate: Normal becomes Fairy, x1.2",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "body slam",
+   "defender": "baxcalibur",
+   "opts": {
+    "ability": "pixilate"
+   },
+   "expected": [
+    104,
+    124
+   ],
+   "rolls": [
+    104,
+    106,
+    106,
+    108,
+    110,
+    110,
+    112,
+    114,
+    114,
+    116,
+    116,
+    118,
+    120,
+    120,
+    122,
+    124
+   ]
+  },
+  {
+   "name": "Helping Hand x1.5",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "helping_hand": true
+   },
+   "expected": [
+    182,
+    216
+   ],
+   "rolls": [
+    182,
+    182,
+    186,
+    188,
+    192,
+    192,
+    194,
+    198,
+    198,
+    200,
+    204,
+    206,
+    206,
+    210,
+    212,
+    216
+   ]
+  },
+  {
+   "name": "Knock Off x1.5 against an item holder",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "incineroar",
+   "move": "knock off",
+   "defender": "garchomp",
+   "opts": {
+    "def_item": "leftovers"
+   },
+   "expected": [
+    66,
+    78
+   ],
+   "rolls": [
+    66,
+    66,
+    67,
+    67,
+    69,
+    69,
+    70,
+    70,
+    72,
+    72,
+    73,
+    73,
+    75,
+    75,
+    76,
+    78
+   ]
+  },
+  {
+   "name": "Facade doubles when burned and ignores the burn drop",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "snorlax",
+   "move": "facade",
+   "defender": "baxcalibur",
+   "opts": {
+    "burn": true
+   },
+   "expected": [
+    93,
+    109
+   ],
+   "rolls": [
+    93,
+    93,
+    94,
+    96,
+    96,
+    97,
+    99,
+    100,
+    100,
+    102,
+    103,
+    105,
+    105,
+    106,
+    108,
+    109
+   ]
+  },
+  {
+   "name": "Acrobatics doubles with no item (site loads Mega Salamence)",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "salamence-mega",
+   "move": "acrobatics",
+   "defender": "garchomp",
+   "expected": [
+    90,
+    106
+   ],
+   "rolls": [
+    90,
+    91,
+    91,
+    93,
+    94,
+    94,
+    96,
+    97,
+    99,
+    99,
+    100,
+    102,
+    102,
+    103,
+    105,
+    106
+   ]
+  },
+  {
+   "name": "Electro Ball power from speed ratio",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "rotom",
+   "move": "electro ball",
+   "defender": "snorlax",
+   "expected": [
+    42,
+    49
+   ],
+   "rolls": [
+    42,
+    42,
+    42,
+    43,
+    43,
+    43,
+    45,
+    45,
+    45,
+    46,
+    46,
+    46,
+    48,
+    48,
+    48,
+    49
+   ]
+  },
+  {
+   "name": "Gyro Ball power from speed ratio",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "snorlax",
+   "move": "gyro ball",
+   "defender": "garchomp",
+   "expected": [
+    27,
+    32
+   ],
+   "rolls": [
+    27,
+    27,
+    27,
+    28,
+    28,
+    28,
+    29,
+    29,
+    29,
+    30,
+    30,
+    30,
+    31,
+    31,
+    31,
+    32
+   ]
+  },
+  {
+   "name": "Foul Play uses the defender's Attack",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "sableye",
+   "move": "foul play",
+   "defender": "garchomp",
+   "expected": [
+    70,
+    84
+   ],
+   "rolls": [
+    70,
+    72,
+    72,
+    73,
+    73,
+    75,
+    75,
+    76,
+    78,
+    78,
+    79,
+    79,
+    81,
+    81,
+    82,
+    84
+   ]
+  },
+  {
+   "name": "Triple Axel, 3 hits (20/40/60 BP)",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "baxcalibur",
+   "move": "triple axel",
+   "defender": "garchomp",
+   "opts": {
+    "hits": 3
+   },
+   "expected": [
+    392,
+    476
+   ]
+  },
+  {
+   "name": "Bullet Seed, 3 hits",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "rillaboom",
+   "move": "bullet seed",
+   "defender": "garchomp",
+   "opts": {
+    "hits": 3
+   },
+   "expected": [
+    54,
+    66
+   ]
+  },
+  {
+   "name": "Filter x0.75 on super-effective hits",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "def_ability": "filter"
+   },
+   "expected": [
+    91,
+    109
+   ],
+   "rolls": [
+    91,
+    94,
+    94,
+    96,
+    96,
+    99,
+    99,
+    100,
+    100,
+    103,
+    103,
+    105,
+    105,
+    108,
+    108,
+    109
+   ]
+  },
+  {
+   "name": "Fur Coat doubles Defense",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "earthquake",
+   "defender": "baxcalibur",
+   "opts": {
+    "def_ability": "fur-coat"
+   },
+   "expected": [
+    39,
+    46
+   ],
+   "rolls": [
+    39,
+    39,
+    39,
+    40,
+    40,
+    40,
+    42,
+    42,
+    42,
+    43,
+    43,
+    43,
+    45,
+    45,
+    45,
+    46
+   ]
+  },
+  {
+   "name": "Fluffy halves contact damage",
+   "source": "hand (game mechanic; Pikalytics does not apply Fluffy: it shows 122-146, the unreduced hit)",
+   "attacker": "garchomp",
+   "move": "dragon claw",
+   "defender": "baxcalibur",
+   "opts": {
+    "def_ability": "fluffy"
+   },
+   "expected": [
+    61,
+    73
+   ]
+  },
+  {
+   "name": "Heatproof halves Fire attack",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "incineroar",
+   "move": "flare blitz",
+   "defender": "baxcalibur",
+   "opts": {
+    "def_ability": "heatproof"
+   },
+   "expected": [
+    42,
+    49
+   ],
+   "rolls": [
+    42,
+    42,
+    42,
+    43,
+    43,
+    43,
+    45,
+    45,
+    45,
+    46,
+    46,
+    46,
+    48,
+    48,
+    48,
+    49
+   ]
+  },
+  {
+   "name": "Iron Fist x1.2 on punches",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "scizor",
+   "move": "bullet punch",
+   "defender": "baxcalibur",
+   "opts": {
+    "ability": "iron-fist"
+   },
+   "expected": [
+    74,
+    90
+   ],
+   "rolls": [
+    74,
+    74,
+    78,
+    78,
+    78,
+    80,
+    80,
+    80,
+    80,
+    84,
+    84,
+    84,
+    86,
+    86,
+    86,
+    90
+   ]
+  },
+  {
+   "name": "Strong Jaw x1.5 on bites",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "crunch",
+   "defender": "snorlax",
+   "opts": {
+    "ability": "strong-jaw"
+   },
+   "expected": [
+    80,
+    95
+   ],
+   "rolls": [
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95
+   ]
+  },
+  {
+   "name": "Sharpness x1.5 on slicing moves",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "aerial ace",
+   "defender": "snorlax",
+   "opts": {
+    "ability": "sharpness"
+   },
+   "expected": [
+    60,
+    71
+   ],
+   "rolls": [
+    60,
+    61,
+    61,
+    62,
+    63,
+    63,
+    64,
+    65,
+    66,
+    66,
+    67,
+    68,
+    68,
+    69,
+    70,
+    71
+   ]
+  },
+  {
+   "name": "Mega Launcher x1.5 on pulse moves",
+   "source": "pikalytics 2026-09-26 (Champions ruleset, Blank Sets, no SP/item, Hardy)",
+   "attacker": "garchomp",
+   "move": "dragon pulse",
+   "defender": "baxcalibur",
+   "opts": {
+    "ability": "mega-launcher"
+   },
+   "expected": [
+    134,
+    162
+   ],
+   "rolls": [
+    134,
+    138,
+    138,
+    140,
+    144,
+    144,
+    146,
+    146,
+    150,
+    150,
+    152,
+    152,
+    156,
+    156,
+    158,
+    162
    ]
   }
  ]

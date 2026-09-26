@@ -116,6 +116,8 @@ def main():
             "pp": pp.get(mid),  # Serebii (Showdown has no Champions PP)
             "priority": merged.get("priority"),
             "target": merged.get("target"),
+            "flags": sorted(merged.get("flags") or {}),  # contact, punch, bite, slicing, pulse, sound, ...
+            "multihit": merged.get("multihit"),  # int, or [min, max]
             "short_desc": b.get("shortDesc"),
             "champions_overrides": o or None,
         }

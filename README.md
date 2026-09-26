@@ -31,7 +31,7 @@ Writes `src/champions/data/champions.json` (~143 KB: 231 species, 380 forms with
 
 ## Known gaps
 
-- `champions/calc.py` models STAB, type effectiveness, crit, spread, burn, stages, sun/rain and a few items/abilities only, and matches Pikalytics' Champions calculator on 20 cases (`src/champions/data/damage_cases.json`, regenerate with `tools/pikalytics_harness.js`) but hasn't been checked against in-game damage.
+- `champions/calc.py` models STAB, type effectiveness, crit, spread, burn, stages, weather, terrain, screens, Helping Hand, multi-hit moves, resist berries, flag-based power abilities (Tough Claws, Iron Fist...), -ate abilities, several defender abilities, and a handful of variable-power moves. 45 cases in `src/champions/data/damage_cases.json` match Pikalytics' Champions calculator (regenerate with `tools/pikalytics_harness.js`); Fluffy is hand-derived because Pikalytics doesn't apply it. Not modeled: weight/HP-based power moves, Sheer Force, most other items/abilities. Nothing is checked against in-game damage yet.
 - Ability descriptions are main-series text (e.g. Ice Body still says "hail"). `champions_override` marks abilities Showdown's Champions mod overrides; that can be a real change (Regenerator) or an implementation detail (Berserk).
 - Anything PokéAPI lists may not be legal in M-C. Over-inclusion is intentional; filter at lookup time.
 
@@ -43,4 +43,4 @@ Writes `src/champions/data/champions.json` (~143 KB: 231 species, 380 forms with
 
 ## Version history
 
-Development is tagged linearly (`git tag -n`): v0.1.0 data fetcher, v0.2.0 stats/Stat Points, v0.3.0 moves & learnsets, v0.4.0 lookup CLI, v0.5.0 items & type chart, v0.6.0 abilities, v0.7.0 damage calculator, v0.8.0 calculator verified against Pikalytics, v0.9.0 installable package (`src/` layout, `champions` CLI). Tags before v0.9.0 use the old flat-script layout. Design notes live in `docs/DECISIONS.md` and `docs/DEVLOG.md`.
+Development is tagged linearly (`git tag -n`): v0.1.0 data fetcher, v0.2.0 stats/Stat Points, v0.3.0 moves & learnsets, v0.4.0 lookup CLI, v0.5.0 items & type chart, v0.6.0 abilities, v0.7.0 damage calculator, v0.8.0 calculator verified against Pikalytics, v0.9.0 installable package (`src/` layout, `champions` CLI), v0.10.0 broader damage calc and CI. Tags before v0.9.0 use the old flat-script layout. Design notes live in `docs/DECISIONS.md` and `docs/DEVLOG.md`.

@@ -1,7 +1,7 @@
 """Hand-computed checks for calc.py. Run: python3 -m unittest tests.test_calc"""
 import unittest
 
-from champions.calc import poke_round, rolls, stage, type_multiplier
+from champions.calc import chain, poke_round, rolls, stage, type_multiplier
 from champions.lookup import load
 
 
@@ -33,6 +33,16 @@ class DamageMath(unittest.TestCase):
         self.assertEqual(type_multiplier("Ground", ["flying"], chart), 0)
         self.assertEqual(type_multiplier("Ice", ["dragon", "flying"], chart), 4)
         self.assertEqual(type_multiplier("Fire", ["water", "rock"], chart), 0.25)
+
+
+class Chain(unittest.TestCase):
+    def test_single_modifier_is_unchanged(self):
+        self.assertEqual(chain([5324]), 5324)
+
+    def test_two_modifiers_round_once(self):
+        # Showdown chainModify: (m1 * m2 + 2048) >> 12; 0.5 * 0.75 = 1536
+        self.assertEqual(chain([2048, 3072]), 1536)
+        self.assertEqual(chain([]), 4096)
 
 
 if __name__ == "__main__":
