@@ -2,6 +2,14 @@
 
 Local reference data for Pokémon Champions (current: Regulation M-C, Sept 9 – Dec 2, 2026; Ranked Season M-6).
 
+## Play
+
+```sh
+champions play [--port 8000] [--no-open]
+```
+
+Local web UI for doubles/singles battles on the battle engine. API (all JSON; errors are `{"error": ...}` with HTTP 400): `GET /api/dex`, `GET /api/state`, `POST /api/new|turn|replace|undo|restart`. See `src/champions/play/server.py` and `tests/test_play_api.py`.
+
 ## Refresh the data
 
 ```sh

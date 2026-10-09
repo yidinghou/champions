@@ -2,6 +2,9 @@
 
 Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.md`; open work at the bottom.
 
+## 2026-10-09
+- Added `champions play` (issue #3): JSON API + single-page UI over the battle engine, history-replay undo/restart (decision 013).
+
 ## 2026-09-25
 - Verified `calc.py` against Pikalytics: 20 site cases, all rolls match after fixing 4096-rounding and base-power item mods (decision 011). Saved `tools/pikalytics_harness.js` to regenerate.
 - Damage tests are data-driven: `data/damage_cases.json` + `test_damage_cases.py`, using a new `calc.damage()` function.
