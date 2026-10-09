@@ -22,3 +22,4 @@ Timeline of what we did and learned, newest first. Decisions live in `DECISIONS.
 - Verify the 7 overridden abilities (what actually changed in Champions).
 - Check a few hits in-game too (Pikalytics is third-party). Untested modifiers: terrain, screens, most abilities/items.
 - Ideas: a team builder (item clause, one Mega, no duplicate dex numbers per `data/rules.json`) with team-wide type coverage.
+- Battle simulator and UI work (including type icons for the UI) is tracked in the GitHub milestone "Battle simulator and playable UI".

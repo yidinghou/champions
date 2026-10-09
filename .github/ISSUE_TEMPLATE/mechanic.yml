@@ -1,0 +1,28 @@
+name: Battle mechanic
+description: A mechanic or deliverable for the battle simulator
+labels: ["battle-engine", "mechanic"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should the engine do that it does not do now?
+    validations:
+      required: true
+  - type: textarea
+    id: scenarios
+    attributes:
+      label: Scenarios to write first
+      description: One line per `battle_cases.json` case, named like the cases there. These are the acceptance criteria.
+      placeholder: "- Fake Out fails after the user's first turn out"
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Where the expected behavior comes from (Smogon, Bulbapedia, a Showdown test file, or in-game).
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope

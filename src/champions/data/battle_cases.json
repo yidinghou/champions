@@ -1,0 +1,2324 @@
+{
+ "cases": [
+  {
+   "name": "faster mon moves first",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Speed",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "speed order is independent of which side is listed first",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Speed",
+   "teams": {
+    "p1": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Choice Scarf (x1.5) lets slower rillaboom outspeed garchomp",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Choice_Scarf",
+   "teams": {
+    "p1": [
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ],
+      "item": "choicescarf"
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "+1 Speed (x1.5) is not enough for incineroar to pass garchomp",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Stat_modifier",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ],
+      "boosts": {
+       "speed": 1
+      }
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "+2 Speed (x2) lets incineroar outspeed garchomp",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Stat_modifier",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ],
+      "boosts": {
+       "speed": 2
+      }
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "paralysis halves Speed",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Paralysis_(status_condition)",
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "status": "par"
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "priority move beats a faster mon",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Priority",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack",
+       "p2a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "higher priority beats lower priority regardless of speed",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Priority",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "extremespeed"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "extremespeed",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "quickattack",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:extremespeed",
+       "p2a:quickattack"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "negative priority moves last even for the fastest mon",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Priority",
+   "teams": {
+    "p1": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "trickroom"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "trickroom"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:trickroom"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Trick Room reverses speed order",
+   "source": "https://www.smogon.com/dex/sv/moves/trick-room",
+   "field": {
+    "trick_room": 5
+   },
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Trick Room does not apply the turn it is used (-7 priority)",
+   "source": "https://www.smogon.com/dex/sv/moves/trick-room",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "trickroom",
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "trickroom"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:trickroom"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "priority still beats Trick Room",
+   "source": "https://www.smogon.com/dex/sv/moves/trick-room",
+   "field": {
+    "trick_room": 5
+   },
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack",
+       "p2a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "two equal-priority movers under Trick Room: slower first",
+   "source": "https://www.smogon.com/dex/sv/moves/trick-room",
+   "field": {
+    "trick_room": 5
+   },
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "quickattack",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:quickattack",
+       "p1a:quickattack"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "using Trick Room while active ends it",
+   "source": "https://www.smogon.com/dex/sv/moves/trick-room",
+   "field": {
+    "trick_room": 3
+   },
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "trickroom"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "trickroom"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:trickroom"
+      ]
+     }
+    ],
+    "final": {
+     "field": {
+      "trick_room": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "Trick Room lasts 5 turns counting the turn it was used",
+   "source": "https://www.smogon.com/dex/sv/moves/trick-room",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "trickroom",
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "trickroom"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:trickroom"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ]
+     }
+    ],
+    "final": {
+     "field": {
+      "trick_room": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "Tailwind doubles Speed for the side for 4 turns including the cast turn",
+   "source": "https://www.smogon.com/dex/sv/moves/tailwind",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind",
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "tailwind"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:tailwind"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ]
+     }
+    ],
+    "final": {
+     "field": {
+      "tailwind_p1": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "Tailwind on the opposing side lets incineroar outspeed garchomp",
+   "source": "https://www.smogon.com/dex/sv/moves/tailwind",
+   "field": {
+    "tailwind_p2": 4
+   },
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "doubles: four mons act in descending Speed",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Speed",
+   "active": 2,
+   "teams": {
+    "p1": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "mudslap"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ]
+     },
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2b:mudslap",
+       "p2a:mudslap",
+       "p1b:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "doubles: Trick Room reverses all four",
+   "source": "https://www.smogon.com/dex/sv/moves/trick-room",
+   "active": 2,
+   "field": {
+    "trick_room": 5
+   },
+   "teams": {
+    "p1": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "mudslap"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ]
+     },
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1b:mudslap",
+       "p2a:mudslap",
+       "p2b:mudslap",
+       "p1a:mudslap"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "switches resolve before moves, so the attack hits the replacement",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Priority",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "switch": 1
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:switch",
+       "p2a:mudslap"
+      ]
+     }
+    ],
+    "final": {
+     "active": {
+      "p1a": "kingambit"
+     },
+     "damaged": [
+      "p1:1"
+     ],
+     "full": [
+      "p1:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "Fake Out flinches a slower target",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "arcanine",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "flinched": [
+       "p2a"
+      ]
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0"
+     ],
+     "full": [
+      "p1:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "Fake Out fails after the user's first turn on the field",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "arcanine",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "flinched": [
+       "p2a"
+      ]
+     },
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "failed": [
+       "p1a"
+      ],
+      "flinched": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Fake Out held until turn 2 fails",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout",
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "arcanine",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ]
+     },
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "failed": [
+       "p1a"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Fake Out vs Fake Out: the faster user flinches the other",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "arcanine",
+      "moves": [
+       "fakeout"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "fakeout",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:fakeout",
+       "p1a:fakeout"
+      ],
+      "flinched": [
+       "p1a"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Protect (+4) blocks Fake Out (+3) and prevents the flinch",
+   "source": "https://www.smogon.com/dex/sv/moves/protect",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "arcanine",
+      "moves": [
+       "protect"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "protect"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:protect",
+       "p1a:fakeout"
+      ],
+      "blocked": [
+       "p1a"
+      ]
+     }
+    ],
+    "final": {
+     "full": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "doubles: Fake Out flinches only its target",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "active": 2,
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout"
+      ]
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ]
+     },
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p2b"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1b"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1b"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2b:mudslap",
+       "p2a:mudslap",
+       "p1b:mudslap"
+      ],
+      "flinched": [
+       "p2a"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "a KO removes the fainted mon's queued move and asks for a replacement",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Fainting",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack"
+      ],
+      "pending": [
+       "p2a"
+      ]
+     }
+    ],
+    "final": {
+     "fainted": [
+      "p2:0"
+     ],
+     "full": [
+      "p1:0"
+     ],
+     "winner": null
+    }
+   }
+  },
+  {
+   "name": "replacing a fainted mon puts the chosen one in the slot",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Fainting",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "_replace": {
+      "p2a": 1
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack"
+      ],
+      "pending": [
+       "p2a"
+      ]
+     },
+     {}
+    ],
+    "final": {
+     "active": {
+      "p2a": "kingambit"
+     },
+     "winner": null
+    }
+   }
+  },
+  {
+   "name": "the last mon fainting ends the battle",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Fainting",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "quickattack"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack"
+      ],
+      "pending": []
+     }
+    ],
+    "final": {
+     "winner": "p1",
+     "fainted": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a mon with no bench leaves its doubles slot empty and the battle goes on",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Fainting",
+   "active": 2,
+   "teams": {
+    "p1": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "quickattack",
+       "mudslap"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     },
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p2b"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2b"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p2b"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack",
+       "p2b:mudslap",
+       "p1b:mudslap"
+      ],
+      "pending": []
+     },
+     {
+      "order": [
+       "p1a:mudslap",
+       "p2b:mudslap",
+       "p1b:mudslap"
+      ]
+     }
+    ],
+    "final": {
+     "active": {
+      "p2a": null
+     },
+     "winner": null
+    }
+   }
+  },
+  {
+   "name": "doubles: a move aimed at a fainted foe redirects to its partner",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Target",
+   "active": 2,
+   "teams": {
+    "p1": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "quickattack"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     },
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack",
+       "p2b:mudslap",
+       "p1b:mudslap"
+      ]
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:1"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a replacement can Fake Out on its first turn out",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "quickattack",
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     },
+     {
+      "species": "arcanine",
+      "moves": [
+       "fakeout"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "quickattack",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "_replace": {
+      "p2a": 1
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "fakeout",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:quickattack"
+      ],
+      "pending": [
+       "p2a"
+      ]
+     },
+     {},
+     {
+      "order": [
+       "p2a:fakeout",
+       "p1a:mudslap"
+      ],
+      "flinched": [
+       "p1a"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "First Impression fails after the user's first turn out",
+   "source": "https://www.smogon.com/dex/sv/moves/first-impression",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "firstimpression"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "firstimpression",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "firstimpression",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:firstimpression",
+       "p2a:mudslap"
+      ],
+      "failed": [],
+      "flinched": []
+     },
+     {
+      "order": [
+       "p1a:firstimpression",
+       "p2a:mudslap"
+      ],
+      "failed": [
+       "p1a"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Protect only lasts the turn it is used",
+   "source": "https://www.smogon.com/dex/sv/moves/protect",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "protect",
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "protect"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:protect",
+       "p1a:mudslap"
+      ],
+      "blocked": [
+       "p1a"
+      ]
+     },
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ],
+      "blocked": []
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a move aimed at a fainted ally fails instead of redirecting",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Target",
+   "active": 2,
+   "teams": {
+    "p1": [
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "quickattack",
+       "mudslap"
+      ]
+     },
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p1a"
+     },
+     "p2a": {
+      "move": "quickattack",
+      "target": "p1a"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1b"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:quickattack",
+       "p2b:mudslap",
+       "p1b:mudslap"
+      ]
+     }
+    ],
+    "final": {
+     "full": [
+      "p2:0",
+      "p2:1"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a mon that switches back in can Fake Out again",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout",
+       "mudslap"
+      ]
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "switch": 1
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "switch": 0
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ]
+     },
+     {},
+     {},
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "flinched": [
+       "p2a"
+      ],
+      "failed": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "a mon brought in by replacement can Fake Out again",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout",
+       "mudslap"
+      ]
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "protect",
+       "quickattack",
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "protect"
+     }
+    },
+    {
+     "p1a": {
+      "switch": 1
+     },
+     "p2a": {
+      "move": "protect"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "quickattack",
+      "target": "p1a"
+     }
+    },
+    {
+     "_replace": {
+      "p1a": 0
+     }
+    },
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {},
+     {},
+     {
+      "order": [
+       "p2a:quickattack"
+      ],
+      "pending": [
+       "p1a"
+      ]
+     },
+     {},
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "flinched": [
+       "p2a"
+      ],
+      "failed": []
+     }
+    ]
+   }
+  }
+ ]
+}
