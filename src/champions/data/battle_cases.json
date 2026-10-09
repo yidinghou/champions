@@ -1257,7 +1257,8 @@
       ],
       "failed": [
        "p1a"
-      ]
+      ],
+      "flinched": []
      }
     ]
    }
@@ -1969,7 +1970,8 @@
        "p1a:firstimpression",
        "p2a:mudslap"
       ],
-      "failed": []
+      "failed": [],
+      "flinched": []
      },
      {
       "order": [
@@ -1979,6 +1981,341 @@
       "failed": [
        "p1a"
       ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Protect only lasts the turn it is used",
+   "source": "https://www.smogon.com/dex/sv/moves/protect",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "dragapult",
+      "moves": [
+       "protect",
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "protect"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:protect",
+       "p1a:mudslap"
+      ],
+      "blocked": [
+       "p1a"
+      ]
+     },
+     {
+      "order": [
+       "p2a:mudslap",
+       "p1a:mudslap"
+      ],
+      "blocked": []
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a move aimed at a fainted ally fails instead of redirecting",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Target",
+   "active": 2,
+   "teams": {
+    "p1": [
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "quickattack",
+       "mudslap"
+      ]
+     },
+     {
+      "species": "rillaboom",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p1b": {
+      "move": "mudslap",
+      "target": "p1a"
+     },
+     "p2a": {
+      "move": "quickattack",
+      "target": "p1a"
+     },
+     "p2b": {
+      "move": "mudslap",
+      "target": "p1b"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p2a:quickattack",
+       "p2b:mudslap",
+       "p1b:mudslap"
+      ]
+     }
+    ],
+    "final": {
+     "full": [
+      "p2:0",
+      "p2:1"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a mon that switches back in can Fake Out again",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout",
+       "mudslap"
+      ]
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "switch": 1
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "switch": 0
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    },
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ]
+     },
+     {},
+     {},
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "flinched": [
+       "p2a"
+      ],
+      "failed": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "a mon brought in by replacement can Fake Out again",
+   "source": "https://www.smogon.com/dex/sv/moves/fake-out",
+   "teams": {
+    "p1": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "fakeout",
+       "mudslap"
+      ]
+     },
+     {
+      "species": "kingambit",
+      "moves": [
+       "mudslap"
+      ],
+      "hp": 1
+     }
+    ],
+    "p2": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "protect",
+       "quickattack",
+       "mudslap"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "protect"
+     }
+    },
+    {
+     "p1a": {
+      "switch": 1
+     },
+     "p2a": {
+      "move": "protect"
+     }
+    },
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "quickattack",
+      "target": "p1a"
+     }
+    },
+    {
+     "_replace": {
+      "p1a": 0
+     }
+    },
+    {
+     "p1a": {
+      "move": "fakeout",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "mudslap",
+      "target": "p1a"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {},
+     {},
+     {
+      "order": [
+       "p2a:quickattack"
+      ],
+      "pending": [
+       "p1a"
+      ]
+     },
+     {},
+     {
+      "order": [
+       "p1a:fakeout",
+       "p2a:mudslap"
+      ],
+      "flinched": [
+       "p2a"
+      ],
+      "failed": []
      }
     ]
    }
