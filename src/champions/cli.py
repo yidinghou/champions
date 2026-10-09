@@ -14,6 +14,7 @@ FETCHERS = {
     "champions": "champions.fetch.champions",
     "moves": "champions.fetch.moves",
     "reference": "champions.fetch.reference",
+    "opgg": "champions.fetch.opgg",
 }
 
 
