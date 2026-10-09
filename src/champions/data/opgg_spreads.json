@@ -1,18 +1,8 @@
 {
- "fetched_at": "2026-10-09T17:41:46+00:00",
+ "fetched_at": "2026-10-09T18:18:16+00:00",
  "source": "https://op.gg/pokemon-champions/pokedex/{}",
  "view": "singles",
- "misses": [
-  "pyroar-male",
-  "meowstic-male-mega",
-  "meowstic-female-mega",
-  "aegislash-shield",
-  "lycanroc-midday",
-  "mimikyu-disguised",
-  "mr-rime",
-  "morpeko-full-belly",
-  "palafin-zero"
- ],
+ "misses": [],
  "pokemon": [
   {
    "updated": "Oct 7, 2026, 10:38 AM",
@@ -172,6 +162,7 @@
    ],
    "moves": [],
    "name": "venusaur",
+   "slug": "venusaur",
    "problems": [],
    "base_mismatch": []
   },
@@ -333,6 +324,7 @@
    ],
    "moves": [],
    "name": "venusaur-mega",
+   "slug": "mega-venusaur",
    "problems": [],
    "base_mismatch": []
   },
@@ -506,6 +498,7 @@
    ],
    "moves": [],
    "name": "charizard",
+   "slug": "charizard",
    "problems": [],
    "base_mismatch": []
   },
@@ -679,6 +672,7 @@
    ],
    "moves": [],
    "name": "charizard-mega-x",
+   "slug": "mega-charizard-x",
    "problems": [],
    "base_mismatch": []
   },
@@ -852,6 +846,7 @@
    ],
    "moves": [],
    "name": "charizard-mega-y",
+   "slug": "mega-charizard-y",
    "problems": [],
    "base_mismatch": []
   },
@@ -1013,6 +1008,7 @@
    ],
    "moves": [],
    "name": "blastoise",
+   "slug": "blastoise",
    "problems": [],
    "base_mismatch": []
   },
@@ -1174,6 +1170,7 @@
    ],
    "moves": [],
    "name": "blastoise-mega",
+   "slug": "mega-blastoise",
    "problems": [],
    "base_mismatch": []
   },
@@ -1335,6 +1332,7 @@
    ],
    "moves": [],
    "name": "beedrill",
+   "slug": "beedrill",
    "problems": [],
    "base_mismatch": []
   },
@@ -1496,6 +1494,7 @@
    ],
    "moves": [],
    "name": "beedrill-mega",
+   "slug": "mega-beedrill",
    "problems": [],
    "base_mismatch": []
   },
@@ -1657,6 +1656,7 @@
    ],
    "moves": [],
    "name": "pidgeot",
+   "slug": "pidgeot",
    "problems": [],
    "base_mismatch": []
   },
@@ -1818,6 +1818,7 @@
    ],
    "moves": [],
    "name": "pidgeot-mega",
+   "slug": "mega-pidgeot",
    "problems": [],
    "base_mismatch": []
   },
@@ -1979,6 +1980,7 @@
    ],
    "moves": [],
    "name": "arbok",
+   "slug": "arbok",
    "problems": [],
    "base_mismatch": []
   },
@@ -2140,6 +2142,7 @@
    ],
    "moves": [],
    "name": "pikachu",
+   "slug": "pikachu",
    "problems": [],
    "base_mismatch": []
   },
@@ -2301,6 +2304,7 @@
    ],
    "moves": [],
    "name": "raichu",
+   "slug": "raichu",
    "problems": [],
    "base_mismatch": []
   },
@@ -2462,6 +2466,7 @@
    ],
    "moves": [],
    "name": "raichu-mega-x",
+   "slug": "mega-raichu-x",
    "problems": [],
    "base_mismatch": []
   },
@@ -2623,6 +2628,7 @@
    ],
    "moves": [],
    "name": "raichu-mega-y",
+   "slug": "mega-raichu-y",
    "problems": [],
    "base_mismatch": []
   },
@@ -2784,6 +2790,7 @@
    ],
    "moves": [],
    "name": "clefable",
+   "slug": "clefable",
    "problems": [],
    "base_mismatch": []
   },
@@ -2945,6 +2952,7 @@
    ],
    "moves": [],
    "name": "clefable-mega",
+   "slug": "mega-clefable",
    "problems": [],
    "base_mismatch": []
   },
@@ -3106,6 +3114,7 @@
    ],
    "moves": [],
    "name": "ninetales",
+   "slug": "ninetales",
    "problems": [],
    "base_mismatch": []
   },
@@ -3412,6 +3421,7 @@
     }
    ],
    "name": "wigglytuff",
+   "slug": "wigglytuff",
    "problems": [],
    "base_mismatch": []
   },
@@ -3573,6 +3583,7 @@
    ],
    "moves": [],
    "name": "vileplume",
+   "slug": "vileplume",
    "problems": [],
    "base_mismatch": []
   },
@@ -3879,6 +3890,7 @@
     }
    ],
    "name": "persian",
+   "slug": "persian",
    "problems": [],
    "base_mismatch": []
   },
@@ -4040,6 +4052,7 @@
    ],
    "moves": [],
    "name": "arcanine",
+   "slug": "arcanine",
    "problems": [],
    "base_mismatch": []
   },
@@ -4201,6 +4214,7 @@
    ],
    "moves": [],
    "name": "alakazam",
+   "slug": "alakazam",
    "problems": [],
    "base_mismatch": []
   },
@@ -4362,6 +4376,7 @@
    ],
    "moves": [],
    "name": "alakazam-mega",
+   "slug": "mega-alakazam",
    "problems": [],
    "base_mismatch": []
   },
@@ -4523,6 +4538,7 @@
    ],
    "moves": [],
    "name": "machamp",
+   "slug": "machamp",
    "problems": [],
    "base_mismatch": []
   },
@@ -4684,6 +4700,7 @@
    ],
    "moves": [],
    "name": "victreebel",
+   "slug": "victreebel",
    "problems": [],
    "base_mismatch": []
   },
@@ -4845,6 +4862,7 @@
    ],
    "moves": [],
    "name": "victreebel-mega",
+   "slug": "mega-victreebel",
    "problems": [],
    "base_mismatch": []
   },
@@ -5006,6 +5024,7 @@
    ],
    "moves": [],
    "name": "slowbro",
+   "slug": "slowbro",
    "problems": [],
    "base_mismatch": []
   },
@@ -5167,6 +5186,7 @@
    ],
    "moves": [],
    "name": "slowbro-mega",
+   "slug": "mega-slowbro",
    "problems": [],
    "base_mismatch": []
   },
@@ -5473,6 +5493,7 @@
     }
    ],
    "name": "farfetchd",
+   "slug": "farfetchd",
    "problems": [],
    "base_mismatch": []
   },
@@ -5634,6 +5655,7 @@
    ],
    "moves": [],
    "name": "gengar",
+   "slug": "gengar",
    "problems": [],
    "base_mismatch": []
   },
@@ -5795,6 +5817,7 @@
    ],
    "moves": [],
    "name": "gengar-mega",
+   "slug": "mega-gengar",
    "problems": [],
    "base_mismatch": []
   },
@@ -5956,6 +5979,7 @@
    ],
    "moves": [],
    "name": "kangaskhan",
+   "slug": "kangaskhan",
    "problems": [],
    "base_mismatch": []
   },
@@ -6117,6 +6141,7 @@
    ],
    "moves": [],
    "name": "kangaskhan-mega",
+   "slug": "mega-kangaskhan",
    "problems": [],
    "base_mismatch": []
   },
@@ -6278,6 +6303,7 @@
    ],
    "moves": [],
    "name": "starmie",
+   "slug": "starmie",
    "problems": [],
    "base_mismatch": []
   },
@@ -6439,6 +6465,7 @@
    ],
    "moves": [],
    "name": "starmie-mega",
+   "slug": "mega-starmie",
    "problems": [],
    "base_mismatch": []
   },
@@ -6745,6 +6772,7 @@
     }
    ],
    "name": "mr-mime",
+   "slug": "mr-mime",
    "problems": [],
    "base_mismatch": []
   },
@@ -6906,6 +6934,7 @@
    ],
    "moves": [],
    "name": "pinsir",
+   "slug": "pinsir",
    "problems": [],
    "base_mismatch": []
   },
@@ -7067,6 +7096,7 @@
    ],
    "moves": [],
    "name": "pinsir-mega",
+   "slug": "mega-pinsir",
    "problems": [],
    "base_mismatch": []
   },
@@ -7228,6 +7258,7 @@
    ],
    "moves": [],
    "name": "tauros",
+   "slug": "tauros",
    "problems": [],
    "base_mismatch": []
   },
@@ -7389,6 +7420,7 @@
    ],
    "moves": [],
    "name": "gyarados",
+   "slug": "gyarados",
    "problems": [],
    "base_mismatch": []
   },
@@ -7550,6 +7582,7 @@
    ],
    "moves": [],
    "name": "gyarados-mega",
+   "slug": "mega-gyarados",
    "problems": [],
    "base_mismatch": []
   },
@@ -7711,6 +7744,7 @@
    ],
    "moves": [],
    "name": "ditto",
+   "slug": "ditto",
    "problems": [],
    "base_mismatch": []
   },
@@ -7872,6 +7906,7 @@
    ],
    "moves": [],
    "name": "vaporeon",
+   "slug": "vaporeon",
    "problems": [],
    "base_mismatch": []
   },
@@ -8045,6 +8080,7 @@
    ],
    "moves": [],
    "name": "jolteon",
+   "slug": "jolteon",
    "problems": [],
    "base_mismatch": []
   },
@@ -8206,6 +8242,7 @@
    ],
    "moves": [],
    "name": "flareon",
+   "slug": "flareon",
    "problems": [],
    "base_mismatch": []
   },
@@ -8367,6 +8404,7 @@
    ],
    "moves": [],
    "name": "aerodactyl",
+   "slug": "aerodactyl",
    "problems": [],
    "base_mismatch": []
   },
@@ -8528,6 +8566,7 @@
    ],
    "moves": [],
    "name": "aerodactyl-mega",
+   "slug": "mega-aerodactyl",
    "problems": [],
    "base_mismatch": []
   },
@@ -8689,6 +8728,7 @@
    ],
    "moves": [],
    "name": "snorlax",
+   "slug": "snorlax",
    "problems": [],
    "base_mismatch": []
   },
@@ -8850,6 +8890,7 @@
    ],
    "moves": [],
    "name": "dragonite",
+   "slug": "dragonite",
    "problems": [],
    "base_mismatch": []
   },
@@ -9011,6 +9052,7 @@
    ],
    "moves": [],
    "name": "dragonite-mega",
+   "slug": "mega-dragonite",
    "problems": [],
    "base_mismatch": []
   },
@@ -9172,6 +9214,7 @@
    ],
    "moves": [],
    "name": "meganium",
+   "slug": "meganium",
    "problems": [],
    "base_mismatch": []
   },
@@ -9333,6 +9376,7 @@
    ],
    "moves": [],
    "name": "meganium-mega",
+   "slug": "mega-meganium",
    "problems": [],
    "base_mismatch": []
   },
@@ -9494,6 +9538,7 @@
    ],
    "moves": [],
    "name": "typhlosion",
+   "slug": "typhlosion",
    "problems": [],
    "base_mismatch": []
   },
@@ -9655,6 +9700,7 @@
    ],
    "moves": [],
    "name": "feraligatr",
+   "slug": "feraligatr",
    "problems": [],
    "base_mismatch": []
   },
@@ -9816,6 +9862,7 @@
    ],
    "moves": [],
    "name": "feraligatr-mega",
+   "slug": "mega-feraligatr",
    "problems": [],
    "base_mismatch": []
   },
@@ -9977,6 +10024,7 @@
    ],
    "moves": [],
    "name": "ariados",
+   "slug": "ariados",
    "problems": [],
    "base_mismatch": []
   },
@@ -10138,6 +10186,7 @@
    ],
    "moves": [],
    "name": "ampharos",
+   "slug": "ampharos",
    "problems": [],
    "base_mismatch": []
   },
@@ -10299,6 +10348,7 @@
    ],
    "moves": [],
    "name": "ampharos-mega",
+   "slug": "mega-ampharos",
    "problems": [],
    "base_mismatch": []
   },
@@ -10460,6 +10510,7 @@
    ],
    "moves": [],
    "name": "azumarill",
+   "slug": "azumarill",
    "problems": [],
    "base_mismatch": []
   },
@@ -10621,6 +10672,7 @@
    ],
    "moves": [],
    "name": "politoed",
+   "slug": "politoed",
    "problems": [],
    "base_mismatch": []
   },
@@ -10782,6 +10834,7 @@
    ],
    "moves": [],
    "name": "espeon",
+   "slug": "espeon",
    "problems": [],
    "base_mismatch": []
   },
@@ -10943,6 +10996,7 @@
    ],
    "moves": [],
    "name": "umbreon",
+   "slug": "umbreon",
    "problems": [],
    "base_mismatch": []
   },
@@ -11104,6 +11158,7 @@
    ],
    "moves": [],
    "name": "slowking",
+   "slug": "slowking",
    "problems": [],
    "base_mismatch": []
   },
@@ -11265,6 +11320,7 @@
    ],
    "moves": [],
    "name": "forretress",
+   "slug": "forretress",
    "problems": [],
    "base_mismatch": []
   },
@@ -11426,6 +11482,7 @@
    ],
    "moves": [],
    "name": "steelix",
+   "slug": "steelix",
    "problems": [],
    "base_mismatch": []
   },
@@ -11587,6 +11644,7 @@
    ],
    "moves": [],
    "name": "steelix-mega",
+   "slug": "mega-steelix",
    "problems": [],
    "base_mismatch": []
   },
@@ -11748,6 +11806,7 @@
    ],
    "moves": [],
    "name": "qwilfish",
+   "slug": "qwilfish",
    "problems": [],
    "base_mismatch": []
   },
@@ -11909,6 +11968,7 @@
    ],
    "moves": [],
    "name": "scizor",
+   "slug": "scizor",
    "problems": [],
    "base_mismatch": []
   },
@@ -12070,6 +12130,7 @@
    ],
    "moves": [],
    "name": "scizor-mega",
+   "slug": "mega-scizor",
    "problems": [],
    "base_mismatch": []
   },
@@ -12231,6 +12292,7 @@
    ],
    "moves": [],
    "name": "heracross",
+   "slug": "heracross",
    "problems": [],
    "base_mismatch": []
   },
@@ -12392,6 +12454,7 @@
    ],
    "moves": [],
    "name": "heracross-mega",
+   "slug": "mega-heracross",
    "problems": [],
    "base_mismatch": []
   },
@@ -12553,6 +12616,7 @@
    ],
    "moves": [],
    "name": "skarmory",
+   "slug": "skarmory",
    "problems": [],
    "base_mismatch": []
   },
@@ -12714,6 +12778,7 @@
    ],
    "moves": [],
    "name": "skarmory-mega",
+   "slug": "mega-skarmory",
    "problems": [],
    "base_mismatch": []
   },
@@ -12875,6 +12940,7 @@
    ],
    "moves": [],
    "name": "houndoom",
+   "slug": "houndoom",
    "problems": [],
    "base_mismatch": []
   },
@@ -13036,6 +13102,7 @@
    ],
    "moves": [],
    "name": "houndoom-mega",
+   "slug": "mega-houndoom",
    "problems": [],
    "base_mismatch": []
   },
@@ -13197,6 +13264,7 @@
    ],
    "moves": [],
    "name": "tyranitar",
+   "slug": "tyranitar",
    "problems": [],
    "base_mismatch": []
   },
@@ -13358,6 +13426,7 @@
    ],
    "moves": [],
    "name": "tyranitar-mega",
+   "slug": "mega-tyranitar",
    "problems": [],
    "base_mismatch": []
   },
@@ -13519,6 +13588,7 @@
    ],
    "moves": [],
    "name": "sceptile",
+   "slug": "sceptile",
    "problems": [],
    "base_mismatch": []
   },
@@ -13680,6 +13750,7 @@
    ],
    "moves": [],
    "name": "sceptile-mega",
+   "slug": "mega-sceptile",
    "problems": [],
    "base_mismatch": []
   },
@@ -13841,6 +13912,7 @@
    ],
    "moves": [],
    "name": "blaziken",
+   "slug": "blaziken",
    "problems": [],
    "base_mismatch": []
   },
@@ -14002,6 +14074,7 @@
    ],
    "moves": [],
    "name": "blaziken-mega",
+   "slug": "mega-blaziken",
    "problems": [],
    "base_mismatch": []
   },
@@ -14163,6 +14236,7 @@
    ],
    "moves": [],
    "name": "swampert",
+   "slug": "swampert",
    "problems": [],
    "base_mismatch": []
   },
@@ -14324,6 +14398,7 @@
    ],
    "moves": [],
    "name": "swampert-mega",
+   "slug": "mega-swampert",
    "problems": [],
    "base_mismatch": []
   },
@@ -14485,6 +14560,7 @@
    ],
    "moves": [],
    "name": "pelipper",
+   "slug": "pelipper",
    "problems": [],
    "base_mismatch": []
   },
@@ -14646,6 +14722,7 @@
    ],
    "moves": [],
    "name": "gardevoir",
+   "slug": "gardevoir",
    "problems": [],
    "base_mismatch": []
   },
@@ -14807,6 +14884,7 @@
    ],
    "moves": [],
    "name": "gardevoir-mega",
+   "slug": "mega-gardevoir",
    "problems": [],
    "base_mismatch": []
   },
@@ -14968,6 +15046,7 @@
    ],
    "moves": [],
    "name": "sableye",
+   "slug": "sableye",
    "problems": [],
    "base_mismatch": []
   },
@@ -15129,6 +15208,7 @@
    ],
    "moves": [],
    "name": "sableye-mega",
+   "slug": "mega-sableye",
    "problems": [],
    "base_mismatch": []
   },
@@ -15290,6 +15370,7 @@
    ],
    "moves": [],
    "name": "mawile",
+   "slug": "mawile",
    "problems": [],
    "base_mismatch": []
   },
@@ -15451,6 +15532,7 @@
    ],
    "moves": [],
    "name": "mawile-mega",
+   "slug": "mega-mawile",
    "problems": [],
    "base_mismatch": []
   },
@@ -15612,6 +15694,7 @@
    ],
    "moves": [],
    "name": "aggron",
+   "slug": "aggron",
    "problems": [],
    "base_mismatch": []
   },
@@ -15773,6 +15856,7 @@
    ],
    "moves": [],
    "name": "aggron-mega",
+   "slug": "mega-aggron",
    "problems": [],
    "base_mismatch": []
   },
@@ -15934,6 +16018,7 @@
    ],
    "moves": [],
    "name": "medicham",
+   "slug": "medicham",
    "problems": [],
    "base_mismatch": []
   },
@@ -16095,6 +16180,7 @@
    ],
    "moves": [],
    "name": "medicham-mega",
+   "slug": "mega-medicham",
    "problems": [],
    "base_mismatch": []
   },
@@ -16268,6 +16354,7 @@
    ],
    "moves": [],
    "name": "manectric",
+   "slug": "manectric",
    "problems": [],
    "base_mismatch": []
   },
@@ -16441,6 +16528,7 @@
    ],
    "moves": [],
    "name": "manectric-mega",
+   "slug": "mega-manectric",
    "problems": [],
    "base_mismatch": []
   },
@@ -16747,6 +16835,7 @@
     }
    ],
    "name": "swalot",
+   "slug": "swalot",
    "problems": [],
    "base_mismatch": []
   },
@@ -16908,6 +16997,7 @@
    ],
    "moves": [],
    "name": "sharpedo",
+   "slug": "sharpedo",
    "problems": [],
    "base_mismatch": []
   },
@@ -17069,6 +17159,7 @@
    ],
    "moves": [],
    "name": "sharpedo-mega",
+   "slug": "mega-sharpedo",
    "problems": [],
    "base_mismatch": []
   },
@@ -17230,6 +17321,7 @@
    ],
    "moves": [],
    "name": "camerupt",
+   "slug": "camerupt",
    "problems": [],
    "base_mismatch": []
   },
@@ -17391,6 +17483,7 @@
    ],
    "moves": [],
    "name": "camerupt-mega",
+   "slug": "mega-camerupt",
    "problems": [],
    "base_mismatch": []
   },
@@ -17552,6 +17645,7 @@
    ],
    "moves": [],
    "name": "torkoal",
+   "slug": "torkoal",
    "problems": [],
    "base_mismatch": []
   },
@@ -17713,6 +17807,7 @@
    ],
    "moves": [],
    "name": "altaria",
+   "slug": "altaria",
    "problems": [],
    "base_mismatch": []
   },
@@ -17874,6 +17969,7 @@
    ],
    "moves": [],
    "name": "altaria-mega",
+   "slug": "mega-altaria",
    "problems": [],
    "base_mismatch": []
   },
@@ -18035,6 +18131,7 @@
    ],
    "moves": [],
    "name": "milotic",
+   "slug": "milotic",
    "problems": [],
    "base_mismatch": []
   },
@@ -18196,6 +18293,7 @@
    ],
    "moves": [],
    "name": "castform",
+   "slug": "castform",
    "problems": [],
    "base_mismatch": []
   },
@@ -18357,6 +18455,7 @@
    ],
    "moves": [],
    "name": "banette",
+   "slug": "banette",
    "problems": [],
    "base_mismatch": []
   },
@@ -18518,6 +18617,7 @@
    ],
    "moves": [],
    "name": "banette-mega",
+   "slug": "mega-banette",
    "problems": [],
    "base_mismatch": []
   },
@@ -18679,6 +18779,7 @@
    ],
    "moves": [],
    "name": "chimecho",
+   "slug": "chimecho",
    "problems": [],
    "base_mismatch": []
   },
@@ -18840,6 +18941,7 @@
    ],
    "moves": [],
    "name": "chimecho-mega",
+   "slug": "mega-chimecho",
    "problems": [],
    "base_mismatch": []
   },
@@ -19013,6 +19115,7 @@
    ],
    "moves": [],
    "name": "absol",
+   "slug": "absol",
    "problems": [],
    "base_mismatch": []
   },
@@ -19186,6 +19289,7 @@
    ],
    "moves": [],
    "name": "absol-mega",
+   "slug": "mega-absol",
    "problems": [],
    "base_mismatch": []
   },
@@ -19359,6 +19463,7 @@
    ],
    "moves": [],
    "name": "absol-mega-z",
+   "slug": "mega-absol-z",
    "problems": [],
    "base_mismatch": []
   },
@@ -19520,6 +19625,7 @@
    ],
    "moves": [],
    "name": "glalie",
+   "slug": "glalie",
    "problems": [],
    "base_mismatch": []
   },
@@ -19681,6 +19787,7 @@
    ],
    "moves": [],
    "name": "glalie-mega",
+   "slug": "mega-glalie",
    "problems": [],
    "base_mismatch": []
   },
@@ -19987,6 +20094,7 @@
     }
    ],
    "name": "salamence",
+   "slug": "salamence",
    "problems": [],
    "base_mismatch": []
   },
@@ -20293,6 +20401,7 @@
     }
    ],
    "name": "salamence-mega",
+   "slug": "mega-salamence",
    "problems": [],
    "base_mismatch": []
   },
@@ -20454,6 +20563,7 @@
    ],
    "moves": [],
    "name": "metagross",
+   "slug": "metagross",
    "problems": [],
    "base_mismatch": []
   },
@@ -20615,6 +20725,7 @@
    ],
    "moves": [],
    "name": "metagross-mega",
+   "slug": "mega-metagross",
    "problems": [],
    "base_mismatch": []
   },
@@ -20776,6 +20887,7 @@
    ],
    "moves": [],
    "name": "torterra",
+   "slug": "torterra",
    "problems": [],
    "base_mismatch": []
   },
@@ -20937,6 +21049,7 @@
    ],
    "moves": [],
    "name": "infernape",
+   "slug": "infernape",
    "problems": [],
    "base_mismatch": []
   },
@@ -21098,6 +21211,7 @@
    ],
    "moves": [],
    "name": "empoleon",
+   "slug": "empoleon",
    "problems": [],
    "base_mismatch": []
   },
@@ -21259,6 +21373,7 @@
    ],
    "moves": [],
    "name": "staraptor",
+   "slug": "staraptor",
    "problems": [],
    "base_mismatch": []
   },
@@ -21420,6 +21535,7 @@
    ],
    "moves": [],
    "name": "staraptor-mega",
+   "slug": "mega-staraptor",
    "problems": [],
    "base_mismatch": []
   },
@@ -21581,6 +21697,7 @@
    ],
    "moves": [],
    "name": "luxray",
+   "slug": "luxray",
    "problems": [],
    "base_mismatch": []
   },
@@ -21742,6 +21859,7 @@
    ],
    "moves": [],
    "name": "roserade",
+   "slug": "roserade",
    "problems": [],
    "base_mismatch": []
   },
@@ -21903,6 +22021,7 @@
    ],
    "moves": [],
    "name": "rampardos",
+   "slug": "rampardos",
    "problems": [],
    "base_mismatch": []
   },
@@ -22064,6 +22183,7 @@
    ],
    "moves": [],
    "name": "bastiodon",
+   "slug": "bastiodon",
    "problems": [],
    "base_mismatch": []
   },
@@ -22237,6 +22357,7 @@
    ],
    "moves": [],
    "name": "lopunny",
+   "slug": "lopunny",
    "problems": [],
    "base_mismatch": []
   },
@@ -22410,6 +22531,7 @@
    ],
    "moves": [],
    "name": "lopunny-mega",
+   "slug": "mega-lopunny",
    "problems": [],
    "base_mismatch": []
   },
@@ -22571,6 +22693,7 @@
    ],
    "moves": [],
    "name": "spiritomb",
+   "slug": "spiritomb",
    "problems": [],
    "base_mismatch": []
   },
@@ -22732,6 +22855,7 @@
    ],
    "moves": [],
    "name": "garchomp",
+   "slug": "garchomp",
    "problems": [],
    "base_mismatch": []
   },
@@ -22893,6 +23017,7 @@
    ],
    "moves": [],
    "name": "garchomp-mega",
+   "slug": "mega-garchomp",
    "problems": [],
    "base_mismatch": []
   },
@@ -23054,6 +23179,7 @@
    ],
    "moves": [],
    "name": "garchomp-mega-z",
+   "slug": "mega-garchomp-z",
    "problems": [],
    "base_mismatch": []
   },
@@ -23215,6 +23341,7 @@
    ],
    "moves": [],
    "name": "lucario",
+   "slug": "lucario",
    "problems": [],
    "base_mismatch": []
   },
@@ -23376,6 +23503,7 @@
    ],
    "moves": [],
    "name": "lucario-mega",
+   "slug": "mega-lucario",
    "problems": [],
    "base_mismatch": []
   },
@@ -23537,6 +23665,7 @@
    ],
    "moves": [],
    "name": "lucario-mega-z",
+   "slug": "mega-lucario-z",
    "problems": [],
    "base_mismatch": []
   },
@@ -23698,6 +23827,7 @@
    ],
    "moves": [],
    "name": "hippowdon",
+   "slug": "hippowdon",
    "problems": [],
    "base_mismatch": []
   },
@@ -23859,6 +23989,7 @@
    ],
    "moves": [],
    "name": "toxicroak",
+   "slug": "toxicroak",
    "problems": [],
    "base_mismatch": []
   },
@@ -24020,6 +24151,7 @@
    ],
    "moves": [],
    "name": "abomasnow",
+   "slug": "abomasnow",
    "problems": [],
    "base_mismatch": []
   },
@@ -24181,6 +24313,7 @@
    ],
    "moves": [],
    "name": "abomasnow-mega",
+   "slug": "mega-abomasnow",
    "problems": [],
    "base_mismatch": []
   },
@@ -24342,6 +24475,7 @@
    ],
    "moves": [],
    "name": "weavile",
+   "slug": "weavile",
    "problems": [],
    "base_mismatch": []
   },
@@ -24503,6 +24637,7 @@
    ],
    "moves": [],
    "name": "rhyperior",
+   "slug": "rhyperior",
    "problems": [],
    "base_mismatch": []
   },
@@ -24664,6 +24799,7 @@
    ],
    "moves": [],
    "name": "leafeon",
+   "slug": "leafeon",
    "problems": [],
    "base_mismatch": []
   },
@@ -24825,6 +24961,7 @@
    ],
    "moves": [],
    "name": "glaceon",
+   "slug": "glaceon",
    "problems": [],
    "base_mismatch": []
   },
@@ -24986,6 +25123,7 @@
    ],
    "moves": [],
    "name": "gliscor",
+   "slug": "gliscor",
    "problems": [],
    "base_mismatch": []
   },
@@ -25147,6 +25285,7 @@
    ],
    "moves": [],
    "name": "mamoswine",
+   "slug": "mamoswine",
    "problems": [],
    "base_mismatch": []
   },
@@ -25308,6 +25447,7 @@
    ],
    "moves": [],
    "name": "gallade",
+   "slug": "gallade",
    "problems": [],
    "base_mismatch": []
   },
@@ -25469,6 +25609,7 @@
    ],
    "moves": [],
    "name": "gallade-mega",
+   "slug": "mega-gallade",
    "problems": [],
    "base_mismatch": []
   },
@@ -25630,6 +25771,7 @@
    ],
    "moves": [],
    "name": "froslass",
+   "slug": "froslass",
    "problems": [],
    "base_mismatch": []
   },
@@ -25791,6 +25933,7 @@
    ],
    "moves": [],
    "name": "froslass-mega",
+   "slug": "mega-froslass",
    "problems": [],
    "base_mismatch": []
   },
@@ -25952,6 +26095,7 @@
    ],
    "moves": [],
    "name": "rotom",
+   "slug": "rotom",
    "problems": [],
    "base_mismatch": []
   },
@@ -26113,6 +26257,7 @@
    ],
    "moves": [],
    "name": "serperior",
+   "slug": "serperior",
    "problems": [],
    "base_mismatch": []
   },
@@ -26274,6 +26419,7 @@
    ],
    "moves": [],
    "name": "emboar",
+   "slug": "emboar",
    "problems": [],
    "base_mismatch": []
   },
@@ -26435,6 +26581,7 @@
    ],
    "moves": [],
    "name": "emboar-mega",
+   "slug": "mega-emboar",
    "problems": [],
    "base_mismatch": []
   },
@@ -26596,6 +26743,7 @@
    ],
    "moves": [],
    "name": "samurott",
+   "slug": "samurott",
    "problems": [],
    "base_mismatch": []
   },
@@ -26757,6 +26905,7 @@
    ],
    "moves": [],
    "name": "watchog",
+   "slug": "watchog",
    "problems": [],
    "base_mismatch": []
   },
@@ -26918,6 +27067,7 @@
    ],
    "moves": [],
    "name": "liepard",
+   "slug": "liepard",
    "problems": [],
    "base_mismatch": []
   },
@@ -27079,6 +27229,7 @@
    ],
    "moves": [],
    "name": "simisage",
+   "slug": "simisage",
    "problems": [],
    "base_mismatch": []
   },
@@ -27240,6 +27391,7 @@
    ],
    "moves": [],
    "name": "simisear",
+   "slug": "simisear",
    "problems": [],
    "base_mismatch": []
   },
@@ -27401,6 +27553,7 @@
    ],
    "moves": [],
    "name": "simipour",
+   "slug": "simipour",
    "problems": [],
    "base_mismatch": []
   },
@@ -27562,6 +27715,7 @@
    ],
    "moves": [],
    "name": "musharna",
+   "slug": "musharna",
    "problems": [],
    "base_mismatch": []
   },
@@ -27723,6 +27877,7 @@
    ],
    "moves": [],
    "name": "excadrill",
+   "slug": "excadrill",
    "problems": [],
    "base_mismatch": []
   },
@@ -27884,6 +28039,7 @@
    ],
    "moves": [],
    "name": "excadrill-mega",
+   "slug": "mega-excadrill",
    "problems": [],
    "base_mismatch": []
   },
@@ -28045,6 +28201,7 @@
    ],
    "moves": [],
    "name": "audino",
+   "slug": "audino",
    "problems": [],
    "base_mismatch": []
   },
@@ -28206,6 +28363,7 @@
    ],
    "moves": [],
    "name": "audino-mega",
+   "slug": "mega-audino",
    "problems": [],
    "base_mismatch": []
   },
@@ -28367,6 +28525,7 @@
    ],
    "moves": [],
    "name": "conkeldurr",
+   "slug": "conkeldurr",
    "problems": [],
    "base_mismatch": []
   },
@@ -28528,6 +28687,7 @@
    ],
    "moves": [],
    "name": "scolipede",
+   "slug": "scolipede",
    "problems": [],
    "base_mismatch": []
   },
@@ -28689,6 +28849,7 @@
    ],
    "moves": [],
    "name": "scolipede-mega",
+   "slug": "mega-scolipede",
    "problems": [],
    "base_mismatch": []
   },
@@ -28850,6 +29011,7 @@
    ],
    "moves": [],
    "name": "whimsicott",
+   "slug": "whimsicott",
    "problems": [],
    "base_mismatch": []
   },
@@ -29011,6 +29173,7 @@
    ],
    "moves": [],
    "name": "krookodile",
+   "slug": "krookodile",
    "problems": [],
    "base_mismatch": []
   },
@@ -29172,6 +29335,7 @@
    ],
    "moves": [],
    "name": "scrafty",
+   "slug": "scrafty",
    "problems": [],
    "base_mismatch": []
   },
@@ -29333,6 +29497,7 @@
    ],
    "moves": [],
    "name": "scrafty-mega",
+   "slug": "mega-scrafty",
    "problems": [],
    "base_mismatch": []
   },
@@ -29494,6 +29659,7 @@
    ],
    "moves": [],
    "name": "cofagrigus",
+   "slug": "cofagrigus",
    "problems": [],
    "base_mismatch": []
   },
@@ -29655,6 +29821,7 @@
    ],
    "moves": [],
    "name": "garbodor",
+   "slug": "garbodor",
    "problems": [],
    "base_mismatch": []
   },
@@ -29816,6 +29983,7 @@
    ],
    "moves": [],
    "name": "zoroark",
+   "slug": "zoroark",
    "problems": [],
    "base_mismatch": []
   },
@@ -29977,6 +30145,7 @@
    ],
    "moves": [],
    "name": "reuniclus",
+   "slug": "reuniclus",
    "problems": [],
    "base_mismatch": []
   },
@@ -30138,6 +30307,7 @@
    ],
    "moves": [],
    "name": "vanilluxe",
+   "slug": "vanilluxe",
    "problems": [],
    "base_mismatch": []
   },
@@ -30299,6 +30469,7 @@
    ],
    "moves": [],
    "name": "emolga",
+   "slug": "emolga",
    "problems": [],
    "base_mismatch": []
   },
@@ -30460,6 +30631,7 @@
    ],
    "moves": [],
    "name": "eelektross",
+   "slug": "eelektross",
    "problems": [],
    "base_mismatch": []
   },
@@ -30621,6 +30793,7 @@
    ],
    "moves": [],
    "name": "eelektross-mega",
+   "slug": "mega-eelektross",
    "problems": [],
    "base_mismatch": []
   },
@@ -30782,6 +30955,7 @@
    ],
    "moves": [],
    "name": "chandelure",
+   "slug": "chandelure",
    "problems": [],
    "base_mismatch": []
   },
@@ -30943,6 +31117,7 @@
    ],
    "moves": [],
    "name": "chandelure-mega",
+   "slug": "mega-chandelure",
    "problems": [],
    "base_mismatch": []
   },
@@ -31104,6 +31279,7 @@
    ],
    "moves": [],
    "name": "beartic",
+   "slug": "beartic",
    "problems": [],
    "base_mismatch": []
   },
@@ -31265,6 +31441,7 @@
    ],
    "moves": [],
    "name": "stunfisk",
+   "slug": "stunfisk",
    "problems": [],
    "base_mismatch": []
   },
@@ -31426,6 +31603,7 @@
    ],
    "moves": [],
    "name": "golurk",
+   "slug": "golurk",
    "problems": [],
    "base_mismatch": []
   },
@@ -31587,6 +31765,7 @@
    ],
    "moves": [],
    "name": "golurk-mega",
+   "slug": "mega-golurk",
    "problems": [],
    "base_mismatch": []
   },
@@ -31748,6 +31927,7 @@
    ],
    "moves": [],
    "name": "hydreigon",
+   "slug": "hydreigon",
    "problems": [],
    "base_mismatch": []
   },
@@ -31909,6 +32089,7 @@
    ],
    "moves": [],
    "name": "volcarona",
+   "slug": "volcarona",
    "problems": [],
    "base_mismatch": []
   },
@@ -32070,6 +32251,7 @@
    ],
    "moves": [],
    "name": "chesnaught",
+   "slug": "chesnaught",
    "problems": [],
    "base_mismatch": []
   },
@@ -32231,6 +32413,7 @@
    ],
    "moves": [],
    "name": "chesnaught-mega",
+   "slug": "mega-chesnaught",
    "problems": [],
    "base_mismatch": []
   },
@@ -32392,6 +32575,7 @@
    ],
    "moves": [],
    "name": "delphox",
+   "slug": "delphox",
    "problems": [],
    "base_mismatch": []
   },
@@ -32553,6 +32737,7 @@
    ],
    "moves": [],
    "name": "delphox-mega",
+   "slug": "mega-delphox",
    "problems": [],
    "base_mismatch": []
   },
@@ -32714,6 +32899,7 @@
    ],
    "moves": [],
    "name": "greninja",
+   "slug": "greninja",
    "problems": [],
    "base_mismatch": []
   },
@@ -32875,6 +33061,7 @@
    ],
    "moves": [],
    "name": "greninja-mega",
+   "slug": "mega-greninja",
    "problems": [],
    "base_mismatch": []
   },
@@ -33048,6 +33235,7 @@
    ],
    "moves": [],
    "name": "diggersby",
+   "slug": "diggersby",
    "problems": [],
    "base_mismatch": []
   },
@@ -33209,6 +33397,7 @@
    ],
    "moves": [],
    "name": "talonflame",
+   "slug": "talonflame",
    "problems": [],
    "base_mismatch": []
   },
@@ -33382,6 +33571,169 @@
    ],
    "moves": [],
    "name": "vivillon",
+   "slug": "vivillon",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 86,
+    "attack": 68,
+    "defense": 72,
+    "special-attack": 109,
+    "special-defense": 66,
+    "speed": 106
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 47.0,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 15.1,
+     "sp": {
+      "hp": 10,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 24
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 5.6,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 4.5,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 3.9,
+     "sp": {
+      "hp": 4,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 30
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 1.6,
+     "sp": {
+      "hp": 7,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 27
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 1.2,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 1,
+      "special-attack": 32,
+      "special-defense": 1,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 1.0,
+     "sp": {
+      "hp": 6,
+      "attack": 0,
+      "defense": 1,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 27
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 0.9,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 0.9,
+     "sp": {
+      "hp": 4,
+      "attack": 0,
+      "defense": 1,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 29
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 0.8,
+     "sp": {
+      "hp": 14,
+      "attack": 0,
+      "defense": 1,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 19
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 0.6,
+     "sp": {
+      "hp": 6,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 28
+     }
+    }
+   ],
+   "moves": [],
+   "name": "pyroar-male",
+   "slug": "pyroar",
    "problems": [],
    "base_mismatch": []
   },
@@ -33543,6 +33895,7 @@
    ],
    "moves": [],
    "name": "pyroar-mega",
+   "slug": "mega-pyroar",
    "problems": [],
    "base_mismatch": []
   },
@@ -33704,6 +34057,7 @@
    ],
    "moves": [],
    "name": "floette",
+   "slug": "floette",
    "problems": [],
    "base_mismatch": [
     "base hp: OP.GG 74 vs champions.json 54",
@@ -33872,6 +34226,7 @@
    ],
    "moves": [],
    "name": "floette-mega",
+   "slug": "mega-floette",
    "problems": [],
    "base_mismatch": []
   },
@@ -34033,6 +34388,7 @@
    ],
    "moves": [],
    "name": "florges",
+   "slug": "florges",
    "problems": [],
    "base_mismatch": []
   },
@@ -34339,6 +34695,7 @@
     }
    ],
    "name": "gogoat",
+   "slug": "gogoat",
    "problems": [],
    "base_mismatch": []
   },
@@ -34500,6 +34857,7 @@
    ],
    "moves": [],
    "name": "pangoro",
+   "slug": "pangoro",
    "problems": [],
    "base_mismatch": []
   },
@@ -34661,6 +35019,7 @@
    ],
    "moves": [],
    "name": "furfrou",
+   "slug": "furfrou",
    "problems": [],
    "base_mismatch": []
   },
@@ -34822,6 +35181,493 @@
    ],
    "moves": [],
    "name": "meowstic-male",
+   "slug": "meowstic-male",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 74,
+    "attack": 48,
+    "defense": 76,
+    "special-attack": 143,
+    "special-defense": 101,
+    "speed": 124
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 16.9,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 13.3,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 32,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 4.8,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 24,
+      "special-attack": 0,
+      "special-defense": 10,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 4.1,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 3.7,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 32,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 3.2,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 14,
+      "special-attack": 0,
+      "special-defense": 20,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 3.1,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 25,
+      "special-attack": 0,
+      "special-defense": 9,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 2.5,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 2.4,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 1.8,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 1.7,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 1.7,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 2,
+      "special-defense": 0,
+      "speed": 32
+     }
+    }
+   ],
+   "moves": [],
+   "name": "meowstic-male-mega",
+   "slug": "mega-meowstic",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 74,
+    "attack": 48,
+    "defense": 76,
+    "special-attack": 143,
+    "special-defense": 101,
+    "speed": 124
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 16.9,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 13.3,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 32,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 4.8,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 24,
+      "special-attack": 0,
+      "special-defense": 10,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 4.1,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 3.7,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 32,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 3.2,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 14,
+      "special-attack": 0,
+      "special-defense": 20,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 3.1,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 25,
+      "special-attack": 0,
+      "special-defense": 9,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 2.5,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 2.4,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 1.8,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 1.7,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 1.7,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 2,
+      "special-defense": 0,
+      "speed": 32
+     }
+    }
+   ],
+   "moves": [],
+   "name": "meowstic-female-mega",
+   "slug": "mega-meowstic",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 60,
+    "attack": 50,
+    "defense": 140,
+    "special-attack": 50,
+    "special-defense": 140,
+    "speed": 60
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 17.4,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 1,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 8.8,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 1,
+      "special-attack": 32,
+      "special-defense": 1,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 7.2,
+     "sp": {
+      "hp": 2,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 6.8,
+     "sp": {
+      "hp": 32,
+      "attack": 2,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 6.4,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 5.6,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 5.2,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 3.9,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 2.8,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 2,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 1.3,
+     "sp": {
+      "hp": 32,
+      "attack": 26,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 8
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 0.9,
+     "sp": {
+      "hp": 32,
+      "attack": 1,
+      "defense": 1,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 0.9,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 1
+     }
+    }
+   ],
+   "moves": [],
+   "name": "aegislash-shield",
+   "slug": "aegislash",
    "problems": [],
    "base_mismatch": []
   },
@@ -34983,6 +35829,7 @@
    ],
    "moves": [],
    "name": "aromatisse",
+   "slug": "aromatisse",
    "problems": [],
    "base_mismatch": []
   },
@@ -35144,6 +35991,7 @@
    ],
    "moves": [],
    "name": "slurpuff",
+   "slug": "slurpuff",
    "problems": [],
    "base_mismatch": []
   },
@@ -35305,6 +36153,7 @@
    ],
    "moves": [],
    "name": "malamar",
+   "slug": "malamar",
    "problems": [],
    "base_mismatch": []
   },
@@ -35466,6 +36315,7 @@
    ],
    "moves": [],
    "name": "malamar-mega",
+   "slug": "mega-malamar",
    "problems": [],
    "base_mismatch": []
   },
@@ -35627,6 +36477,7 @@
    ],
    "moves": [],
    "name": "barbaracle",
+   "slug": "barbaracle",
    "problems": [],
    "base_mismatch": []
   },
@@ -35788,6 +36639,7 @@
    ],
    "moves": [],
    "name": "barbaracle-mega",
+   "slug": "mega-barbaracle",
    "problems": [],
    "base_mismatch": []
   },
@@ -35949,6 +36801,7 @@
    ],
    "moves": [],
    "name": "dragalge",
+   "slug": "dragalge",
    "problems": [],
    "base_mismatch": []
   },
@@ -36110,6 +36963,7 @@
    ],
    "moves": [],
    "name": "dragalge-mega",
+   "slug": "mega-dragalge",
    "problems": [],
    "base_mismatch": []
   },
@@ -36271,6 +37125,7 @@
    ],
    "moves": [],
    "name": "clawitzer",
+   "slug": "clawitzer",
    "problems": [],
    "base_mismatch": []
   },
@@ -36432,6 +37287,7 @@
    ],
    "moves": [],
    "name": "heliolisk",
+   "slug": "heliolisk",
    "problems": [],
    "base_mismatch": []
   },
@@ -36593,6 +37449,7 @@
    ],
    "moves": [],
    "name": "tyrantrum",
+   "slug": "tyrantrum",
    "problems": [],
    "base_mismatch": []
   },
@@ -36754,6 +37611,7 @@
    ],
    "moves": [],
    "name": "aurorus",
+   "slug": "aurorus",
    "problems": [],
    "base_mismatch": []
   },
@@ -36915,6 +37773,7 @@
    ],
    "moves": [],
    "name": "sylveon",
+   "slug": "sylveon",
    "problems": [],
    "base_mismatch": []
   },
@@ -37076,6 +37935,7 @@
    ],
    "moves": [],
    "name": "hawlucha",
+   "slug": "hawlucha",
    "problems": [],
    "base_mismatch": []
   },
@@ -37237,6 +38097,7 @@
    ],
    "moves": [],
    "name": "hawlucha-mega",
+   "slug": "mega-hawlucha",
    "problems": [],
    "base_mismatch": []
   },
@@ -37398,6 +38259,7 @@
    ],
    "moves": [],
    "name": "dedenne",
+   "slug": "dedenne",
    "problems": [],
    "base_mismatch": []
   },
@@ -37559,6 +38421,7 @@
    ],
    "moves": [],
    "name": "goodra",
+   "slug": "goodra",
    "problems": [],
    "base_mismatch": []
   },
@@ -37720,6 +38583,7 @@
    ],
    "moves": [],
    "name": "klefki",
+   "slug": "klefki",
    "problems": [],
    "base_mismatch": []
   },
@@ -37881,6 +38745,7 @@
    ],
    "moves": [],
    "name": "trevenant",
+   "slug": "trevenant",
    "problems": [],
    "base_mismatch": []
   },
@@ -38042,6 +38907,7 @@
    ],
    "moves": [],
    "name": "gourgeist-average",
+   "slug": "gourgeist-average",
    "problems": [],
    "base_mismatch": []
   },
@@ -38203,6 +39069,7 @@
    ],
    "moves": [],
    "name": "avalugg",
+   "slug": "avalugg",
    "problems": [],
    "base_mismatch": []
   },
@@ -38364,6 +39231,7 @@
    ],
    "moves": [],
    "name": "noivern",
+   "slug": "noivern",
    "problems": [],
    "base_mismatch": []
   },
@@ -38525,6 +39393,7 @@
    ],
    "moves": [],
    "name": "decidueye",
+   "slug": "decidueye",
    "problems": [],
    "base_mismatch": []
   },
@@ -38686,6 +39555,7 @@
    ],
    "moves": [],
    "name": "incineroar",
+   "slug": "incineroar",
    "problems": [],
    "base_mismatch": []
   },
@@ -38847,6 +39717,7 @@
    ],
    "moves": [],
    "name": "primarina",
+   "slug": "primarina",
    "problems": [],
    "base_mismatch": []
   },
@@ -39008,6 +39879,7 @@
    ],
    "moves": [],
    "name": "toucannon",
+   "slug": "toucannon",
    "problems": [],
    "base_mismatch": []
   },
@@ -39169,6 +40041,7 @@
    ],
    "moves": [],
    "name": "crabominable",
+   "slug": "crabominable",
    "problems": [],
    "base_mismatch": []
   },
@@ -39330,6 +40203,169 @@
    ],
    "moves": [],
    "name": "crabominable-mega",
+   "slug": "mega-crabominable",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 75,
+    "attack": 115,
+    "defense": 65,
+    "special-attack": 55,
+    "special-defense": 65,
+    "speed": 112
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 39.2,
+     "sp": {
+      "hp": 2,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 10.2,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 8.9,
+     "sp": {
+      "hp": 1,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 8.5,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 6.0,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 3.4,
+     "sp": {
+      "hp": 1,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 1,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 2.8,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 1,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 2.3,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 1.3,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 1.1,
+     "sp": {
+      "hp": 1,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 1.0,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 0.9,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 0
+     }
+    }
+   ],
+   "moves": [],
+   "name": "lycanroc-midday",
+   "slug": "lycanroc",
    "problems": [],
    "base_mismatch": []
   },
@@ -39491,6 +40527,7 @@
    ],
    "moves": [],
    "name": "toxapex",
+   "slug": "toxapex",
    "problems": [],
    "base_mismatch": []
   },
@@ -39652,6 +40689,7 @@
    ],
    "moves": [],
    "name": "mudsdale",
+   "slug": "mudsdale",
    "problems": [],
    "base_mismatch": []
   },
@@ -39813,6 +40851,7 @@
    ],
    "moves": [],
    "name": "araquanid",
+   "slug": "araquanid",
    "problems": [],
    "base_mismatch": []
   },
@@ -39974,6 +41013,7 @@
    ],
    "moves": [],
    "name": "salazzle",
+   "slug": "salazzle",
    "problems": [],
    "base_mismatch": []
   },
@@ -40135,6 +41175,7 @@
    ],
    "moves": [],
    "name": "tsareena",
+   "slug": "tsareena",
    "problems": [],
    "base_mismatch": []
   },
@@ -40296,6 +41337,7 @@
    ],
    "moves": [],
    "name": "oranguru",
+   "slug": "oranguru",
    "problems": [],
    "base_mismatch": []
   },
@@ -40457,6 +41499,7 @@
    ],
    "moves": [],
    "name": "passimian",
+   "slug": "passimian",
    "problems": [],
    "base_mismatch": []
   },
@@ -40763,6 +41806,7 @@
     }
    ],
    "name": "golisopod",
+   "slug": "golisopod",
    "problems": [],
    "base_mismatch": []
   },
@@ -41069,6 +42113,169 @@
     }
    ],
    "name": "golisopod-mega",
+   "slug": "mega-golisopod",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 55,
+    "attack": 90,
+    "defense": 80,
+    "special-attack": 50,
+    "special-defense": 105,
+    "speed": 96
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 34.1,
+     "sp": {
+      "hp": 1,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 22.1,
+     "sp": {
+      "hp": 2,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 4.6,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 2.8,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 2.4,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 2.1,
+     "sp": {
+      "hp": 29,
+      "attack": 32,
+      "defense": 5,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 2.1,
+     "sp": {
+      "hp": 1,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 1,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 1.3,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 1.3,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 1.3,
+     "sp": {
+      "hp": 29,
+      "attack": 32,
+      "defense": 4,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 1
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 1.0,
+     "sp": {
+      "hp": 1,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 1.0,
+     "sp": {
+      "hp": 28,
+      "attack": 30,
+      "defense": 3,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 5
+     }
+    }
+   ],
+   "moves": [],
+   "name": "mimikyu-disguised",
+   "slug": "mimikyu",
    "problems": [],
    "base_mismatch": []
   },
@@ -41230,6 +42437,7 @@
    ],
    "moves": [],
    "name": "drampa",
+   "slug": "drampa",
    "problems": [],
    "base_mismatch": []
   },
@@ -41391,6 +42599,7 @@
    ],
    "moves": [],
    "name": "drampa-mega",
+   "slug": "mega-drampa",
    "problems": [],
    "base_mismatch": []
   },
@@ -41552,6 +42761,7 @@
    ],
    "moves": [],
    "name": "kommo-o",
+   "slug": "kommo-o",
    "problems": [],
    "base_mismatch": []
   },
@@ -41858,6 +43068,7 @@
     }
    ],
    "name": "rillaboom",
+   "slug": "rillaboom",
    "problems": [],
    "base_mismatch": []
   },
@@ -42164,6 +43375,7 @@
     }
    ],
    "name": "cinderace",
+   "slug": "cinderace",
    "problems": [],
    "base_mismatch": []
   },
@@ -42470,6 +43682,7 @@
     }
    ],
    "name": "inteleon",
+   "slug": "inteleon",
    "problems": [],
    "base_mismatch": []
   },
@@ -42631,6 +43844,7 @@
    ],
    "moves": [],
    "name": "corviknight",
+   "slug": "corviknight",
    "problems": [],
    "base_mismatch": []
   },
@@ -42937,6 +44151,7 @@
     }
    ],
    "name": "thievul",
+   "slug": "thievul",
    "problems": [],
    "base_mismatch": []
   },
@@ -43098,6 +44313,7 @@
    ],
    "moves": [],
    "name": "flapple",
+   "slug": "flapple",
    "problems": [],
    "base_mismatch": []
   },
@@ -43259,6 +44475,7 @@
    ],
    "moves": [],
    "name": "appletun",
+   "slug": "appletun",
    "problems": [],
    "base_mismatch": []
   },
@@ -43420,6 +44637,7 @@
    ],
    "moves": [],
    "name": "sandaconda",
+   "slug": "sandaconda",
    "problems": [],
    "base_mismatch": []
   },
@@ -43726,6 +44944,7 @@
     }
    ],
    "name": "toxtricity-amped",
+   "slug": "toxtricity-amped",
    "problems": [],
    "base_mismatch": []
   },
@@ -44032,6 +45251,7 @@
     }
    ],
    "name": "grapploct",
+   "slug": "grapploct",
    "problems": [],
    "base_mismatch": []
   },
@@ -44193,6 +45413,7 @@
    ],
    "moves": [],
    "name": "polteageist",
+   "slug": "polteageist",
    "problems": [],
    "base_mismatch": []
   },
@@ -44354,6 +45575,7 @@
    ],
    "moves": [],
    "name": "hatterene",
+   "slug": "hatterene",
    "problems": [],
    "base_mismatch": []
   },
@@ -44515,6 +45737,7 @@
    ],
    "moves": [],
    "name": "grimmsnarl",
+   "slug": "grimmsnarl",
    "problems": [],
    "base_mismatch": []
   },
@@ -44821,6 +46044,7 @@
     }
    ],
    "name": "perrserker",
+   "slug": "perrserker",
    "problems": [],
    "base_mismatch": []
   },
@@ -45127,6 +46351,169 @@
     }
    ],
    "name": "sirfetchd",
+   "slug": "sirfetchd",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 80,
+    "attack": 85,
+    "defense": 75,
+    "special-attack": 110,
+    "special-defense": 100,
+    "speed": 70
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 20.7,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 7.3,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 6.0,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 2,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 5.3,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 3.1,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 2.7,
+     "sp": {
+      "hp": 0,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 32,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 2.6,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 32,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 2.6,
+     "sp": {
+      "hp": 2,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 2.5,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 32,
+      "special-attack": 2,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 2.3,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 2.3,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 0,
+      "special-attack": 32,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 2.0,
+     "sp": {
+      "hp": 32,
+      "attack": 0,
+      "defense": 32,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 0
+     }
+    }
+   ],
+   "moves": [],
+   "name": "mr-rime",
+   "slug": "mr.-rime",
    "problems": [],
    "base_mismatch": []
   },
@@ -45288,6 +46675,7 @@
    ],
    "moves": [],
    "name": "runerigus",
+   "slug": "runerigus",
    "problems": [],
    "base_mismatch": []
   },
@@ -45449,6 +46837,7 @@
    ],
    "moves": [],
    "name": "alcremie",
+   "slug": "alcremie",
    "problems": [],
    "base_mismatch": []
   },
@@ -45610,6 +46999,7 @@
    ],
    "moves": [],
    "name": "falinks",
+   "slug": "falinks",
    "problems": [],
    "base_mismatch": []
   },
@@ -45771,6 +47161,7 @@
    ],
    "moves": [],
    "name": "falinks-mega",
+   "slug": "mega-falinks",
    "problems": [],
    "base_mismatch": []
   },
@@ -46077,6 +47468,7 @@
     }
    ],
    "name": "pincurchin",
+   "slug": "pincurchin",
    "problems": [],
    "base_mismatch": []
   },
@@ -46383,6 +47775,169 @@
     }
    ],
    "name": "indeedee-male",
+   "slug": "indeedee-male",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 58,
+    "attack": 95,
+    "defense": 58,
+    "special-attack": 70,
+    "special-defense": 58,
+    "speed": 97
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 63.0,
+     "sp": {
+      "hp": 2,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 9.5,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 6.9,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 4.3,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 3.6,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 1,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 1.3,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 1.1,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 0.7,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 2,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 0.7,
+     "sp": {
+      "hp": 1,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 1,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 0.6,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 0.6,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 32,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 0.5,
+     "sp": {
+      "hp": 2,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    }
+   ],
+   "moves": [],
+   "name": "morpeko-full-belly",
+   "slug": "morpeko",
    "problems": [],
    "base_mismatch": []
   },
@@ -46544,6 +48099,7 @@
    ],
    "moves": [],
    "name": "dragapult",
+   "slug": "dragapult",
    "problems": [],
    "base_mismatch": []
   },
@@ -46705,6 +48261,7 @@
    ],
    "moves": [],
    "name": "wyrdeer",
+   "slug": "wyrdeer",
    "problems": [],
    "base_mismatch": []
   },
@@ -46866,6 +48423,7 @@
    ],
    "moves": [],
    "name": "kleavor",
+   "slug": "kleavor",
    "problems": [],
    "base_mismatch": []
   },
@@ -47027,6 +48585,7 @@
    ],
    "moves": [],
    "name": "basculegion-male",
+   "slug": "basculegion-male",
    "problems": [],
    "base_mismatch": []
   },
@@ -47200,6 +48759,7 @@
    ],
    "moves": [],
    "name": "sneasler",
+   "slug": "sneasler",
    "problems": [],
    "base_mismatch": []
   },
@@ -47361,6 +48921,7 @@
    ],
    "moves": [],
    "name": "overqwil",
+   "slug": "overqwil",
    "problems": [],
    "base_mismatch": []
   },
@@ -47522,6 +49083,7 @@
    ],
    "moves": [],
    "name": "meowscarada",
+   "slug": "meowscarada",
    "problems": [],
    "base_mismatch": []
   },
@@ -47683,6 +49245,7 @@
    ],
    "moves": [],
    "name": "skeledirge",
+   "slug": "skeledirge",
    "problems": [],
    "base_mismatch": []
   },
@@ -47844,6 +49407,7 @@
    ],
    "moves": [],
    "name": "quaquaval",
+   "slug": "quaquaval",
    "problems": [],
    "base_mismatch": []
   },
@@ -48150,6 +49714,7 @@
     }
    ],
    "name": "pawmot",
+   "slug": "pawmot",
    "problems": [],
    "base_mismatch": []
   },
@@ -48166,6 +49731,7 @@
    "spreads": [],
    "moves": [],
    "name": "maushold-family-of-four",
+   "slug": "maushold-family-of-four",
    "problems": [],
    "base_mismatch": []
   },
@@ -48472,6 +50038,7 @@
     }
    ],
    "name": "arboliva",
+   "slug": "arboliva",
    "problems": [],
    "base_mismatch": []
   },
@@ -48778,6 +50345,7 @@
     }
    ],
    "name": "squawkabilly-green-plumage",
+   "slug": "squawkabilly-green-plumage",
    "problems": [],
    "base_mismatch": []
   },
@@ -48939,6 +50507,7 @@
    ],
    "moves": [],
    "name": "garganacl",
+   "slug": "garganacl",
    "problems": [],
    "base_mismatch": []
   },
@@ -49100,6 +50669,7 @@
    ],
    "moves": [],
    "name": "armarouge",
+   "slug": "armarouge",
    "problems": [],
    "base_mismatch": []
   },
@@ -49261,6 +50831,7 @@
    ],
    "moves": [],
    "name": "ceruledge",
+   "slug": "ceruledge",
    "problems": [],
    "base_mismatch": []
   },
@@ -49422,6 +50993,7 @@
    ],
    "moves": [],
    "name": "bellibolt",
+   "slug": "bellibolt",
    "problems": [],
    "base_mismatch": []
   },
@@ -49728,6 +51300,7 @@
     }
    ],
    "name": "mabosstiff",
+   "slug": "mabosstiff",
    "problems": [],
    "base_mismatch": []
   },
@@ -49889,6 +51462,7 @@
    ],
    "moves": [],
    "name": "scovillain",
+   "slug": "scovillain",
    "problems": [],
    "base_mismatch": []
   },
@@ -50050,6 +51624,7 @@
    ],
    "moves": [],
    "name": "scovillain-mega",
+   "slug": "mega-scovillain",
    "problems": [],
    "base_mismatch": []
   },
@@ -50211,6 +51786,7 @@
    ],
    "moves": [],
    "name": "espathra",
+   "slug": "espathra",
    "problems": [],
    "base_mismatch": []
   },
@@ -50372,6 +51948,169 @@
    ],
    "moves": [],
    "name": "tinkaton",
+   "slug": "tinkaton",
+   "problems": [],
+   "base_mismatch": []
+  },
+  {
+   "updated": "Oct 7, 2026, 10:38 AM",
+   "base": {
+    "hp": 100,
+    "attack": 70,
+    "defense": 72,
+    "special-attack": 53,
+    "special-defense": 62,
+    "speed": 100
+   },
+   "spreads": [
+    {
+     "rank": 1,
+     "usage": 41.1,
+     "sp": {
+      "hp": 2,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 2,
+     "usage": 9.6,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 2
+     }
+    },
+    {
+     "rank": 3,
+     "usage": 5.6,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 4,
+     "usage": 4.3,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 2,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 5,
+     "usage": 3.6,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 6,
+     "usage": 2.9,
+     "sp": {
+      "hp": 32,
+      "attack": 2,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 32,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 7,
+     "usage": 2.7,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 8,
+     "usage": 2.6,
+     "sp": {
+      "hp": 32,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 2,
+      "speed": 0
+     }
+    },
+    {
+     "rank": 9,
+     "usage": 1.4,
+     "sp": {
+      "hp": 4,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 30
+     }
+    },
+    {
+     "rank": 10,
+     "usage": 1.3,
+     "sp": {
+      "hp": 0,
+      "attack": 32,
+      "defense": 1,
+      "special-attack": 0,
+      "special-defense": 1,
+      "speed": 32
+     }
+    },
+    {
+     "rank": 11,
+     "usage": 1.2,
+     "sp": {
+      "hp": 16,
+      "attack": 32,
+      "defense": 0,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 18
+     }
+    },
+    {
+     "rank": 12,
+     "usage": 0.6,
+     "sp": {
+      "hp": 2,
+      "attack": 32,
+      "defense": 32,
+      "special-attack": 0,
+      "special-defense": 0,
+      "speed": 0
+     }
+    }
+   ],
+   "moves": [],
+   "name": "palafin-zero",
+   "slug": "palafin",
    "problems": [],
    "base_mismatch": []
   },
@@ -50533,6 +52272,7 @@
    ],
    "moves": [],
    "name": "orthworm",
+   "slug": "orthworm",
    "problems": [],
    "base_mismatch": []
   },
@@ -50706,6 +52446,7 @@
    ],
    "moves": [],
    "name": "glimmora",
+   "slug": "glimmora",
    "problems": [],
    "base_mismatch": []
   },
@@ -50879,6 +52620,7 @@
    ],
    "moves": [],
    "name": "glimmora-mega",
+   "slug": "mega-glimmora",
    "problems": [],
    "base_mismatch": []
   },
@@ -51040,6 +52782,7 @@
    ],
    "moves": [],
    "name": "houndstone",
+   "slug": "houndstone",
    "problems": [],
    "base_mismatch": []
   },
@@ -51201,6 +52944,7 @@
    ],
    "moves": [],
    "name": "annihilape",
+   "slug": "annihilape",
    "problems": [],
    "base_mismatch": []
   },
@@ -51362,6 +53106,7 @@
    ],
    "moves": [],
    "name": "farigiraf",
+   "slug": "farigiraf",
    "problems": [],
    "base_mismatch": []
   },
@@ -51523,6 +53268,7 @@
    ],
    "moves": [],
    "name": "kingambit",
+   "slug": "kingambit",
    "problems": [],
    "base_mismatch": []
   },
@@ -51829,6 +53575,7 @@
     }
    ],
    "name": "baxcalibur",
+   "slug": "baxcalibur",
    "problems": [],
    "base_mismatch": []
   },
@@ -52135,6 +53882,7 @@
     }
    ],
    "name": "baxcalibur-mega",
+   "slug": "mega-baxcalibur",
    "problems": [],
    "base_mismatch": []
   },
@@ -52296,6 +54044,7 @@
    ],
    "moves": [],
    "name": "gholdengo",
+   "slug": "gholdengo",
    "problems": [],
    "base_mismatch": []
   },
@@ -52457,6 +54206,7 @@
    ],
    "moves": [],
    "name": "sinistcha",
+   "slug": "sinistcha",
    "problems": [],
    "base_mismatch": []
   },
@@ -52618,6 +54368,7 @@
    ],
    "moves": [],
    "name": "archaludon",
+   "slug": "archaludon",
    "problems": [],
    "base_mismatch": []
   },
@@ -52779,6 +54530,7 @@
    ],
    "moves": [],
    "name": "hydrapple",
+   "slug": "hydrapple",
    "problems": [],
    "base_mismatch": []
   }

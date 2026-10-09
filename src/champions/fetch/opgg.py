@@ -6,7 +6,8 @@ EXPERIMENTAL, held on a branch for manual review. Writes data/opgg_spreads.json 
 human-readable review file docs/opgg_review.md; neither is read by anything else yet.
 Only the default (Singles) view is in the server-rendered HTML; the Doubles tab loads client-side
 and is not scraped. OP.GG has no public API, so this parses page text and may break on redesigns.
-Slugs: champions.json "venusaur-mega" -> OP.GG "mega-venusaur". Misses (HTTP 404) are recorded.
+Slugs: see slugs(). Forms that share a page (Meowstic male/female Mega) get the same data; the
+"slug" field in the output shows which page each came from. Misses (HTTP 404) are recorded.
 """
 import json
 import re
@@ -28,21 +29,34 @@ LABELS = {"HP": "hp", "Attack": "attack", "Defense": "defense", "Sp. Atk": "spec
           "Sp. Def": "special-defense", "Speed": "speed"}
 
 
-def slug(name):
-    """champions.json form name -> OP.GG slug (megas are prefixed, not suffixed)."""
+OVERRIDES = {"mr-rime": "mr.-rime"}
+
+
+def slugs(name, species):
+    """Candidate OP.GG slugs, best first. champions.json "venusaur-mega" -> "mega-venusaur";
+    default forms named after a variant ("aegislash-shield") fall back to the species page."""
+    if name in OVERRIDES:
+        return [OVERRIDES[name]]
     m = re.match(r"^(.+?)-mega(-[xyz])?$", name)
-    return f"mega-{m.group(1)}{m.group(2) or ''}" if m else name
+    if m:
+        out = [f"mega-{m.group(1)}{m.group(2) or ''}", f"mega-{species}"]
+    else:
+        out = [name, species]
+    return list(dict.fromkeys(out))
 
 
-def fetch(name):
-    req = urllib.request.Request(URL.format(slug(name)), headers={"User-Agent": "Mozilla/5.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            return r.read().decode("utf-8", errors="replace")
-    except urllib.error.HTTPError as e:
-        if e.code == 404:
-            return None
-        raise
+def fetch(name, species):
+    """(slug, html) for the first slug that exists, or (None, None)."""
+    for sl in slugs(name, species):
+        req = urllib.request.Request(URL.format(sl), headers={"User-Agent": "Mozilla/5.0"})
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return sl, r.read().decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as e:
+            if e.code != 404:
+                raise
+        time.sleep(DELAY)
+    return None, None
 
 
 def text(html):
@@ -114,16 +128,17 @@ def main(argv=None):
     names = [a for i, a in enumerate(argv) if not a.startswith("--") and (i == 0 or argv[i - 1] != "--limit")]
     mons = json.loads((DATA / "champions.json").read_text())["pokemon"]
     base = {p["name"]: p["stats"] for p in mons}
+    species = {p["name"]: p["species"] for p in mons}
     todo = names or [p["name"] for p in mons if p["is_default"] or p["is_mega"]]
     todo = todo[:limit] if limit else todo
     results, misses = [], []
     for n, name in enumerate(todo, 1):
-        html = fetch(name)
+        used, html = fetch(name, species[name])
         if html is None:
             misses.append(name)
         else:
             e = parse(html)
-            e["name"] = name
+            e["name"], e["slug"] = name, used
             e["problems"] = check(e)
             e["base_mismatch"] = [f"base {k}: OP.GG {v} vs champions.json {base[name][k]}"
                                   for k, v in e["base"].items() if base[name][k] != v]
