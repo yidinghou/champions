@@ -33,6 +33,20 @@
   .err { color:var(--p2); min-height:1.4em; } .log { max-height:220px; overflow:auto; font-size:13px; }
   .log div.on { font-weight:600; color:var(--acc); }
   .hidden { display:none; }
+  /* orders rail: the only place actions live; cards above only show state */
+  .field { display:grid; gap:4px; } .field .cards { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; } .field .slot { margin-bottom:0; }
+  @media (max-width:700px) { .field .cards { grid-template-columns:1fr; } }
+  .split { display:grid; grid-template-columns:1fr 340px; gap:12px; align-items:start; } @media (max-width:900px) { .split { grid-template-columns:1fr; } }
+  .rail { position:sticky; top:12px; display:grid; gap:8px; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .rail h3 { margin:0; font-size:14px; } .rail .side-lbl { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--side); margin-top:2px; }
+  .order { border:1px solid var(--line); border-left:5px solid var(--side); border-radius:8px; padding:7px 9px; }
+  .order.open { border-color:var(--acc); border-left-color:var(--side); } .order .top { display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; }
+  .order .top .tick { margin-left:auto; color:var(--hp-hi); font-weight:800; } .order .sum { font-size:13px; color:var(--mute); margin-top:2px; cursor:pointer; } .order .sum b { color:var(--ink); }
+  .lbl { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--mute); margin:8px 0 4px; }
+  .opt { display:flex; align-items:center; gap:8px; width:100%; margin-top:5px; text-align:left; } .opt .tagr { font-size:11px; color:var(--mute); }
+  .opt .mini { margin-left:auto; width:70px; } .opt .mini .bar { height:7px; margin:0; } .opt.p1 { border-color:var(--p1); } .opt.p2 { border-color:var(--p2); }
+  .chips2 { display:flex; flex-wrap:wrap; gap:6px; }
+  .rail .btnrow { display:flex; gap:8px; } .rail .btnrow .primary { flex:1; }
   /* type badges: one colour per type, shared by setup and battle screens */
   .ti { width:22px; height:22px; flex:none; vertical-align:middle; }
   /* setup: one card per Pokémon, labelled fields on a fixed grid */
@@ -54,20 +68,18 @@
   .slot .head { display:flex; align-items:baseline; gap:8px; } .slot .name { font-weight:700; font-size:17px; }
   .slot .pct { margin-left:auto; font-size:26px; font-weight:800; line-height:1; text-align:right; } .slot .pct small { display:block; font-size:12px; font-weight:500; color:var(--mute); margin-top:2px; }
   .slot .bar { height:14px; border-radius:7px; margin:10px 0 8px; } .slot .bar > i { transition:width .3s; }
-  .slot.targeted { outline:2px dashed var(--p2); }
+  .slot.targeted { outline:2px dashed var(--p2); } .slot.acting { outline:2px solid var(--acc); }
   .chips { display:flex; flex-wrap:wrap; gap:6px; align-items:center; min-height:4px; } .chips + .chips { margin-top:8px; }
   .pill { display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; border:1px solid var(--line); border-radius:999px; padding:2px 9px; background:var(--bg); white-space:nowrap; }
   .pill small { font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--mute); }
   .stage { font-size:12px; font-weight:800; border-radius:4px; padding:1px 7px; border:1.5px solid; } .stage.up { color:var(--hp-hi); } .stage.down { color:var(--hp-lo); }
   .status { font-size:12px; font-weight:800; color:#fff; border-radius:4px; padding:1px 7px; background:#d4a017; text-transform:uppercase; }
   .dmg { margin-left:auto; font-weight:800; color:var(--hp-lo); }
-  .moves { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px; }
+  .moves { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
   .mv { display:flex; align-items:center; gap:7px; text-align:left; font-weight:600; padding:4px 8px 4px 5px; border-radius:8px; white-space:nowrap;
         background:color-mix(in srgb, var(--t) 14%, var(--card)); border:1px solid color-mix(in srgb, var(--t) 40%, var(--line)); }
   .mv em { margin-left:auto; font-style:normal; font-size:11px; color:var(--mute); }
   .mv.sel { outline:2px solid var(--acc); }
-  .acts .label { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--mute); margin:8px 0 3px; }
-  .acts .btns { display:flex; flex-wrap:wrap; gap:6px; }
   .log h3 { font-size:13px; margin:0 0 4px; } .log .p1 { color:var(--p1); font-weight:600; } .log .p2 { color:var(--p2); font-weight:600; }
   .banner { font-size:18px; font-weight:700; text-align:center; padding:10px; border-radius:8px; margin-bottom:12px; color:#fff; background:var(--acc); }
   .setup-bar { position:sticky; top:0; z-index:1; background:var(--card); padding-bottom:8px; }
@@ -173,12 +185,13 @@ async function start() {
   const spec = (m) => { const s = {species: m.species, moves: m.moves}; if (m.item) s.item = m.item; if (m.nature !== "hardy") s.nature = m.nature; return s; };
   try {
     view = await api("/api/new", {teams: {p1: teams.p1.map(spec), p2: teams.p2.map(spec)}, active});
-    frameIdx = null; picks = {};
+    frameIdx = null; picks = {}; openSlot = null;
     show();
   } catch (e) { fail(e); }
 }
 
 // ---- battle -----------------------------------------------------------------------------------------------
+let openSlot = null;
 function show() {
   $("setup").classList.toggle("hidden", !!view.started);
   $("game").classList.toggle("hidden", !view.started);
@@ -189,10 +202,10 @@ function show() {
   const state = frame ? frame.state : view.snapshot;
   const live = !frame || frameIdx === frames.length - 1;
   const canAct = live && !view.winner && !view.pending.length;
-  const slots = canAct ? Object.keys(view.legal).filter((s) => view.legal[s].moves.length || view.legal[s].switches.length) : [];
-  for (const slot of slots) ensurePick(slot, view.legal[slot]);
-  const targeted = new Set(slots.map((s) => picks[s].target).filter(Boolean));
-  const ctx = {frame, canAct, targeted, diff: hpDiff(frames, frameIdx)};
+  const slots = canAct ? orderSlots() : [];
+  if (!slots.includes(openSlot)) openSlot = slots.find((x) => !ready(x)) || slots[0] || null;
+  const targeted = new Set(slots.filter(ready).map((x) => picks[x].target).filter(Boolean));
+  const ctx = {frame, targeted, open: openSlot, diff: hpDiff(frames, frameIdx)};
 
   if (view.winner) g.append(el("div", {class: "banner"}, view.winner === "draw" ? "Draw!" : `${view.winner === "p1" ? "Player 1" : "Player 2"} wins!`));
   g.append(el("div", {class: "card"}, el("div", {class: "row"},
@@ -202,16 +215,15 @@ function show() {
     el("button", {onclick: () => act(() => api("/api/restart", {}))}, "Restart"),
     el("button", {onclick: () => { view = {started: false}; show(); }}, "New game"))));
 
-  const sides = el("div", {class: "sides"});
-  for (const side of ["p1", "p2"]) {
-    const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"));
-    for (const slot of Object.keys(state.slots).filter((s) => s.startsWith(side))) col.append(slotCard(slot, state.slots[slot], ctx));
-    col.append(el("div", {class: "mute"}, "Bench: ", state.bench[side].map((b) => `${pretty(b.species)} ${b.hp}/${b.max_hp}`).join(", ") || "none"));
+  const sides = el("div", {class: "field"});  // opponent on top, you below, like the game
+  for (const side of ["p2", "p1"]) {
+    const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"),
+      el("div", {class: "cards"}, Object.keys(state.slots).filter((x) => x.startsWith(side)).map((slot) => slotCard(slot, state.slots[slot], ctx))),
+      el("div", {class: "mute"}, "Bench: ", state.bench[side].map((b) => `${pretty(b.species)} ${b.hp}/${b.max_hp}`).join(", ") || "none"));
     sides.append(col);
   }
-  g.append(sides);
+  g.append(el("div", {class: "split"}, sides, rail(live, canAct, slots)));
   if (frames.length) g.append(frameLog(frames));
-  if (live) g.append(controls(canAct));
 }
 function fieldTags(f) {
   const t = [];
@@ -238,6 +250,7 @@ function slotCard(slot, m, ctx) {
   if (ctx.frame && ctx.frame.actor === slot) cls.push("actor");
   if (ctx.frame && ctx.frame.target === slot) cls.push("target");
   if (ctx.targeted.has(slot)) cls.push("targeted");
+  if (ctx.open === slot) cls.push("acting");
   if (!m) return el("div", {class: cls.join(" ")}, `${slot}: empty`);
   const pct = Math.round(100 * m.hp / m.max_hp), d = ctx.diff[slot];
   const stages = Object.entries(m.boosts).filter(([, v]) => v).map(([k, v]) => el("span", {class: "stage " + (v > 0 ? "up" : "down")}, `${STAGE_ABBR[k]} ${v > 0 ? "+" : ""}${v}`));
@@ -248,7 +261,6 @@ function slotCard(slot, m, ctx) {
     el("div", {class: "chips"}, m.status ? el("span", {class: "status"}, m.status) : null, stages, d ? el("span", {class: "dmg"}, `−${d.hp} (−${d.pct}%)`) : null),
     el("div", {class: "chips"}, el("span", {class: "pill"}, el("small", {}, "Item"), m.item ? pretty(m.item) : "—"),
       el("span", {class: "pill"}, el("small", {}, "Ability"), m.ability ? pretty(m.ability) : "—")));
-  if (ctx.canAct && view.legal[slot] && (view.legal[slot].moves.length || view.legal[slot].switches.length)) body.append(actionPicker(slot, view.legal[slot]));
   return el("div", {class: cls.join(" ")}, el("div", {class: "gutter"}, m.types.map(typeIcon)), body);
 }
 const SLOT_OR_SPECIES = () => new RegExp(`\\b(p[12])([ab]) (${Object.keys(dex.species).sort((x, y) => y.length - x.length).join("|")})\\b|\\b(p[12])([ab])\\b`, "g");
@@ -271,55 +283,96 @@ function frameLog(frames) {
   box.append(el("div", {class: "log"}, frames.map((f, i) => el("div", {class: i === cur ? "on" : "", onclick: () => { frameIdx = i; show(); }}, fmtLog(f.text)))));
   return box;
 }
-function controls(canAct) {
-  const box = el("div", {class: "card"});
-  if (view.winner) { box.append("Battle over."); return box; }
+const orderSlots = () => Object.keys(view.legal).filter((x) => view.legal[x].moves.length || view.legal[x].switches.length);
+const mon = (slot) => view.snapshot.slots[slot];
+const sideOf = (slot) => slot.slice(0, 2);
+function moveOf(slot) {
+  const p = picks[slot];
+  return p && p.kind && p.kind.startsWith("move:") ? view.legal[slot].moves.find((x) => "move:" + x.move === p.kind) : null;
+}
+function ready(slot) {  // an order is ready once a move (with its target, if it needs one) or a switch is chosen
+  const p = picks[slot];
+  if (!p || !p.kind) return false;
+  const mv = moveOf(slot);
+  return !mv || !mv.targets || !!p.target;
+}
+function choose(slot, kind) {
+  const p = picks[slot] = {kind}, mv = moveOf(slot);
+  if (mv && mv.targets && mv.targets.length === 1) p.target = mv.targets[0];  // nothing to choose
+  advance(slot);
+}
+function advance(slot) { if (ready(slot)) openSlot = orderSlots().find((x) => !ready(x)) || slot; show(); }
+function autoFill() {
+  for (const slot of orderSlots().filter((x) => !ready(x))) {
+    const legal = view.legal[slot], mv = legal.moves[0], foes = mv && mv.targets ? mv.targets.filter((t) => sideOf(t) !== sideOf(slot)) : [];
+    picks[slot] = mv ? {kind: "move:" + mv.move, target: mv.targets ? (foes[0] || mv.targets[0]) : undefined} : {kind: "switch:" + legal.switches[0]};
+  }
+  openSlot = null; show();
+}
+function summary(slot) {
+  const p = picks[slot];
+  if (!ready(slot)) return el("span", {}, "choose a move");
+  if (p.kind.startsWith("switch:")) return el("span", {}, el("b", {}, "Switch"), ` → ${pretty(view.snapshot.bench[sideOf(slot)].find((b) => "switch:" + b.index === p.kind).species)}`);
+  const mv = moveOf(slot);
+  return el("span", {}, el("b", {}, mv.name), mv.targets ? ` → ${pretty(mon(p.target).species)}` : mv.category === "Status" ? "" : " → all targets");
+}
+function movePicker(slot, legal) {
+  const p = picks[slot] || {}, box = el("div", {});
+  box.append(el("div", {class: "moves"}, legal.moves.map((x) => el("button", {
+    class: "mv" + (p.kind === "move:" + x.move ? " sel" : ""), style: `--t:${typeColor(x.type)}`, title: `${x.type} · ${x.category}`,
+    onclick: () => choose(slot, "move:" + x.move)},
+    typeIcon(x.type), x.name, x.priority ? el("em", {}, `${x.priority > 0 ? "+" : ""}${x.priority}`) : null))));
+  const mv = moveOf(slot);
+  if (mv && mv.targets && mv.targets.length > 1) {
+    box.append(el("div", {class: "lbl"}, "Target"), ...mv.targets.map((t) => {
+      const m = mon(t), pct = Math.round(100 * m.hp / m.max_hp);
+      return el("button", {class: `opt ${sideOf(t)}` + (p.target === t ? " sel" : ""), onclick: () => { picks[slot].target = t; advance(slot); }},
+        pretty(m.species), sideOf(t) === sideOf(slot) ? el("span", {class: "tagr"}, "ally") : null,
+        el("span", {class: "mini"}, el("div", {class: "bar"}, el("i", {class: pct < 25 ? "lo" : pct < 50 ? "mid" : "", style: `width:${pct}%`}))));
+    }));
+  }
+  if (legal.switches.length) {
+    box.append(el("div", {class: "lbl"}, "Switch"), el("div", {class: "chips2"}, legal.switches.map((i) => el("button", {
+      class: p.kind === "switch:" + i ? "sel" : "", onclick: () => choose(slot, "switch:" + i)},
+      pretty(view.snapshot.bench[sideOf(slot)].find((b) => b.index === i).species)))));
+  }
+  return box;
+}
+function rail(live, canAct, slots) {
+  const box = el("div", {class: "rail"});
+  if (view.winner) { box.append(el("h3", {}, "Battle over")); return box; }
+  if (!live) {
+    box.append(el("h3", {}, playing ? "Playing turn…" : "Viewing an earlier step"),
+      el("button", {class: "primary", onclick: () => { clearInterval(timer); playing = false; frameIdx = null; show(); }}, playing ? "Skip to end" : "Back to live"));
+    return box;
+  }
   if (view.pending.length) {
-    box.append(el("h2", {}, "Choose replacements"));
+    box.append(el("h3", {}, "Choose replacements"));
     const chosen = {};
     for (const slot of view.pending) {
-      const side = slot.slice(0, 2), bench = view.snapshot.bench[side];
+      const bench = view.snapshot.bench[sideOf(slot)];
       chosen[slot] = bench[0].index;
       box.append(el("div", {class: "row"}, `${slot}:`, select(bench.map((b) => [String(b.index), `${pretty(b.species)} ${b.hp}/${b.max_hp}`]), String(chosen[slot]), (e) => { chosen[slot] = +e.target.value; })));
     }
     box.append(el("button", {class: "primary", onclick: () => act(() => api("/api/replace", {replacements: chosen}))}, "Send in"));
     return box;
   }
-  const slots = Object.keys(view.legal).filter((s) => view.legal[s].moves.length || view.legal[s].switches.length);
-  box.append(el("div", {class: "row"}, el("span", {class: "mute", style: "flex:1"}, "Pick a move on each Pokémon, then resolve."),
-    el("button", {class: "primary", onclick: () => act(() => api("/api/turn", {actions: buildActions(slots)}))}, "Resolve turn")));
-  return box;
-}
-function ensurePick(slot, legal) {
-  const pick = picks[slot] = picks[slot] || {};
-  const kinds = [...legal.moves.map((x) => "move:" + x.move), ...legal.switches.map((i) => "switch:" + i)];
-  if (!kinds.includes(pick.kind)) { pick.kind = kinds[0]; pick.target = undefined; }
-  if (pick.kind.startsWith("move:")) {
-    const mv = legal.moves.find((x) => "move:" + x.move === pick.kind);
-    if (mv.targets && !mv.targets.includes(pick.target)) pick.target = mv.targets.find((t) => t.slice(0, 2) !== slot.slice(0, 2)) || mv.targets[0];
-    if (!mv.targets) pick.target = undefined;
+  box.append(el("h3", {}, `Orders · Turn ${view.snapshot.turn + 1}`));
+  let lastSide = null;
+  for (const slot of slots) {
+    if (sideOf(slot) !== lastSide) { lastSide = sideOf(slot); box.append(el("div", {class: `side-lbl ${lastSide}`}, lastSide === "p1" ? "Player 1" : "Player 2")); }
+    const m = mon(slot), isOpen = openSlot === slot;
+    const order = el("div", {class: `order ${sideOf(slot)}` + (isOpen ? " open" : "")},
+      el("div", {class: "top", onclick: () => { openSlot = slot; show(); }}, m.types.map(typeIcon), pretty(m.species), el("span", {class: "mute", style: "font-weight:400"}, slot),
+        ready(slot) ? el("span", {class: "tick"}, "✓") : null),
+      el("div", {class: "sum", onclick: () => { openSlot = slot; show(); }}, summary(slot)));
+    if (isOpen) order.append(movePicker(slot, view.legal[slot]));
+    box.append(order);
   }
-  return pick;
-}
-function actionPicker(slot, legal) {
-  const pick = picks[slot], box = el("div", {class: "acts"});
-  box.append(el("div", {class: "moves"}, legal.moves.map((x) => el("button", {
-    class: "mv" + (pick.kind === "move:" + x.move ? " sel" : ""), style: `--t:${typeColor(x.type)}`, title: `${x.type} · ${x.category}`,
-    onclick: () => { pick.kind = "move:" + x.move; pick.target = undefined; show(); }},
-    typeIcon(x.type), x.name, x.priority ? el("em", {}, `${x.priority > 0 ? "+" : ""}${x.priority}`) : null))));
-  const mv = pick.kind.startsWith("move:") && legal.moves.find((x) => "move:" + x.move === pick.kind);
-  if (mv && mv.targets) {
-    box.append(el("div", {class: "label"}, "Target"), el("div", {class: "btns"}, mv.targets.map((t) => el("button", {
-      class: `chip ${t.slice(0, 2)}` + (pick.target === t ? " sel" : ""), onclick: () => { pick.target = t; show(); }},
-      `${pretty(view.snapshot.slots[t].species)} (${t})`))));
-  } else if (mv) {
-    box.append(el("div", {class: "label"}, "Target"), el("span", {class: "mute"}, mv.category === "Status" ? "no target" : "hits all targets"));
-  }
-  if (legal.switches.length) {
-    box.append(el("div", {class: "label"}, "Switch"), el("div", {class: "btns"}, legal.switches.map((i) => el("button", {
-      class: "chip" + (pick.kind === "switch:" + i ? " sel" : ""), onclick: () => { pick.kind = "switch:" + i; pick.target = undefined; show(); }},
-      pretty(view.snapshot.bench[slot.slice(0, 2)].find((b) => b.index === i).species)))));
-  }
+  const done = slots.filter(ready).length;
+  box.append(el("div", {class: "mute"}, `${done} of ${slots.length} ready`),
+    el("div", {class: "btnrow"}, el("button", {onclick: autoFill, disabled: done === slots.length}, "Auto-fill rest"),
+      el("button", {class: "primary", disabled: done !== slots.length, onclick: () => act(() => api("/api/turn", {actions: buildActions(slots)}))}, "Resolve turn")));
   return box;
 }
 function buildActions(slots) {
@@ -332,14 +385,14 @@ function buildActions(slots) {
 }
 async function act(fn) {
   $("err").textContent = "";
-  try { view = await fn(); frameIdx = view.frames && view.frames.length ? 0 : null; picks = {}; show(); if (frameIdx === 0) playFrames(); }
+  try { view = await fn(); frameIdx = view.frames && view.frames.length ? 0 : null; picks = {}; openSlot = null; show(); if (frameIdx === 0) playFrames(); }
   catch (e) { fail(e); }
 }
-let timer = null;
+let timer = null, playing = false;
 function playFrames() {  // step through the last turn's frames so each hit is visible, then rest on the latest
-  clearInterval(timer);
+  clearInterval(timer); playing = true;
   timer = setInterval(() => {
-    if (!view.frames || frameIdx == null || frameIdx >= view.frames.length - 1) { clearInterval(timer); frameIdx = null; show(); return; }
+    if (!view.frames || frameIdx == null || frameIdx >= view.frames.length - 1) { clearInterval(timer); playing = false; frameIdx = null; show(); return; }
     frameIdx++; show();
   }, 600);
 }
