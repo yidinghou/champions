@@ -216,6 +216,13 @@ class ServerTests(unittest.TestCase):
         self.assertIn("text/html", headers["Content-Type"])
         self.assertIn(b"<html", body.lower())
 
+    def test_type_icons_are_served(self):
+        status, headers, body = self.call("/icons/fire.png")
+        self.assertEqual((status, headers["Content-Type"]), (200, "image/png"))
+        self.assertTrue(body.startswith(b"\x89PNG"))
+        self.assertEqual(self.api("/icons/nope.png")[0], 404)
+        self.assertEqual(self.api("/icons/..%2Findex.png")[0], 404)
+
 
 if __name__ == "__main__":
     unittest.main()

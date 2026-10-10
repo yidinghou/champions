@@ -128,7 +128,8 @@ class Battle:
             slots[slot] = None if m is None else {
                 "index": self.active[slot], "species": m.species, "types": list(m.types), "hp": m.hp,
                 "max_hp": m.max_hp, "status": m.status, "boosts": dict(m.boosts), "item": m.item,
-                "ability": m.ability, "speed": self._speed(slot), "turns_out": m.turns_out}
+                "ability": m.ability, "speed": self._speed(slot), "turns_out": m.turns_out,
+                "moves": [mv for mv in m.moves if is_supported(mv)]}  # what the UI can offer, so the card can list them
         bench = {side: [{"index": i, "species": self.teams[side][i].species, "hp": self.teams[side][i].hp,
                          "max_hp": self.teams[side][i].max_hp} for i in self._bench(side)] for side in self.teams}
         return {"turn": self.turn_no, "field": dict(self.field), "winner": self.winner,

@@ -103,6 +103,7 @@ class SnapshotAndFrames(unittest.TestCase):
         a = s["slots"]["p1a"]
         for key in ("species", "types", "hp", "max_hp", "status", "boosts", "item", "ability", "speed", "turns_out"):
             self.assertIn(key, a)
+        self.assertEqual(a["moves"], ["fakeout", M, "protect"], "unsupported moves are left out")
         self.assertEqual(s["field"]["trick_room"], 0)
         self.assertEqual([m["species"] for m in s["bench"]["p1"]], ["kingambit"])
         self.assertIsNone(s["winner"])

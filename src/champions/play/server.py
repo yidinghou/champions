@@ -1,6 +1,7 @@
 """Stdlib JSON API plus the single-page UI. The browser holds no game logic: it posts actions and renders views.
 
 GET  /               the page
+GET  /icons/<type>.png  type icon (one of the 18 types)
 GET  /api/dex        species, supported moves, items, natures
 GET  /api/state      current view (or {"started": false})
 POST /api/new        {teams: {p1: [...], p2: [...]}, active: 1|2, seed?, field?}
@@ -11,6 +12,7 @@ Every error is `{"error": text}` with HTTP 400 (404 for unknown routes), never a
 """
 import argparse
 import json
+import re
 import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -19,7 +21,9 @@ from pathlib import Path
 from ..battle.dex import dex
 from .session import Session
 
-PAGE = Path(__file__).parent / "static" / "index.html"
+STATIC = Path(__file__).parent / "static"
+PAGE = STATIC / "index.html"
+ICON_ROUTE = re.compile(r"/icons/([a-z]+)\.png")
 MAX_BODY = 1_000_000
 
 
@@ -89,6 +93,9 @@ class Handler(BaseHTTPRequestHandler):
     }
 
     def do_GET(self):
+        icon = ICON_ROUTE.fullmatch(self.path.split("?", 1)[0])
+        if icon and (STATIC / "icons" / f"{icon[1]}.png").is_file():  # the regex keeps the name to letters only
+            return self._send(200, (STATIC / "icons" / f"{icon[1]}.png").read_bytes(), "image/png")
         self._dispatch(self.GET)
 
     def do_POST(self):
