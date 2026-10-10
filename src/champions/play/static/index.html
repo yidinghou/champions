@@ -46,6 +46,22 @@
   .field.invalid input { border-color:var(--p2); }
   .moves-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 8px; }
   .moves-grid select { width:100%; border-left:4px solid var(--t, var(--line)); }
+  /* battle: cards carry their own move buttons; log reads in mon names */
+  .slot .name { font-weight:700; font-size:16px; }
+  .slot .hpline { display:flex; justify-content:space-between; font-size:13px; }
+  .slot .bar { height:14px; border-radius:7px; }
+  .slot .bar > i { transition:width .3s; }
+  .slot.targeted { outline:2px dashed var(--p2); }
+  .dmg { font-weight:700; color:var(--hp-lo); font-size:13px; }
+  .slot .acts { margin-top:8px; border-top:1px solid var(--line); padding-top:8px; }
+  .acts .label { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--mute); margin:6px 0 3px; }
+  .acts .btns { display:flex; flex-wrap:wrap; gap:6px; }
+  button.move { border-left:5px solid var(--t, var(--line)); text-align:left; padding:4px 8px; }
+  button.move small { display:block; font-size:11px; color:var(--mute); }
+  button.sel { outline:2px solid var(--acc); background:color-mix(in srgb, var(--acc) 12%, var(--card)); }
+  button.chip.p1 { border-color:var(--p1); } button.chip.p2 { border-color:var(--p2); }
+  .log h3 { font-size:13px; margin:0 0 4px; } .log .p1 { color:var(--p1); font-weight:600; } .log .p2 { color:var(--p2); font-weight:600; }
+  .banner { font-size:18px; font-weight:700; text-align:center; padding:10px; border-radius:8px; margin-bottom:12px; color:#fff; background:var(--acc); }
   .setup-bar { position:sticky; top:0; z-index:1; background:var(--card); padding-bottom:8px; }
 </style>
 </head>
@@ -164,10 +180,15 @@ function show() {
   const frame = frameIdx != null && frames[frameIdx] ? frames[frameIdx] : null;
   const state = frame ? frame.state : view.snapshot;
   const live = !frame || frameIdx === frames.length - 1;
+  const canAct = live && !view.winner && !view.pending.length;
+  const slots = canAct ? Object.keys(view.legal).filter((s) => view.legal[s].moves.length || view.legal[s].switches.length) : [];
+  for (const slot of slots) ensurePick(slot, view.legal[slot]);
+  const targeted = new Set(slots.map((s) => picks[s].target).filter(Boolean));
+  const ctx = {frame, canAct, targeted, diff: hpDiff(frames, frameIdx)};
 
+  if (view.winner) g.append(el("div", {class: "banner"}, view.winner === "draw" ? "Draw!" : `${view.winner === "p1" ? "Player 1" : "Player 2"} wins!`));
   g.append(el("div", {class: "card"}, el("div", {class: "row"},
     el("strong", {}, `Turn ${state.turn}`), fieldTags(state.field),
-    view.winner ? el("strong", {}, view.winner === "draw" ? "Draw!" : `${view.winner} wins!`) : null,
     el("span", {style: "flex:1"}),
     el("button", {disabled: !view.history, onclick: () => act(() => api("/api/undo", {}))}, "Undo"),
     el("button", {onclick: () => act(() => api("/api/restart", {}))}, "Restart"),
@@ -176,13 +197,13 @@ function show() {
   const sides = el("div", {class: "sides"});
   for (const side of ["p1", "p2"]) {
     const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"));
-    for (const slot of Object.keys(state.slots).filter((s) => s.startsWith(side))) col.append(slotCard(slot, state.slots[slot], frame));
-    col.append(el("div", {class: "mute"}, "Bench: ", state.bench[side].map((b) => `${b.species} ${b.hp}/${b.max_hp}`).join(", ") || "none"));
+    for (const slot of Object.keys(state.slots).filter((s) => s.startsWith(side))) col.append(slotCard(slot, state.slots[slot], ctx));
+    col.append(el("div", {class: "mute"}, "Bench: ", state.bench[side].map((b) => `${pretty(b.species)} ${b.hp}/${b.max_hp}`).join(", ") || "none"));
     sides.append(col);
   }
   g.append(sides);
   if (frames.length) g.append(frameLog(frames));
-  if (live) g.append(controls());
+  if (live) g.append(controls(canAct));
 }
 function fieldTags(f) {
   const t = [];
@@ -191,29 +212,56 @@ function fieldTags(f) {
   if (f.tailwind_p2) t.push(`P2 Tailwind (${f.tailwind_p2})`);
   return t.map((x) => el("span", {class: "tag"}, x));
 }
-function slotCard(slot, m, frame) {
+// HP lost per slot: against the previous frame while scrubbing, or across the whole turn when resting on the latest state
+function hpDiff(frames, idx) {
+  if (!frames.length) return {};
+  const [before, after] = idx == null ? [frames[0], frames[frames.length - 1]] : [frames[idx - 1], frames[idx]];
+  if (!before || !after) return {};
+  const out = {};
+  for (const [slot, m] of Object.entries(after.state.slots)) {
+    const b = before.state.slots[slot];
+    if (m && b && m.index === b.index && m.hp < b.hp) out[slot] = {hp: b.hp - m.hp, pct: Math.round(100 * (b.hp - m.hp) / m.max_hp)};
+  }
+  return out;
+}
+function slotCard(slot, m, ctx) {
   const cls = ["slot"];
   if (!m) cls.push("empty"); else if (m.hp === 0) cls.push("fainted");
-  if (frame && frame.actor === slot) cls.push("actor");
-  if (frame && frame.target === slot) cls.push("target");
+  if (ctx.frame && ctx.frame.actor === slot) cls.push("actor");
+  if (ctx.frame && ctx.frame.target === slot) cls.push("target");
+  if (ctx.targeted.has(slot)) cls.push("targeted");
   if (!m) return el("div", {class: cls.join(" ")}, `${slot}: empty`);
-  const pct = Math.round(100 * m.hp / m.max_hp);
-  return el("div", {class: cls.join(" ")},
-    el("div", {class: "row"}, el("strong", {}, `${slot} ${m.species}`), m.types.map((t) => el("span", {class: "tag"}, t)),
+  const pct = Math.round(100 * m.hp / m.max_hp), d = ctx.diff[slot];
+  const card = el("div", {class: cls.join(" ")},
+    el("div", {class: "row"}, el("span", {class: "name"}, pretty(m.species)), el("span", {class: "mute"}, slot), m.types.map(typeBadge),
       m.status ? el("span", {class: "tag"}, m.status) : null, el("span", {class: "mute"}, `Spe ${m.speed}`)),
     el("div", {class: "bar"}, el("i", {class: pct < 25 ? "lo" : pct < 50 ? "mid" : "", style: `width:${pct}%`})),
-    el("div", {class: "mute"}, `${m.hp}/${m.max_hp}`, m.item ? ` · ${m.item}` : ""));
+    el("div", {class: "hpline"}, el("span", {}, `${m.hp}/${m.max_hp} · ${pct}%`, m.item ? ` · ${pretty(m.item)}` : ""),
+      d ? el("span", {class: "dmg"}, `−${d.hp} (−${d.pct}%)`) : null));
+  if (ctx.canAct && view.legal[slot] && (view.legal[slot].moves.length || view.legal[slot].switches.length)) card.append(actionPicker(slot, view.legal[slot]));
+  return card;
+}
+const SLOT_OR_SPECIES = () => new RegExp(`\\b(p[12])([ab]) (${Object.keys(dex.species).sort((x, y) => y.length - x.length).join("|")})\\b|\\b(p[12])([ab])\\b`, "g");
+function fmtLog(text) {  // "p2b noivern used X on p1a froslass-mega" -> colored "Noivern used X on Froslass Mega"
+  const out = []; let last = 0, m; const re = SLOT_OR_SPECIES();
+  while ((m = re.exec(text))) {
+    out.push(text.slice(last, m.index));
+    out.push(m[3] ? el("span", {class: m[1]}, pretty(m[3])) : el("span", {class: m[4]}, `${m[4].toUpperCase()}${m[5]}`));
+    last = m.index + m[0].length;
+  }
+  out.push(text.slice(last));
+  return out;
 }
 function frameLog(frames) {
-  const box = el("div", {class: "card"}, el("h2", {}, "Last turn"));
-  const cur = frameIdx ?? frames.length - 1;
+  const cur = frameIdx ?? frames.length - 1, turn = frames[frames.length - 1].state.turn;
+  const box = el("div", {class: "card"}, el("h2", {}, `Turn ${turn} log`));
   box.append(el("div", {class: "row"},
     el("input", {type: "range", min: 0, max: frames.length - 1, value: cur, style: "flex:1", oninput: (e) => { frameIdx = +e.target.value; show(); }}),
     el("button", {onclick: () => { frameIdx = null; show(); }}, "Latest")));
-  box.append(el("div", {class: "log"}, frames.map((f, i) => el("div", {class: i === cur ? "on" : "", onclick: () => { frameIdx = i; show(); }}, f.text))));
+  box.append(el("div", {class: "log"}, frames.map((f, i) => el("div", {class: i === cur ? "on" : "", onclick: () => { frameIdx = i; show(); }}, fmtLog(f.text)))));
   return box;
 }
-function controls() {
+function controls(canAct) {
   const box = el("div", {class: "card"});
   if (view.winner) { box.append("Battle over."); return box; }
   if (view.pending.length) {
@@ -222,31 +270,48 @@ function controls() {
     for (const slot of view.pending) {
       const side = slot.slice(0, 2), bench = view.snapshot.bench[side];
       chosen[slot] = bench[0].index;
-      box.append(el("div", {class: "row"}, `${slot}:`, select(bench.map((b) => [String(b.index), `${b.species} ${b.hp}/${b.max_hp}`]), String(chosen[slot]), (e) => { chosen[slot] = +e.target.value; })));
+      box.append(el("div", {class: "row"}, `${slot}:`, select(bench.map((b) => [String(b.index), `${pretty(b.species)} ${b.hp}/${b.max_hp}`]), String(chosen[slot]), (e) => { chosen[slot] = +e.target.value; })));
     }
     box.append(el("button", {class: "primary", onclick: () => act(() => api("/api/replace", {replacements: chosen}))}, "Send in"));
     return box;
   }
-  box.append(el("h2", {}, "Choose actions"));
   const slots = Object.keys(view.legal).filter((s) => view.legal[s].moves.length || view.legal[s].switches.length);
-  for (const slot of slots) box.append(actionPicker(slot, view.legal[slot]));
-  box.append(el("button", {class: "primary", onclick: () => act(() => api("/api/turn", {actions: buildActions(slots)}))}, "Resolve turn"));
+  box.append(el("div", {class: "row"}, el("span", {class: "mute", style: "flex:1"}, "Pick a move on each Pokémon, then resolve."),
+    el("button", {class: "primary", onclick: () => act(() => api("/api/turn", {actions: buildActions(slots)}))}, "Resolve turn")));
   return box;
 }
-function actionPicker(slot, legal) {
-  const m = view.snapshot.slots[slot], pick = picks[slot] = picks[slot] || {};
-  const kinds = [...legal.moves.map((x) => ["move:" + x.move, x.name + (x.priority ? ` (${x.priority > 0 ? "+" : ""}${x.priority})` : "")]),
-                 ...legal.switches.map((i) => ["switch:" + i, "Switch → " + view.snapshot.bench[slot.slice(0, 2)].find((b) => b.index === i).species])];
-  if (!pick.kind || !kinds.some((k) => k[0] === pick.kind)) pick.kind = kinds[0][0];
-  const row = el("div", {class: "row"}, `${slot} ${m.species}:`, select(kinds, pick.kind, (e) => { pick.kind = e.target.value; pick.target = undefined; show(); }));
+function ensurePick(slot, legal) {
+  const pick = picks[slot] = picks[slot] || {};
+  const kinds = [...legal.moves.map((x) => "move:" + x.move), ...legal.switches.map((i) => "switch:" + i)];
+  if (!kinds.includes(pick.kind)) { pick.kind = kinds[0]; pick.target = undefined; }
   if (pick.kind.startsWith("move:")) {
     const mv = legal.moves.find((x) => "move:" + x.move === pick.kind);
-    if (mv.targets) {
-      if (!mv.targets.includes(pick.target)) pick.target = mv.targets.find((t) => t.slice(0, 2) !== slot.slice(0, 2)) || mv.targets[0];
-      row.append("→", select(mv.targets.map((t) => [t, `${t} ${view.snapshot.slots[t].species}`]), pick.target, (e) => { pick.target = e.target.value; }));
-    }
+    if (mv.targets && !mv.targets.includes(pick.target)) pick.target = mv.targets.find((t) => t.slice(0, 2) !== slot.slice(0, 2)) || mv.targets[0];
+    if (!mv.targets) pick.target = undefined;
   }
-  return row;
+  return pick;
+}
+function actionPicker(slot, legal) {
+  const pick = picks[slot], box = el("div", {class: "acts"});
+  const moves = el("div", {class: "btns"}, legal.moves.map((x) => el("button", {
+    class: "move" + (pick.kind === "move:" + x.move ? " sel" : ""), style: `--t:${typeColor(x.type)}`,
+    onclick: () => { pick.kind = "move:" + x.move; pick.target = undefined; show(); }},
+    x.name, el("small", {}, `${x.type} · ${x.category}${x.priority ? ` · ${x.priority > 0 ? "+" : ""}${x.priority}` : ""}`))));
+  box.append(el("div", {class: "label"}, "Move"), moves);
+  const mv = pick.kind.startsWith("move:") && legal.moves.find((x) => "move:" + x.move === pick.kind);
+  if (mv && mv.targets) {
+    box.append(el("div", {class: "label"}, "Target"), el("div", {class: "btns"}, mv.targets.map((t) => el("button", {
+      class: `chip ${t.slice(0, 2)}` + (pick.target === t ? " sel" : ""), onclick: () => { pick.target = t; show(); }},
+      `${pretty(view.snapshot.slots[t].species)} (${t})`))));
+  } else if (mv) {
+    box.append(el("div", {class: "label"}, "Target"), el("span", {class: "mute"}, mv.category === "Status" ? "no target" : "hits all targets"));
+  }
+  if (legal.switches.length) {
+    box.append(el("div", {class: "label"}, "Switch"), el("div", {class: "btns"}, legal.switches.map((i) => el("button", {
+      class: "chip" + (pick.kind === "switch:" + i ? " sel" : ""), onclick: () => { pick.kind = "switch:" + i; pick.target = undefined; show(); }},
+      pretty(view.snapshot.bench[slot.slice(0, 2)].find((b) => b.index === i).species)))));
+  }
+  return box;
 }
 function buildActions(slots) {
   const out = {};
