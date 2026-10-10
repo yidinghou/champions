@@ -8,6 +8,7 @@ COMMANDS = {
     "lookup": ("champions.lookup", "look up Pokémon, moves, items, abilities (offline)"),
     "calc": ("champions.calc", "damage calculator"),
     "stats": ("champions.stats", "level-50 battle stats: stats NAME [NATURE] [stat=sp,...]"),
+    "play": ("champions.play.server", "play a battle in the browser: play [--port N] [--no-open]"),
     "check-roster": ("champions.fetch.roster_check", "verify new_in_mc tags against Showdown (network)"),
 }
 FETCHERS = {

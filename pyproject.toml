@@ -20,4 +20,4 @@ version = { attr = "champions.__version__" }
 where = ["src"]
 
 [tool.setuptools.package-data]
-champions = ["data/*.json"]
+champions = ["data/*.json", "play/static/*"]

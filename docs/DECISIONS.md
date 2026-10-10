@@ -52,3 +52,10 @@ The user picked https://www.pikalytics.com/damage-calculator (a Smogon-calc UI w
 **Source of truth:** Pikalytics only covers damage, so turn mechanics are checked against Smogon/Bulbapedia (cited per case in `source`). Showdown's `test/sim` suite is the next oracle to port from. Not yet checked in-game.
 Fainting works between turns: `pending_replacements()` / `replace()`, an emptied doubles slot when no reserve is left, `winner`, and a move aimed at a fainted foe redirects to its partner. `legal_actions()`, `snapshot()` and per-action `TurnResult.frames` exist for the UI.
 **Limits:** no accuracy, full-paralysis, spread moves, abilities or weather yet. `moves.is_supported` lets in only plain single-target damaging moves (secondary effects ignored) plus Protect, Trick Room and Tailwind (257 of 510 moves); everything else is rejected with `ValueError`, never silently mis-simulated.
+
+## 013 — `champions play`: stdlib server, state = (config, action history) (2026-10-09)
+`src/champions/play/` serves a JSON API and one static page with `http.server`; no dependencies. The browser holds no game logic: it posts actions and renders the view the engine returns (snapshot, legal actions, per-action frames).
+**State:** the server keeps only the team config (with a seed) and the list of turns/replacements. Every change replays history onto a fresh `Battle`, so undo and restart are a shorter list, and a rejected action is tried on a replay copy first and never recorded.
+**Errors:** all bad input is `{error}` with HTTP 400 (lookup `KeyError`/`SystemExit` and wrong JSON types are converted to `ValueError`); unknown routes are 404; anything else is a 500 with the exception name only.
+**Limits:** one game per process, no auth or persistence, and the page is a minimal vanilla-JS UI (no type icons). Spec: `tests/test_play_api.py`.
+

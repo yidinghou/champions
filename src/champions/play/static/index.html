@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Champions Play</title>
+<style>
+  :root { --bg:#f6f6f4; --card:#fff; --ink:#1c1c1a; --mute:#6b6b66; --line:#d9d9d3; --acc:#2a5bd7; --p1:#2a5bd7; --p2:#c0392b;
+          --hp-hi:#2e9d5b; --hp-mid:#d9a21b; --hp-lo:#c0392b; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161615; --card:#1f1f1d; --ink:#ececE8; --mute:#9a9a93; --line:#34342f; --acc:#6f95ff; --p1:#6f95ff; --p2:#ff7a6b; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.4 system-ui, sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:16px; }
+  h1 { font-size:20px; margin:0 0 12px; }
+  h2 { font-size:15px; margin:16px 0 8px; }
+  button, select, input { font:inherit; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:6px; padding:5px 8px; }
+  button { cursor:pointer; } button.primary { background:var(--acc); border-color:var(--acc); color:#fff; }
+  button:disabled { opacity:.5; cursor:default; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:12px; }
+  .row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:6px; }
+  .sides { display:grid; grid-template-columns:1fr 1fr; gap:12px; } @media (max-width:700px) { .sides { grid-template-columns:1fr; } }
+  .mon { border-bottom:1px solid var(--line); padding:6px 0; } .mon:last-child { border-bottom:0; }
+  .p1 h2 { color:var(--p1); } .p2 h2 { color:var(--p2); }
+  .slot { border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; }
+  .slot.empty { color:var(--mute); } .slot.fainted { opacity:.5; }
+  .slot.actor { outline:2px solid var(--acc); } .slot.target { outline:2px dashed var(--p2); }
+  .bar { height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin:4px 0; }
+  .bar > i { display:block; height:100%; background:var(--hp-hi); } .bar > i.mid { background:var(--hp-mid); } .bar > i.lo { background:var(--hp-lo); }
+  .mute { color:var(--mute); } .tag { font-size:12px; border:1px solid var(--line); border-radius:4px; padding:0 4px; margin-right:4px; }
+  .err { color:var(--p2); min-height:1.4em; } .log { max-height:220px; overflow:auto; font-size:13px; }
+  .log div.on { font-weight:600; color:var(--acc); }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Champions Play</h1>
+  <div id="err" class="err" role="alert"></div>
+  <section id="setup" class="card hidden"></section>
+  <section id="game" class="hidden"></section>
+</main>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e[k] = v;
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(k));
+  return e;
+}
+async function api(path, body) {
+  const res = await fetch(path, body === undefined ? {} : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+function fail(e) { $("err").textContent = e.message || String(e); }
+
+let dex = null, view = null, frameIdx = null, teams = {p1: [], p2: []}, active = 2, picks = {};
+
+function option(value, label, selected) { const o = el("option", {value}, label ?? value); o.selected = !!selected; return o; }
+function select(options, value, onchange) { const s = el("select", {onchange}, options.map(([v, l]) => option(v, l, v === value))); return s; }
+
+// ---- setup ------------------------------------------------------------------------------------------------
+function blankMon(side) {
+  const names = Object.keys(dex.species), species = names[Math.floor(Math.random() * names.length)];
+  return {species, moves: dex.species[species].moves.slice(0, 4), item: "", nature: "hardy"};
+}
+function renderSetup() {
+  const box = $("setup"); box.replaceChildren();
+  box.append(el("div", {class: "row"}, "Format:",
+    select([["1", "Singles"], ["2", "Doubles"]], String(active), (e) => { active = +e.target.value; }),
+    el("button", {class: "primary", onclick: start}, "Start battle"),
+    el("button", {onclick: () => { teams = {p1: [], p2: []}; fillTeams(); renderSetup(); }}, "Randomize teams")));
+  const sides = el("div", {class: "sides"});
+  for (const side of ["p1", "p2"]) {
+    const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"));
+    teams[side].forEach((m, i) => col.append(monEditor(side, m, i)));
+    col.append(el("button", {disabled: teams[side].length >= 6, onclick: () => { teams[side].push(blankMon(side)); renderSetup(); }}, "+ Pokémon"));
+    sides.append(col);
+  }
+  box.append(sides);
+}
+function monEditor(side, m, i) {
+  const moveIds = dex.species[m.species].moves;
+  const row = el("div", {class: "mon"});
+  row.append(el("div", {class: "row"},
+    select(Object.keys(dex.species).sort().map((s) => [s, s]), m.species, (e) => { m.species = e.target.value; m.moves = dex.species[m.species].moves.slice(0, 4); renderSetup(); }),
+    select([["", "(no item)"], ...dex.items.map((s) => [s, s])], m.item, (e) => { m.item = e.target.value; }),
+    select(dex.natures.map((s) => [s, s]), m.nature, (e) => { m.nature = e.target.value; }),
+    el("button", {disabled: teams[side].length <= 1, onclick: () => { teams[side].splice(i, 1); renderSetup(); }}, "✕")));
+  const moves = el("div", {class: "row"});
+  for (let k = 0; k < 4; k++) {
+    moves.append(select([["", "(empty)"], ...moveIds.map((id) => [id, dex.moves[id].name])], m.moves[k] || "", (e) => {
+      const cur = m.moves.slice(); cur[k] = e.target.value; m.moves = cur.filter(Boolean);
+    }));
+  }
+  row.append(moves);
+  return row;
+}
+function fillTeams() { for (const side of ["p1", "p2"]) while (teams[side].length < 4) teams[side].push(blankMon(side)); }
+async function start() {
+  $("err").textContent = "";
+  const spec = (m) => { const s = {species: m.species, moves: m.moves}; if (m.item) s.item = m.item; if (m.nature !== "hardy") s.nature = m.nature; return s; };
+  try {
+    view = await api("/api/new", {teams: {p1: teams.p1.map(spec), p2: teams.p2.map(spec)}, active});
+    frameIdx = null; picks = {};
+    show();
+  } catch (e) { fail(e); }
+}
+
+// ---- battle -----------------------------------------------------------------------------------------------
+function show() {
+  $("setup").classList.toggle("hidden", !!view.started);
+  $("game").classList.toggle("hidden", !view.started);
+  if (!view.started) { fillTeams(); renderSetup(); $("setup").classList.remove("hidden"); return; }
+  const g = $("game"); g.replaceChildren();
+  const frames = view.frames || [];
+  const frame = frameIdx != null && frames[frameIdx] ? frames[frameIdx] : null;
+  const state = frame ? frame.state : view.snapshot;
+  const live = !frame || frameIdx === frames.length - 1;
+
+  g.append(el("div", {class: "card"}, el("div", {class: "row"},
+    el("strong", {}, `Turn ${state.turn}`), fieldTags(state.field),
+    view.winner ? el("strong", {}, view.winner === "draw" ? "Draw!" : `${view.winner} wins!`) : null,
+    el("span", {style: "flex:1"}),
+    el("button", {disabled: !view.history, onclick: () => act(() => api("/api/undo", {}))}, "Undo"),
+    el("button", {onclick: () => act(() => api("/api/restart", {}))}, "Restart"),
+    el("button", {onclick: () => { view = {started: false}; show(); }}, "New game"))));
+
+  const sides = el("div", {class: "sides"});
+  for (const side of ["p1", "p2"]) {
+    const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"));
+    for (const slot of Object.keys(state.slots).filter((s) => s.startsWith(side))) col.append(slotCard(slot, state.slots[slot], frame));
+    col.append(el("div", {class: "mute"}, "Bench: ", state.bench[side].map((b) => `${b.species} ${b.hp}/${b.max_hp}`).join(", ") || "none"));
+    sides.append(col);
+  }
+  g.append(sides);
+  if (frames.length) g.append(frameLog(frames));
+  if (live) g.append(controls());
+}
+function fieldTags(f) {
+  const t = [];
+  if (f.trick_room) t.push(`Trick Room (${f.trick_room})`);
+  if (f.tailwind_p1) t.push(`P1 Tailwind (${f.tailwind_p1})`);
+  if (f.tailwind_p2) t.push(`P2 Tailwind (${f.tailwind_p2})`);
+  return t.map((x) => el("span", {class: "tag"}, x));
+}
+function slotCard(slot, m, frame) {
+  const cls = ["slot"];
+  if (!m) cls.push("empty"); else if (m.hp === 0) cls.push("fainted");
+  if (frame && frame.actor === slot) cls.push("actor");
+  if (frame && frame.target === slot) cls.push("target");
+  if (!m) return el("div", {class: cls.join(" ")}, `${slot}: empty`);
+  const pct = Math.round(100 * m.hp / m.max_hp);
+  return el("div", {class: cls.join(" ")},
+    el("div", {class: "row"}, el("strong", {}, `${slot} ${m.species}`), m.types.map((t) => el("span", {class: "tag"}, t)),
+      m.status ? el("span", {class: "tag"}, m.status) : null, el("span", {class: "mute"}, `Spe ${m.speed}`)),
+    el("div", {class: "bar"}, el("i", {class: pct < 25 ? "lo" : pct < 50 ? "mid" : "", style: `width:${pct}%`})),
+    el("div", {class: "mute"}, `${m.hp}/${m.max_hp}`, m.item ? ` · ${m.item}` : ""));
+}
+function frameLog(frames) {
+  const box = el("div", {class: "card"}, el("h2", {}, "Last turn"));
+  const cur = frameIdx ?? frames.length - 1;
+  box.append(el("div", {class: "row"},
+    el("input", {type: "range", min: 0, max: frames.length - 1, value: cur, style: "flex:1", oninput: (e) => { frameIdx = +e.target.value; show(); }}),
+    el("button", {onclick: () => { frameIdx = null; show(); }}, "Latest")));
+  box.append(el("div", {class: "log"}, frames.map((f, i) => el("div", {class: i === cur ? "on" : "", onclick: () => { frameIdx = i; show(); }}, f.text))));
+  return box;
+}
+function controls() {
+  const box = el("div", {class: "card"});
+  if (view.winner) { box.append("Battle over."); return box; }
+  if (view.pending.length) {
+    box.append(el("h2", {}, "Choose replacements"));
+    const chosen = {};
+    for (const slot of view.pending) {
+      const side = slot.slice(0, 2), bench = view.snapshot.bench[side];
+      chosen[slot] = bench[0].index;
+      box.append(el("div", {class: "row"}, `${slot}:`, select(bench.map((b) => [String(b.index), `${b.species} ${b.hp}/${b.max_hp}`]), String(chosen[slot]), (e) => { chosen[slot] = +e.target.value; })));
+    }
+    box.append(el("button", {class: "primary", onclick: () => act(() => api("/api/replace", {replacements: chosen}))}, "Send in"));
+    return box;
+  }
+  box.append(el("h2", {}, "Choose actions"));
+  const slots = Object.keys(view.legal).filter((s) => view.legal[s].moves.length || view.legal[s].switches.length);
+  for (const slot of slots) box.append(actionPicker(slot, view.legal[slot]));
+  box.append(el("button", {class: "primary", onclick: () => act(() => api("/api/turn", {actions: buildActions(slots)}))}, "Resolve turn"));
+  return box;
+}
+function actionPicker(slot, legal) {
+  const m = view.snapshot.slots[slot], pick = picks[slot] = picks[slot] || {};
+  const kinds = [...legal.moves.map((x) => ["move:" + x.move, x.name + (x.priority ? ` (${x.priority > 0 ? "+" : ""}${x.priority})` : "")]),
+                 ...legal.switches.map((i) => ["switch:" + i, "Switch → " + view.snapshot.bench[slot.slice(0, 2)].find((b) => b.index === i).species])];
+  if (!pick.kind || !kinds.some((k) => k[0] === pick.kind)) pick.kind = kinds[0][0];
+  const row = el("div", {class: "row"}, `${slot} ${m.species}:`, select(kinds, pick.kind, (e) => { pick.kind = e.target.value; pick.target = undefined; show(); }));
+  if (pick.kind.startsWith("move:")) {
+    const mv = legal.moves.find((x) => "move:" + x.move === pick.kind);
+    if (mv.targets) {
+      if (!mv.targets.includes(pick.target)) pick.target = mv.targets.find((t) => t.slice(0, 2) !== slot.slice(0, 2)) || mv.targets[0];
+      row.append("→", select(mv.targets.map((t) => [t, `${t} ${view.snapshot.slots[t].species}`]), pick.target, (e) => { pick.target = e.target.value; }));
+    }
+  }
+  return row;
+}
+function buildActions(slots) {
+  const out = {};
+  for (const slot of slots) {
+    const p = picks[slot], [kind, v] = p.kind.split(":");
+    out[slot] = kind === "switch" ? {switch: +v} : (p.target ? {move: v, target: p.target} : {move: v});
+  }
+  return out;
+}
+async function act(fn) {
+  $("err").textContent = "";
+  try { view = await fn(); frameIdx = view.frames && view.frames.length ? 0 : null; picks = {}; show(); if (frameIdx === 0) playFrames(); }
+  catch (e) { fail(e); }
+}
+let timer = null;
+function playFrames() {  // step through the last turn's frames so each hit is visible, then rest on the latest
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (!view.frames || frameIdx == null || frameIdx >= view.frames.length - 1) { clearInterval(timer); frameIdx = null; show(); return; }
+    frameIdx++; show();
+  }, 600);
+}
+
+(async () => {
+  try {
+    dex = await api("/api/dex");
+    view = await api("/api/state");
+    show();
+  } catch (e) { fail(e); }
+})();
+</script>
+</body>
+</html>
