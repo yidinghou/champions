@@ -21,7 +21,6 @@
   .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:12px; }
   .row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:6px; }
   .sides { display:grid; grid-template-columns:1fr 1fr; gap:12px; } @media (max-width:700px) { .sides { grid-template-columns:1fr; } }
-  .mon { border-bottom:1px solid var(--line); padding:6px 0; } .mon:last-child { border-bottom:0; }
   .p1 h2 { color:var(--p1); } .p2 h2 { color:var(--p2); }
   .slot { border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; }
   .slot.empty { color:var(--mute); } .slot.fainted { opacity:.5; }
@@ -32,6 +31,22 @@
   .err { color:var(--p2); min-height:1.4em; } .log { max-height:220px; overflow:auto; font-size:13px; }
   .log div.on { font-weight:600; color:var(--acc); }
   .hidden { display:none; }
+  /* type badges: one colour per type, shared by setup and battle screens */
+  .type { display:inline-block; font-size:11px; font-weight:600; letter-spacing:.02em; text-transform:uppercase; color:#fff;
+          border-radius:4px; padding:1px 6px; background:var(--t, #777); }
+  /* setup: one card per Pokémon, labelled fields on a fixed grid */
+  .mon-card { border:1px solid var(--line); border-radius:8px; padding:10px; margin-bottom:10px; }
+  .mon-head { display:flex; gap:6px; align-items:center; margin-bottom:8px; }
+  .mon-head .species { flex:1; min-width:0; font-weight:600; }
+  .mon-head .types { display:flex; gap:4px; }
+  .fields { display:grid; grid-template-columns:1fr 1fr; gap:6px 8px; margin-bottom:8px; }
+  .field { display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .field > span { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--mute); }
+  .field select, .field input { width:100%; }
+  .field.invalid input { border-color:var(--p2); }
+  .moves-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 8px; }
+  .moves-grid select { width:100%; border-left:4px solid var(--t, var(--line)); }
+  .setup-bar { position:sticky; top:0; z-index:1; background:var(--card); padding-bottom:8px; }
 </style>
 </head>
 <body>
@@ -65,6 +80,14 @@ let dex = null, view = null, frameIdx = null, teams = {p1: [], p2: []}, active =
 function option(value, label, selected) { const o = el("option", {value}, label ?? value); o.selected = !!selected; return o; }
 function select(options, value, onchange) { const s = el("select", {onchange}, options.map(([v, l]) => option(v, l, v === value))); return s; }
 
+const TYPE_COLORS = {normal:"#8a8a78", fire:"#e8590c", water:"#3b7be8", electric:"#d4a017", grass:"#3f9b3f", ice:"#4bb5c4",
+  fighting:"#b8322c", poison:"#9a3fa0", ground:"#b8923c", flying:"#7a8be0", psychic:"#e0457b", bug:"#8a9a1c", rock:"#9a8530",
+  ghost:"#6a4c93", dragon:"#5a3fd6", dark:"#5a4636", steel:"#7a8a9a", fairy:"#d97ab0"};
+const typeColor = (t) => TYPE_COLORS[String(t).toLowerCase()] || "#777";
+const typeBadge = (t) => el("span", {class: "type", style: `--t:${typeColor(t)}`}, t);
+const pretty = (slug) => slug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");  // froslass-mega -> Froslass Mega
+function field(label, control, cls) { return el("label", {class: "field" + (cls ? " " + cls : "")}, el("span", {}, label), control); }
+
 // ---- setup ------------------------------------------------------------------------------------------------
 function blankMon(side) {
   const names = Object.keys(dex.species), species = names[Math.floor(Math.random() * names.length)];
@@ -72,10 +95,12 @@ function blankMon(side) {
 }
 function renderSetup() {
   const box = $("setup"); box.replaceChildren();
-  box.append(el("div", {class: "row"}, "Format:",
-    select([["1", "Singles"], ["2", "Doubles"]], String(active), (e) => { active = +e.target.value; }),
-    el("button", {class: "primary", onclick: start}, "Start battle"),
-    el("button", {onclick: () => { teams = {p1: [], p2: []}; fillTeams(); renderSetup(); }}, "Randomize teams")));
+  box.append(el("datalist", {id: "species-list"}, Object.keys(dex.species).sort().map((id) => option(pretty(id), id))));
+  box.append(el("div", {class: "row setup-bar"},
+    field("Format", select([["1", "Singles"], ["2", "Doubles"]], String(active), (e) => { active = +e.target.value; })),
+    el("span", {style: "flex:1"}),
+    el("button", {onclick: () => { teams = {p1: [], p2: []}; fillTeams(); renderSetup(); }}, "Randomize teams"),
+    el("button", {class: "primary", onclick: start}, "Start battle")));
   const sides = el("div", {class: "sides"});
   for (const side of ["p1", "p2"]) {
     const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"));
@@ -86,21 +111,37 @@ function renderSetup() {
   box.append(sides);
 }
 function monEditor(side, m, i) {
-  const moveIds = dex.species[m.species].moves;
-  const row = el("div", {class: "mon"});
-  row.append(el("div", {class: "row"},
-    select(Object.keys(dex.species).sort().map((s) => [s, s]), m.species, (e) => { m.species = e.target.value; m.moves = dex.species[m.species].moves.slice(0, 4); renderSetup(); }),
-    select([["", "(no item)"], ...dex.items.map((s) => [s, s])], m.item, (e) => { m.item = e.target.value; }),
-    select(dex.natures.map((s) => [s, s]), m.nature, (e) => { m.nature = e.target.value; }),
-    el("button", {disabled: teams[side].length <= 1, onclick: () => { teams[side].splice(i, 1); renderSetup(); }}, "✕")));
-  const moves = el("div", {class: "row"});
+  const byLabel = (text) => {
+    const t = text.trim().toLowerCase();
+    return Object.keys(dex.species).find((id) => id === t || pretty(id).toLowerCase() === t);
+  };
+  const card = el("div", {class: "mon-card"});
+  const types = el("span", {class: "types"}, dex.species[m.species].types.map(typeBadge));
+  const input = el("input", {class: "species", value: pretty(m.species), placeholder: "Species", autocomplete: "off",
+    onchange: (e) => {
+      const id = byLabel(e.target.value);
+      if (!id) { e.target.parentElement.classList.add("invalid"); return; }
+      if (id !== m.species) { m.species = id; m.moves = dex.species[id].moves.slice(0, 4); }
+      renderSetup();
+    }});
+  input.setAttribute("list", "species-list");
+  input.addEventListener("focus", () => input.select());
+  card.append(el("div", {class: "mon-head"}, el("label", {class: "field", style: "flex:1"}, el("span", {}, `Pokémon ${i + 1}`), input), types,
+    el("button", {title: "Remove", disabled: teams[side].length <= 1, onclick: () => { teams[side].splice(i, 1); renderSetup(); }}, "✕")));
+  card.append(el("div", {class: "fields"},
+    field("Item", select([["", "(no item)"], ...dex.items.map((x) => [x, pretty(x)])], m.item, (e) => { m.item = e.target.value; })),
+    field("Nature", select(dex.natures.map((x) => [x, pretty(x)]), m.nature, (e) => { m.nature = e.target.value; }))));
+  const moveIds = dex.species[m.species].moves, grid = el("div", {class: "moves-grid"});
   for (let k = 0; k < 4; k++) {
-    moves.append(select([["", "(empty)"], ...moveIds.map((id) => [id, dex.moves[id].name])], m.moves[k] || "", (e) => {
-      const cur = m.moves.slice(); cur[k] = e.target.value; m.moves = cur.filter(Boolean);
-    }));
+    const cur = m.moves[k] || "", sel = select([["", "(empty)"], ...moveIds.map((id) => [id, dex.moves[id].name])], cur, (e) => {
+      const next = m.moves.slice(); next[k] = e.target.value; m.moves = next.filter(Boolean);
+      renderSetup();
+    });
+    if (cur) sel.style.setProperty("--t", typeColor(dex.moves[cur].type));
+    grid.append(field(`Move ${k + 1}`, sel));
   }
-  row.append(moves);
-  return row;
+  card.append(grid);
+  return card;
 }
 function fillTeams() { for (const side of ["p1", "p2"]) while (teams[side].length < 4) teams[side].push(blankMon(side)); }
 async function start() {
