@@ -20,10 +20,14 @@ def duel(**kw):
 
 class Supported(unittest.TestCase):
     def test_whitelist(self):
-        for ok in ("mudslap", "fakeout", "protect", "trickroom", "tailwind", "electroball", "gyroball", "quickattack"):
+        for ok in ("mudslap", "fakeout", "protect", "trickroom", "tailwind", "electroball", "gyroball", "quickattack", "earthquake", "rockslide"):
             self.assertTrue(is_supported(ok), ok)
-        for bad in ("swordsdance", "solarbeam", "electroshot", "hyperbeam", "earthquake", "heavyslam", "seismictoss", "counter"):
-            self.assertFalse(is_supported(bad), bad)  # status/charge/recharge/spread/variable-power are not modeled yet
+        for bad in ("swordsdance", "solarbeam", "electroshot", "hyperbeam", "heavyslam", "seismictoss", "counter"):
+            self.assertFalse(is_supported(bad), bad)  # status/charge/recharge/variable-power are not modeled yet
+
+    def test_spread_moves_have_no_target_choice(self):
+        b = Battle({"p1": [mon("incineroar", ["earthquake"]), mon("kingambit")], "p2": [mon("garchomp"), mon("arcanine")]}, active=2)
+        self.assertIsNone(b.legal_actions("p1a")["moves"][0]["targets"])
 
 
 class LegalActions(unittest.TestCase):
