@@ -12,7 +12,7 @@
   }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.4 system-ui, sans-serif; }
-  main { max-width:960px; margin:0 auto; padding:16px; }
+  main { max-width:1240px; margin:0 auto; padding:16px; }
   h1 { font-size:20px; margin:0 0 12px; }
   h2 { font-size:15px; margin:16px 0 8px; }
   button, select, input { font:inherit; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:6px; padding:5px 8px; }
@@ -78,6 +78,7 @@
   .moves { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
   .mv { display:flex; align-items:center; gap:7px; text-align:left; font-weight:600; padding:4px 8px 4px 5px; border-radius:8px; white-space:nowrap;
         background:color-mix(in srgb, var(--t) 14%, var(--card)); border:1px solid color-mix(in srgb, var(--t) 40%, var(--line)); }
+  .moves.ro { margin-top:10px; gap:5px; } .mv.ro { font-size:12.6px; padding:3px 7px 3px 4px; gap:6px; } .mv.ro .ti { width:18px; height:18px; }
   .mv em { margin-left:auto; font-style:normal; font-size:11px; color:var(--mute); }
   .mv.sel { outline:2px solid var(--acc); }
   .log h3 { font-size:13px; margin:0 0 4px; } .log .p1 { color:var(--p1); font-weight:600; } .log .p2 { color:var(--p2); font-weight:600; }
@@ -260,7 +261,11 @@ function slotCard(slot, m, ctx) {
     el("div", {class: "bar"}, el("i", {class: pct < 25 ? "lo" : pct < 50 ? "mid" : "", style: `width:${pct}%`})),
     el("div", {class: "chips"}, m.status ? el("span", {class: "status"}, m.status) : null, stages, d ? el("span", {class: "dmg"}, `−${d.hp} (−${d.pct}%)`) : null),
     el("div", {class: "chips"}, el("span", {class: "pill"}, el("small", {}, "Item"), m.item ? pretty(m.item) : "—"),
-      el("span", {class: "pill"}, el("small", {}, "Ability"), m.ability ? pretty(m.ability) : "—")));
+      el("span", {class: "pill"}, el("small", {}, "Ability"), m.ability ? pretty(m.ability) : "—")),
+    el("div", {class: "moves ro"}, (m.moves || []).map((id) => {  // read-only: choosing happens in the Orders rail
+      const d = dex.moves[id] || {name: pretty(id), type: "normal"};
+      return el("div", {class: "mv ro", style: `--t:${typeColor(d.type)}`, title: `${d.type} · ${d.category || ""}`}, typeIcon(d.type), d.name);
+    })));
   return el("div", {class: cls.join(" ")}, el("div", {class: "gutter"}, m.types.map(typeIcon)), body);
 }
 const SLOT_OR_SPECIES = () => new RegExp(`\\b(p[12])([ab]) (${Object.keys(dex.species).sort((x, y) => y.length - x.length).join("|")})\\b|\\b(p[12])([ab])\\b`, "g");
