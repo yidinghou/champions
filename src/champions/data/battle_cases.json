@@ -2319,6 +2319,523 @@
      }
     ]
    }
+  },
+  {
+   "name": "a 90% move misses on a high accuracy roll",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Accuracy",
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "aquatail"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "chance": [
+    95
+   ],
+   "turns": [
+    {
+     "p1a": {
+      "move": "aquatail",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "order": [
+       "p1a:aquatail",
+       "p2a:tailwind"
+      ],
+      "missed": [
+       "p1a"
+      ]
+     }
+    ],
+    "final": {
+     "full": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a 90% move hits on a low accuracy roll",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Accuracy",
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "aquatail"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "chance": [
+    10
+   ],
+   "turns": [
+    {
+     "p1a": {
+      "move": "aquatail",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "missed": []
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a 90% move hits on a roll of 89 and misses on 90 (hit when roll < accuracy)",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Accuracy",
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "aquatail"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "chance": [
+    89,
+    90
+   ],
+   "turns": [
+    {
+     "p1a": {
+      "move": "aquatail",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "tailwind"
+     }
+    },
+    {
+     "p1a": {
+      "move": "aquatail",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "missed": []
+     },
+     {
+      "missed": [
+       "p1a"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "moves that never miss ignore accuracy",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Accuracy",
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "aerialace"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "chance": [
+    99.9
+   ],
+   "turns": [
+    {
+     "p1a": {
+      "move": "aerialace",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "missed": []
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "paralysis stops the move on a roll under 25",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Paralysis_(status_condition)",
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "status": "par"
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "chance": [
+    10
+   ],
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "paralyzed": [
+       "p1a"
+      ]
+     }
+    ],
+    "final": {
+     "full": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a paralyzed mon moves on a roll of 25 or more",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Paralysis_(status_condition)",
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "mudslap"
+      ],
+      "status": "par"
+     }
+    ],
+    "p2": [
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "chance": [
+    25
+   ],
+   "turns": [
+    {
+     "p1a": {
+      "move": "mudslap",
+      "target": "p2a"
+     },
+     "p2a": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "paralyzed": []
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a spread move hits both foes",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Damage#Number_of_targets",
+   "active": 2,
+   "chance": [
+    10,
+    10
+   ],
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "rockslide"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "kingambit",
+      "moves": [
+       "tailwind"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "rockslide"
+     },
+     "p1b": {
+      "move": "tailwind"
+     },
+     "p2a": {
+      "move": "tailwind"
+     },
+     "p2b": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "missed": []
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0",
+      "p2:1"
+     ],
+     "full": [
+      "p1:1"
+     ]
+    }
+   }
+  },
+  {
+   "name": "a spread move can miss one foe and hit the other",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Damage#Number_of_targets",
+   "active": 2,
+   "chance": [
+    10,
+    95
+   ],
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "rockslide"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "kingambit",
+      "moves": [
+       "tailwind"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "rockslide"
+     },
+     "p1b": {
+      "move": "tailwind"
+     },
+     "p2a": {
+      "move": "tailwind"
+     },
+     "p2b": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {
+      "missed": [
+       "p1a"
+      ]
+     }
+    ],
+    "final": {
+     "damaged": [
+      "p2:0"
+     ],
+     "full": [
+      "p2:1"
+     ]
+    }
+   }
+  },
+  {
+   "name": "Earthquake hits an ally in doubles",
+   "source": "https://bulbapedia.bulbagarden.net/wiki/Earthquake_(move)",
+   "active": 2,
+   "teams": {
+    "p1": [
+     {
+      "species": "garchomp",
+      "moves": [
+       "earthquake"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ],
+    "p2": [
+     {
+      "species": "kingambit",
+      "moves": [
+       "tailwind"
+      ]
+     },
+     {
+      "species": "incineroar",
+      "moves": [
+       "tailwind"
+      ]
+     }
+    ]
+   },
+   "turns": [
+    {
+     "p1a": {
+      "move": "earthquake"
+     },
+     "p1b": {
+      "move": "tailwind"
+     },
+     "p2a": {
+      "move": "tailwind"
+     },
+     "p2b": {
+      "move": "tailwind"
+     }
+    }
+   ],
+   "expect": {
+    "turns": [
+     {}
+    ],
+    "final": {
+     "damaged": [
+      "p1:1",
+      "p2:0",
+      "p2:1"
+     ],
+     "full": [
+      "p1:0"
+     ]
+    }
+   }
   }
  ]
 }

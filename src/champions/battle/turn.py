@@ -2,8 +2,8 @@
 
 Speed is re-evaluated after every action (Gen 8+), so Tailwind/Trick Room changes apply mid-turn.
 Fainted mons are replaced between turns (`pending_replacements` / `replace`); a side with no living mon loses.
-Not yet modeled: accuracy, full-paralysis, spread moves, abilities/items beyond Choice Scarf Speed, secondary
-effects. `moves.is_supported` is the gate: unsupported moves are rejected with ValueError before the turn runs.
+Accuracy, full-paralysis and spread moves are modeled; their coin flips come from `chance` (see Battle). Not yet
+modeled: abilities/items beyond Choice Scarf Speed, secondary effects, evasion/accuracy stages. `moves.is_supported` is the gate: unsupported moves are rejected with ValueError before the turn runs.
 """
 import random
 from dataclasses import dataclass, field as dc_field
@@ -11,12 +11,14 @@ from typing import List
 
 from ..calc import damage
 from ..lookup import norm
-from .moves import FIRST_TURN_ONLY, FLINCHES, all_moves, is_supported
+from .moves import FIRST_TURN_ONLY, FLINCHES, SPREAD, all_moves, is_supported
 from .state import make_field, make_pokemon
 
 SWITCH_PRIORITY = 100  # switches resolve before every move
 PROTECT, TRICK_ROOM, TAILWIND = "protect", "trickroom", "tailwind"
 TRICK_ROOM_TURNS, TAILWIND_TURNS = 5, 4  # both count the turn they are used
+FULL_PARALYSIS_PERCENT = 25
+SPREAD_MODIFIER_TARGETS = 2  # a spread move is x0.75 once it hits this many targets
 
 
 @dataclass
@@ -25,6 +27,8 @@ class TurnResult:
     flinched: List[str] = dc_field(default_factory=list)
     failed: List[str] = dc_field(default_factory=list)
     blocked: List[str] = dc_field(default_factory=list)  # attackers whose move hit a Protect
+    missed: List[str] = dc_field(default_factory=list)  # attackers whose move missed a target (once per target)
+    paralyzed: List[str] = dc_field(default_factory=list)  # attackers fully paralyzed this turn
     pending: List[str] = dc_field(default_factory=list)  # slots that need a replacement before the next turn
     log: List[str] = dc_field(default_factory=list)
     frames: List[dict] = dc_field(default_factory=list)  # {text, actor, target, state} per step, for scrubbing
@@ -46,13 +50,17 @@ def effective_speed(mon, side_tailwind):
 
 
 class Battle:
-    def __init__(self, teams, active=1, field=None, seed=0, rolls="random"):
+    def __init__(self, teams, active=1, field=None, seed=0, rolls="random", chance=None):
+        """`rolls` picks the damage roll. `chance` forces the percent rolls (0-100) for accuracy and full-paralysis
+        checks, consumed in order; once it runs out they come from the seeded rng. An accuracy check hits when
+        roll < accuracy, full-paralysis stops the move when roll < 25. Moves that cannot miss consume nothing."""
         self.teams = {side: [make_pokemon(s) for s in specs] for side, specs in teams.items()}
         self.slots = {f"{side}{'ab'[i]}": (side, i) for side in self.teams for i in range(active)}
         self.active = {slot: i for slot, (_, i) in self.slots.items()}  # slot -> team index; None = empty slot
         self.field = make_field(field)
         self.rng = random.Random(seed)
         self.rolls = rolls
+        self.chance = list(chance or [])
         self.moves = all_moves()
         self.turn_no = 0
         self.winner = None  # "p1", "p2", "draw" or None
@@ -85,6 +93,16 @@ class Battle:
     def _priority(self, action):
         return SWITCH_PRIORITY if "switch" in action else self.moves[norm(action["move"])]["priority"]
 
+    def _percent(self):
+        return self.chance.pop(0) if self.chance else self.rng.random() * 100
+
+    def _hits(self, accuracy):
+        return accuracy is True or accuracy >= 100 or self._percent() < accuracy
+
+    def _foes(self, slot):
+        side = self.slots[slot][0]
+        return [s for s in self.slots if self.slots[s][0] != side and self._alive(s)]
+
     # -- what the UI may offer -----------------------------------------------------------------------------
     def legal_actions(self, slot):
         empty = {"moves": [], "switches": []}
@@ -96,7 +114,7 @@ class Battle:
                 continue
             data = self.moves[move_id]
             targets = None
-            if data["category"] != "Status":
+            if data["category"] != "Status" and data["target"] not in SPREAD:
                 targets = [s for s in self.slots if s != slot and self._alive(s)
                            and (data["target"] != "adjacentFoe" or self.slots[s][0] != side)]
             moves.append({"move": move_id, "name": data["name"], "type": data["type"], "category": data["category"],
@@ -203,19 +221,43 @@ class Battle:
             return f"{slot} {mon.species} used {move['name']}, but it failed", None
         if move["category"] == "Status":
             return self._status_move(slot, mon, move_id, res), None
-        target_slot = action["target"]
-        if not self._alive(target_slot):
-            target_slot = self._retarget(slot, target_slot)
-            if target_slot is None:
+        if mon.status == "par" and self._percent() < FULL_PARALYSIS_PERCENT:
+            res.paralyzed.append(slot)
+            return f"{slot} {mon.species} is fully paralyzed and couldn't move", None
+        if move["target"] in SPREAD:
+            targets = self._foes(slot) + ([s for s in self.slots if s != slot and self.slots[s][0] == self.slots[slot][0]
+                                           and self._alive(s)] if move["target"] == "allAdjacent" else [])
+            if not targets:
                 return f"{slot} {mon.species} used {move['name']}, but there was no target", None
+        else:
+            target_slot = action["target"]
+            if not self._alive(target_slot):
+                target_slot = self._retarget(slot, target_slot)
+                if target_slot is None:
+                    return f"{slot} {mon.species} used {move['name']}, but there was no target", None
+            targets = [target_slot]
+        hit, notes = [], []
+        for target_slot in targets:
+            target = self.mon(target_slot)
+            if target.protected and "protect" in move["flags"]:
+                res.blocked.append(slot)
+                notes.append(f"{target_slot} {target.species} protected itself from {move['name']}")
+            elif not self._hits(move["accuracy"]):
+                res.missed.append(slot)
+                notes.append(f"{slot} {mon.species}'s {move['name']} missed {target_slot} {target.species}")
+            else:
+                hit.append(target_slot)
+        spread = move["target"] in SPREAD and len(hit) >= SPREAD_MODIFIER_TARGETS
+        for target_slot in hit:
+            notes.append(self._hit(slot, mon, move_id, move, target_slot, spread, moved))
+        return "; ".join(notes), (hit or targets)[0]
+
+    def _hit(self, slot, mon, move_id, move, target_slot, spread, moved):
         target = self.mon(target_slot)
-        if target.protected and "protect" in move["flags"]:
-            res.blocked.append(slot)
-            return f"{target_slot} {target.species} protected itself from {move['name']}", target_slot
         rolls, _, _, _ = damage(mon.species, move_id, target.species, atk_nature=mon.nature, atk_sp=self._sp(mon),
                                 def_nature=target.nature, def_sp=self._sp(target), item=mon.item,
                                 ability=mon.ability, def_ability=target.ability, def_item=target.item,
-                                doubles=len(self.slots) > 2)
+                                doubles=len(self.slots) > 2, spread=spread)
         dealt = self.rng.choice(rolls) if self.rolls == "random" else {"max": max, "min": min}[self.rolls](rolls)
         dealt = min(dealt, target.hp)
         target.hp -= dealt
@@ -224,7 +266,7 @@ class Battle:
             text += "; it fainted"
         elif move_id in FLINCHES and dealt and id(target) not in moved:
             target.flinched = True
-        return text, target_slot
+        return text
 
     @staticmethod
     def _sp(mon):
