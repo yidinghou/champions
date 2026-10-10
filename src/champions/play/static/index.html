@@ -22,8 +22,10 @@
   .row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:6px; }
   .sides { display:grid; grid-template-columns:1fr 1fr; gap:12px; } @media (max-width:700px) { .sides { grid-template-columns:1fr; } }
   .p1 h2 { color:var(--p1); } .p2 h2 { color:var(--p2); }
-  .slot { border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; }
-  .slot.empty { color:var(--mute); } .slot.fainted { opacity:.5; }
+  .p1 { --side:var(--p1); } .p2 { --side:var(--p2); }
+  .slot { display:grid; grid-template-columns:44px 1fr; background:var(--card); border:1px solid var(--line); border-left:6px solid var(--side);
+          border-radius:10px; overflow:hidden; margin-bottom:8px; }
+  .slot.empty { display:block; padding:10px; color:var(--mute); border-style:dashed; } .slot.fainted { opacity:.5; filter:grayscale(.8); }
   .slot.actor { outline:2px solid var(--acc); } .slot.target { outline:2px dashed var(--p2); }
   .bar { height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin:4px 0; }
   .bar > i { display:block; height:100%; background:var(--hp-hi); } .bar > i.mid { background:var(--hp-mid); } .bar > i.lo { background:var(--hp-lo); }
@@ -32,8 +34,7 @@
   .log div.on { font-weight:600; color:var(--acc); }
   .hidden { display:none; }
   /* type badges: one colour per type, shared by setup and battle screens */
-  .type { display:inline-block; font-size:11px; font-weight:600; letter-spacing:.02em; text-transform:uppercase; color:#fff;
-          border-radius:4px; padding:1px 6px; background:var(--t, #777); }
+  .ti { width:22px; height:22px; flex:none; vertical-align:middle; }
   /* setup: one card per Pokémon, labelled fields on a fixed grid */
   .mon-card { border:1px solid var(--line); border-radius:8px; padding:10px; margin-bottom:10px; }
   .mon-head { display:flex; gap:6px; align-items:center; margin-bottom:8px; }
@@ -46,20 +47,27 @@
   .field.invalid input { border-color:var(--p2); }
   .moves-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 8px; }
   .moves-grid select { width:100%; border-left:4px solid var(--t, var(--line)); }
-  /* battle: cards carry their own move buttons; log reads in mon names */
-  .slot .name { font-weight:700; font-size:16px; }
-  .slot .hpline { display:flex; justify-content:space-between; font-size:13px; }
-  .slot .bar { height:14px; border-radius:7px; }
-  .slot .bar > i { transition:width .3s; }
+  /* battle card: type icons in a left gutter, then name, HP, status/stages, item and ability, moves */
+  .gutter { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:8px 0; background:var(--bg); border-right:1px solid var(--line); }
+  .gutter .ti { width:28px; height:28px; }
+  .slot .body { padding:12px; min-width:0; }
+  .slot .head { display:flex; align-items:baseline; gap:8px; } .slot .name { font-weight:700; font-size:17px; }
+  .slot .pct { margin-left:auto; font-size:26px; font-weight:800; line-height:1; text-align:right; } .slot .pct small { display:block; font-size:12px; font-weight:500; color:var(--mute); margin-top:2px; }
+  .slot .bar { height:14px; border-radius:7px; margin:10px 0 8px; } .slot .bar > i { transition:width .3s; }
   .slot.targeted { outline:2px dashed var(--p2); }
-  .dmg { font-weight:700; color:var(--hp-lo); font-size:13px; }
-  .slot .acts { margin-top:8px; border-top:1px solid var(--line); padding-top:8px; }
-  .acts .label { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--mute); margin:6px 0 3px; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; align-items:center; min-height:4px; } .chips + .chips { margin-top:8px; }
+  .pill { display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; border:1px solid var(--line); border-radius:999px; padding:2px 9px; background:var(--bg); white-space:nowrap; }
+  .pill small { font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--mute); }
+  .stage { font-size:12px; font-weight:800; border-radius:4px; padding:1px 7px; border:1.5px solid; } .stage.up { color:var(--hp-hi); } .stage.down { color:var(--hp-lo); }
+  .status { font-size:12px; font-weight:800; color:#fff; border-radius:4px; padding:1px 7px; background:#d4a017; text-transform:uppercase; }
+  .dmg { margin-left:auto; font-weight:800; color:var(--hp-lo); }
+  .moves { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px; }
+  .mv { display:flex; align-items:center; gap:7px; text-align:left; font-weight:600; padding:4px 8px 4px 5px; border-radius:8px; white-space:nowrap;
+        background:color-mix(in srgb, var(--t) 14%, var(--card)); border:1px solid color-mix(in srgb, var(--t) 40%, var(--line)); }
+  .mv em { margin-left:auto; font-style:normal; font-size:11px; color:var(--mute); }
+  .mv.sel { outline:2px solid var(--acc); }
+  .acts .label { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--mute); margin:8px 0 3px; }
   .acts .btns { display:flex; flex-wrap:wrap; gap:6px; }
-  button.move { border-left:5px solid var(--t, var(--line)); text-align:left; padding:4px 8px; }
-  button.move small { display:block; font-size:11px; color:var(--mute); }
-  button.sel { outline:2px solid var(--acc); background:color-mix(in srgb, var(--acc) 12%, var(--card)); }
-  button.chip.p1 { border-color:var(--p1); } button.chip.p2 { border-color:var(--p2); }
   .log h3 { font-size:13px; margin:0 0 4px; } .log .p1 { color:var(--p1); font-weight:600; } .log .p2 { color:var(--p2); font-weight:600; }
   .banner { font-size:18px; font-weight:700; text-align:center; padding:10px; border-radius:8px; margin-bottom:12px; color:#fff; background:var(--acc); }
   .setup-bar { position:sticky; top:0; z-index:1; background:var(--card); padding-bottom:8px; }
@@ -96,11 +104,11 @@ let dex = null, view = null, frameIdx = null, teams = {p1: [], p2: []}, active =
 function option(value, label, selected) { const o = el("option", {value}, label ?? value); o.selected = !!selected; return o; }
 function select(options, value, onchange) { const s = el("select", {onchange}, options.map(([v, l]) => option(v, l, v === value))); return s; }
 
-const TYPE_COLORS = {normal:"#8a8a78", fire:"#e8590c", water:"#3b7be8", electric:"#d4a017", grass:"#3f9b3f", ice:"#4bb5c4",
-  fighting:"#b8322c", poison:"#9a3fa0", ground:"#b8923c", flying:"#7a8be0", psychic:"#e0457b", bug:"#8a9a1c", rock:"#9a8530",
-  ghost:"#6a4c93", dragon:"#5a3fd6", dark:"#5a4636", steel:"#7a8a9a", fairy:"#d97ab0"};
+const TYPE_COLORS = {bug:"#a09f28", grass:"#439a3b", fairy:"#e28ce1", normal:"#828283", dragon:"#576fc0", psychic:"#e96c8f", ghost:"#714470", ground:"#a3743c",
+  steel:"#6bacc8", fire:"#e4613e", flying:"#74acd2", ice:"#49c8c9", electric:"#e0bc2d", rock:"#a9a581", dark:"#4e4747", water:"#329ae3", fighting:"#e69123", poison:"#9454cc"};
 const typeColor = (t) => TYPE_COLORS[String(t).toLowerCase()] || "#777";
-const typeBadge = (t) => el("span", {class: "type", style: `--t:${typeColor(t)}`}, t);
+const typeIcon = (t) => el("img", {class: "ti", src: `/icons/${String(t).toLowerCase()}.png`, alt: t, title: t});
+const STAGE_ABBR = {attack: "Atk", defense: "Def", "special-attack": "SpA", "special-defense": "SpD", speed: "Spe"};
 const pretty = (slug) => slug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");  // froslass-mega -> Froslass Mega
 function field(label, control, cls) { return el("label", {class: "field" + (cls ? " " + cls : "")}, el("span", {}, label), control); }
 
@@ -132,7 +140,7 @@ function monEditor(side, m, i) {
     return Object.keys(dex.species).find((id) => id === t || pretty(id).toLowerCase() === t);
   };
   const card = el("div", {class: "mon-card"});
-  const types = el("span", {class: "types"}, dex.species[m.species].types.map(typeBadge));
+  const types = el("span", {class: "types"}, dex.species[m.species].types.map(typeIcon));
   const input = el("input", {class: "species", value: pretty(m.species), placeholder: "Species", autocomplete: "off",
     onchange: (e) => {
       const id = byLabel(e.target.value);
@@ -232,14 +240,16 @@ function slotCard(slot, m, ctx) {
   if (ctx.targeted.has(slot)) cls.push("targeted");
   if (!m) return el("div", {class: cls.join(" ")}, `${slot}: empty`);
   const pct = Math.round(100 * m.hp / m.max_hp), d = ctx.diff[slot];
-  const card = el("div", {class: cls.join(" ")},
-    el("div", {class: "row"}, el("span", {class: "name"}, pretty(m.species)), el("span", {class: "mute"}, slot), m.types.map(typeBadge),
-      m.status ? el("span", {class: "tag"}, m.status) : null, el("span", {class: "mute"}, `Spe ${m.speed}`)),
+  const stages = Object.entries(m.boosts).filter(([, v]) => v).map(([k, v]) => el("span", {class: "stage " + (v > 0 ? "up" : "down")}, `${STAGE_ABBR[k]} ${v > 0 ? "+" : ""}${v}`));
+  const body = el("div", {class: "body"},
+    el("div", {class: "head"}, el("span", {class: "name"}, pretty(m.species)), el("span", {class: "mute"}, slot),
+      el("span", {class: "pct"}, `${pct}%`, el("small", {}, `${m.hp}/${m.max_hp}`))),
     el("div", {class: "bar"}, el("i", {class: pct < 25 ? "lo" : pct < 50 ? "mid" : "", style: `width:${pct}%`})),
-    el("div", {class: "hpline"}, el("span", {}, `${m.hp}/${m.max_hp} · ${pct}%`, m.item ? ` · ${pretty(m.item)}` : ""),
-      d ? el("span", {class: "dmg"}, `−${d.hp} (−${d.pct}%)`) : null));
-  if (ctx.canAct && view.legal[slot] && (view.legal[slot].moves.length || view.legal[slot].switches.length)) card.append(actionPicker(slot, view.legal[slot]));
-  return card;
+    el("div", {class: "chips"}, m.status ? el("span", {class: "status"}, m.status) : null, stages, d ? el("span", {class: "dmg"}, `−${d.hp} (−${d.pct}%)`) : null),
+    el("div", {class: "chips"}, el("span", {class: "pill"}, el("small", {}, "Item"), m.item ? pretty(m.item) : "—"),
+      el("span", {class: "pill"}, el("small", {}, "Ability"), m.ability ? pretty(m.ability) : "—")));
+  if (ctx.canAct && view.legal[slot] && (view.legal[slot].moves.length || view.legal[slot].switches.length)) body.append(actionPicker(slot, view.legal[slot]));
+  return el("div", {class: cls.join(" ")}, el("div", {class: "gutter"}, m.types.map(typeIcon)), body);
 }
 const SLOT_OR_SPECIES = () => new RegExp(`\\b(p[12])([ab]) (${Object.keys(dex.species).sort((x, y) => y.length - x.length).join("|")})\\b|\\b(p[12])([ab])\\b`, "g");
 function fmtLog(text) {  // "p2b noivern used X on p1a froslass-mega" -> colored "Noivern used X on Froslass Mega"
@@ -293,11 +303,10 @@ function ensurePick(slot, legal) {
 }
 function actionPicker(slot, legal) {
   const pick = picks[slot], box = el("div", {class: "acts"});
-  const moves = el("div", {class: "btns"}, legal.moves.map((x) => el("button", {
-    class: "move" + (pick.kind === "move:" + x.move ? " sel" : ""), style: `--t:${typeColor(x.type)}`,
+  box.append(el("div", {class: "moves"}, legal.moves.map((x) => el("button", {
+    class: "mv" + (pick.kind === "move:" + x.move ? " sel" : ""), style: `--t:${typeColor(x.type)}`, title: `${x.type} · ${x.category}`,
     onclick: () => { pick.kind = "move:" + x.move; pick.target = undefined; show(); }},
-    x.name, el("small", {}, `${x.type} · ${x.category}${x.priority ? ` · ${x.priority > 0 ? "+" : ""}${x.priority}` : ""}`))));
-  box.append(el("div", {class: "label"}, "Move"), moves);
+    typeIcon(x.type), x.name, x.priority ? el("em", {}, `${x.priority > 0 ? "+" : ""}${x.priority}`) : null))));
   const mv = pick.kind.startsWith("move:") && legal.moves.find((x) => "move:" + x.move === pick.kind);
   if (mv && mv.targets) {
     box.append(el("div", {class: "label"}, "Target"), el("div", {class: "btns"}, mv.targets.map((t) => el("button", {
