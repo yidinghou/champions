@@ -13,7 +13,7 @@ body:
     id: scenarios
     attributes:
       label: Scenarios to write first
-      description: One line per `battle_cases.json` case, named like the cases there. These are the acceptance criteria.
+      description: One line per test in `tests/test_battle_cases.py`, named like the test methods there. These are the acceptance criteria.
       placeholder: "- Fake Out fails after the user's first turn out"
     validations:
       required: true
