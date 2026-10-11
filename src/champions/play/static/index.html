@@ -123,6 +123,7 @@ const typeColor = (t) => TYPE_COLORS[String(t).toLowerCase()] || "#777";
 const typeIcon = (t) => el("img", {class: "ti", src: `/icons/${String(t).toLowerCase()}.png`, alt: t, title: t});
 const STAGE_ABBR = {attack: "Atk", defense: "Def", "special-attack": "SpA", "special-defense": "SpD", speed: "Spe"};
 const pretty = (slug) => slug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");  // froslass-mega -> Froslass Mega
+let scenarios = [], pickedScenario = null;  // battle tests loadable from a source checkout (empty otherwise)
 function field(label, control, cls) { return el("label", {class: "field" + (cls ? " " + cls : "")}, el("span", {}, label), control); }
 
 // ---- setup ------------------------------------------------------------------------------------------------
@@ -138,6 +139,14 @@ function renderSetup() {
     el("span", {style: "flex:1"}),
     el("button", {onclick: () => { teams = {p1: [], p2: []}; fillTeams(); renderSetup(); }}, "Randomize teams"),
     el("button", {class: "primary", onclick: start}, "Start battle")));
+  if (scenarios.length) {
+    const groups = [...new Set(scenarios.map((x) => x.group))];
+    const pick = el("select", {onchange: (e) => { pickedScenario = e.target.value; }}, groups.map((g) =>
+      el("optgroup", {label: g}, scenarios.filter((x) => x.group === g).map((x) => option(x.id, x.name, x.id === pickedScenario)))));
+    pickedScenario = pickedScenario || pick.value;
+    box.append(el("div", {class: "row setup-bar"}, field("Battle test", pick),
+      el("button", {onclick: () => loadScenario(pickedScenario)}, "Load test")));
+  }
   const sides = el("div", {class: "sides"});
   for (const side of ["p1", "p2"]) {
     const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"));
@@ -191,6 +200,11 @@ async function start() {
   } catch (e) { fail(e); }
 }
 
+async function loadScenario(id) {
+  $("err").textContent = "";
+  try { view = await api("/api/scenario", {id}); frameIdx = null; picks = {}; openSlot = null; show(); } catch (e) { fail(e); }
+}
+
 // ---- battle -----------------------------------------------------------------------------------------------
 let openSlot = null;
 function show() {
@@ -216,6 +230,16 @@ function show() {
     el("button", {onclick: () => act(() => api("/api/restart", {}))}, "Restart"),
     el("button", {onclick: () => { view = {started: false}; show(); }}, "New game"))));
 
+  if (view.script) {
+    const sc = scenarios.find((x) => x.id === view.script.name) || {};
+    const sp = view.script;
+    g.append(el("div", {class: "card"},
+      el("div", {class: "row"}, el("strong", {}, `${sc.group || "Battle test"}: ${sc.name || sp.name}`), el("span", {style: "flex:1"}),
+        el("span", {class: "mute"}, sp.done == null ? "off script" : `turn ${sp.done} of ${sp.length} played`),
+        el("button", {class: "primary", disabled: !sp.can_step || playing, onclick: () => act(() => api("/api/step", {}))}, "Step ▶")),
+      sc.source ? el("div", {class: "mute"}, sc.source) : null,
+      sc.error ? el("div", {class: "err"}, `this test fails: ${sc.error}`) : null));
+  }
   const sides = el("div", {class: "field"});  // opponent on top, you below, like the game
   for (const side of ["p2", "p1"]) {
     const col = el("div", {class: side}, el("h2", {}, side === "p1" ? "Player 1" : "Player 2"),
@@ -405,6 +429,7 @@ function playFrames() {  // step through the last turn's frames so each hit is v
 (async () => {
   try {
     dex = await api("/api/dex");
+    try { scenarios = (await api("/api/scenarios")).scenarios; } catch { scenarios = []; }
     view = await api("/api/state");
     show();
   } catch (e) { fail(e); }
