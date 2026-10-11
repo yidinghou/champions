@@ -40,7 +40,13 @@ def _clean_config(raw):
     field = raw.get("field")
     if field is not None and not isinstance(field, dict):
         raise ValueError("'field' must be an object")
-    return {"teams": teams, "active": active, "seed": seed, "field": field}
+    chance = raw.get("chance")
+    if chance is not None and not (isinstance(chance, list) and all(isinstance(c, (int, float)) and not isinstance(c, bool) for c in chance)):
+        raise ValueError("'chance' must be a list of percents")
+    rolls = raw.get("rolls", "random")
+    if rolls not in ("random", "max", "min"):
+        raise ValueError("'rolls' must be random, max or min")
+    return {"teams": teams, "active": active, "seed": seed, "field": field, "chance": chance, "rolls": rolls}
 
 
 class Session:
@@ -49,11 +55,13 @@ class Session:
         self.history = []  # {"turn": actions} or {"replace": {slot: team_index}}
         self.battle = None
         self._last = None  # the latest TurnResult, for its frames
+        self.script = None  # {"name", "entries"}: a recorded scenario you can step through (see load/step)
 
     # -- building ------------------------------------------------------------------------------------------
     @staticmethod
     def _build(config):
-        return Battle(config["teams"], active=config["active"], field=config["field"], seed=config["seed"])
+        return Battle(config["teams"], active=config["active"], field=config["field"], seed=config["seed"],
+                      chance=config.get("chance"), rolls=config.get("rolls", "random"))
 
     @staticmethod
     def _apply(battle, entry):
@@ -77,8 +85,22 @@ class Session:
     def new(self, raw):
         config = _clean_config(raw)
         battle = _guard(lambda: self._build(config))  # a bad team must not replace the running game
-        self.config, self.history, self.battle, self._last = config, [], battle, None
+        self.config, self.history, self.battle, self._last, self.script = config, [], battle, None, None
         return self.view()
+
+    def load(self, name, raw_config, entries):
+        """Start a recorded scenario at turn 0; `step()` plays its entries one at a time (undo steps back)."""
+        self.new(raw_config)
+        self.script = {"name": name, "entries": list(entries)}
+        return self.view()
+
+    def step(self):
+        self._require()
+        entries = self.script["entries"] if self.script else []
+        n = len(self.history)
+        if n >= len(entries) or self.history != entries[:n]:
+            raise ValueError("no scripted turn to play")
+        return self._record(entries[n])
 
     def turn(self, actions):
         self._require()
@@ -123,6 +145,11 @@ class Session:
         out = {"started": True, "snapshot": b.snapshot(), "pending": b.pending_replacements(), "winner": b.winner,
                "legal": {slot: b.legal_actions(slot) for slot in b.slots}, "history": len(self.history),
                "config": self.config}
+        if self.script:
+            entries, n = self.script["entries"], len(self.history)
+            on_script = self.history == entries[:n]
+            out["script"] = {"name": self.script["name"], "length": len(entries), "done": n if on_script else None,
+                             "can_step": on_script and n < len(entries)}
         if self._last is not None:
             out.update({k: v for k, v in asdict(self._last).items() if k != "pending"})
         return out

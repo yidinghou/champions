@@ -224,5 +224,56 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(self.api("/icons/..%2Findex.png")[0], 404)
 
 
+class ScenarioTests(unittest.TestCase):
+    """Every battle test in tests/test_battle_cases.py can be loaded into `champions play` and stepped through
+    to the same state the test itself reached (so what you examine in the browser is what the test asserts on)."""
+
+    @classmethod
+    def setUpClass(cls):
+        from champions.play import scenarios
+        cls.scenarios = scenarios.collect()
+
+    def test_every_battle_test_is_loadable_and_passes(self):
+        self.assertGreaterEqual(len(self.scenarios), 46)
+        self.assertEqual([s["id"] for s in self.scenarios if s["error"]], [])
+
+    def test_stepping_a_scenario_reproduces_the_tests_final_state(self):
+        for sc in self.scenarios:
+            with self.subTest(sc["id"]):
+                s = Session()
+                v = s.load(sc["id"], sc["config"], sc["history"])
+                self.assertEqual((v["history"], v["script"]["length"]), (0, len(sc["history"])))
+                while v["script"]["can_step"]:
+                    v = s.step()
+                self.assertEqual(v["script"]["done"], len(sc["history"]))
+                self.assertEqual(v["snapshot"], sc["battle"].snapshot())
+
+    def test_undo_steps_back_and_deviating_ends_the_script(self):
+        sc = next(x for x in self.scenarios if x["id"] == "TrickRoom.test_lasts_5_turns_counting_the_turn_it_was_used")
+        s = Session()
+        s.load(sc["id"], sc["config"], sc["history"])
+        s.step(), s.step()
+        self.assertEqual(s.undo()["script"]["done"], 1)
+        self.assertEqual(s.step()["script"]["done"], 2)
+        v = s.turn({"p1a": {"move": "trickroom"}, "p2a": {"move": "mudslap", "target": "p1a"}})  # script has mudslap
+        self.assertIsNone(v["script"]["done"], "an off-script turn leaves the recording")
+        with self.assertRaisesRegex(ValueError, "scripted"):
+            s.step()
+
+
+class ScenarioServerTests(ServerTests):
+    def test_list_load_and_step_over_http(self):
+        status, listing = self.api("/api/scenarios")
+        self.assertEqual(status, 200)
+        sc = next(x for x in listing["scenarios"] if x["id"] == "Accuracy.test_90_percent_move_misses_on_a_high_roll")
+        self.assertEqual((sc["group"], sc["turns"]), ("Accuracy", 1))
+        status, v = self.api("/api/scenario", {"id": sc["id"]})
+        self.assertEqual((status, v["history"], v["script"]["can_step"]), (200, 0, True))
+        status, v = self.api("/api/step", {})
+        self.assertEqual((status, v["missed"]), (200, ["p1a"]))
+        self.assertEqual(self.api("/api/step", {})[0], 400, "script exhausted")
+        self.assertEqual(self.api("/api/scenario", {"id": "Nope.test_x"})[0], 400)
+
+
 if __name__ == "__main__":
     unittest.main()

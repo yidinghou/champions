@@ -42,4 +42,10 @@ class Accuracy(BattleTest):
 Pick test moves that cannot KO or be immune (Mud Slap is the default). A Normal-type Fake Out does nothing to a
 Ghost, which bit the first draft.
 
+## Watching a test in `champions play`
+From a source checkout, `champions play` lists every test here under **Battle test** on the setup screen. Load one
+and press **Step ▶** to play its recorded turns one at a time (Undo steps back; playing your own turn leaves the
+script). The first `Battle` a test builds is the one shown, with its forced `chance` rolls and seed. Outside a
+checkout the picker is hidden.
+
 Run locally without installing: `PYTHONPATH=src python3 -m unittest discover -s tests -t . -v`

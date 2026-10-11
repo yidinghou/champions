@@ -8,6 +8,8 @@ POST /api/new        {teams: {p1: [...], p2: [...]}, active: 1|2, seed?, field?}
 POST /api/turn       {actions: {slot: {move, target} | {switch}}}
 POST /api/replace    {replacements: {slot: team_index}}
 POST /api/undo, /api/restart
+GET  /api/scenarios  battle tests from tests/test_battle_cases.py that can be loaded (400 outside a source checkout)
+POST /api/scenario   {id}: start that test's battle at turn 0; POST /api/step plays its next recorded turn
 Every error is `{"error": text}` with HTTP 400 (404 for unknown routes), never a traceback.
 """
 import argparse
@@ -19,6 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from ..battle.dex import dex
+from . import scenarios
 from .session import Session
 
 STATIC = Path(__file__).parent / "static"
@@ -79,15 +82,35 @@ class Handler(BaseHTTPRequestHandler):
         with self.server.lock:
             return fn(self.server.session)
 
+    def _scenarios(self):
+        with self.server.lock:  # first call runs the test suite once; the result is cached
+            if self.server.scenarios is None:
+                self.server.scenarios = {s["id"]: s for s in scenarios.collect()}
+            return self.server.scenarios
+
+    def _list_scenarios(self):
+        return {"scenarios": [{k: s[k] for k in ("id", "group", "name", "source", "error")} | {"turns": len(s["history"])}
+                              for s in self._scenarios().values()]}
+
+    def _load_scenario(self):
+        sid = self._read_json().get("id")
+        found = self._scenarios().get(sid)
+        if found is None:
+            raise ValueError(f"unknown scenario: {sid}")
+        return self._locked(lambda s: s.load(found["id"], found["config"], found["history"]))
+
     GET = {
         "/": lambda h: (PAGE.read_bytes(), "text/html; charset=utf-8"),
         "/api/dex": lambda h: dex(),
         "/api/state": lambda h: h._locked(lambda s: s.view()),
+        "/api/scenarios": lambda h: h._list_scenarios(),
     }
     POST = {
         "/api/new": lambda h: h._locked(lambda s: s.new(h._read_json())),
         "/api/turn": lambda h: h._locked(lambda s: s.turn(h._read_json().get("actions"))),
         "/api/replace": lambda h: h._locked(lambda s: s.replace(h._read_json().get("replacements"))),
+        "/api/scenario": lambda h: h._load_scenario(),
+        "/api/step": lambda h: h._locked(lambda s: s.step()),
         "/api/undo": lambda h: h._locked(lambda s: s.undo()),
         "/api/restart": lambda h: h._locked(lambda s: s.restart()),
     }
@@ -104,7 +127,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def make_server(port=8000, host="127.0.0.1"):
     server = ThreadingHTTPServer((host, port), Handler)
-    server.session, server.lock = Session(), threading.Lock()
+    server.session, server.lock, server.scenarios = Session(), threading.Lock(), None
     return server
 
 
