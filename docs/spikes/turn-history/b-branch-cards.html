@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>B · Branching timeline cards</title><link rel="stylesheet" href="shared.css">
+<style>
+ .tl{display:grid;grid-template-columns:90px 1fr;gap:0}
+ .gutter svg{display:block}
+ .rows{display:flex;flex-direction:column;gap:8px}
+ .row{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;height:64px;overflow:hidden;transition:height .15s}
+ .row.on{border-color:var(--sel);box-shadow:0 0 0 1px var(--sel);height:auto}
+ .row.alt{border-style:dashed;border-color:var(--alt)}
+ .head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.head b{font-size:13px}
+ .bars{display:flex;gap:14px;margin:6px 0 2px;font-size:12px}
+ .bar{width:90px;height:6px;background:var(--line);border-radius:3px;display:inline-block;vertical-align:middle;margin:0 6px}
+ .bar i{display:block;height:100%;border-radius:3px}
+ .body{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
+ .body div{margin:1px 0}
+ .row:not(.on) .body{display:none}.row:not(.on) .bars{margin-top:2px}
+</style></head><body><main>
+<h1>B · Branching timeline cards</h1>
+<p class="sub">Git-graph style: a lane on the left, one card per turn on the right. Each node carries what happened (summary, HP, field) and the selected one opens its full log inline, so there is no separate scrubber or log pane.</p>
+<div class="tl"><div class="gutter"><svg id="g" width="90"></svg></div><div class="rows" id="rows"></div></div>
+<div class="note">Rows are collapsed to one line of state; the selected row expands. The purple dashed card is the branch from turn 2.</div>
+</main>
+<script src="shared.js"></script>
+<script>
+let sel="t2";
+const order=["s0","t1","t2","t3","b3","t4"], H=72; // row height incl. gap for collapsed rows
+function lane(id){return NODES[id].alt?1:0}
+function render(){
+  const rows=document.getElementById("rows");
+  rows.innerHTML=order.map(id=>{const n=NODES[id];
+    return `<div class="row ${id===sel?"on":""} ${n.alt?"alt":""}" data-id="${id}">
+      <div class="head"><b>${n.turn?"Turn "+n.turn+" · "+n.label:"Start"}</b>${n.field?n.field.map(f=>`<span class="tag">${f}</span>`).join(""):""}${n.win?'<span class="tag sel">p1 wins</span>':""}${n.alt?'<span class="tag">branch</span>':""}</div>
+      <div class="bars"><span class="p1">Incineroar</span><span class="bar"><i style="width:${n.hp[0]}%;background:var(--p1)"></i></span>${n.hp[0]}%
+        <span class="p2" style="margin-left:10px">Garchomp</span><span class="bar"><i style="width:${n.hp[1]}%;background:var(--p2)"></i></span>${n.hp[1]}%</div>
+      <div class="body">${n.lines.map(l=>`<div>${lineHtml(l)}</div>`).join("")}</div></div>`}).join("");
+  rows.querySelectorAll(".row").forEach(r=>r.onclick=()=>{sel=r.dataset.id;render()});
+  // gutter: measure rendered rows so the lane lines up with the cards
+  const rs=[...rows.children], top=rows.getBoundingClientRect().top, svg=document.getElementById("g");
+  const y=id=>{const r=rs[order.indexOf(id)].getBoundingClientRect();return r.top-top+22}, x=id=>20+lane(id)*36;
+  svg.setAttribute("height",rows.offsetHeight);let h="";
+  for(const id of order){const n=NODES[id];if(!n.parent)continue;
+    h+=`<path d="M${x(n.parent)} ${y(n.parent)} C ${x(n.parent)} ${y(id)}, ${x(id)} ${y(n.parent)}, ${x(id)} ${y(id)}" fill="none" stroke="${n.alt?"var(--alt)":"var(--line)"}" stroke-width="2" ${n.alt?'stroke-dasharray="5 4"':""}/>`}
+  // main lane skip: t2 -> t3 -> t4 must connect past the branch row
+  for(const id of order){h+=`<circle cx="${x(id)}" cy="${y(id)}" r="7" fill="${id===sel?"var(--sel)":"var(--card)"}" stroke="${NODES[id].alt?"var(--alt)":id===sel?"var(--sel)":"var(--mute)"}" stroke-width="2"/>`}
+  svg.innerHTML=h;
+}
+render();
+</script></body></html>

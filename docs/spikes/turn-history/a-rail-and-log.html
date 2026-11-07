@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A · Rail + shared log</title><link rel="stylesheet" href="shared.css">
+<style>
+ .rail{overflow-x:auto}.rail svg{display:block;min-width:720px}
+ .node{cursor:pointer}.node circle{fill:var(--card);stroke:var(--line);stroke-width:2}.node.on circle{stroke:var(--sel);fill:var(--sel)}
+ .node.alt circle{stroke:var(--alt)}.node.dim{opacity:.55}
+ .log h3{margin:0 0 8px;font-size:13px}.turn{border-left:3px solid var(--line);padding:4px 0 4px 12px;margin:0 0 10px;cursor:pointer}
+ .turn.on{border-color:var(--sel);background:color-mix(in srgb,var(--sel) 8%,transparent);border-radius:0 8px 8px 0}
+ .turn.future{opacity:.4}.turn h4{margin:0 0 2px;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+ .turn div.l{margin:0}
+</style></head><body><main>
+<h1>A · Rail + shared log</h1>
+<p class="sub">One horizontal DAG of turns. Branches fork when you undo and try something else. The whole battle's log lives below in one place; the selected turn is highlighted and the rest stay visible.</p>
+<div class="card rail"><svg id="rail" height="150"></svg></div>
+<div class="card log" id="log"></div>
+<div class="note">Click a node or a log block to move. Dashed purple = alternative line you tried from turn 2. Path shown in the log follows the selected node's ancestors, plus "future" turns dimmed.</div>
+</main>
+<script src="shared.js"></script>
+<script>
+let sel="t2";
+const pos={s0:[50,50],t1:[170,50],t2:[290,50],t3:[410,50],t4:[530,50],b3:[410,112]};
+function path(id){const out=[];for(let n=NODES[id];n;n=NODES[n.parent])out.unshift(n.id);return out}
+function render(){
+  const on=new Set(path(sel)), svg=document.getElementById("rail"); let h="";
+  for(const n of Object.values(NODES)) if(n.parent){const [x1,y1]=pos[n.parent],[x2,y2]=pos[n.id];
+    h+=`<path d="M${x1} ${y1} C ${x1+50} ${y1}, ${x2-50} ${y2}, ${x2} ${y2}" fill="none" stroke="${n.alt?"var(--alt)":"var(--line)"}" stroke-width="2" ${n.alt?'stroke-dasharray="5 4"':""}/>`}
+  for(const n of Object.values(NODES)){const [x,y]=pos[n.id];
+    h+=`<g class="node ${n.id===sel?"on":""} ${n.alt?"alt":""} ${on.has(n.id)||n.id===sel?"":"dim"}" data-id="${n.id}">
+      <circle cx="${x}" cy="${y}" r="13"/><text x="${x}" y="${y+4}" text-anchor="middle" style="${n.id===sel?"fill:#fff":""}">${n.turn||"▶"}</text>
+      <text x="${x}" y="${y+34}" text-anchor="middle">${n.label}</text></g>`}
+  svg.innerHTML=h;
+  svg.querySelectorAll(".node").forEach(g=>g.onclick=()=>{sel=g.dataset.id;render()});
+  const seq=path(sel).concat(MAIN.filter(i=>!on.has(i)&&NODES[i].turn>NODES[sel].turn));
+  document.getElementById("log").innerHTML=`<h3>Battle log</h3>`+seq.map(id=>{const n=NODES[id];
+    return `<div class="turn ${id===sel?"on":""} ${on.has(id)?"":"future"}" data-id="${id}"><h4>${n.turn?"Turn "+n.turn:"Start"}${n.field?` · ${n.field.join(", ")}`:""}</h4>${n.lines.map(l=>`<div class="l">${lineHtml(l)}</div>`).join("")}</div>`}).join("");
+  document.querySelectorAll(".turn").forEach(t=>t.onclick=()=>{sel=t.dataset.id;render()});
+}
+render();
+</script></body></html>

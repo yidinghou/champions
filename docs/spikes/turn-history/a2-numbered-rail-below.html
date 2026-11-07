@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A2 · Numbered rail, log below</title><link rel="stylesheet" href="shared.css">
+<style>
+ .rail{display:flex;align-items:center;gap:0;padding:14px 18px;overflow-x:auto}
+ .n{flex:none;width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:var(--card);color:var(--ink);font:600 14px inherit;cursor:pointer}
+ .n.on{background:var(--sel);border-color:var(--sel);color:#fff}.n.live::after{content:"";display:block}
+ .link{flex:1;min-width:26px;height:2px;background:var(--line)}
+ .n.next{border-style:dashed;color:var(--mute);cursor:default}
+ .head{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}.head h3{margin:0;font-size:15px}
+ .head .sp{flex:1}.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:2px 10px;cursor:pointer}
+ .btn:disabled{opacity:.4;cursor:default}.log .l{padding:2px 0}
+</style></head><body><main>
+<h1>A2 · Numbered rail, log below</h1>
+<p class="sub">Nodes are just turn numbers. The log under the rail shows only the turn you are on — Latest by default, or an earlier turn when you click its number. One line of history, no branches.</p>
+<div class="card rail" id="rail"></div>
+<div class="card log" id="log"></div>
+<div class="note">Keys: ← / → move between turns. "Latest" returns to the live turn (the one you resolve next).</div>
+</main>
+<script src="shared.js"></script>
+<script>
+const T=["t1","t2","t3","t4"]; let i=1; // index into T; last = live
+function render(){
+  const live=T.length-1;
+  document.getElementById("rail").innerHTML=T.map((id,k)=>`${k?'<span class="link"></span>':""}<button class="n ${k===i?"on":""}" data-k="${k}" title="Turn ${k+1}">${k+1}</button>`).join("")+'<span class="link" style="background:repeating-linear-gradient(90deg,var(--line) 0 5px,transparent 5px 9px)"></span><button class="n next" disabled>5</button>';
+  const n=NODES[T[i]];
+  document.getElementById("log").innerHTML=`<div class="head"><h3>Turn ${i+1}</h3>${n.field?n.field.map(f=>`<span class="tag">${f}</span>`).join(""):""}<span class="sp"></span>
+    <button class="btn" id="prev" ${i===0?"disabled":""}>‹</button><button class="btn" id="next" ${i===live?"disabled":""}>›</button><button class="btn" id="latest" ${i===live?"disabled":""}>Latest</button></div>`+
+    n.lines.map(l=>`<div class="l">${lineHtml(l)}</div>`).join("");
+  document.querySelectorAll(".n[data-k]").forEach(b=>b.onclick=()=>{i=+b.dataset.k;render()});
+  prev.onclick=()=>{i--;render()};next.onclick=()=>{i++;render()};latest.onclick=()=>{i=live;render()};
+}
+addEventListener("keydown",e=>{if(e.key==="ArrowLeft"&&i>0){i--;render()}if(e.key==="ArrowRight"&&i<T.length-1){i++;render()}});
+render();
+</script></body></html>

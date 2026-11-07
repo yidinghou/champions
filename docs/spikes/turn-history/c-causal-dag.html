@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C · Causal event DAG</title><link rel="stylesheet" href="shared.css">
+<style>
+ .wrap{overflow-x:auto}svg{display:block;min-width:840px}
+ .ev{cursor:pointer}.ev rect{fill:var(--card);stroke:var(--line);stroke-width:1.5}.ev.on rect{stroke:var(--sel);stroke-width:2.5}
+ .ev.hit rect{stroke:var(--sel)}.col{fill:var(--ink);opacity:.03}.col.on{fill:var(--sel);opacity:.1}
+ .span{fill:var(--good);opacity:.18}.spanl{fill:var(--good)!important;font-weight:600}
+ .log .l{padding:2px 8px;border-left:3px solid transparent;border-radius:0 6px 6px 0}
+ .log .l.on{border-color:var(--sel);background:color-mix(in srgb,var(--sel) 12%,transparent)}
+ .log h4{margin:10px 0 2px;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+ .log h4.on{color:var(--sel)}
+ .legend{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-top:8px;flex-wrap:wrap}
+</style></head><body><main>
+<h1>C · Causal event DAG</h1>
+<p class="sub">Nodes are events, not turns. Lanes are who acted; arrows show cause and effect (Fake Out → flinch, Tailwind → faster moves). Duration effects are bars across turns. Hover or click an event: its line lights up in the shared log, and the whole turn column is selected.</p>
+<div class="card wrap"><svg id="dag" height="340"></svg>
+<div class="legend"><span>→ causes</span><span><b style="color:var(--good)">▬</b> lasting effect</span><span>dashed = alternative branch from turn 2</span></div></div>
+<div class="card log" id="log"></div>
+<div class="note">Each event is a single log line, so the log below is just the same nodes in reading order — highlight keeps the two in sync. Turn columns replace the scrubber: click a column header to jump.</div>
+</main>
+<script src="shared.js"></script>
+<script>
+// events: id, turn, lane (0 p1a, 1 p2a, 2 field, 3 alt-branch), text, log line index in that turn's lines
+const EV=[
+ {id:"e1",turn:1,lane:0,t:"Fake Out",node:"t1",li:0},{id:"e2",turn:1,lane:1,t:"flinched",node:"t1",li:1,from:["e1"]},
+ {id:"e3",turn:2,lane:0,t:"Tailwind",node:"t2",li:0},{id:"e4",turn:2,lane:1,t:"Aqua Tail missed",node:"t2",li:1},
+ {id:"e5",turn:3,lane:0,t:"Mud Slap (first)",node:"t3",li:0,from:["e3"]},{id:"e6",turn:3,lane:1,t:"Aqua Tail",node:"t3",li:2},
+ {id:"e7",turn:4,lane:0,t:"Mud Slap → KO",node:"t4",li:0,from:["e3"]},{id:"e8",turn:4,lane:1,t:"fainted",node:"t4",li:1,from:["e7"]},
+ {id:"x1",turn:3,lane:3,t:"Fake Out fails",node:"b3",li:0,alt:true,from:["e4"]},{id:"x2",turn:3,lane:4,t:"Aqua Tail hits",node:"b3",li:1,alt:true,from:[]}];
+const X=t=>170+(t-1)*170, Y=l=>40+l*62, W=130, Hh=34;
+let selId="e4";
+function render(){
+  const sel=EV.find(e=>e.id===selId), svg=document.getElementById("dag"); let h="";
+  [1,2,3,4].forEach(t=>{h+=`<rect class="col ${sel.turn===t?"on":""}" x="${X(t)-W/2-10}" y="6" width="${W+20}" height="326" rx="8" data-t="${t}"/>
+   <text class="m" x="${X(t)}" y="22" text-anchor="middle">Turn ${t}</text>`});
+  ["Incineroar","Garchomp","Field","Alt branch",""].forEach((s,i)=>h+=`<text class="m" x="4" y="${Y(i)+Hh/2+4}" font-size="11">${s}</text>`);
+  // lasting effect: Tailwind spans turns 2..5 (4 turns incl. cast)
+  h+=`<rect class="span" x="${X(2)-W/2}" y="${Y(2)}" width="${X(4)-X(2)+W}" height="${Hh}" rx="6"/><text class="spanl" x="${X(2)-W/2+10}" y="${Y(2)+21}">Tailwind (p1) — 4 turns incl. cast</text>`;
+  const by=Object.fromEntries(EV.map(e=>[e.id,e]));
+  EV.forEach(e=>(e.from||[]).forEach(f=>{const a=by[f],b=e;
+    const ax=X(a.turn)+W/2, ay=Y(a.lane)+Hh/2, bx=X(b.turn)-W/2, by_=Y(b.lane)+Hh/2, same=a.turn===b.turn;
+    const d=same?`M${X(a.turn)} ${Y(a.lane)+Hh} L${X(b.turn)} ${Y(b.lane)}`:`M${ax} ${ay} C ${ax+40} ${ay}, ${bx-40} ${by_}, ${bx} ${by_}`;
+    h+=`<path d="${d}" fill="none" stroke="${b.alt?"var(--alt)":"var(--mute)"}" stroke-width="1.6" ${b.alt?'stroke-dasharray="5 4"':""} marker-end="url(#ar)"/>`}));
+  h=`<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--mute)"/></marker></defs>`+h;
+  EV.forEach(e=>{const lane=e.lane;
+    h+=`<g class="ev ${e.id===selId?"on":""} ${e.node===sel.node&&e.id!==selId?"hit":""}" data-id="${e.id}"><rect x="${X(e.turn)-W/2}" y="${Y(lane)}" width="${W}" height="${Hh}" rx="8" ${e.alt?'stroke-dasharray="5 4" style="stroke:var(--alt)"':""}/>
+      <text x="${X(e.turn)}" y="${Y(lane)+21}" text-anchor="middle" class="${lane===0?"":""}">${e.t}</text></g>`});
+  svg.innerHTML=h;
+  svg.querySelectorAll(".ev").forEach(g=>g.onclick=()=>{selId=g.dataset.id;render()});
+  svg.querySelectorAll(".col").forEach(c=>c.onclick=()=>{selId=EV.find(e=>e.turn===+c.dataset.t&&!e.alt).id;render()});
+  const turns=["t1","t2","t3","t4"];
+  document.getElementById("log").innerHTML=`<h3 style="margin:0 0 4px;font-size:13px">Battle log</h3>`+turns.map(id=>{const n=NODES[id];
+    return `<h4 class="${n.id===sel.node||(sel.node==="b3"&&n.turn===3)?"on":""}">Turn ${n.turn}${n.field?" · "+n.field.join(", "):""}</h4>`+n.lines.map((l,i)=>`<div class="l ${sel.node===id&&sel.li===i?"on":""}">${lineHtml(l)}</div>`).join("")}).join("");
+}
+render();
+</script></body></html>
