@@ -1,0 +1,271 @@
+{
+ "source": "championslab",
+ "format": "doubles",
+ "url": "https://championslab.xyz/meta",
+ "notes": "top-20 only; corpus: 560 tournaments, 28,123 teams; 8 winning teams in 'teams'",
+ "fetched_at": "2026-11-10T23:21:40+00:00",
+ "pokemon": {
+  "garchomp": {
+   "name": "Garchomp",
+   "rank": 1,
+   "usage": 46.32,
+   "winrate": 52.8,
+   "as_of": "09/11/2026"
+  },
+  "archaludon": {
+   "name": "Archaludon",
+   "rank": 2,
+   "usage": 44.69,
+   "winrate": 52.7,
+   "as_of": "09/11/2026"
+  },
+  "meowscarada": {
+   "name": "Meowscarada",
+   "rank": 3,
+   "usage": 43.12,
+   "winrate": 52.0,
+   "as_of": "09/11/2026"
+  },
+  "primarina": {
+   "name": "Primarina",
+   "rank": 4,
+   "usage": 41.61,
+   "winrate": 52.6,
+   "as_of": "09/11/2026"
+  },
+  "charizard": {
+   "name": "Charizard",
+   "rank": 5,
+   "usage": 40.15,
+   "winrate": 51.1,
+   "as_of": "09/11/2026"
+  },
+  "corviknight": {
+   "name": "Corviknight",
+   "rank": 6,
+   "usage": 38.74,
+   "winrate": 52.3,
+   "as_of": "09/11/2026"
+  },
+  "hippowdon": {
+   "name": "Hippowdon",
+   "rank": 7,
+   "usage": 37.38,
+   "winrate": 52.0,
+   "as_of": "09/11/2026"
+  },
+  "basculegionm": {
+   "name": "Basculegion-M",
+   "rank": 8,
+   "usage": 36.07,
+   "winrate": 50.5,
+   "as_of": "09/11/2026"
+  },
+  "lucario": {
+   "name": "Lucario",
+   "rank": 9,
+   "usage": 34.81,
+   "winrate": 52.5,
+   "as_of": "09/11/2026"
+  },
+  "gengar": {
+   "name": "Gengar",
+   "rank": 10,
+   "usage": 33.58,
+   "winrate": 51.6,
+   "as_of": "09/11/2026"
+  },
+  "aegislash": {
+   "name": "Aegislash",
+   "rank": 11,
+   "usage": 32.41,
+   "winrate": 52.2,
+   "as_of": "09/11/2026"
+  },
+  "gyarados": {
+   "name": "Gyarados",
+   "rank": 12,
+   "usage": 31.27,
+   "winrate": 52.9,
+   "as_of": "09/11/2026"
+  },
+  "lopunny": {
+   "name": "Lopunny",
+   "rank": 13,
+   "usage": 30.17,
+   "winrate": 50.6,
+   "as_of": "09/11/2026"
+  },
+  "glimmora": {
+   "name": "Glimmora",
+   "rank": 14,
+   "usage": 29.11,
+   "winrate": 51.1,
+   "as_of": "09/11/2026"
+  },
+  "scizor": {
+   "name": "Scizor",
+   "rank": 15,
+   "usage": 28.09,
+   "winrate": 51.1,
+   "as_of": "09/11/2026"
+  },
+  "dragonite": {
+   "name": "Dragonite",
+   "rank": 16,
+   "usage": 27.11,
+   "winrate": 53.0,
+   "as_of": "09/11/2026"
+  },
+  "eternalfloette": {
+   "name": "Eternal Floette",
+   "rank": 17,
+   "usage": 26.16,
+   "winrate": 51.0,
+   "as_of": "09/11/2026"
+  },
+  "volcarona": {
+   "name": "Volcarona",
+   "rank": 18,
+   "usage": 25.24,
+   "winrate": 52.9,
+   "as_of": "09/11/2026"
+  },
+  "mimikyu": {
+   "name": "Mimikyu",
+   "rank": 19,
+   "usage": 24.35,
+   "winrate": 52.1,
+   "as_of": "09/11/2026"
+  },
+  "starmie": {
+   "name": "Starmie",
+   "rank": 20,
+   "usage": 23.5,
+   "winrate": 50.8,
+   "as_of": "09/11/2026"
+  }
+ },
+ "teams": [
+  {
+   "player": "LexiconVGC",
+   "event": "The Grand Champions Festival Encore",
+   "wins": 17,
+   "losses": 2,
+   "players": 4254,
+   "team": [
+    "Charizard",
+    "Grimmsnarl",
+    "Pelipper",
+    "Archaludon",
+    "Basculegion-M",
+    "Venusaur"
+   ]
+  },
+  {
+   "player": "JoeUX9",
+   "event": "4th Annual St. Jude VGC Charity Tournament",
+   "wins": 14,
+   "losses": 2,
+   "players": 728,
+   "team": [
+    "Charizard",
+    "Farigiraf",
+    "Venusaur",
+    "Garchomp",
+    "Incineroar",
+    "Sylveon"
+   ]
+  },
+  {
+   "player": "AyushXD",
+   "event": "POKÉMON CHAMPIONS INDIAN LEAGUE S2",
+   "wins": 13,
+   "losses": 2,
+   "players": 626,
+   "team": [
+    "Gengar",
+    "Archaludon",
+    "Politoed",
+    "Swampert",
+    "Vivillon",
+    "Incineroar"
+   ]
+  },
+  {
+   "player": "Beedrillvgc",
+   "event": "Free entry! $250 Global VGC Welcome Tour!",
+   "wins": 12,
+   "losses": 2,
+   "players": 414,
+   "team": [
+    "Charizard",
+    "Venusaur",
+    "Sinistcha",
+    "Incineroar",
+    "Eternal Floette",
+    "Garchomp"
+   ]
+  },
+  {
+   "player": "shaikhvgc786",
+   "event": "Maddo's Cup #10 | 100€ for the Winner | Reg M-B",
+   "wins": 13,
+   "losses": 2,
+   "players": 412,
+   "team": [
+    "Raichu",
+    "Farigiraf",
+    "Mawile",
+    "Garchomp",
+    "Vivillon",
+    "Torkoal"
+   ]
+  },
+  {
+   "player": "Gabb",
+   "event": "Free entry! $250 Global VGC Welcome Tour! P2",
+   "wins": 12,
+   "losses": 2,
+   "players": 392,
+   "team": [
+    "Kingambit",
+    "Aerodactyl",
+    "Sylveon",
+    "Farigiraf",
+    "Charizard",
+    "Garchomp"
+   ]
+  },
+  {
+   "player": "Daredevilzz26",
+   "event": "Sitrus-Series|Champions-MB|#67| $50 for 1st",
+   "wins": 11,
+   "losses": 1,
+   "players": 280,
+   "team": [
+    "Tyranitar",
+    "Excadrill",
+    "Milotic",
+    "Sinistcha",
+    "Staraptor",
+    "Gholdengo"
+   ]
+  },
+  {
+   "player": "Louie John Valencia",
+   "event": "Khun Champions Cup #2",
+   "wins": 13,
+   "losses": 1,
+   "players": 266,
+   "team": [
+    "Charizard",
+    "Aerodactyl",
+    "Farigiraf",
+    "Garchomp",
+    "Sylveon",
+    "Kingambit"
+   ]
+  }
+ ]
+}

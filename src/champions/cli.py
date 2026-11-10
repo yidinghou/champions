@@ -9,6 +9,7 @@ COMMANDS = {
     "calc": ("champions.calc", "damage calculator"),
     "stats": ("champions.stats", "level-50 battle stats: stats NAME [NATURE] [stat=sp,...]"),
     "play": ("champions.play.server", "play a battle in the browser: play [--port N] [--no-open]"),
+    "sources": ("champions.sources.cli", "usage-stat sources: sources {munchstats|pikalytics|championslab|opgg|compare}"),
     "check-roster": ("champions.fetch.roster_check", "verify new_in_mc tags against Showdown (network)"),
 }
 FETCHERS = {

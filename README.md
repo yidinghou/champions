@@ -32,6 +32,10 @@ Writes `src/champions/data/champions.json` (~143 KB: 231 species, 380 forms with
 
 `champions/stats.py` uses Champions' Stat Point system (66 SP, max 32 per stat, +1 each at level 50, nature applied after). Formula comes from champsdex.com and totals from Game8; confirmed in-game by the user. Details in `src/champions/data/rules.json`.
 
+## Usage statistics
+
+`champions sources {munchstats|pikalytics|championslab|opgg|compare}` pulls move/item/spread usage from third-party sites into `sources/snapshots/`. Which to trust and why: `sources/README.md`.
+
 ## Where the data comes from
 
 - **Roster and stats:** [PokéAPI](https://pokeapi.co/api/v2/pokedex/champions) `champions` pokédex (community-contributed, no auth). It lists everything in the game but has **no regulation/season info**.
