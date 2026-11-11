@@ -10,6 +10,7 @@ import json
 import re
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -29,9 +30,10 @@ def key(name):
 def get(url, source, slug, delay, refresh=False, ua=UA):
     """HTML for url, cached at cache/<source>/<slug>.html. Sleeps `delay` s only after a network hit.
     Returns None on 404."""
-    path = CACHE / source / f"{slug}.html"
+    path = CACHE / source / (re.sub(r"[^\w.-]", "_", slug) + ".html")
     if path.exists() and not refresh:
         return path.read_text()
+    url = urllib.parse.quote(url, safe=":/?=&%")          # names like "Farfetch’d" are not ASCII
     req = urllib.request.Request(url, headers={"User-Agent": ua})
     try:
         with urllib.request.urlopen(req, timeout=60) as r:

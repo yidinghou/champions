@@ -4,30 +4,30 @@
 
 | source | format | fetched | Pokémon | as_of (first) | moves Σ (med/min/max) | items Σ | abilities Σ | natures Σ | spreads Σ |
 |---|---|---|---|---|---|---|---|---|---|
-| munchstats | doubles | 2026-11-10 | 30 | October 06, 2026 at 12:07 UTC | 381 / 354 / 398 | 97 / 91 / 99 | 100 / 100 / 100 | 100 / 98 / 100 | 70 / 42 / 97 |
-| pikalytics | doubles | 2026-11-10 | 30 | – | 168 / 115 / 199 | 100 / 100 / 100 | 100 / 100 / 100 | – | – |
+| munchstats | doubles | 2026-11-11 | 260 | October 06, 2026 at 12:07 UTC | 344 / 100 / 398 | 92 / 76 / 100 | 100 / 40 / 100 | 99 / 76 / 100 | 76 / 42 / 97 |
+| pikalytics | doubles | 2026-11-11 | 277 | – | 176 / 84 / 815 | 100 / 100 / 100 | 100 / 100 / 100 | – | – |
 | championslab | doubles | 2026-11-10 | 20 | 09/11/2026 | – | – | – | – | – |
-| opgg | singles | 2026-11-10 | 27 | Oct 7, 2026, 10:38 AM | 209 / 140 / 345 | – | – | – | 67 / 45 / 89 |
+| opgg | singles | 2026-11-11 | 313 | Oct 7, 2026, 10:38 AM | 211 / 76 / 447 | – | – | – | 70 / 40 / 95 |
 
 Moves should total ≈400 (four per set); items, abilities, natures ≈100; spreads ≤100 (only the top few are listed).
 
 ## Usage curve shape
 
-- pikalytics: consecutive-rank usage ratio median 0.941, range 0.192 over 30 Pokémon
+- pikalytics: consecutive-rank usage ratio median 1.000, range 0.500 over 116 Pokémon
 - championslab: consecutive-rank usage ratio median 0.965, range 0.000 over 20 Pokémon
 
 A range near 0 means usage falls on a perfectly smooth curve, which real counts do not do.
 
 ## Rank agreement (Spearman ρ on shared Pokémon)
 
-- munchstats vs pikalytics: ρ = 0.82 (n=30)
-- munchstats vs championslab: ρ = 1.00 (n=4)
-- pikalytics vs championslab: ρ = 0.80 (n=4)
+- munchstats vs pikalytics: ρ = 0.96 (n=259)
+- munchstats vs championslab: ρ = 0.44 (n=18)
+- pikalytics vs championslab: ρ = 0.43 (n=18)
 
 ## Move-list agreement (shared Pokémon)
 
 | pair | n | top-4 moves in common (mean of 4) | mean abs diff on shared moves (pct points) |
 |---|---|---|---|
-| munchstats vs pikalytics | 30 | 3.53 | 22.2 |
-| munchstats vs opgg | 27 | 1.52 | 30.2 |
-| pikalytics vs opgg | 27 | 1.48 | 12.1 |
+| munchstats vs pikalytics | 259 | 3.31 | 19.4 |
+| munchstats vs opgg | 216 | 1.56 | 25.0 |
+| pikalytics vs opgg | 217 | 1.53 | 11.5 |
