@@ -7,4 +7,3 @@ __pycache__/
 build/
 dist/
 sources/cache/
-sources/icons/*.png
