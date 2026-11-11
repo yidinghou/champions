@@ -32,6 +32,22 @@ Writes `src/champions/data/champions.json` (~143 KB: 231 species, 380 forms with
 
 `champions/stats.py` uses Champions' Stat Point system (66 SP, max 32 per stat, +1 each at level 50, nature applied after). Formula comes from champsdex.com and totals from Game8; confirmed in-game by the user. Details in `src/champions/data/rules.json`.
 
+## Scan a team-select screenshot
+
+```sh
+pip install -e .[vision]            # Pillow + numpy (the rest of the package is stdlib-only)
+champions sources icons             # once: ~340 reference sprites into sources/icons/ (gitignored)
+champions scan shot.png             # the opponent's six, with scores; --json for the API shape
+champions play                      # setup page: "Scan screenshot" (or paste) fills Player 2
+```
+
+Works on clean 16:9 Switch captures of the Singles/Doubles team-select screen (not phone photos). Each
+opponent sprite is matched against the reference icons, restricted to species whose types match the two
+type badges on the card; same-species forms it can't tell apart (Lycanroc, Rotom...) are flagged "unsure"
+with the alternatives. Likely moves, item, ability, nature and Stat Points come from the MunchStats
+snapshot (`sources/snapshots/`). Calibrated on one real screenshot (fixture in `tests/fixtures/`): please
+report misses with the screenshot. Opponent items and the left (your own) column are not read.
+
 ## Usage statistics
 
 `champions sources {munchstats|pikalytics|championslab|opgg|compare}` pulls move/item/spread usage from third-party sites into `sources/snapshots/`. Which to trust and why: `sources/README.md`.

@@ -10,6 +10,7 @@ COMMANDS = {
     "stats": ("champions.stats", "level-50 battle stats: stats NAME [NATURE] [stat=sp,...]"),
     "play": ("champions.play.server", "play a battle in the browser: play [--port N] [--no-open]"),
     "sources": ("champions.sources.cli", "usage-stat sources: sources {munchstats|pikalytics|championslab|opgg|compare}"),
+    "scan": ("champions.vision.scan", "read the opponent's six from a team-select screenshot: scan shot.png"),
     "check-roster": ("champions.fetch.roster_check", "verify new_in_mc tags against Showdown (network)"),
 }
 FETCHERS = {

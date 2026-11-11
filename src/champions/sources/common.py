@@ -49,6 +49,28 @@ def get(url, source, slug, delay, refresh=False, ua=UA):
     return html
 
 
+def get_bytes(url, source, slug, delay, refresh=False, ext=".png", ua=UA):
+    """Like get() but for binary files (cache/<source>/<slug><ext>). None on 404 or non-image reply."""
+    path = CACHE / source / (re.sub(r"[^\w.-]", "_", slug) + ext)
+    if path.exists() and not refresh:
+        return path.read_bytes()
+    req = urllib.request.Request(urllib.parse.quote(url, safe=":/?=&%"), headers={"User-Agent": ua})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            data, kind = r.read(), r.headers.get("Content-Type", "")
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            time.sleep(delay)
+            return None
+        raise
+    time.sleep(delay)
+    if not kind.startswith("image/"):
+        return None
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data)
+    return data
+
+
 def strip_tags(html):
     html = re.sub(r"<script.*?</script>|<style.*?</style>", "", html, flags=re.S)
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html)).strip()

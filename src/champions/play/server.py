@@ -8,11 +8,14 @@ POST /api/new        {teams: {p1: [...], p2: [...]}, active: 1|2, seed?, field?}
 POST /api/turn       {actions: {slot: {move, target} | {switch}}}
 POST /api/replace    {replacements: {slot: team_index}}
 POST /api/undo, /api/restart
+POST /api/scan       {image: <base64 PNG/JPEG of the team-select screen>}: the opponent's six, see champions/vision/scan.py
+                     -> {slots: [{slot, types, candidates: [{name, score}], uncertain}], defaults: {name: spec fields}}
 GET  /api/scenarios  battle tests from tests/test_battle_cases.py that can be loaded (400 outside a source checkout)
 POST /api/scenario   {id}: start that test's battle at turn 0; POST /api/step plays its next recorded turn
 Every error is `{"error": text}` with HTTP 400 (404 for unknown routes), never a traceback.
 """
 import argparse
+import base64
 import json
 import re
 import threading
@@ -21,6 +24,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from ..battle.dex import dex
+from ..sources import usage
 from . import scenarios
 from .session import Session
 
@@ -28,6 +32,7 @@ STATIC = Path(__file__).parent / "static"
 PAGE = STATIC / "index.html"
 ICON_ROUTE = re.compile(r"/icons/([a-z]+)\.png")
 MAX_BODY = 1_000_000
+MAX_SCAN_BODY = 16_000_000                      # a base64 screenshot is a few MB
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -46,12 +51,12 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
-    def _read_json(self):
+    def _read_json(self, limit=MAX_BODY):
         try:
             length = int(self.headers.get("Content-Length") or 0)
         except ValueError:
             raise ValueError("bad Content-Length") from None
-        if length > MAX_BODY:
+        if length > limit:
             raise ValueError("request body too large")
         raw = self.rfile.read(length) if length else b""
         try:
@@ -99,6 +104,27 @@ class Handler(BaseHTTPRequestHandler):
             raise ValueError(f"unknown scenario: {sid}")
         return self._locked(lambda s: s.load(found["id"], found["config"], found["history"]))
 
+    def _scan(self):
+        image = self._read_json(MAX_SCAN_BODY).get("image")
+        if not isinstance(image, str) or not image:
+            raise ValueError("'image' must be a base64 string")
+        try:
+            raw = base64.b64decode(image.split(",", 1)[-1], validate=True)   # tolerate a data: URL prefix
+        except ValueError:
+            raise ValueError("'image' is not valid base64") from None
+        try:
+            from ..vision import scan
+            res = scan.scan(raw)
+        except SystemExit as e:                  # missing Pillow/numpy or icons: tell the user how to fix it
+            raise ValueError(str(e.code)) from None
+        d, defaults = dex(), {}
+        for slot in res["slots"]:
+            slot["candidates"] = [c for c in slot["candidates"] if c["name"] in d["species"]]
+            for c in slot["candidates"]:
+                if c["name"] not in defaults:
+                    defaults[c["name"]] = usage.defaults(c["name"], d)
+        return {**res, "defaults": defaults}
+
     GET = {
         "/": lambda h: (PAGE.read_bytes(), "text/html; charset=utf-8"),
         "/api/dex": lambda h: dex(),
@@ -110,6 +136,7 @@ class Handler(BaseHTTPRequestHandler):
         "/api/turn": lambda h: h._locked(lambda s: s.turn(h._read_json().get("actions"))),
         "/api/replace": lambda h: h._locked(lambda s: s.replace(h._read_json().get("replacements"))),
         "/api/scenario": lambda h: h._load_scenario(),
+        "/api/scan": lambda h: h._scan(),
         "/api/step": lambda h: h._locked(lambda s: s.step()),
         "/api/undo": lambda h: h._locked(lambda s: s.undo()),
         "/api/restart": lambda h: h._locked(lambda s: s.restart()),

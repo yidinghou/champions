@@ -59,6 +59,7 @@
   .field > span { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--mute); }
   .field select, .field input { width:100%; }
   .field.invalid input { border-color:var(--p2); }
+  .mon-card.invalid { border-color:var(--p2); }
   .moves-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 8px; }
   .moves-grid select { width:100%; border-left:4px solid var(--t, var(--line)); }
   /* battle card: type icons in a left gutter, then name, HP, status/stages, item and ability, moves */
@@ -137,6 +138,9 @@ function renderSetup() {
   box.append(el("div", {class: "row setup-bar"},
     field("Format", select([["1", "Singles"], ["2", "Doubles"]], String(active), (e) => { active = +e.target.value; })),
     el("span", {style: "flex:1"}),
+    el("span", {class: "mute", id: "scan-note"}, scanNote),
+    el("input", {type: "file", id: "scan-file", accept: "image/*", style: "display:none", onchange: (e) => scanFile(e.target.files[0])}),
+    el("button", {title: "Pick or paste (Ctrl/Cmd+V) a screenshot of the team-select screen to fill Player 2", onclick: () => $("scan-file").click()}, "Scan screenshot"),
     el("button", {onclick: () => { teams = {p1: [], p2: []}; fillTeams(); renderSetup(); }}, "Randomize teams"),
     el("button", {class: "primary", onclick: start}, "Start battle")));
   if (scenarios.length) {
@@ -161,7 +165,7 @@ function monEditor(side, m, i) {
     const t = text.trim().toLowerCase();
     return Object.keys(dex.species).find((id) => id === t || pretty(id).toLowerCase() === t);
   };
-  const card = el("div", {class: "mon-card"});
+  const card = el("div", {class: "mon-card" + (m.uncertain ? " invalid" : "")});
   const types = el("span", {class: "types"}, dex.species[m.species].types.map(typeIcon));
   const input = el("input", {class: "species", value: pretty(m.species), placeholder: "Species", autocomplete: "off",
     onchange: (e) => {
@@ -174,6 +178,8 @@ function monEditor(side, m, i) {
   input.addEventListener("focus", () => input.select());
   card.append(el("div", {class: "mon-head"}, el("label", {class: "field", style: "flex:1"}, el("span", {}, `Pokémon ${i + 1}`), input), types,
     el("button", {title: "Remove", disabled: teams[side].length <= 1, onclick: () => { teams[side].splice(i, 1); renderSetup(); }}, "✕")));
+  if (m.alts && m.alts.length) card.append(el("div", {class: "mute"}, "Scan unsure; other guesses: ",
+    ...m.alts.map((n) => el("button", {onclick: () => { m.species = n; m.moves = dex.species[n].moves.slice(0, 4); m.item = ""; m.ability = m.sp = undefined; m.alts = []; m.uncertain = false; renderSetup(); }}, pretty(n)))));
   card.append(el("div", {class: "fields"},
     field("Item", select([["", "(no item)"], ...dex.items.map((x) => [x, pretty(x)])], m.item, (e) => { m.item = e.target.value; })),
     field("Nature", select(dex.natures.map((x) => [x, pretty(x)]), m.nature, (e) => { m.nature = e.target.value; }))));
@@ -189,10 +195,39 @@ function monEditor(side, m, i) {
   card.append(grid);
   return card;
 }
+// ---- scan a team-select screenshot into Player 2 -------------------------------------------------------------
+let scanNote = "";
+function scanFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async () => {
+    $("err").textContent = ""; scanNote = "Scanning…"; renderSetup();
+    try {
+      const res = await api("/api/scan", {image: reader.result});
+      const found = res.slots.filter((x) => x.candidates.length);
+      if (!found.length) throw new Error("no Pokémon recognised: is this the team-select screen?");
+      teams.p2 = found.map((x) => {
+        const best = x.candidates[0].name, d = res.defaults[best] || {};
+        return {species: best, moves: d.moves || dex.species[best].moves.slice(0, 4), item: d.item || "", nature: d.nature || "hardy",
+                ability: d.ability, sp: d.sp, alts: x.uncertain ? x.candidates.slice(1, 4).map((c) => c.name) : [], uncertain: x.uncertain};
+      });
+      const unsure = found.filter((x) => x.uncertain).length;
+      scanNote = `Found ${found.length} of 6` + (unsure ? `, ${unsure} unsure (check the highlighted ones)` : "") +
+        (Object.values(res.defaults).some((x) => x.moves) ? "; moves/items are the most common in-game picks" : "");
+    } catch (e) { scanNote = ""; fail(e); }
+    renderSetup();
+  };
+  reader.readAsDataURL(file);
+}
+document.addEventListener("paste", (e) => {
+  const f = [...(e.clipboardData?.files || [])].find((x) => x.type.startsWith("image/"));
+  if (f && !$("setup").classList.contains("hidden")) scanFile(f);
+});
+
 function fillTeams() { for (const side of ["p1", "p2"]) while (teams[side].length < 4) teams[side].push(blankMon(side)); }
 async function start() {
   $("err").textContent = "";
-  const spec = (m) => { const s = {species: m.species, moves: m.moves}; if (m.item) s.item = m.item; if (m.nature !== "hardy") s.nature = m.nature; return s; };
+  const spec = (m) => { const s = {species: m.species, moves: m.moves}; if (m.item) s.item = m.item; if (m.ability) s.ability = m.ability; if (m.sp) s.sp = m.sp; if (m.nature !== "hardy") s.nature = m.nature; return s; };
   try {
     view = await api("/api/new", {teams: {p1: teams.p1.map(spec), p2: teams.p2.map(spec)}, active});
     frameIdx = null; picks = {}; openSlot = null;
