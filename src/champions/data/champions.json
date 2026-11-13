@@ -1,0 +1,9398 @@
+{
+ "fetched_at": "2026-11-13T20:21:53+00:00",
+ "source": "https://pokeapi.co/api/v2/pokedex/champions",
+ "species_count": 231,
+ "pokemon": [
+  {
+   "name": "venusaur",
+   "species": "venusaur",
+   "dex_id": 3,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 82,
+    "defense": 83,
+    "special-attack": 100,
+    "special-defense": 100,
+    "speed": 80
+   },
+   "abilities": [
+    "overgrow",
+    "chlorophyll"
+   ],
+   "hidden_ability": "chlorophyll"
+  },
+  {
+   "name": "venusaur-mega",
+   "species": "venusaur",
+   "dex_id": 3,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 100,
+    "defense": 123,
+    "special-attack": 122,
+    "special-defense": 120,
+    "speed": 80
+   },
+   "abilities": [
+    "thick-fat"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "charizard",
+   "species": "charizard",
+   "dex_id": 6,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "flying"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 84,
+    "defense": 78,
+    "special-attack": 109,
+    "special-defense": 85,
+    "speed": 100
+   },
+   "abilities": [
+    "blaze",
+    "solar-power"
+   ],
+   "hidden_ability": "solar-power"
+  },
+  {
+   "name": "charizard-mega-x",
+   "species": "charizard",
+   "dex_id": 6,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 130,
+    "defense": 111,
+    "special-attack": 130,
+    "special-defense": 85,
+    "speed": 100
+   },
+   "abilities": [
+    "tough-claws"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "charizard-mega-y",
+   "species": "charizard",
+   "dex_id": 6,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "flying"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 104,
+    "defense": 78,
+    "special-attack": 159,
+    "special-defense": 115,
+    "speed": 100
+   },
+   "abilities": [
+    "drought"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "blastoise",
+   "species": "blastoise",
+   "dex_id": 9,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 79,
+    "attack": 83,
+    "defense": 100,
+    "special-attack": 85,
+    "special-defense": 105,
+    "speed": 78
+   },
+   "abilities": [
+    "torrent",
+    "rain-dish"
+   ],
+   "hidden_ability": "rain-dish"
+  },
+  {
+   "name": "blastoise-mega",
+   "species": "blastoise",
+   "dex_id": 9,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 79,
+    "attack": 103,
+    "defense": 120,
+    "special-attack": 135,
+    "special-defense": 115,
+    "speed": 78
+   },
+   "abilities": [
+    "mega-launcher"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "beedrill",
+   "species": "beedrill",
+   "dex_id": 15,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "poison"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 90,
+    "defense": 40,
+    "special-attack": 45,
+    "special-defense": 80,
+    "speed": 75
+   },
+   "abilities": [
+    "swarm",
+    "sniper"
+   ],
+   "hidden_ability": "sniper"
+  },
+  {
+   "name": "beedrill-mega",
+   "species": "beedrill",
+   "dex_id": 15,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "poison"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 150,
+    "defense": 40,
+    "special-attack": 15,
+    "special-defense": 80,
+    "speed": 145
+   },
+   "abilities": [
+    "adaptability"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "pidgeot",
+   "species": "pidgeot",
+   "dex_id": 18,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 83,
+    "attack": 80,
+    "defense": 75,
+    "special-attack": 70,
+    "special-defense": 70,
+    "speed": 101
+   },
+   "abilities": [
+    "keen-eye",
+    "tangled-feet",
+    "big-pecks"
+   ],
+   "hidden_ability": "big-pecks"
+  },
+  {
+   "name": "pidgeot-mega",
+   "species": "pidgeot",
+   "dex_id": 18,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 83,
+    "attack": 80,
+    "defense": 80,
+    "special-attack": 135,
+    "special-defense": 80,
+    "speed": 121
+   },
+   "abilities": [
+    "no-guard"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "arbok",
+   "species": "arbok",
+   "dex_id": 24,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 95,
+    "defense": 69,
+    "special-attack": 65,
+    "special-defense": 79,
+    "speed": 80
+   },
+   "abilities": [
+    "intimidate",
+    "shed-skin",
+    "unnerve"
+   ],
+   "hidden_ability": "unnerve"
+  },
+  {
+   "name": "pikachu",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-rock-star",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-belle",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-pop-star",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-phd",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-libre",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-cosplay",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-original-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-hoenn-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-sinnoh-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-unova-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-kalos-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-alola-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-partner-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-starter",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 45,
+    "attack": 80,
+    "defense": 50,
+    "special-attack": 75,
+    "special-defense": 60,
+    "speed": 120
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "pikachu-world-cap",
+   "species": "pikachu",
+   "dex_id": 25,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 35,
+    "attack": 55,
+    "defense": 40,
+    "special-attack": 50,
+    "special-defense": 50,
+    "speed": 90
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "raichu",
+   "species": "raichu",
+   "dex_id": 26,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 90,
+    "defense": 55,
+    "special-attack": 90,
+    "special-defense": 80,
+    "speed": 110
+   },
+   "abilities": [
+    "static",
+    "lightning-rod"
+   ],
+   "hidden_ability": "lightning-rod"
+  },
+  {
+   "name": "raichu-alola",
+   "species": "raichu",
+   "dex_id": 26,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 85,
+    "defense": 50,
+    "special-attack": 95,
+    "special-defense": 85,
+    "speed": 110
+   },
+   "abilities": [
+    "surge-surfer"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "raichu-mega-x",
+   "species": "raichu",
+   "dex_id": 26,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 135,
+    "defense": 95,
+    "special-attack": 90,
+    "special-defense": 95,
+    "speed": 110
+   },
+   "abilities": [
+    "electric-surge"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "raichu-mega-y",
+   "species": "raichu",
+   "dex_id": 26,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 100,
+    "defense": 55,
+    "special-attack": 160,
+    "special-defense": 80,
+    "speed": 130
+   },
+   "abilities": [
+    "no-guard"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "clefable",
+   "species": "clefable",
+   "dex_id": 36,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 70,
+    "defense": 73,
+    "special-attack": 95,
+    "special-defense": 90,
+    "speed": 60
+   },
+   "abilities": [
+    "cute-charm",
+    "magic-guard",
+    "unaware"
+   ],
+   "hidden_ability": "unaware"
+  },
+  {
+   "name": "clefable-mega",
+   "species": "clefable",
+   "dex_id": 36,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fairy",
+    "flying"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 80,
+    "defense": 93,
+    "special-attack": 135,
+    "special-defense": 110,
+    "speed": 70
+   },
+   "abilities": [
+    "magic-bounce"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "ninetales",
+   "species": "ninetales",
+   "dex_id": 38,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 73,
+    "attack": 76,
+    "defense": 75,
+    "special-attack": 81,
+    "special-defense": 100,
+    "speed": 100
+   },
+   "abilities": [
+    "flash-fire",
+    "drought"
+   ],
+   "hidden_ability": "drought"
+  },
+  {
+   "name": "ninetales-alola",
+   "species": "ninetales",
+   "dex_id": 38,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 73,
+    "attack": 67,
+    "defense": 75,
+    "special-attack": 81,
+    "special-defense": 100,
+    "speed": 109
+   },
+   "abilities": [
+    "snow-cloak",
+    "snow-warning"
+   ],
+   "hidden_ability": "snow-warning"
+  },
+  {
+   "name": "wigglytuff",
+   "species": "wigglytuff",
+   "dex_id": 40,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "normal",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 140,
+    "attack": 70,
+    "defense": 45,
+    "special-attack": 85,
+    "special-defense": 50,
+    "speed": 45
+   },
+   "abilities": [
+    "cute-charm",
+    "competitive",
+    "frisk"
+   ],
+   "hidden_ability": "frisk"
+  },
+  {
+   "name": "vileplume",
+   "species": "vileplume",
+   "dex_id": 45,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 80,
+    "defense": 85,
+    "special-attack": 110,
+    "special-defense": 90,
+    "speed": 50
+   },
+   "abilities": [
+    "chlorophyll",
+    "effect-spore"
+   ],
+   "hidden_ability": "effect-spore"
+  },
+  {
+   "name": "persian",
+   "species": "persian",
+   "dex_id": 53,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 70,
+    "defense": 60,
+    "special-attack": 65,
+    "special-defense": 65,
+    "speed": 115
+   },
+   "abilities": [
+    "limber",
+    "technician",
+    "unnerve"
+   ],
+   "hidden_ability": "unnerve"
+  },
+  {
+   "name": "persian-alola",
+   "species": "persian",
+   "dex_id": 53,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 60,
+    "defense": 60,
+    "special-attack": 75,
+    "special-defense": 65,
+    "speed": 115
+   },
+   "abilities": [
+    "fur-coat",
+    "technician",
+    "rattled"
+   ],
+   "hidden_ability": "rattled"
+  },
+  {
+   "name": "arcanine",
+   "species": "arcanine",
+   "dex_id": 59,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 110,
+    "defense": 80,
+    "special-attack": 100,
+    "special-defense": 80,
+    "speed": 95
+   },
+   "abilities": [
+    "intimidate",
+    "flash-fire",
+    "justified"
+   ],
+   "hidden_ability": "justified"
+  },
+  {
+   "name": "arcanine-hisui",
+   "species": "arcanine",
+   "dex_id": 59,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "rock"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 115,
+    "defense": 80,
+    "special-attack": 95,
+    "special-defense": 80,
+    "speed": 90
+   },
+   "abilities": [
+    "intimidate",
+    "flash-fire",
+    "rock-head"
+   ],
+   "hidden_ability": "rock-head"
+  },
+  {
+   "name": "alakazam",
+   "species": "alakazam",
+   "dex_id": 65,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 50,
+    "defense": 45,
+    "special-attack": 135,
+    "special-defense": 95,
+    "speed": 120
+   },
+   "abilities": [
+    "synchronize",
+    "inner-focus",
+    "magic-guard"
+   ],
+   "hidden_ability": "magic-guard"
+  },
+  {
+   "name": "alakazam-mega",
+   "species": "alakazam",
+   "dex_id": 65,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 50,
+    "defense": 65,
+    "special-attack": 175,
+    "special-defense": 105,
+    "speed": 150
+   },
+   "abilities": [
+    "trace"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "machamp",
+   "species": "machamp",
+   "dex_id": 68,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 130,
+    "defense": 80,
+    "special-attack": 65,
+    "special-defense": 85,
+    "speed": 55
+   },
+   "abilities": [
+    "guts",
+    "no-guard",
+    "steadfast"
+   ],
+   "hidden_ability": "steadfast"
+  },
+  {
+   "name": "victreebel",
+   "species": "victreebel",
+   "dex_id": 71,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 105,
+    "defense": 65,
+    "special-attack": 100,
+    "special-defense": 70,
+    "speed": 70
+   },
+   "abilities": [
+    "chlorophyll",
+    "gluttony"
+   ],
+   "hidden_ability": "gluttony"
+  },
+  {
+   "name": "victreebel-mega",
+   "species": "victreebel",
+   "dex_id": 71,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 125,
+    "defense": 85,
+    "special-attack": 135,
+    "special-defense": 95,
+    "speed": 70
+   },
+   "abilities": [
+    "innards-out"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "slowbro",
+   "species": "slowbro",
+   "dex_id": 80,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 75,
+    "defense": 110,
+    "special-attack": 100,
+    "special-defense": 80,
+    "speed": 30
+   },
+   "abilities": [
+    "oblivious",
+    "own-tempo",
+    "regenerator"
+   ],
+   "hidden_ability": "regenerator"
+  },
+  {
+   "name": "slowbro-mega",
+   "species": "slowbro",
+   "dex_id": 80,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 75,
+    "defense": 180,
+    "special-attack": 130,
+    "special-defense": 80,
+    "speed": 30
+   },
+   "abilities": [
+    "shell-armor"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "slowbro-galar",
+   "species": "slowbro",
+   "dex_id": 80,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 100,
+    "defense": 95,
+    "special-attack": 100,
+    "special-defense": 70,
+    "speed": 30
+   },
+   "abilities": [
+    "quick-draw",
+    "own-tempo",
+    "regenerator"
+   ],
+   "hidden_ability": "regenerator"
+  },
+  {
+   "name": "farfetchd",
+   "species": "farfetchd",
+   "dex_id": 83,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 52,
+    "attack": 90,
+    "defense": 55,
+    "special-attack": 58,
+    "special-defense": 62,
+    "speed": 60
+   },
+   "abilities": [
+    "keen-eye",
+    "inner-focus",
+    "defiant"
+   ],
+   "hidden_ability": "defiant"
+  },
+  {
+   "name": "farfetchd-galar",
+   "species": "farfetchd",
+   "dex_id": 83,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 52,
+    "attack": 95,
+    "defense": 55,
+    "special-attack": 58,
+    "special-defense": 62,
+    "speed": 55
+   },
+   "abilities": [
+    "steadfast",
+    "scrappy"
+   ],
+   "hidden_ability": "scrappy"
+  },
+  {
+   "name": "gengar",
+   "species": "gengar",
+   "dex_id": 94,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "poison"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 65,
+    "defense": 60,
+    "special-attack": 130,
+    "special-defense": 75,
+    "speed": 110
+   },
+   "abilities": [
+    "cursed-body"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "gengar-mega",
+   "species": "gengar",
+   "dex_id": 94,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "poison"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 65,
+    "defense": 80,
+    "special-attack": 170,
+    "special-defense": 95,
+    "speed": 130
+   },
+   "abilities": [
+    "shadow-tag"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "kangaskhan",
+   "species": "kangaskhan",
+   "dex_id": 115,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 105,
+    "attack": 95,
+    "defense": 80,
+    "special-attack": 40,
+    "special-defense": 80,
+    "speed": 90
+   },
+   "abilities": [
+    "early-bird",
+    "scrappy",
+    "inner-focus"
+   ],
+   "hidden_ability": "inner-focus"
+  },
+  {
+   "name": "kangaskhan-mega",
+   "species": "kangaskhan",
+   "dex_id": 115,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 105,
+    "attack": 125,
+    "defense": 100,
+    "special-attack": 60,
+    "special-defense": 100,
+    "speed": 100
+   },
+   "abilities": [
+    "parental-bond"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "starmie",
+   "species": "starmie",
+   "dex_id": 121,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 75,
+    "defense": 85,
+    "special-attack": 100,
+    "special-defense": 85,
+    "speed": 115
+   },
+   "abilities": [
+    "illuminate",
+    "natural-cure",
+    "analytic"
+   ],
+   "hidden_ability": "analytic"
+  },
+  {
+   "name": "starmie-mega",
+   "species": "starmie",
+   "dex_id": 121,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 100,
+    "defense": 105,
+    "special-attack": 130,
+    "special-defense": 105,
+    "speed": 120
+   },
+   "abilities": [
+    "huge-power"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "mr-mime",
+   "species": "mr-mime",
+   "dex_id": 122,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "psychic",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 40,
+    "attack": 45,
+    "defense": 65,
+    "special-attack": 100,
+    "special-defense": 120,
+    "speed": 90
+   },
+   "abilities": [
+    "soundproof",
+    "filter",
+    "technician"
+   ],
+   "hidden_ability": "technician"
+  },
+  {
+   "name": "mr-mime-galar",
+   "species": "mr-mime",
+   "dex_id": 122,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 65,
+    "defense": 65,
+    "special-attack": 90,
+    "special-defense": 90,
+    "speed": 100
+   },
+   "abilities": [
+    "vital-spirit",
+    "screen-cleaner",
+    "ice-body"
+   ],
+   "hidden_ability": "ice-body"
+  },
+  {
+   "name": "pinsir",
+   "species": "pinsir",
+   "dex_id": 127,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 125,
+    "defense": 100,
+    "special-attack": 55,
+    "special-defense": 70,
+    "speed": 85
+   },
+   "abilities": [
+    "hyper-cutter",
+    "mold-breaker",
+    "moxie"
+   ],
+   "hidden_ability": "moxie"
+  },
+  {
+   "name": "pinsir-mega",
+   "species": "pinsir",
+   "dex_id": 127,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "flying"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 155,
+    "defense": 120,
+    "special-attack": 65,
+    "special-defense": 90,
+    "speed": 105
+   },
+   "abilities": [
+    "aerilate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "tauros",
+   "species": "tauros",
+   "dex_id": 128,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 100,
+    "defense": 95,
+    "special-attack": 40,
+    "special-defense": 70,
+    "speed": 110
+   },
+   "abilities": [
+    "intimidate",
+    "anger-point",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "tauros-paldea-combat-breed",
+   "species": "tauros",
+   "dex_id": 128,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 110,
+    "defense": 105,
+    "special-attack": 30,
+    "special-defense": 70,
+    "speed": 100
+   },
+   "abilities": [
+    "intimidate",
+    "anger-point",
+    "cud-chew"
+   ],
+   "hidden_ability": "cud-chew"
+  },
+  {
+   "name": "tauros-paldea-blaze-breed",
+   "species": "tauros",
+   "dex_id": 128,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "fire"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 110,
+    "defense": 105,
+    "special-attack": 30,
+    "special-defense": 70,
+    "speed": 100
+   },
+   "abilities": [
+    "intimidate",
+    "anger-point",
+    "cud-chew"
+   ],
+   "hidden_ability": "cud-chew"
+  },
+  {
+   "name": "tauros-paldea-aqua-breed",
+   "species": "tauros",
+   "dex_id": 128,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "water"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 110,
+    "defense": 105,
+    "special-attack": 30,
+    "special-defense": 70,
+    "speed": 100
+   },
+   "abilities": [
+    "intimidate",
+    "anger-point",
+    "cud-chew"
+   ],
+   "hidden_ability": "cud-chew"
+  },
+  {
+   "name": "gyarados",
+   "species": "gyarados",
+   "dex_id": 130,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "flying"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 125,
+    "defense": 79,
+    "special-attack": 60,
+    "special-defense": 100,
+    "speed": 81
+   },
+   "abilities": [
+    "intimidate",
+    "moxie"
+   ],
+   "hidden_ability": "moxie"
+  },
+  {
+   "name": "gyarados-mega",
+   "species": "gyarados",
+   "dex_id": 130,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 155,
+    "defense": 109,
+    "special-attack": 70,
+    "special-defense": 130,
+    "speed": 81
+   },
+   "abilities": [
+    "mold-breaker"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "ditto",
+   "species": "ditto",
+   "dex_id": 132,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 48,
+    "attack": 48,
+    "defense": 48,
+    "special-attack": 48,
+    "special-defense": 48,
+    "speed": 48
+   },
+   "abilities": [
+    "limber",
+    "imposter"
+   ],
+   "hidden_ability": "imposter"
+  },
+  {
+   "name": "vaporeon",
+   "species": "vaporeon",
+   "dex_id": 134,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 130,
+    "attack": 65,
+    "defense": 60,
+    "special-attack": 110,
+    "special-defense": 95,
+    "speed": 65
+   },
+   "abilities": [
+    "water-absorb",
+    "hydration"
+   ],
+   "hidden_ability": "hydration"
+  },
+  {
+   "name": "jolteon",
+   "species": "jolteon",
+   "dex_id": 135,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 65,
+    "defense": 60,
+    "special-attack": 110,
+    "special-defense": 95,
+    "speed": 130
+   },
+   "abilities": [
+    "volt-absorb",
+    "quick-feet"
+   ],
+   "hidden_ability": "quick-feet"
+  },
+  {
+   "name": "flareon",
+   "species": "flareon",
+   "dex_id": 136,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 130,
+    "defense": 60,
+    "special-attack": 95,
+    "special-defense": 110,
+    "speed": 65
+   },
+   "abilities": [
+    "flash-fire",
+    "guts"
+   ],
+   "hidden_ability": "guts"
+  },
+  {
+   "name": "aerodactyl",
+   "species": "aerodactyl",
+   "dex_id": 142,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "flying"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 105,
+    "defense": 65,
+    "special-attack": 60,
+    "special-defense": 75,
+    "speed": 130
+   },
+   "abilities": [
+    "rock-head",
+    "pressure",
+    "unnerve"
+   ],
+   "hidden_ability": "unnerve"
+  },
+  {
+   "name": "aerodactyl-mega",
+   "species": "aerodactyl",
+   "dex_id": 142,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "flying"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 135,
+    "defense": 85,
+    "special-attack": 70,
+    "special-defense": 95,
+    "speed": 150
+   },
+   "abilities": [
+    "tough-claws"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "snorlax",
+   "species": "snorlax",
+   "dex_id": 143,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 160,
+    "attack": 110,
+    "defense": 65,
+    "special-attack": 65,
+    "special-defense": 110,
+    "speed": 30
+   },
+   "abilities": [
+    "immunity",
+    "thick-fat",
+    "gluttony"
+   ],
+   "hidden_ability": "gluttony"
+  },
+  {
+   "name": "dragonite",
+   "species": "dragonite",
+   "dex_id": 149,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "flying"
+   ],
+   "stats": {
+    "hp": 91,
+    "attack": 134,
+    "defense": 95,
+    "special-attack": 100,
+    "special-defense": 100,
+    "speed": 80
+   },
+   "abilities": [
+    "inner-focus",
+    "multiscale"
+   ],
+   "hidden_ability": "multiscale"
+  },
+  {
+   "name": "dragonite-mega",
+   "species": "dragonite",
+   "dex_id": 149,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "flying"
+   ],
+   "stats": {
+    "hp": 91,
+    "attack": 124,
+    "defense": 115,
+    "special-attack": 145,
+    "special-defense": 125,
+    "speed": 100
+   },
+   "abilities": [
+    "multiscale"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "meganium",
+   "species": "meganium",
+   "dex_id": 154,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 82,
+    "defense": 100,
+    "special-attack": 83,
+    "special-defense": 100,
+    "speed": 80
+   },
+   "abilities": [
+    "overgrow",
+    "leaf-guard"
+   ],
+   "hidden_ability": "leaf-guard"
+  },
+  {
+   "name": "meganium-mega",
+   "species": "meganium",
+   "dex_id": 154,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 92,
+    "defense": 115,
+    "special-attack": 143,
+    "special-defense": 115,
+    "speed": 80
+   },
+   "abilities": [
+    "mega-sol"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "typhlosion",
+   "species": "typhlosion",
+   "dex_id": 157,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 84,
+    "defense": 78,
+    "special-attack": 109,
+    "special-defense": 85,
+    "speed": 100
+   },
+   "abilities": [
+    "blaze",
+    "flash-fire"
+   ],
+   "hidden_ability": "flash-fire"
+  },
+  {
+   "name": "typhlosion-hisui",
+   "species": "typhlosion",
+   "dex_id": 157,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 73,
+    "attack": 84,
+    "defense": 78,
+    "special-attack": 119,
+    "special-defense": 85,
+    "speed": 95
+   },
+   "abilities": [
+    "blaze",
+    "frisk"
+   ],
+   "hidden_ability": "frisk"
+  },
+  {
+   "name": "feraligatr",
+   "species": "feraligatr",
+   "dex_id": 160,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 105,
+    "defense": 100,
+    "special-attack": 79,
+    "special-defense": 83,
+    "speed": 78
+   },
+   "abilities": [
+    "torrent",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "feraligatr-mega",
+   "species": "feraligatr",
+   "dex_id": 160,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 160,
+    "defense": 125,
+    "special-attack": 89,
+    "special-defense": 93,
+    "speed": 78
+   },
+   "abilities": [
+    "dragonize"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "ariados",
+   "species": "ariados",
+   "dex_id": 168,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "poison"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 90,
+    "defense": 70,
+    "special-attack": 60,
+    "special-defense": 70,
+    "speed": 40
+   },
+   "abilities": [
+    "swarm",
+    "insomnia",
+    "sniper"
+   ],
+   "hidden_ability": "sniper"
+  },
+  {
+   "name": "ampharos",
+   "species": "ampharos",
+   "dex_id": 181,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 75,
+    "defense": 85,
+    "special-attack": 115,
+    "special-defense": 90,
+    "speed": 55
+   },
+   "abilities": [
+    "static",
+    "plus"
+   ],
+   "hidden_ability": "plus"
+  },
+  {
+   "name": "ampharos-mega",
+   "species": "ampharos",
+   "dex_id": 181,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 95,
+    "defense": 105,
+    "special-attack": 165,
+    "special-defense": 110,
+    "speed": 45
+   },
+   "abilities": [
+    "mold-breaker"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "azumarill",
+   "species": "azumarill",
+   "dex_id": 184,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 50,
+    "defense": 80,
+    "special-attack": 60,
+    "special-defense": 80,
+    "speed": 50
+   },
+   "abilities": [
+    "thick-fat",
+    "huge-power",
+    "sap-sipper"
+   ],
+   "hidden_ability": "sap-sipper"
+  },
+  {
+   "name": "politoed",
+   "species": "politoed",
+   "dex_id": 186,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 75,
+    "defense": 75,
+    "special-attack": 90,
+    "special-defense": 100,
+    "speed": 70
+   },
+   "abilities": [
+    "water-absorb",
+    "damp",
+    "drizzle"
+   ],
+   "hidden_ability": "drizzle"
+  },
+  {
+   "name": "espeon",
+   "species": "espeon",
+   "dex_id": 196,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 65,
+    "defense": 60,
+    "special-attack": 130,
+    "special-defense": 95,
+    "speed": 110
+   },
+   "abilities": [
+    "synchronize",
+    "magic-bounce"
+   ],
+   "hidden_ability": "magic-bounce"
+  },
+  {
+   "name": "umbreon",
+   "species": "umbreon",
+   "dex_id": 197,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 65,
+    "defense": 110,
+    "special-attack": 60,
+    "special-defense": 130,
+    "speed": 65
+   },
+   "abilities": [
+    "synchronize",
+    "inner-focus"
+   ],
+   "hidden_ability": "inner-focus"
+  },
+  {
+   "name": "slowking",
+   "species": "slowking",
+   "dex_id": 199,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 75,
+    "defense": 80,
+    "special-attack": 100,
+    "special-defense": 110,
+    "speed": 30
+   },
+   "abilities": [
+    "oblivious",
+    "own-tempo",
+    "regenerator"
+   ],
+   "hidden_ability": "regenerator"
+  },
+  {
+   "name": "slowking-galar",
+   "species": "slowking",
+   "dex_id": 199,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 65,
+    "defense": 80,
+    "special-attack": 110,
+    "special-defense": 110,
+    "speed": 30
+   },
+   "abilities": [
+    "curious-medicine",
+    "own-tempo",
+    "regenerator"
+   ],
+   "hidden_ability": "regenerator"
+  },
+  {
+   "name": "forretress",
+   "species": "forretress",
+   "dex_id": 205,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "steel"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 90,
+    "defense": 140,
+    "special-attack": 60,
+    "special-defense": 60,
+    "speed": 40
+   },
+   "abilities": [
+    "sturdy",
+    "overcoat"
+   ],
+   "hidden_ability": "overcoat"
+  },
+  {
+   "name": "steelix",
+   "species": "steelix",
+   "dex_id": 208,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "ground"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 85,
+    "defense": 200,
+    "special-attack": 55,
+    "special-defense": 65,
+    "speed": 30
+   },
+   "abilities": [
+    "rock-head",
+    "sturdy",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "steelix-mega",
+   "species": "steelix",
+   "dex_id": 208,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "ground"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 125,
+    "defense": 230,
+    "special-attack": 55,
+    "special-defense": 95,
+    "speed": 30
+   },
+   "abilities": [
+    "sand-force"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "qwilfish",
+   "species": "qwilfish",
+   "dex_id": 211,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "poison"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 95,
+    "defense": 85,
+    "special-attack": 55,
+    "special-defense": 55,
+    "speed": 85
+   },
+   "abilities": [
+    "poison-point",
+    "swift-swim",
+    "intimidate"
+   ],
+   "hidden_ability": "intimidate"
+  },
+  {
+   "name": "qwilfish-hisui",
+   "species": "qwilfish",
+   "dex_id": 211,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "poison"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 95,
+    "defense": 85,
+    "special-attack": 55,
+    "special-defense": 55,
+    "speed": 85
+   },
+   "abilities": [
+    "poison-point",
+    "swift-swim",
+    "intimidate"
+   ],
+   "hidden_ability": "intimidate"
+  },
+  {
+   "name": "scizor",
+   "species": "scizor",
+   "dex_id": 212,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 130,
+    "defense": 100,
+    "special-attack": 55,
+    "special-defense": 80,
+    "speed": 65
+   },
+   "abilities": [
+    "swarm",
+    "technician",
+    "light-metal"
+   ],
+   "hidden_ability": "light-metal"
+  },
+  {
+   "name": "scizor-mega",
+   "species": "scizor",
+   "dex_id": 212,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 150,
+    "defense": 140,
+    "special-attack": 65,
+    "special-defense": 100,
+    "speed": 75
+   },
+   "abilities": [
+    "technician"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "heracross",
+   "species": "heracross",
+   "dex_id": 214,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 125,
+    "defense": 75,
+    "special-attack": 40,
+    "special-defense": 95,
+    "speed": 85
+   },
+   "abilities": [
+    "swarm",
+    "guts",
+    "moxie"
+   ],
+   "hidden_ability": "moxie"
+  },
+  {
+   "name": "heracross-mega",
+   "species": "heracross",
+   "dex_id": 214,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 185,
+    "defense": 115,
+    "special-attack": 40,
+    "special-defense": 105,
+    "speed": 75
+   },
+   "abilities": [
+    "skill-link"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "skarmory",
+   "species": "skarmory",
+   "dex_id": 227,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "flying"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 80,
+    "defense": 140,
+    "special-attack": 40,
+    "special-defense": 70,
+    "speed": 70
+   },
+   "abilities": [
+    "keen-eye",
+    "sturdy",
+    "weak-armor"
+   ],
+   "hidden_ability": "weak-armor"
+  },
+  {
+   "name": "skarmory-mega",
+   "species": "skarmory",
+   "dex_id": 227,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "flying"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 140,
+    "defense": 110,
+    "special-attack": 40,
+    "special-defense": 100,
+    "speed": 110
+   },
+   "abilities": [
+    "stalwart"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "houndoom",
+   "species": "houndoom",
+   "dex_id": 229,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "fire"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 90,
+    "defense": 50,
+    "special-attack": 110,
+    "special-defense": 80,
+    "speed": 95
+   },
+   "abilities": [
+    "early-bird",
+    "flash-fire",
+    "unnerve"
+   ],
+   "hidden_ability": "unnerve"
+  },
+  {
+   "name": "houndoom-mega",
+   "species": "houndoom",
+   "dex_id": 229,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "fire"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 90,
+    "defense": 90,
+    "special-attack": 140,
+    "special-defense": 90,
+    "speed": 115
+   },
+   "abilities": [
+    "solar-power"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "tyranitar",
+   "species": "tyranitar",
+   "dex_id": 248,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "dark"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 134,
+    "defense": 110,
+    "special-attack": 95,
+    "special-defense": 100,
+    "speed": 61
+   },
+   "abilities": [
+    "sand-stream",
+    "unnerve"
+   ],
+   "hidden_ability": "unnerve"
+  },
+  {
+   "name": "tyranitar-mega",
+   "species": "tyranitar",
+   "dex_id": 248,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "dark"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 164,
+    "defense": 150,
+    "special-attack": 95,
+    "special-defense": 120,
+    "speed": 71
+   },
+   "abilities": [
+    "sand-stream"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "sceptile",
+   "species": "sceptile",
+   "dex_id": 254,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 85,
+    "defense": 65,
+    "special-attack": 105,
+    "special-defense": 85,
+    "speed": 120
+   },
+   "abilities": [
+    "overgrow",
+    "unburden"
+   ],
+   "hidden_ability": "unburden"
+  },
+  {
+   "name": "sceptile-mega",
+   "species": "sceptile",
+   "dex_id": 254,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 110,
+    "defense": 75,
+    "special-attack": 145,
+    "special-defense": 85,
+    "speed": 145
+   },
+   "abilities": [
+    "lightning-rod"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "blaziken",
+   "species": "blaziken",
+   "dex_id": 257,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 120,
+    "defense": 70,
+    "special-attack": 110,
+    "special-defense": 70,
+    "speed": 80
+   },
+   "abilities": [
+    "blaze",
+    "speed-boost"
+   ],
+   "hidden_ability": "speed-boost"
+  },
+  {
+   "name": "blaziken-mega",
+   "species": "blaziken",
+   "dex_id": 257,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 160,
+    "defense": 80,
+    "special-attack": 130,
+    "special-defense": 80,
+    "speed": 100
+   },
+   "abilities": [
+    "speed-boost"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "swampert",
+   "species": "swampert",
+   "dex_id": 260,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "ground"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 110,
+    "defense": 90,
+    "special-attack": 85,
+    "special-defense": 90,
+    "speed": 60
+   },
+   "abilities": [
+    "torrent",
+    "damp"
+   ],
+   "hidden_ability": "damp"
+  },
+  {
+   "name": "swampert-mega",
+   "species": "swampert",
+   "dex_id": 260,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "ground"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 150,
+    "defense": 110,
+    "special-attack": 95,
+    "special-defense": 110,
+    "speed": 70
+   },
+   "abilities": [
+    "swift-swim"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "pelipper",
+   "species": "pelipper",
+   "dex_id": 279,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "flying"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 50,
+    "defense": 100,
+    "special-attack": 95,
+    "special-defense": 70,
+    "speed": 65
+   },
+   "abilities": [
+    "keen-eye",
+    "drizzle",
+    "rain-dish"
+   ],
+   "hidden_ability": "rain-dish"
+  },
+  {
+   "name": "gardevoir",
+   "species": "gardevoir",
+   "dex_id": 282,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 65,
+    "defense": 65,
+    "special-attack": 125,
+    "special-defense": 115,
+    "speed": 80
+   },
+   "abilities": [
+    "synchronize",
+    "trace",
+    "telepathy"
+   ],
+   "hidden_ability": "telepathy"
+  },
+  {
+   "name": "gardevoir-mega",
+   "species": "gardevoir",
+   "dex_id": 282,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "psychic",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 85,
+    "defense": 65,
+    "special-attack": 165,
+    "special-defense": 135,
+    "speed": 100
+   },
+   "abilities": [
+    "pixilate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "sableye",
+   "species": "sableye",
+   "dex_id": 302,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 75,
+    "defense": 75,
+    "special-attack": 65,
+    "special-defense": 65,
+    "speed": 50
+   },
+   "abilities": [
+    "keen-eye",
+    "stall",
+    "prankster"
+   ],
+   "hidden_ability": "prankster"
+  },
+  {
+   "name": "sableye-mega",
+   "species": "sableye",
+   "dex_id": 302,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 85,
+    "defense": 125,
+    "special-attack": 85,
+    "special-defense": 115,
+    "speed": 20
+   },
+   "abilities": [
+    "magic-bounce"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "mawile",
+   "species": "mawile",
+   "dex_id": 303,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 85,
+    "defense": 85,
+    "special-attack": 55,
+    "special-defense": 55,
+    "speed": 50
+   },
+   "abilities": [
+    "hyper-cutter",
+    "intimidate",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "mawile-mega",
+   "species": "mawile",
+   "dex_id": 303,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 105,
+    "defense": 125,
+    "special-attack": 55,
+    "special-defense": 95,
+    "speed": 50
+   },
+   "abilities": [
+    "huge-power"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "aggron",
+   "species": "aggron",
+   "dex_id": 306,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "rock"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 110,
+    "defense": 180,
+    "special-attack": 60,
+    "special-defense": 60,
+    "speed": 50
+   },
+   "abilities": [
+    "sturdy",
+    "rock-head",
+    "heavy-metal"
+   ],
+   "hidden_ability": "heavy-metal"
+  },
+  {
+   "name": "aggron-mega",
+   "species": "aggron",
+   "dex_id": 306,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 140,
+    "defense": 230,
+    "special-attack": 60,
+    "special-defense": 80,
+    "speed": 50
+   },
+   "abilities": [
+    "filter"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "medicham",
+   "species": "medicham",
+   "dex_id": 308,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 60,
+    "defense": 75,
+    "special-attack": 60,
+    "special-defense": 75,
+    "speed": 80
+   },
+   "abilities": [
+    "pure-power",
+    "telepathy"
+   ],
+   "hidden_ability": "telepathy"
+  },
+  {
+   "name": "medicham-mega",
+   "species": "medicham",
+   "dex_id": 308,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 100,
+    "defense": 85,
+    "special-attack": 80,
+    "special-defense": 85,
+    "speed": 100
+   },
+   "abilities": [
+    "pure-power"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "manectric",
+   "species": "manectric",
+   "dex_id": 310,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 75,
+    "defense": 60,
+    "special-attack": 105,
+    "special-defense": 60,
+    "speed": 105
+   },
+   "abilities": [
+    "static",
+    "lightning-rod",
+    "minus"
+   ],
+   "hidden_ability": "minus"
+  },
+  {
+   "name": "manectric-mega",
+   "species": "manectric",
+   "dex_id": 310,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 75,
+    "defense": 80,
+    "special-attack": 135,
+    "special-defense": 80,
+    "speed": 135
+   },
+   "abilities": [
+    "intimidate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "swalot",
+   "species": "swalot",
+   "dex_id": 317,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "poison"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 73,
+    "defense": 83,
+    "special-attack": 73,
+    "special-defense": 83,
+    "speed": 55
+   },
+   "abilities": [
+    "liquid-ooze",
+    "sticky-hold",
+    "gluttony"
+   ],
+   "hidden_ability": "gluttony"
+  },
+  {
+   "name": "sharpedo",
+   "species": "sharpedo",
+   "dex_id": 319,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 120,
+    "defense": 40,
+    "special-attack": 95,
+    "special-defense": 40,
+    "speed": 95
+   },
+   "abilities": [
+    "rough-skin",
+    "speed-boost"
+   ],
+   "hidden_ability": "speed-boost"
+  },
+  {
+   "name": "sharpedo-mega",
+   "species": "sharpedo",
+   "dex_id": 319,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 140,
+    "defense": 70,
+    "special-attack": 110,
+    "special-defense": 65,
+    "speed": 105
+   },
+   "abilities": [
+    "strong-jaw"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "camerupt",
+   "species": "camerupt",
+   "dex_id": 323,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 100,
+    "defense": 70,
+    "special-attack": 105,
+    "special-defense": 75,
+    "speed": 40
+   },
+   "abilities": [
+    "magma-armor",
+    "solid-rock",
+    "anger-point"
+   ],
+   "hidden_ability": "anger-point"
+  },
+  {
+   "name": "camerupt-mega",
+   "species": "camerupt",
+   "dex_id": 323,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 120,
+    "defense": 100,
+    "special-attack": 145,
+    "special-defense": 105,
+    "speed": 20
+   },
+   "abilities": [
+    "sheer-force"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "torkoal",
+   "species": "torkoal",
+   "dex_id": 324,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 85,
+    "defense": 140,
+    "special-attack": 85,
+    "special-defense": 70,
+    "speed": 20
+   },
+   "abilities": [
+    "white-smoke",
+    "drought",
+    "shell-armor"
+   ],
+   "hidden_ability": "shell-armor"
+  },
+  {
+   "name": "altaria",
+   "species": "altaria",
+   "dex_id": 334,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "flying"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 70,
+    "defense": 90,
+    "special-attack": 70,
+    "special-defense": 105,
+    "speed": 80
+   },
+   "abilities": [
+    "natural-cure",
+    "cloud-nine"
+   ],
+   "hidden_ability": "cloud-nine"
+  },
+  {
+   "name": "altaria-mega",
+   "species": "altaria",
+   "dex_id": 334,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 110,
+    "defense": 110,
+    "special-attack": 110,
+    "special-defense": 105,
+    "speed": 80
+   },
+   "abilities": [
+    "pixilate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "milotic",
+   "species": "milotic",
+   "dex_id": 350,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 60,
+    "defense": 79,
+    "special-attack": 100,
+    "special-defense": 125,
+    "speed": 81
+   },
+   "abilities": [
+    "marvel-scale",
+    "competitive",
+    "cute-charm"
+   ],
+   "hidden_ability": "cute-charm"
+  },
+  {
+   "name": "castform",
+   "species": "castform",
+   "dex_id": 351,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 70,
+    "defense": 70,
+    "special-attack": 70,
+    "special-defense": 70,
+    "speed": 70
+   },
+   "abilities": [
+    "forecast"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "castform-sunny",
+   "species": "castform",
+   "dex_id": 351,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 70,
+    "defense": 70,
+    "special-attack": 70,
+    "special-defense": 70,
+    "speed": 70
+   },
+   "abilities": [
+    "forecast"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "castform-rainy",
+   "species": "castform",
+   "dex_id": 351,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 70,
+    "defense": 70,
+    "special-attack": 70,
+    "special-defense": 70,
+    "speed": 70
+   },
+   "abilities": [
+    "forecast"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "castform-snowy",
+   "species": "castform",
+   "dex_id": 351,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 70,
+    "defense": 70,
+    "special-attack": 70,
+    "special-defense": 70,
+    "speed": 70
+   },
+   "abilities": [
+    "forecast"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "banette",
+   "species": "banette",
+   "dex_id": 354,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost"
+   ],
+   "stats": {
+    "hp": 64,
+    "attack": 115,
+    "defense": 65,
+    "special-attack": 83,
+    "special-defense": 63,
+    "speed": 65
+   },
+   "abilities": [
+    "insomnia",
+    "frisk",
+    "cursed-body"
+   ],
+   "hidden_ability": "cursed-body"
+  },
+  {
+   "name": "banette-mega",
+   "species": "banette",
+   "dex_id": 354,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "ghost"
+   ],
+   "stats": {
+    "hp": 64,
+    "attack": 165,
+    "defense": 75,
+    "special-attack": 93,
+    "special-defense": 83,
+    "speed": 75
+   },
+   "abilities": [
+    "prankster"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "chimecho",
+   "species": "chimecho",
+   "dex_id": 358,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 50,
+    "defense": 80,
+    "special-attack": 95,
+    "special-defense": 90,
+    "speed": 65
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "chimecho-mega",
+   "species": "chimecho",
+   "dex_id": 358,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "psychic",
+    "steel"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 50,
+    "defense": 110,
+    "special-attack": 135,
+    "special-defense": 120,
+    "speed": 65
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "absol",
+   "species": "absol",
+   "dex_id": 359,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 130,
+    "defense": 60,
+    "special-attack": 75,
+    "special-defense": 60,
+    "speed": 75
+   },
+   "abilities": [
+    "pressure",
+    "super-luck",
+    "justified"
+   ],
+   "hidden_ability": "justified"
+  },
+  {
+   "name": "absol-mega",
+   "species": "absol",
+   "dex_id": 359,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 150,
+    "defense": 60,
+    "special-attack": 115,
+    "special-defense": 60,
+    "speed": 115
+   },
+   "abilities": [
+    "magic-bounce"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "absol-mega-z",
+   "species": "absol",
+   "dex_id": 359,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": true,
+   "types": [
+    "dark",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 154,
+    "defense": 60,
+    "special-attack": 75,
+    "special-defense": 60,
+    "speed": 151
+   },
+   "abilities": [
+    "sharpness"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "glalie",
+   "species": "glalie",
+   "dex_id": 362,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 80,
+    "defense": 80,
+    "special-attack": 80,
+    "special-defense": 80,
+    "speed": 80
+   },
+   "abilities": [
+    "inner-focus",
+    "ice-body",
+    "moody"
+   ],
+   "hidden_ability": "moody"
+  },
+  {
+   "name": "glalie-mega",
+   "species": "glalie",
+   "dex_id": 362,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "ice"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 120,
+    "defense": 80,
+    "special-attack": 120,
+    "special-defense": 80,
+    "speed": 100
+   },
+   "abilities": [
+    "refrigerate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "salamence",
+   "species": "salamence",
+   "dex_id": 373,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "dragon",
+    "flying"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 135,
+    "defense": 80,
+    "special-attack": 110,
+    "special-defense": 80,
+    "speed": 100
+   },
+   "abilities": [
+    "intimidate",
+    "moxie"
+   ],
+   "hidden_ability": "moxie"
+  },
+  {
+   "name": "salamence-mega",
+   "species": "salamence",
+   "dex_id": 373,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": true,
+   "types": [
+    "dragon",
+    "flying"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 145,
+    "defense": 130,
+    "special-attack": 120,
+    "special-defense": 90,
+    "speed": 120
+   },
+   "abilities": [
+    "aerilate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "metagross",
+   "species": "metagross",
+   "dex_id": 376,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 135,
+    "defense": 130,
+    "special-attack": 95,
+    "special-defense": 90,
+    "speed": 70
+   },
+   "abilities": [
+    "clear-body",
+    "light-metal"
+   ],
+   "hidden_ability": "light-metal"
+  },
+  {
+   "name": "metagross-mega",
+   "species": "metagross",
+   "dex_id": 376,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 145,
+    "defense": 150,
+    "special-attack": 105,
+    "special-defense": 110,
+    "speed": 110
+   },
+   "abilities": [
+    "tough-claws"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "torterra",
+   "species": "torterra",
+   "dex_id": 389,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "ground"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 109,
+    "defense": 105,
+    "special-attack": 75,
+    "special-defense": 85,
+    "speed": 56
+   },
+   "abilities": [
+    "overgrow",
+    "shell-armor"
+   ],
+   "hidden_ability": "shell-armor"
+  },
+  {
+   "name": "infernape",
+   "species": "infernape",
+   "dex_id": 392,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 76,
+    "attack": 104,
+    "defense": 71,
+    "special-attack": 104,
+    "special-defense": 71,
+    "speed": 108
+   },
+   "abilities": [
+    "blaze",
+    "iron-fist"
+   ],
+   "hidden_ability": "iron-fist"
+  },
+  {
+   "name": "empoleon",
+   "species": "empoleon",
+   "dex_id": 395,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "steel"
+   ],
+   "stats": {
+    "hp": 84,
+    "attack": 86,
+    "defense": 88,
+    "special-attack": 111,
+    "special-defense": 101,
+    "speed": 60
+   },
+   "abilities": [
+    "torrent",
+    "competitive"
+   ],
+   "hidden_ability": "competitive"
+  },
+  {
+   "name": "staraptor",
+   "species": "staraptor",
+   "dex_id": 398,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 120,
+    "defense": 70,
+    "special-attack": 50,
+    "special-defense": 60,
+    "speed": 100
+   },
+   "abilities": [
+    "intimidate",
+    "reckless"
+   ],
+   "hidden_ability": "reckless"
+  },
+  {
+   "name": "staraptor-mega",
+   "species": "staraptor",
+   "dex_id": 398,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "flying"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 140,
+    "defense": 100,
+    "special-attack": 60,
+    "special-defense": 90,
+    "speed": 110
+   },
+   "abilities": [
+    "contrary"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "luxray",
+   "species": "luxray",
+   "dex_id": 405,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 120,
+    "defense": 79,
+    "special-attack": 95,
+    "special-defense": 79,
+    "speed": 70
+   },
+   "abilities": [
+    "rivalry",
+    "intimidate",
+    "guts"
+   ],
+   "hidden_ability": "guts"
+  },
+  {
+   "name": "roserade",
+   "species": "roserade",
+   "dex_id": 407,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 70,
+    "defense": 65,
+    "special-attack": 125,
+    "special-defense": 105,
+    "speed": 90
+   },
+   "abilities": [
+    "natural-cure",
+    "poison-point",
+    "technician"
+   ],
+   "hidden_ability": "technician"
+  },
+  {
+   "name": "rampardos",
+   "species": "rampardos",
+   "dex_id": 409,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock"
+   ],
+   "stats": {
+    "hp": 97,
+    "attack": 165,
+    "defense": 60,
+    "special-attack": 65,
+    "special-defense": 50,
+    "speed": 58
+   },
+   "abilities": [
+    "mold-breaker",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "bastiodon",
+   "species": "bastiodon",
+   "dex_id": 411,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "steel"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 52,
+    "defense": 168,
+    "special-attack": 47,
+    "special-defense": 138,
+    "speed": 30
+   },
+   "abilities": [
+    "sturdy",
+    "soundproof"
+   ],
+   "hidden_ability": "soundproof"
+  },
+  {
+   "name": "lopunny",
+   "species": "lopunny",
+   "dex_id": 428,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 76,
+    "defense": 84,
+    "special-attack": 54,
+    "special-defense": 96,
+    "speed": 105
+   },
+   "abilities": [
+    "cute-charm",
+    "klutz",
+    "limber"
+   ],
+   "hidden_ability": "limber"
+  },
+  {
+   "name": "lopunny-mega",
+   "species": "lopunny",
+   "dex_id": 428,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 136,
+    "defense": 94,
+    "special-attack": 54,
+    "special-defense": 96,
+    "speed": 135
+   },
+   "abilities": [
+    "scrappy"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "spiritomb",
+   "species": "spiritomb",
+   "dex_id": 442,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 92,
+    "defense": 108,
+    "special-attack": 92,
+    "special-defense": 108,
+    "speed": 35
+   },
+   "abilities": [
+    "pressure",
+    "infiltrator"
+   ],
+   "hidden_ability": "infiltrator"
+  },
+  {
+   "name": "garchomp",
+   "species": "garchomp",
+   "dex_id": 445,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "ground"
+   ],
+   "stats": {
+    "hp": 108,
+    "attack": 130,
+    "defense": 95,
+    "special-attack": 80,
+    "special-defense": 85,
+    "speed": 102
+   },
+   "abilities": [
+    "sand-veil",
+    "rough-skin"
+   ],
+   "hidden_ability": "rough-skin"
+  },
+  {
+   "name": "garchomp-mega",
+   "species": "garchomp",
+   "dex_id": 445,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "ground"
+   ],
+   "stats": {
+    "hp": 108,
+    "attack": 170,
+    "defense": 115,
+    "special-attack": 120,
+    "special-defense": 95,
+    "speed": 92
+   },
+   "abilities": [
+    "sand-force"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "garchomp-mega-z",
+   "species": "garchomp",
+   "dex_id": 445,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": true,
+   "types": [
+    "dragon"
+   ],
+   "stats": {
+    "hp": 108,
+    "attack": 130,
+    "defense": 85,
+    "special-attack": 141,
+    "special-defense": 85,
+    "speed": 151
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "lucario",
+   "species": "lucario",
+   "dex_id": 448,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 110,
+    "defense": 70,
+    "special-attack": 115,
+    "special-defense": 70,
+    "speed": 90
+   },
+   "abilities": [
+    "steadfast",
+    "inner-focus",
+    "justified"
+   ],
+   "hidden_ability": "justified"
+  },
+  {
+   "name": "lucario-mega",
+   "species": "lucario",
+   "dex_id": 448,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 145,
+    "defense": 88,
+    "special-attack": 140,
+    "special-defense": 70,
+    "speed": 112
+   },
+   "abilities": [
+    "adaptability"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "lucario-mega-z",
+   "species": "lucario",
+   "dex_id": 448,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": true,
+   "types": [
+    "fighting",
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 100,
+    "defense": 70,
+    "special-attack": 164,
+    "special-defense": 70,
+    "speed": 151
+   },
+   "abilities": [
+    "aura-guard"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "hippowdon",
+   "species": "hippowdon",
+   "dex_id": 450,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground"
+   ],
+   "stats": {
+    "hp": 108,
+    "attack": 112,
+    "defense": 118,
+    "special-attack": 68,
+    "special-defense": 72,
+    "speed": 47
+   },
+   "abilities": [
+    "sand-stream",
+    "sand-force"
+   ],
+   "hidden_ability": "sand-force"
+  },
+  {
+   "name": "toxicroak",
+   "species": "toxicroak",
+   "dex_id": 454,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 83,
+    "attack": 106,
+    "defense": 65,
+    "special-attack": 86,
+    "special-defense": 65,
+    "speed": 85
+   },
+   "abilities": [
+    "anticipation",
+    "dry-skin",
+    "poison-touch"
+   ],
+   "hidden_ability": "poison-touch"
+  },
+  {
+   "name": "abomasnow",
+   "species": "abomasnow",
+   "dex_id": 460,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "ice"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 92,
+    "defense": 75,
+    "special-attack": 92,
+    "special-defense": 85,
+    "speed": 60
+   },
+   "abilities": [
+    "snow-warning",
+    "soundproof"
+   ],
+   "hidden_ability": "soundproof"
+  },
+  {
+   "name": "abomasnow-mega",
+   "species": "abomasnow",
+   "dex_id": 460,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "ice"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 132,
+    "defense": 105,
+    "special-attack": 132,
+    "special-defense": 105,
+    "speed": 30
+   },
+   "abilities": [
+    "snow-warning"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "weavile",
+   "species": "weavile",
+   "dex_id": 461,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "ice"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 120,
+    "defense": 65,
+    "special-attack": 45,
+    "special-defense": 85,
+    "speed": 125
+   },
+   "abilities": [
+    "pressure",
+    "pickpocket"
+   ],
+   "hidden_ability": "pickpocket"
+  },
+  {
+   "name": "rhyperior",
+   "species": "rhyperior",
+   "dex_id": 464,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "stats": {
+    "hp": 115,
+    "attack": 140,
+    "defense": 130,
+    "special-attack": 55,
+    "special-defense": 55,
+    "speed": 40
+   },
+   "abilities": [
+    "lightning-rod",
+    "solid-rock",
+    "reckless"
+   ],
+   "hidden_ability": "reckless"
+  },
+  {
+   "name": "leafeon",
+   "species": "leafeon",
+   "dex_id": 470,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 110,
+    "defense": 130,
+    "special-attack": 60,
+    "special-defense": 65,
+    "speed": 95
+   },
+   "abilities": [
+    "leaf-guard",
+    "chlorophyll"
+   ],
+   "hidden_ability": "chlorophyll"
+  },
+  {
+   "name": "glaceon",
+   "species": "glaceon",
+   "dex_id": 471,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 60,
+    "defense": 110,
+    "special-attack": 130,
+    "special-defense": 95,
+    "speed": 65
+   },
+   "abilities": [
+    "snow-cloak",
+    "ice-body"
+   ],
+   "hidden_ability": "ice-body"
+  },
+  {
+   "name": "gliscor",
+   "species": "gliscor",
+   "dex_id": 472,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "flying"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 95,
+    "defense": 125,
+    "special-attack": 45,
+    "special-defense": 75,
+    "speed": 95
+   },
+   "abilities": [
+    "hyper-cutter",
+    "sand-veil",
+    "poison-heal"
+   ],
+   "hidden_ability": "poison-heal"
+  },
+  {
+   "name": "mamoswine",
+   "species": "mamoswine",
+   "dex_id": 473,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice",
+    "ground"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 130,
+    "defense": 80,
+    "special-attack": 70,
+    "special-defense": 60,
+    "speed": 80
+   },
+   "abilities": [
+    "oblivious",
+    "snow-cloak",
+    "thick-fat"
+   ],
+   "hidden_ability": "thick-fat"
+  },
+  {
+   "name": "gallade",
+   "species": "gallade",
+   "dex_id": 475,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 125,
+    "defense": 65,
+    "special-attack": 65,
+    "special-defense": 115,
+    "speed": 80
+   },
+   "abilities": [
+    "steadfast",
+    "sharpness",
+    "justified"
+   ],
+   "hidden_ability": "justified"
+  },
+  {
+   "name": "gallade-mega",
+   "species": "gallade",
+   "dex_id": 475,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "psychic",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 165,
+    "defense": 95,
+    "special-attack": 65,
+    "special-defense": 115,
+    "speed": 110
+   },
+   "abilities": [
+    "inner-focus"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "froslass",
+   "species": "froslass",
+   "dex_id": 478,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 80,
+    "defense": 70,
+    "special-attack": 80,
+    "special-defense": 70,
+    "speed": 110
+   },
+   "abilities": [
+    "snow-cloak",
+    "cursed-body"
+   ],
+   "hidden_ability": "cursed-body"
+  },
+  {
+   "name": "froslass-mega",
+   "species": "froslass",
+   "dex_id": 478,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "ice",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 80,
+    "defense": 70,
+    "special-attack": 140,
+    "special-defense": 100,
+    "speed": 120
+   },
+   "abilities": [
+    "snow-warning"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "rotom",
+   "species": "rotom",
+   "dex_id": 479,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 50,
+    "defense": 77,
+    "special-attack": 95,
+    "special-defense": 77,
+    "speed": 91
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "rotom-heat",
+   "species": "rotom",
+   "dex_id": 479,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "fire"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 65,
+    "defense": 107,
+    "special-attack": 105,
+    "special-defense": 107,
+    "speed": 86
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "rotom-wash",
+   "species": "rotom",
+   "dex_id": 479,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "water"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 65,
+    "defense": 107,
+    "special-attack": 105,
+    "special-defense": 107,
+    "speed": 86
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "rotom-frost",
+   "species": "rotom",
+   "dex_id": 479,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "ice"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 65,
+    "defense": 107,
+    "special-attack": 105,
+    "special-defense": 107,
+    "speed": 86
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "rotom-fan",
+   "species": "rotom",
+   "dex_id": 479,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "flying"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 65,
+    "defense": 107,
+    "special-attack": 105,
+    "special-defense": 107,
+    "speed": 86
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "rotom-mow",
+   "species": "rotom",
+   "dex_id": 479,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "grass"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 65,
+    "defense": 107,
+    "special-attack": 105,
+    "special-defense": 107,
+    "speed": 86
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "serperior",
+   "species": "serperior",
+   "dex_id": 497,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 75,
+    "defense": 95,
+    "special-attack": 75,
+    "special-defense": 95,
+    "speed": 113
+   },
+   "abilities": [
+    "overgrow",
+    "contrary"
+   ],
+   "hidden_ability": "contrary"
+  },
+  {
+   "name": "emboar",
+   "species": "emboar",
+   "dex_id": 500,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 123,
+    "defense": 65,
+    "special-attack": 100,
+    "special-defense": 65,
+    "speed": 65
+   },
+   "abilities": [
+    "blaze",
+    "reckless"
+   ],
+   "hidden_ability": "reckless"
+  },
+  {
+   "name": "emboar-mega",
+   "species": "emboar",
+   "dex_id": 500,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 148,
+    "defense": 75,
+    "special-attack": 110,
+    "special-defense": 110,
+    "speed": 75
+   },
+   "abilities": [
+    "mold-breaker"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "samurott",
+   "species": "samurott",
+   "dex_id": 503,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 100,
+    "defense": 85,
+    "special-attack": 108,
+    "special-defense": 70,
+    "speed": 70
+   },
+   "abilities": [
+    "torrent",
+    "shell-armor"
+   ],
+   "hidden_ability": "shell-armor"
+  },
+  {
+   "name": "samurott-hisui",
+   "species": "samurott",
+   "dex_id": 503,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 108,
+    "defense": 80,
+    "special-attack": 100,
+    "special-defense": 65,
+    "speed": 85
+   },
+   "abilities": [
+    "torrent",
+    "sharpness"
+   ],
+   "hidden_ability": "sharpness"
+  },
+  {
+   "name": "watchog",
+   "species": "watchog",
+   "dex_id": 505,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 85,
+    "defense": 69,
+    "special-attack": 60,
+    "special-defense": 69,
+    "speed": 77
+   },
+   "abilities": [
+    "illuminate",
+    "keen-eye",
+    "analytic"
+   ],
+   "hidden_ability": "analytic"
+  },
+  {
+   "name": "liepard",
+   "species": "liepard",
+   "dex_id": 510,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 64,
+    "attack": 88,
+    "defense": 50,
+    "special-attack": 88,
+    "special-defense": 50,
+    "speed": 106
+   },
+   "abilities": [
+    "limber",
+    "unburden",
+    "prankster"
+   ],
+   "hidden_ability": "prankster"
+  },
+  {
+   "name": "simisage",
+   "species": "simisage",
+   "dex_id": 512,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 98,
+    "defense": 63,
+    "special-attack": 98,
+    "special-defense": 63,
+    "speed": 101
+   },
+   "abilities": [
+    "gluttony",
+    "overgrow"
+   ],
+   "hidden_ability": "overgrow"
+  },
+  {
+   "name": "simisear",
+   "species": "simisear",
+   "dex_id": 514,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 98,
+    "defense": 63,
+    "special-attack": 98,
+    "special-defense": 63,
+    "speed": 101
+   },
+   "abilities": [
+    "gluttony",
+    "blaze"
+   ],
+   "hidden_ability": "blaze"
+  },
+  {
+   "name": "simipour",
+   "species": "simipour",
+   "dex_id": 516,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 98,
+    "defense": 63,
+    "special-attack": 98,
+    "special-defense": 63,
+    "speed": 101
+   },
+   "abilities": [
+    "gluttony",
+    "torrent"
+   ],
+   "hidden_ability": "torrent"
+  },
+  {
+   "name": "musharna",
+   "species": "musharna",
+   "dex_id": 518,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 116,
+    "attack": 55,
+    "defense": 85,
+    "special-attack": 107,
+    "special-defense": 95,
+    "speed": 29
+   },
+   "abilities": [
+    "forewarn",
+    "synchronize",
+    "telepathy"
+   ],
+   "hidden_ability": "telepathy"
+  },
+  {
+   "name": "excadrill",
+   "species": "excadrill",
+   "dex_id": 530,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "steel"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 135,
+    "defense": 60,
+    "special-attack": 50,
+    "special-defense": 65,
+    "speed": 88
+   },
+   "abilities": [
+    "sand-rush",
+    "sand-force",
+    "mold-breaker"
+   ],
+   "hidden_ability": "mold-breaker"
+  },
+  {
+   "name": "excadrill-mega",
+   "species": "excadrill",
+   "dex_id": 530,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "steel"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 165,
+    "defense": 100,
+    "special-attack": 65,
+    "special-defense": 65,
+    "speed": 103
+   },
+   "abilities": [
+    "piercing-drill"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "audino",
+   "species": "audino",
+   "dex_id": 531,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 103,
+    "attack": 60,
+    "defense": 86,
+    "special-attack": 60,
+    "special-defense": 86,
+    "speed": 50
+   },
+   "abilities": [
+    "healer",
+    "regenerator",
+    "klutz"
+   ],
+   "hidden_ability": "klutz"
+  },
+  {
+   "name": "audino-mega",
+   "species": "audino",
+   "dex_id": 531,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 103,
+    "attack": 60,
+    "defense": 126,
+    "special-attack": 80,
+    "special-defense": 126,
+    "speed": 50
+   },
+   "abilities": [
+    "healer"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "conkeldurr",
+   "species": "conkeldurr",
+   "dex_id": 534,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 105,
+    "attack": 140,
+    "defense": 95,
+    "special-attack": 55,
+    "special-defense": 65,
+    "speed": 45
+   },
+   "abilities": [
+    "guts",
+    "sheer-force",
+    "iron-fist"
+   ],
+   "hidden_ability": "iron-fist"
+  },
+  {
+   "name": "scolipede",
+   "species": "scolipede",
+   "dex_id": 545,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "poison"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 100,
+    "defense": 89,
+    "special-attack": 55,
+    "special-defense": 69,
+    "speed": 112
+   },
+   "abilities": [
+    "poison-point",
+    "swarm",
+    "speed-boost"
+   ],
+   "hidden_ability": "speed-boost"
+  },
+  {
+   "name": "scolipede-mega",
+   "species": "scolipede",
+   "dex_id": 545,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "poison"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 140,
+    "defense": 149,
+    "special-attack": 75,
+    "special-defense": 99,
+    "speed": 62
+   },
+   "abilities": [
+    "shell-armor"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "whimsicott",
+   "species": "whimsicott",
+   "dex_id": 547,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 67,
+    "defense": 85,
+    "special-attack": 77,
+    "special-defense": 75,
+    "speed": 116
+   },
+   "abilities": [
+    "prankster",
+    "infiltrator",
+    "chlorophyll"
+   ],
+   "hidden_ability": "chlorophyll"
+  },
+  {
+   "name": "krookodile",
+   "species": "krookodile",
+   "dex_id": 553,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "dark"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 117,
+    "defense": 80,
+    "special-attack": 65,
+    "special-defense": 70,
+    "speed": 92
+   },
+   "abilities": [
+    "intimidate",
+    "moxie",
+    "anger-point"
+   ],
+   "hidden_ability": "anger-point"
+  },
+  {
+   "name": "scrafty",
+   "species": "scrafty",
+   "dex_id": 560,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 90,
+    "defense": 115,
+    "special-attack": 45,
+    "special-defense": 115,
+    "speed": 58
+   },
+   "abilities": [
+    "shed-skin",
+    "moxie",
+    "intimidate"
+   ],
+   "hidden_ability": "intimidate"
+  },
+  {
+   "name": "scrafty-mega",
+   "species": "scrafty",
+   "dex_id": 560,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 130,
+    "defense": 135,
+    "special-attack": 55,
+    "special-defense": 135,
+    "speed": 68
+   },
+   "abilities": [
+    "intimidate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "cofagrigus",
+   "species": "cofagrigus",
+   "dex_id": 563,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost"
+   ],
+   "stats": {
+    "hp": 58,
+    "attack": 50,
+    "defense": 145,
+    "special-attack": 95,
+    "special-defense": 105,
+    "speed": 30
+   },
+   "abilities": [
+    "mummy"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "garbodor",
+   "species": "garbodor",
+   "dex_id": 569,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 95,
+    "defense": 82,
+    "special-attack": 60,
+    "special-defense": 82,
+    "speed": 75
+   },
+   "abilities": [
+    "stench",
+    "weak-armor",
+    "aftermath"
+   ],
+   "hidden_ability": "aftermath"
+  },
+  {
+   "name": "zoroark",
+   "species": "zoroark",
+   "dex_id": 571,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 105,
+    "defense": 60,
+    "special-attack": 120,
+    "special-defense": 60,
+    "speed": 105
+   },
+   "abilities": [
+    "illusion"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "zoroark-hisui",
+   "species": "zoroark",
+   "dex_id": 571,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 100,
+    "defense": 60,
+    "special-attack": 125,
+    "special-defense": 60,
+    "speed": 110
+   },
+   "abilities": [
+    "illusion"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "reuniclus",
+   "species": "reuniclus",
+   "dex_id": 579,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 65,
+    "defense": 75,
+    "special-attack": 125,
+    "special-defense": 85,
+    "speed": 30
+   },
+   "abilities": [
+    "overcoat",
+    "magic-guard",
+    "regenerator"
+   ],
+   "hidden_ability": "regenerator"
+  },
+  {
+   "name": "vanilluxe",
+   "species": "vanilluxe",
+   "dex_id": 584,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice"
+   ],
+   "stats": {
+    "hp": 71,
+    "attack": 95,
+    "defense": 85,
+    "special-attack": 110,
+    "special-defense": 95,
+    "speed": 79
+   },
+   "abilities": [
+    "ice-body",
+    "snow-warning",
+    "weak-armor"
+   ],
+   "hidden_ability": "weak-armor"
+  },
+  {
+   "name": "emolga",
+   "species": "emolga",
+   "dex_id": 587,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "flying"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 75,
+    "defense": 60,
+    "special-attack": 75,
+    "special-defense": 60,
+    "speed": 103
+   },
+   "abilities": [
+    "static",
+    "motor-drive"
+   ],
+   "hidden_ability": "motor-drive"
+  },
+  {
+   "name": "eelektross",
+   "species": "eelektross",
+   "dex_id": 604,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 115,
+    "defense": 80,
+    "special-attack": 105,
+    "special-defense": 80,
+    "speed": 50
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "eelektross-mega",
+   "species": "eelektross",
+   "dex_id": 604,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 145,
+    "defense": 80,
+    "special-attack": 135,
+    "special-defense": 90,
+    "speed": 80
+   },
+   "abilities": [
+    "eelevate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "chandelure",
+   "species": "chandelure",
+   "dex_id": 609,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "fire"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 55,
+    "defense": 90,
+    "special-attack": 145,
+    "special-defense": 90,
+    "speed": 80
+   },
+   "abilities": [
+    "flash-fire",
+    "flame-body",
+    "infiltrator"
+   ],
+   "hidden_ability": "infiltrator"
+  },
+  {
+   "name": "chandelure-mega",
+   "species": "chandelure",
+   "dex_id": 609,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "fire"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 75,
+    "defense": 110,
+    "special-attack": 175,
+    "special-defense": 110,
+    "speed": 90
+   },
+   "abilities": [
+    "infiltrator"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "beartic",
+   "species": "beartic",
+   "dex_id": 614,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 130,
+    "defense": 80,
+    "special-attack": 70,
+    "special-defense": 80,
+    "speed": 50
+   },
+   "abilities": [
+    "snow-cloak",
+    "slush-rush",
+    "swift-swim"
+   ],
+   "hidden_ability": "swift-swim"
+  },
+  {
+   "name": "stunfisk",
+   "species": "stunfisk",
+   "dex_id": 618,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "electric"
+   ],
+   "stats": {
+    "hp": 109,
+    "attack": 66,
+    "defense": 84,
+    "special-attack": 81,
+    "special-defense": 99,
+    "speed": 32
+   },
+   "abilities": [
+    "static",
+    "limber",
+    "sand-veil"
+   ],
+   "hidden_ability": "sand-veil"
+  },
+  {
+   "name": "stunfisk-galar",
+   "species": "stunfisk",
+   "dex_id": 618,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "steel"
+   ],
+   "stats": {
+    "hp": 109,
+    "attack": 81,
+    "defense": 99,
+    "special-attack": 66,
+    "special-defense": 84,
+    "speed": 32
+   },
+   "abilities": [
+    "mimicry"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "golurk",
+   "species": "golurk",
+   "dex_id": 623,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 89,
+    "attack": 124,
+    "defense": 80,
+    "special-attack": 55,
+    "special-defense": 80,
+    "speed": 55
+   },
+   "abilities": [
+    "iron-fist",
+    "klutz",
+    "no-guard"
+   ],
+   "hidden_ability": "no-guard"
+  },
+  {
+   "name": "golurk-mega",
+   "species": "golurk",
+   "dex_id": 623,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 89,
+    "attack": 159,
+    "defense": 105,
+    "special-attack": 70,
+    "special-defense": 105,
+    "speed": 55
+   },
+   "abilities": [
+    "unseen-fist"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "hydreigon",
+   "species": "hydreigon",
+   "dex_id": 635,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 92,
+    "attack": 105,
+    "defense": 90,
+    "special-attack": 125,
+    "special-defense": 90,
+    "speed": 98
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "volcarona",
+   "species": "volcarona",
+   "dex_id": 637,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "fire"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 60,
+    "defense": 65,
+    "special-attack": 135,
+    "special-defense": 105,
+    "speed": 100
+   },
+   "abilities": [
+    "flame-body",
+    "swarm"
+   ],
+   "hidden_ability": "swarm"
+  },
+  {
+   "name": "chesnaught",
+   "species": "chesnaught",
+   "dex_id": 652,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 88,
+    "attack": 107,
+    "defense": 122,
+    "special-attack": 74,
+    "special-defense": 75,
+    "speed": 64
+   },
+   "abilities": [
+    "overgrow",
+    "bulletproof"
+   ],
+   "hidden_ability": "bulletproof"
+  },
+  {
+   "name": "chesnaught-mega",
+   "species": "chesnaught",
+   "dex_id": 652,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 88,
+    "attack": 137,
+    "defense": 172,
+    "special-attack": 74,
+    "special-defense": 115,
+    "speed": 44
+   },
+   "abilities": [
+    "bulletproof"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "delphox",
+   "species": "delphox",
+   "dex_id": 655,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 69,
+    "defense": 72,
+    "special-attack": 114,
+    "special-defense": 100,
+    "speed": 104
+   },
+   "abilities": [
+    "blaze",
+    "magician"
+   ],
+   "hidden_ability": "magician"
+  },
+  {
+   "name": "delphox-mega",
+   "species": "delphox",
+   "dex_id": 655,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 69,
+    "defense": 72,
+    "special-attack": 159,
+    "special-defense": 125,
+    "speed": 134
+   },
+   "abilities": [
+    "levitate"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "greninja",
+   "species": "greninja",
+   "dex_id": 658,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 95,
+    "defense": 67,
+    "special-attack": 103,
+    "special-defense": 71,
+    "speed": 122
+   },
+   "abilities": [
+    "torrent",
+    "protean"
+   ],
+   "hidden_ability": "protean"
+  },
+  {
+   "name": "greninja-battle-bond",
+   "species": "greninja",
+   "dex_id": 658,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 95,
+    "defense": 67,
+    "special-attack": 103,
+    "special-defense": 71,
+    "speed": 122
+   },
+   "abilities": [
+    "battle-bond"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "greninja-ash",
+   "species": "greninja",
+   "dex_id": 658,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 145,
+    "defense": 67,
+    "special-attack": 153,
+    "special-defense": 71,
+    "speed": 132
+   },
+   "abilities": [
+    "battle-bond"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "greninja-mega",
+   "species": "greninja",
+   "dex_id": 658,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "dark"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 125,
+    "defense": 77,
+    "special-attack": 133,
+    "special-defense": 81,
+    "speed": 142
+   },
+   "abilities": [
+    "protean"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "diggersby",
+   "species": "diggersby",
+   "dex_id": 660,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "ground"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 56,
+    "defense": 77,
+    "special-attack": 50,
+    "special-defense": 77,
+    "speed": 78
+   },
+   "abilities": [
+    "pickup",
+    "cheek-pouch",
+    "huge-power"
+   ],
+   "hidden_ability": "huge-power"
+  },
+  {
+   "name": "talonflame",
+   "species": "talonflame",
+   "dex_id": 663,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "flying"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 81,
+    "defense": 71,
+    "special-attack": 74,
+    "special-defense": 69,
+    "speed": 126
+   },
+   "abilities": [
+    "flame-body",
+    "gale-wings"
+   ],
+   "hidden_ability": "gale-wings"
+  },
+  {
+   "name": "vivillon",
+   "species": "vivillon",
+   "dex_id": 666,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "flying"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 52,
+    "defense": 50,
+    "special-attack": 90,
+    "special-defense": 50,
+    "speed": 89
+   },
+   "abilities": [
+    "shield-dust",
+    "compound-eyes",
+    "friend-guard"
+   ],
+   "hidden_ability": "friend-guard"
+  },
+  {
+   "name": "pyroar-male",
+   "species": "pyroar",
+   "dex_id": 668,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "normal"
+   ],
+   "stats": {
+    "hp": 86,
+    "attack": 68,
+    "defense": 72,
+    "special-attack": 109,
+    "special-defense": 66,
+    "speed": 106
+   },
+   "abilities": [
+    "rivalry",
+    "unnerve",
+    "moxie"
+   ],
+   "hidden_ability": "moxie"
+  },
+  {
+   "name": "pyroar-mega",
+   "species": "pyroar",
+   "dex_id": 668,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "normal"
+   ],
+   "stats": {
+    "hp": 86,
+    "attack": 88,
+    "defense": 92,
+    "special-attack": 129,
+    "special-defense": 86,
+    "speed": 126
+   },
+   "abilities": [
+    "fire-mane"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "floette",
+   "species": "floette",
+   "dex_id": 670,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 54,
+    "attack": 45,
+    "defense": 47,
+    "special-attack": 75,
+    "special-defense": 98,
+    "speed": 52
+   },
+   "abilities": [
+    "flower-veil",
+    "symbiosis"
+   ],
+   "hidden_ability": "symbiosis"
+  },
+  {
+   "name": "floette-eternal",
+   "species": "floette",
+   "dex_id": 670,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 65,
+    "defense": 67,
+    "special-attack": 125,
+    "special-defense": 128,
+    "speed": 92
+   },
+   "abilities": [
+    "flower-veil",
+    "symbiosis"
+   ],
+   "hidden_ability": "symbiosis"
+  },
+  {
+   "name": "floette-mega",
+   "species": "floette",
+   "dex_id": 670,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 85,
+    "defense": 87,
+    "special-attack": 155,
+    "special-defense": 148,
+    "speed": 102
+   },
+   "abilities": [
+    "fairy-aura"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "florges",
+   "species": "florges",
+   "dex_id": 671,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 65,
+    "defense": 68,
+    "special-attack": 112,
+    "special-defense": 154,
+    "speed": 75
+   },
+   "abilities": [
+    "flower-veil",
+    "symbiosis"
+   ],
+   "hidden_ability": "symbiosis"
+  },
+  {
+   "name": "gogoat",
+   "species": "gogoat",
+   "dex_id": 673,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 123,
+    "attack": 100,
+    "defense": 62,
+    "special-attack": 97,
+    "special-defense": 81,
+    "speed": 68
+   },
+   "abilities": [
+    "sap-sipper",
+    "grass-pelt"
+   ],
+   "hidden_ability": "grass-pelt"
+  },
+  {
+   "name": "pangoro",
+   "species": "pangoro",
+   "dex_id": 675,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "dark"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 124,
+    "defense": 78,
+    "special-attack": 69,
+    "special-defense": 71,
+    "speed": 58
+   },
+   "abilities": [
+    "iron-fist",
+    "mold-breaker",
+    "scrappy"
+   ],
+   "hidden_ability": "scrappy"
+  },
+  {
+   "name": "furfrou",
+   "species": "furfrou",
+   "dex_id": 676,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 80,
+    "defense": 60,
+    "special-attack": 65,
+    "special-defense": 90,
+    "speed": 102
+   },
+   "abilities": [
+    "fur-coat"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "meowstic-male",
+   "species": "meowstic",
+   "dex_id": 678,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 48,
+    "defense": 76,
+    "special-attack": 83,
+    "special-defense": 81,
+    "speed": 104
+   },
+   "abilities": [
+    "keen-eye",
+    "infiltrator",
+    "prankster"
+   ],
+   "hidden_ability": "prankster"
+  },
+  {
+   "name": "meowstic-female",
+   "species": "meowstic",
+   "dex_id": 678,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 48,
+    "defense": 76,
+    "special-attack": 83,
+    "special-defense": 81,
+    "speed": 104
+   },
+   "abilities": [
+    "keen-eye",
+    "infiltrator",
+    "competitive"
+   ],
+   "hidden_ability": "competitive"
+  },
+  {
+   "name": "meowstic-male-mega",
+   "species": "meowstic",
+   "dex_id": 678,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 48,
+    "defense": 76,
+    "special-attack": 143,
+    "special-defense": 101,
+    "speed": 124
+   },
+   "abilities": [
+    "trace"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "meowstic-female-mega",
+   "species": "meowstic",
+   "dex_id": 678,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 48,
+    "defense": 76,
+    "special-attack": 143,
+    "special-defense": 101,
+    "speed": 124
+   },
+   "abilities": [
+    "trace"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "aegislash-shield",
+   "species": "aegislash",
+   "dex_id": 681,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 50,
+    "defense": 140,
+    "special-attack": 50,
+    "special-defense": 140,
+    "speed": 60
+   },
+   "abilities": [
+    "stance-change"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "aegislash-blade",
+   "species": "aegislash",
+   "dex_id": 681,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 140,
+    "defense": 50,
+    "special-attack": 140,
+    "special-defense": 50,
+    "speed": 60
+   },
+   "abilities": [
+    "stance-change"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "aromatisse",
+   "species": "aromatisse",
+   "dex_id": 683,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 101,
+    "attack": 72,
+    "defense": 72,
+    "special-attack": 99,
+    "special-defense": 89,
+    "speed": 29
+   },
+   "abilities": [
+    "healer",
+    "aroma-veil"
+   ],
+   "hidden_ability": "aroma-veil"
+  },
+  {
+   "name": "slurpuff",
+   "species": "slurpuff",
+   "dex_id": 685,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 82,
+    "attack": 80,
+    "defense": 86,
+    "special-attack": 85,
+    "special-defense": 75,
+    "speed": 72
+   },
+   "abilities": [
+    "sweet-veil",
+    "unburden"
+   ],
+   "hidden_ability": "unburden"
+  },
+  {
+   "name": "malamar",
+   "species": "malamar",
+   "dex_id": 687,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 86,
+    "attack": 92,
+    "defense": 88,
+    "special-attack": 68,
+    "special-defense": 75,
+    "speed": 73
+   },
+   "abilities": [
+    "contrary",
+    "suction-cups",
+    "infiltrator"
+   ],
+   "hidden_ability": "infiltrator"
+  },
+  {
+   "name": "malamar-mega",
+   "species": "malamar",
+   "dex_id": 687,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 86,
+    "attack": 102,
+    "defense": 88,
+    "special-attack": 98,
+    "special-defense": 120,
+    "speed": 88
+   },
+   "abilities": [
+    "contrary"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "barbaracle",
+   "species": "barbaracle",
+   "dex_id": 689,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "water"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 105,
+    "defense": 115,
+    "special-attack": 54,
+    "special-defense": 86,
+    "speed": 68
+   },
+   "abilities": [
+    "tough-claws",
+    "sniper",
+    "pickpocket"
+   ],
+   "hidden_ability": "pickpocket"
+  },
+  {
+   "name": "barbaracle-mega",
+   "species": "barbaracle",
+   "dex_id": 689,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 140,
+    "defense": 130,
+    "special-attack": 64,
+    "special-defense": 106,
+    "speed": 88
+   },
+   "abilities": [
+    "tough-claws"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "dragalge",
+   "species": "dragalge",
+   "dex_id": 691,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 75,
+    "defense": 90,
+    "special-attack": 97,
+    "special-defense": 123,
+    "speed": 44
+   },
+   "abilities": [
+    "poison-point",
+    "poison-touch",
+    "adaptability"
+   ],
+   "hidden_ability": "adaptability"
+  },
+  {
+   "name": "dragalge-mega",
+   "species": "dragalge",
+   "dex_id": 691,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 85,
+    "defense": 105,
+    "special-attack": 132,
+    "special-defense": 163,
+    "speed": 44
+   },
+   "abilities": [
+    "regenerator"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "clawitzer",
+   "species": "clawitzer",
+   "dex_id": 693,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 71,
+    "attack": 73,
+    "defense": 88,
+    "special-attack": 120,
+    "special-defense": 89,
+    "speed": 59
+   },
+   "abilities": [
+    "mega-launcher"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "heliolisk",
+   "species": "heliolisk",
+   "dex_id": 695,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "normal"
+   ],
+   "stats": {
+    "hp": 62,
+    "attack": 55,
+    "defense": 52,
+    "special-attack": 109,
+    "special-defense": 94,
+    "speed": 109
+   },
+   "abilities": [
+    "dry-skin",
+    "sand-veil",
+    "solar-power"
+   ],
+   "hidden_ability": "solar-power"
+  },
+  {
+   "name": "tyrantrum",
+   "species": "tyrantrum",
+   "dex_id": 697,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 82,
+    "attack": 121,
+    "defense": 119,
+    "special-attack": 69,
+    "special-defense": 59,
+    "speed": 71
+   },
+   "abilities": [
+    "strong-jaw",
+    "rock-head"
+   ],
+   "hidden_ability": "rock-head"
+  },
+  {
+   "name": "aurorus",
+   "species": "aurorus",
+   "dex_id": 699,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "ice"
+   ],
+   "stats": {
+    "hp": 123,
+    "attack": 77,
+    "defense": 72,
+    "special-attack": 99,
+    "special-defense": 92,
+    "speed": 58
+   },
+   "abilities": [
+    "refrigerate",
+    "snow-warning"
+   ],
+   "hidden_ability": "snow-warning"
+  },
+  {
+   "name": "sylveon",
+   "species": "sylveon",
+   "dex_id": 700,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 65,
+    "defense": 65,
+    "special-attack": 110,
+    "special-defense": 130,
+    "speed": 60
+   },
+   "abilities": [
+    "cute-charm",
+    "pixilate"
+   ],
+   "hidden_ability": "pixilate"
+  },
+  {
+   "name": "hawlucha",
+   "species": "hawlucha",
+   "dex_id": 701,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "flying"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 92,
+    "defense": 75,
+    "special-attack": 74,
+    "special-defense": 63,
+    "speed": 118
+   },
+   "abilities": [
+    "limber",
+    "unburden",
+    "mold-breaker"
+   ],
+   "hidden_ability": "mold-breaker"
+  },
+  {
+   "name": "hawlucha-mega",
+   "species": "hawlucha",
+   "dex_id": 701,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "flying"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 137,
+    "defense": 100,
+    "special-attack": 74,
+    "special-defense": 93,
+    "speed": 118
+   },
+   "abilities": [
+    "no-guard"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "dedenne",
+   "species": "dedenne",
+   "dex_id": 702,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 67,
+    "attack": 58,
+    "defense": 57,
+    "special-attack": 81,
+    "special-defense": 67,
+    "speed": 101
+   },
+   "abilities": [
+    "cheek-pouch",
+    "pickup",
+    "plus"
+   ],
+   "hidden_ability": "plus"
+  },
+  {
+   "name": "goodra",
+   "species": "goodra",
+   "dex_id": 706,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dragon"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 100,
+    "defense": 70,
+    "special-attack": 110,
+    "special-defense": 150,
+    "speed": 80
+   },
+   "abilities": [
+    "sap-sipper",
+    "hydration",
+    "gooey"
+   ],
+   "hidden_ability": "gooey"
+  },
+  {
+   "name": "goodra-hisui",
+   "species": "goodra",
+   "dex_id": 706,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 100,
+    "defense": 100,
+    "special-attack": 110,
+    "special-defense": 150,
+    "speed": 60
+   },
+   "abilities": [
+    "sap-sipper",
+    "shell-armor",
+    "gooey"
+   ],
+   "hidden_ability": "gooey"
+  },
+  {
+   "name": "klefki",
+   "species": "klefki",
+   "dex_id": 707,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 57,
+    "attack": 80,
+    "defense": 91,
+    "special-attack": 80,
+    "special-defense": 87,
+    "speed": 75
+   },
+   "abilities": [
+    "prankster",
+    "magician"
+   ],
+   "hidden_ability": "magician"
+  },
+  {
+   "name": "trevenant",
+   "species": "trevenant",
+   "dex_id": 709,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 110,
+    "defense": 76,
+    "special-attack": 65,
+    "special-defense": 82,
+    "speed": 56
+   },
+   "abilities": [
+    "natural-cure",
+    "frisk",
+    "harvest"
+   ],
+   "hidden_ability": "harvest"
+  },
+  {
+   "name": "gourgeist-average",
+   "species": "gourgeist",
+   "dex_id": 711,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 90,
+    "defense": 122,
+    "special-attack": 58,
+    "special-defense": 75,
+    "speed": 84
+   },
+   "abilities": [
+    "pickup",
+    "frisk",
+    "insomnia"
+   ],
+   "hidden_ability": "insomnia"
+  },
+  {
+   "name": "gourgeist-small",
+   "species": "gourgeist",
+   "dex_id": 711,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 85,
+    "defense": 122,
+    "special-attack": 58,
+    "special-defense": 75,
+    "speed": 99
+   },
+   "abilities": [
+    "pickup",
+    "frisk",
+    "insomnia"
+   ],
+   "hidden_ability": "insomnia"
+  },
+  {
+   "name": "gourgeist-large",
+   "species": "gourgeist",
+   "dex_id": 711,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 95,
+    "defense": 122,
+    "special-attack": 58,
+    "special-defense": 75,
+    "speed": 69
+   },
+   "abilities": [
+    "pickup",
+    "frisk",
+    "insomnia"
+   ],
+   "hidden_ability": "insomnia"
+  },
+  {
+   "name": "gourgeist-super",
+   "species": "gourgeist",
+   "dex_id": 711,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 100,
+    "defense": 122,
+    "special-attack": 58,
+    "special-defense": 75,
+    "speed": 54
+   },
+   "abilities": [
+    "pickup",
+    "frisk",
+    "insomnia"
+   ],
+   "hidden_ability": "insomnia"
+  },
+  {
+   "name": "avalugg",
+   "species": "avalugg",
+   "dex_id": 713,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 117,
+    "defense": 184,
+    "special-attack": 44,
+    "special-defense": 46,
+    "speed": 28
+   },
+   "abilities": [
+    "own-tempo",
+    "ice-body",
+    "sturdy"
+   ],
+   "hidden_ability": "sturdy"
+  },
+  {
+   "name": "avalugg-hisui",
+   "species": "avalugg",
+   "dex_id": 713,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice",
+    "rock"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 127,
+    "defense": 184,
+    "special-attack": 34,
+    "special-defense": 36,
+    "speed": 38
+   },
+   "abilities": [
+    "strong-jaw",
+    "ice-body",
+    "sturdy"
+   ],
+   "hidden_ability": "sturdy"
+  },
+  {
+   "name": "noivern",
+   "species": "noivern",
+   "dex_id": 715,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "flying",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 70,
+    "defense": 80,
+    "special-attack": 97,
+    "special-defense": 80,
+    "speed": 123
+   },
+   "abilities": [
+    "frisk",
+    "infiltrator",
+    "telepathy"
+   ],
+   "hidden_ability": "telepathy"
+  },
+  {
+   "name": "decidueye",
+   "species": "decidueye",
+   "dex_id": 724,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 107,
+    "defense": 75,
+    "special-attack": 100,
+    "special-defense": 100,
+    "speed": 70
+   },
+   "abilities": [
+    "overgrow",
+    "long-reach"
+   ],
+   "hidden_ability": "long-reach"
+  },
+  {
+   "name": "decidueye-hisui",
+   "species": "decidueye",
+   "dex_id": 724,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 88,
+    "attack": 112,
+    "defense": 80,
+    "special-attack": 95,
+    "special-defense": 95,
+    "speed": 60
+   },
+   "abilities": [
+    "overgrow",
+    "scrappy"
+   ],
+   "hidden_ability": "scrappy"
+  },
+  {
+   "name": "incineroar",
+   "species": "incineroar",
+   "dex_id": 727,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "dark"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 115,
+    "defense": 90,
+    "special-attack": 80,
+    "special-defense": 90,
+    "speed": 60
+   },
+   "abilities": [
+    "blaze",
+    "intimidate"
+   ],
+   "hidden_ability": "intimidate"
+  },
+  {
+   "name": "primarina",
+   "species": "primarina",
+   "dex_id": 730,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 74,
+    "defense": 74,
+    "special-attack": 126,
+    "special-defense": 116,
+    "speed": 60
+   },
+   "abilities": [
+    "torrent",
+    "liquid-voice"
+   ],
+   "hidden_ability": "liquid-voice"
+  },
+  {
+   "name": "toucannon",
+   "species": "toucannon",
+   "dex_id": 733,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 120,
+    "defense": 75,
+    "special-attack": 75,
+    "special-defense": 75,
+    "speed": 60
+   },
+   "abilities": [
+    "keen-eye",
+    "skill-link",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "crabominable",
+   "species": "crabominable",
+   "dex_id": 740,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "ice"
+   ],
+   "stats": {
+    "hp": 97,
+    "attack": 132,
+    "defense": 77,
+    "special-attack": 62,
+    "special-defense": 67,
+    "speed": 43
+   },
+   "abilities": [
+    "hyper-cutter",
+    "iron-fist",
+    "anger-point"
+   ],
+   "hidden_ability": "anger-point"
+  },
+  {
+   "name": "crabominable-mega",
+   "species": "crabominable",
+   "dex_id": 740,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "ice"
+   ],
+   "stats": {
+    "hp": 97,
+    "attack": 157,
+    "defense": 122,
+    "special-attack": 62,
+    "special-defense": 107,
+    "speed": 33
+   },
+   "abilities": [
+    "iron-fist"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "lycanroc-midday",
+   "species": "lycanroc",
+   "dex_id": 745,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 115,
+    "defense": 65,
+    "special-attack": 55,
+    "special-defense": 65,
+    "speed": 112
+   },
+   "abilities": [
+    "keen-eye",
+    "sand-rush",
+    "steadfast"
+   ],
+   "hidden_ability": "steadfast"
+  },
+  {
+   "name": "lycanroc-midnight",
+   "species": "lycanroc",
+   "dex_id": 745,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 115,
+    "defense": 75,
+    "special-attack": 55,
+    "special-defense": 75,
+    "speed": 82
+   },
+   "abilities": [
+    "keen-eye",
+    "vital-spirit",
+    "no-guard"
+   ],
+   "hidden_ability": "no-guard"
+  },
+  {
+   "name": "lycanroc-dusk",
+   "species": "lycanroc",
+   "dex_id": 745,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 117,
+    "defense": 65,
+    "special-attack": 55,
+    "special-defense": 65,
+    "speed": 110
+   },
+   "abilities": [
+    "tough-claws"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "toxapex",
+   "species": "toxapex",
+   "dex_id": 748,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "water"
+   ],
+   "stats": {
+    "hp": 50,
+    "attack": 63,
+    "defense": 152,
+    "special-attack": 53,
+    "special-defense": 142,
+    "speed": 35
+   },
+   "abilities": [
+    "merciless",
+    "limber",
+    "regenerator"
+   ],
+   "hidden_ability": "regenerator"
+  },
+  {
+   "name": "mudsdale",
+   "species": "mudsdale",
+   "dex_id": 750,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 125,
+    "defense": 100,
+    "special-attack": 55,
+    "special-defense": 85,
+    "speed": 35
+   },
+   "abilities": [
+    "own-tempo",
+    "stamina",
+    "inner-focus"
+   ],
+   "hidden_ability": "inner-focus"
+  },
+  {
+   "name": "araquanid",
+   "species": "araquanid",
+   "dex_id": 752,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "bug"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 70,
+    "defense": 92,
+    "special-attack": 50,
+    "special-defense": 132,
+    "speed": 42
+   },
+   "abilities": [
+    "water-bubble",
+    "water-absorb"
+   ],
+   "hidden_ability": "water-absorb"
+  },
+  {
+   "name": "araquanid-totem",
+   "species": "araquanid",
+   "dex_id": 752,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "bug"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 70,
+    "defense": 92,
+    "special-attack": 50,
+    "special-defense": 132,
+    "speed": 42
+   },
+   "abilities": [
+    "water-bubble",
+    "water-absorb"
+   ],
+   "hidden_ability": "water-absorb"
+  },
+  {
+   "name": "salazzle",
+   "species": "salazzle",
+   "dex_id": 758,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "fire"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 64,
+    "defense": 60,
+    "special-attack": 111,
+    "special-defense": 60,
+    "speed": 117
+   },
+   "abilities": [
+    "corrosion",
+    "oblivious"
+   ],
+   "hidden_ability": "oblivious"
+  },
+  {
+   "name": "salazzle-totem",
+   "species": "salazzle",
+   "dex_id": 758,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "poison",
+    "fire"
+   ],
+   "stats": {
+    "hp": 68,
+    "attack": 64,
+    "defense": 60,
+    "special-attack": 111,
+    "special-defense": 60,
+    "speed": 117
+   },
+   "abilities": [
+    "corrosion",
+    "oblivious"
+   ],
+   "hidden_ability": "oblivious"
+  },
+  {
+   "name": "tsareena",
+   "species": "tsareena",
+   "dex_id": 763,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 120,
+    "defense": 98,
+    "special-attack": 50,
+    "special-defense": 98,
+    "speed": 72
+   },
+   "abilities": [
+    "leaf-guard",
+    "queenly-majesty",
+    "sweet-veil"
+   ],
+   "hidden_ability": "sweet-veil"
+  },
+  {
+   "name": "oranguru",
+   "species": "oranguru",
+   "dex_id": 765,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 60,
+    "defense": 80,
+    "special-attack": 90,
+    "special-defense": 110,
+    "speed": 60
+   },
+   "abilities": [
+    "inner-focus",
+    "telepathy",
+    "symbiosis"
+   ],
+   "hidden_ability": "symbiosis"
+  },
+  {
+   "name": "passimian",
+   "species": "passimian",
+   "dex_id": 766,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 120,
+    "defense": 90,
+    "special-attack": 40,
+    "special-defense": 60,
+    "speed": 80
+   },
+   "abilities": [
+    "receiver",
+    "defiant"
+   ],
+   "hidden_ability": "defiant"
+  },
+  {
+   "name": "golisopod",
+   "species": "golisopod",
+   "dex_id": 768,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "bug",
+    "water"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 125,
+    "defense": 140,
+    "special-attack": 60,
+    "special-defense": 90,
+    "speed": 40
+   },
+   "abilities": [
+    "emergency-exit"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "golisopod-mega",
+   "species": "golisopod",
+   "dex_id": 768,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": true,
+   "types": [
+    "bug",
+    "steel"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 150,
+    "defense": 175,
+    "special-attack": 70,
+    "special-defense": 120,
+    "speed": 40
+   },
+   "abilities": [
+    "tough-claws"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "mimikyu-disguised",
+   "species": "mimikyu",
+   "dex_id": 778,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 90,
+    "defense": 80,
+    "special-attack": 50,
+    "special-defense": 105,
+    "speed": 96
+   },
+   "abilities": [
+    "disguise"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "mimikyu-busted",
+   "species": "mimikyu",
+   "dex_id": 778,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 90,
+    "defense": 80,
+    "special-attack": 50,
+    "special-defense": 105,
+    "speed": 96
+   },
+   "abilities": [
+    "disguise"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "mimikyu-totem-disguised",
+   "species": "mimikyu",
+   "dex_id": 778,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 90,
+    "defense": 80,
+    "special-attack": 50,
+    "special-defense": 105,
+    "speed": 96
+   },
+   "abilities": [
+    "disguise"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "mimikyu-totem-busted",
+   "species": "mimikyu",
+   "dex_id": 778,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 55,
+    "attack": 90,
+    "defense": 80,
+    "special-attack": 50,
+    "special-defense": 105,
+    "speed": 96
+   },
+   "abilities": [
+    "disguise"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "drampa",
+   "species": "drampa",
+   "dex_id": 780,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 60,
+    "defense": 85,
+    "special-attack": 135,
+    "special-defense": 91,
+    "speed": 36
+   },
+   "abilities": [
+    "berserk",
+    "sap-sipper",
+    "cloud-nine"
+   ],
+   "hidden_ability": "cloud-nine"
+  },
+  {
+   "name": "drampa-mega",
+   "species": "drampa",
+   "dex_id": 780,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 85,
+    "defense": 110,
+    "special-attack": 160,
+    "special-defense": 116,
+    "speed": 36
+   },
+   "abilities": [
+    "berserk"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "kommo-o",
+   "species": "kommo-o",
+   "dex_id": 784,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 110,
+    "defense": 125,
+    "special-attack": 100,
+    "special-defense": 105,
+    "speed": 85
+   },
+   "abilities": [
+    "bulletproof",
+    "soundproof",
+    "overcoat"
+   ],
+   "hidden_ability": "overcoat"
+  },
+  {
+   "name": "kommo-o-totem",
+   "species": "kommo-o",
+   "dex_id": 784,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 110,
+    "defense": 125,
+    "special-attack": 100,
+    "special-defense": 105,
+    "speed": 85
+   },
+   "abilities": [
+    "bulletproof",
+    "soundproof",
+    "overcoat"
+   ],
+   "hidden_ability": "overcoat"
+  },
+  {
+   "name": "rillaboom",
+   "species": "rillaboom",
+   "dex_id": 812,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "grass"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 125,
+    "defense": 90,
+    "special-attack": 60,
+    "special-defense": 70,
+    "speed": 85
+   },
+   "abilities": [
+    "overgrow",
+    "grassy-surge"
+   ],
+   "hidden_ability": "grassy-surge"
+  },
+  {
+   "name": "cinderace",
+   "species": "cinderace",
+   "dex_id": 815,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "fire"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 116,
+    "defense": 75,
+    "special-attack": 65,
+    "special-defense": 75,
+    "speed": 119
+   },
+   "abilities": [
+    "blaze",
+    "libero"
+   ],
+   "hidden_ability": "libero"
+  },
+  {
+   "name": "inteleon",
+   "species": "inteleon",
+   "dex_id": 818,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 85,
+    "defense": 65,
+    "special-attack": 125,
+    "special-defense": 65,
+    "speed": 120
+   },
+   "abilities": [
+    "torrent",
+    "sniper"
+   ],
+   "hidden_ability": "sniper"
+  },
+  {
+   "name": "corviknight",
+   "species": "corviknight",
+   "dex_id": 823,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "flying",
+    "steel"
+   ],
+   "stats": {
+    "hp": 98,
+    "attack": 87,
+    "defense": 105,
+    "special-attack": 53,
+    "special-defense": 85,
+    "speed": 67
+   },
+   "abilities": [
+    "pressure",
+    "unnerve",
+    "mirror-armor"
+   ],
+   "hidden_ability": "mirror-armor"
+  },
+  {
+   "name": "thievul",
+   "species": "thievul",
+   "dex_id": 828,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 58,
+    "defense": 58,
+    "special-attack": 87,
+    "special-defense": 92,
+    "speed": 90
+   },
+   "abilities": [
+    "run-away",
+    "unburden",
+    "stakeout"
+   ],
+   "hidden_ability": "stakeout"
+  },
+  {
+   "name": "flapple",
+   "species": "flapple",
+   "dex_id": 841,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 110,
+    "defense": 80,
+    "special-attack": 95,
+    "special-defense": 60,
+    "speed": 70
+   },
+   "abilities": [
+    "ripen",
+    "gluttony",
+    "hustle"
+   ],
+   "hidden_ability": "hustle"
+  },
+  {
+   "name": "appletun",
+   "species": "appletun",
+   "dex_id": 842,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 85,
+    "defense": 80,
+    "special-attack": 100,
+    "special-defense": 80,
+    "speed": 30
+   },
+   "abilities": [
+    "ripen",
+    "gluttony",
+    "thick-fat"
+   ],
+   "hidden_ability": "thick-fat"
+  },
+  {
+   "name": "sandaconda",
+   "species": "sandaconda",
+   "dex_id": 844,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 107,
+    "defense": 125,
+    "special-attack": 65,
+    "special-defense": 70,
+    "speed": 71
+   },
+   "abilities": [
+    "sand-spit",
+    "shed-skin",
+    "sand-veil"
+   ],
+   "hidden_ability": "sand-veil"
+  },
+  {
+   "name": "toxtricity-amped",
+   "species": "toxtricity",
+   "dex_id": 849,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "electric",
+    "poison"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 98,
+    "defense": 70,
+    "special-attack": 114,
+    "special-defense": 70,
+    "speed": 75
+   },
+   "abilities": [
+    "punk-rock",
+    "plus",
+    "technician"
+   ],
+   "hidden_ability": "technician"
+  },
+  {
+   "name": "toxtricity-low-key",
+   "species": "toxtricity",
+   "dex_id": 849,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "electric",
+    "poison"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 98,
+    "defense": 70,
+    "special-attack": 114,
+    "special-defense": 70,
+    "speed": 75
+   },
+   "abilities": [
+    "punk-rock",
+    "minus",
+    "technician"
+   ],
+   "hidden_ability": "technician"
+  },
+  {
+   "name": "grapploct",
+   "species": "grapploct",
+   "dex_id": 853,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 118,
+    "defense": 90,
+    "special-attack": 70,
+    "special-defense": 80,
+    "speed": 42
+   },
+   "abilities": [
+    "limber",
+    "technician"
+   ],
+   "hidden_ability": "technician"
+  },
+  {
+   "name": "polteageist",
+   "species": "polteageist",
+   "dex_id": 855,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 65,
+    "defense": 65,
+    "special-attack": 134,
+    "special-defense": 114,
+    "speed": 70
+   },
+   "abilities": [
+    "weak-armor",
+    "cursed-body"
+   ],
+   "hidden_ability": "cursed-body"
+  },
+  {
+   "name": "hatterene",
+   "species": "hatterene",
+   "dex_id": 858,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 57,
+    "attack": 90,
+    "defense": 95,
+    "special-attack": 136,
+    "special-defense": 103,
+    "speed": 29
+   },
+   "abilities": [
+    "healer",
+    "anticipation",
+    "magic-bounce"
+   ],
+   "hidden_ability": "magic-bounce"
+  },
+  {
+   "name": "grimmsnarl",
+   "species": "grimmsnarl",
+   "dex_id": 861,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "fairy"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 120,
+    "defense": 65,
+    "special-attack": 95,
+    "special-defense": 75,
+    "speed": 60
+   },
+   "abilities": [
+    "prankster",
+    "frisk",
+    "pickpocket"
+   ],
+   "hidden_ability": "pickpocket"
+  },
+  {
+   "name": "perrserker",
+   "species": "perrserker",
+   "dex_id": 863,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 110,
+    "defense": 100,
+    "special-attack": 50,
+    "special-defense": 60,
+    "speed": 50
+   },
+   "abilities": [
+    "battle-armor",
+    "tough-claws",
+    "steely-spirit"
+   ],
+   "hidden_ability": "steely-spirit"
+  },
+  {
+   "name": "sirfetchd",
+   "species": "sirfetchd",
+   "dex_id": 865,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 62,
+    "attack": 135,
+    "defense": 95,
+    "special-attack": 68,
+    "special-defense": 82,
+    "speed": 65
+   },
+   "abilities": [
+    "steadfast",
+    "scrappy"
+   ],
+   "hidden_ability": "scrappy"
+  },
+  {
+   "name": "mr-rime",
+   "species": "mr-rime",
+   "dex_id": 866,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ice",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 85,
+    "defense": 75,
+    "special-attack": 110,
+    "special-defense": 100,
+    "speed": 70
+   },
+   "abilities": [
+    "tangled-feet",
+    "screen-cleaner",
+    "ice-body"
+   ],
+   "hidden_ability": "ice-body"
+  },
+  {
+   "name": "runerigus",
+   "species": "runerigus",
+   "dex_id": 867,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 58,
+    "attack": 95,
+    "defense": 145,
+    "special-attack": 50,
+    "special-defense": 105,
+    "speed": 30
+   },
+   "abilities": [
+    "wandering-spirit"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "alcremie",
+   "species": "alcremie",
+   "dex_id": 869,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 60,
+    "defense": 75,
+    "special-attack": 110,
+    "special-defense": 121,
+    "speed": 64
+   },
+   "abilities": [
+    "sweet-veil",
+    "aroma-veil"
+   ],
+   "hidden_ability": "aroma-veil"
+  },
+  {
+   "name": "falinks",
+   "species": "falinks",
+   "dex_id": 870,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 100,
+    "defense": 100,
+    "special-attack": 70,
+    "special-defense": 60,
+    "speed": 75
+   },
+   "abilities": [
+    "battle-armor",
+    "defiant"
+   ],
+   "hidden_ability": "defiant"
+  },
+  {
+   "name": "falinks-mega",
+   "species": "falinks",
+   "dex_id": 870,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "fighting"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 135,
+    "defense": 135,
+    "special-attack": 70,
+    "special-defense": 65,
+    "speed": 100
+   },
+   "abilities": [
+    "defiant"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "pincurchin",
+   "species": "pincurchin",
+   "dex_id": 871,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 48,
+    "attack": 101,
+    "defense": 95,
+    "special-attack": 91,
+    "special-defense": 85,
+    "speed": 15
+   },
+   "abilities": [
+    "lightning-rod",
+    "electric-surge"
+   ],
+   "hidden_ability": "electric-surge"
+  },
+  {
+   "name": "indeedee-male",
+   "species": "indeedee",
+   "dex_id": 876,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "psychic",
+    "normal"
+   ],
+   "stats": {
+    "hp": 60,
+    "attack": 65,
+    "defense": 55,
+    "special-attack": 105,
+    "special-defense": 95,
+    "speed": 95
+   },
+   "abilities": [
+    "inner-focus",
+    "synchronize",
+    "psychic-surge"
+   ],
+   "hidden_ability": "psychic-surge"
+  },
+  {
+   "name": "indeedee-female",
+   "species": "indeedee",
+   "dex_id": 876,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "psychic",
+    "normal"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 55,
+    "defense": 65,
+    "special-attack": 95,
+    "special-defense": 105,
+    "speed": 85
+   },
+   "abilities": [
+    "own-tempo",
+    "synchronize",
+    "psychic-surge"
+   ],
+   "hidden_ability": "psychic-surge"
+  },
+  {
+   "name": "morpeko-full-belly",
+   "species": "morpeko",
+   "dex_id": 877,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "dark"
+   ],
+   "stats": {
+    "hp": 58,
+    "attack": 95,
+    "defense": 58,
+    "special-attack": 70,
+    "special-defense": 58,
+    "speed": 97
+   },
+   "abilities": [
+    "hunger-switch"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "morpeko-hangry",
+   "species": "morpeko",
+   "dex_id": 877,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric",
+    "dark"
+   ],
+   "stats": {
+    "hp": 58,
+    "attack": 95,
+    "defense": 58,
+    "special-attack": 70,
+    "special-defense": 58,
+    "speed": 97
+   },
+   "abilities": [
+    "hunger-switch"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "dragapult",
+   "species": "dragapult",
+   "dex_id": 887,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dragon",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 88,
+    "attack": 120,
+    "defense": 75,
+    "special-attack": 100,
+    "special-defense": 75,
+    "speed": 142
+   },
+   "abilities": [
+    "clear-body",
+    "infiltrator",
+    "cursed-body"
+   ],
+   "hidden_ability": "cursed-body"
+  },
+  {
+   "name": "wyrdeer",
+   "species": "wyrdeer",
+   "dex_id": 899,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 103,
+    "attack": 105,
+    "defense": 72,
+    "special-attack": 105,
+    "special-defense": 75,
+    "speed": 65
+   },
+   "abilities": [
+    "intimidate",
+    "frisk",
+    "sap-sipper"
+   ],
+   "hidden_ability": "sap-sipper"
+  },
+  {
+   "name": "kleavor",
+   "species": "kleavor",
+   "dex_id": 900,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "bug",
+    "rock"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 135,
+    "defense": 95,
+    "special-attack": 45,
+    "special-defense": 70,
+    "speed": 85
+   },
+   "abilities": [
+    "swarm",
+    "sheer-force",
+    "sharpness"
+   ],
+   "hidden_ability": "sharpness"
+  },
+  {
+   "name": "basculegion-male",
+   "species": "basculegion",
+   "dex_id": 902,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 120,
+    "attack": 112,
+    "defense": 65,
+    "special-attack": 80,
+    "special-defense": 75,
+    "speed": 78
+   },
+   "abilities": [
+    "swift-swim",
+    "adaptability",
+    "mold-breaker"
+   ],
+   "hidden_ability": "mold-breaker"
+  },
+  {
+   "name": "basculegion-female",
+   "species": "basculegion",
+   "dex_id": 902,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 120,
+    "attack": 92,
+    "defense": 65,
+    "special-attack": 100,
+    "special-defense": 75,
+    "speed": 78
+   },
+   "abilities": [
+    "swift-swim",
+    "adaptability",
+    "mold-breaker"
+   ],
+   "hidden_ability": "mold-breaker"
+  },
+  {
+   "name": "sneasler",
+   "species": "sneasler",
+   "dex_id": 903,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "poison"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 130,
+    "defense": 60,
+    "special-attack": 40,
+    "special-defense": 80,
+    "speed": 120
+   },
+   "abilities": [
+    "pressure",
+    "unburden",
+    "poison-touch"
+   ],
+   "hidden_ability": "poison-touch"
+  },
+  {
+   "name": "overqwil",
+   "species": "overqwil",
+   "dex_id": 904,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "poison"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 115,
+    "defense": 95,
+    "special-attack": 65,
+    "special-defense": 65,
+    "speed": 85
+   },
+   "abilities": [
+    "poison-point",
+    "swift-swim",
+    "intimidate"
+   ],
+   "hidden_ability": "intimidate"
+  },
+  {
+   "name": "meowscarada",
+   "species": "meowscarada",
+   "dex_id": 908,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "dark"
+   ],
+   "stats": {
+    "hp": 76,
+    "attack": 110,
+    "defense": 70,
+    "special-attack": 81,
+    "special-defense": 70,
+    "speed": 123
+   },
+   "abilities": [
+    "overgrow",
+    "protean"
+   ],
+   "hidden_ability": "protean"
+  },
+  {
+   "name": "skeledirge",
+   "species": "skeledirge",
+   "dex_id": 911,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 104,
+    "attack": 75,
+    "defense": 100,
+    "special-attack": 110,
+    "special-defense": 75,
+    "speed": 66
+   },
+   "abilities": [
+    "blaze",
+    "unaware"
+   ],
+   "hidden_ability": "unaware"
+  },
+  {
+   "name": "quaquaval",
+   "species": "quaquaval",
+   "dex_id": 914,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 120,
+    "defense": 80,
+    "special-attack": 85,
+    "special-defense": 75,
+    "speed": 85
+   },
+   "abilities": [
+    "torrent",
+    "moxie"
+   ],
+   "hidden_ability": "moxie"
+  },
+  {
+   "name": "pawmot",
+   "species": "pawmot",
+   "dex_id": 923,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "electric",
+    "fighting"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 115,
+    "defense": 70,
+    "special-attack": 70,
+    "special-defense": 60,
+    "speed": 105
+   },
+   "abilities": [
+    "volt-absorb",
+    "natural-cure",
+    "iron-fist"
+   ],
+   "hidden_ability": "iron-fist"
+  },
+  {
+   "name": "maushold-family-of-four",
+   "species": "maushold",
+   "dex_id": 925,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 75,
+    "defense": 70,
+    "special-attack": 65,
+    "special-defense": 75,
+    "speed": 111
+   },
+   "abilities": [
+    "friend-guard",
+    "cheek-pouch",
+    "technician"
+   ],
+   "hidden_ability": "technician"
+  },
+  {
+   "name": "maushold-family-of-three",
+   "species": "maushold",
+   "dex_id": 925,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal"
+   ],
+   "stats": {
+    "hp": 74,
+    "attack": 75,
+    "defense": 70,
+    "special-attack": 65,
+    "special-defense": 75,
+    "speed": 111
+   },
+   "abilities": [
+    "friend-guard",
+    "cheek-pouch",
+    "technician"
+   ],
+   "hidden_ability": "technician"
+  },
+  {
+   "name": "arboliva",
+   "species": "arboliva",
+   "dex_id": 930,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "grass",
+    "normal"
+   ],
+   "stats": {
+    "hp": 78,
+    "attack": 69,
+    "defense": 90,
+    "special-attack": 125,
+    "special-defense": 109,
+    "speed": 39
+   },
+   "abilities": [
+    "seed-sower",
+    "harvest"
+   ],
+   "hidden_ability": "harvest"
+  },
+  {
+   "name": "squawkabilly-green-plumage",
+   "species": "squawkabilly",
+   "dex_id": 931,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 82,
+    "attack": 96,
+    "defense": 51,
+    "special-attack": 45,
+    "special-defense": 51,
+    "speed": 92
+   },
+   "abilities": [
+    "intimidate",
+    "hustle",
+    "guts"
+   ],
+   "hidden_ability": "guts"
+  },
+  {
+   "name": "squawkabilly-blue-plumage",
+   "species": "squawkabilly",
+   "dex_id": 931,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 82,
+    "attack": 96,
+    "defense": 51,
+    "special-attack": 45,
+    "special-defense": 51,
+    "speed": 92
+   },
+   "abilities": [
+    "intimidate",
+    "hustle",
+    "guts"
+   ],
+   "hidden_ability": "guts"
+  },
+  {
+   "name": "squawkabilly-yellow-plumage",
+   "species": "squawkabilly",
+   "dex_id": 931,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 82,
+    "attack": 96,
+    "defense": 51,
+    "special-attack": 45,
+    "special-defense": 51,
+    "speed": 92
+   },
+   "abilities": [
+    "intimidate",
+    "hustle",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "squawkabilly-white-plumage",
+   "species": "squawkabilly",
+   "dex_id": 931,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "stats": {
+    "hp": 82,
+    "attack": 96,
+    "defense": 51,
+    "special-attack": 45,
+    "special-defense": 51,
+    "speed": 92
+   },
+   "abilities": [
+    "intimidate",
+    "hustle",
+    "sheer-force"
+   ],
+   "hidden_ability": "sheer-force"
+  },
+  {
+   "name": "garganacl",
+   "species": "garganacl",
+   "dex_id": 934,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 100,
+    "defense": 130,
+    "special-attack": 45,
+    "special-defense": 90,
+    "speed": 35
+   },
+   "abilities": [
+    "purifying-salt",
+    "sturdy",
+    "clear-body"
+   ],
+   "hidden_ability": "clear-body"
+  },
+  {
+   "name": "armarouge",
+   "species": "armarouge",
+   "dex_id": 936,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 60,
+    "defense": 100,
+    "special-attack": 125,
+    "special-defense": 80,
+    "speed": 75
+   },
+   "abilities": [
+    "flash-fire",
+    "weak-armor"
+   ],
+   "hidden_ability": "weak-armor"
+  },
+  {
+   "name": "ceruledge",
+   "species": "ceruledge",
+   "dex_id": 937,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fire",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 75,
+    "attack": 125,
+    "defense": 80,
+    "special-attack": 60,
+    "special-defense": 100,
+    "speed": 85
+   },
+   "abilities": [
+    "flash-fire",
+    "weak-armor"
+   ],
+   "hidden_ability": "weak-armor"
+  },
+  {
+   "name": "bellibolt",
+   "species": "bellibolt",
+   "dex_id": 939,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "electric"
+   ],
+   "stats": {
+    "hp": 109,
+    "attack": 64,
+    "defense": 91,
+    "special-attack": 103,
+    "special-defense": 83,
+    "speed": 45
+   },
+   "abilities": [
+    "electromorphosis",
+    "static",
+    "damp"
+   ],
+   "hidden_ability": "damp"
+  },
+  {
+   "name": "mabosstiff",
+   "species": "mabosstiff",
+   "dex_id": 943,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "dark"
+   ],
+   "stats": {
+    "hp": 80,
+    "attack": 120,
+    "defense": 90,
+    "special-attack": 60,
+    "special-defense": 70,
+    "speed": 85
+   },
+   "abilities": [
+    "intimidate",
+    "guard-dog",
+    "stakeout"
+   ],
+   "hidden_ability": "stakeout"
+  },
+  {
+   "name": "scovillain",
+   "species": "scovillain",
+   "dex_id": 952,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "fire"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 108,
+    "defense": 65,
+    "special-attack": 108,
+    "special-defense": 65,
+    "speed": 75
+   },
+   "abilities": [
+    "chlorophyll",
+    "insomnia",
+    "moody"
+   ],
+   "hidden_ability": "moody"
+  },
+  {
+   "name": "scovillain-mega",
+   "species": "scovillain",
+   "dex_id": 952,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "fire"
+   ],
+   "stats": {
+    "hp": 65,
+    "attack": 138,
+    "defense": 85,
+    "special-attack": 138,
+    "special-defense": 85,
+    "speed": 75
+   },
+   "abilities": [
+    "spicy-spray"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "espathra",
+   "species": "espathra",
+   "dex_id": 956,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "psychic"
+   ],
+   "stats": {
+    "hp": 95,
+    "attack": 60,
+    "defense": 60,
+    "special-attack": 101,
+    "special-defense": 60,
+    "speed": 105
+   },
+   "abilities": [
+    "opportunist",
+    "frisk",
+    "speed-boost"
+   ],
+   "hidden_ability": "speed-boost"
+  },
+  {
+   "name": "tinkaton",
+   "species": "tinkaton",
+   "dex_id": 959,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fairy",
+    "steel"
+   ],
+   "stats": {
+    "hp": 85,
+    "attack": 75,
+    "defense": 77,
+    "special-attack": 70,
+    "special-defense": 105,
+    "speed": 94
+   },
+   "abilities": [
+    "mold-breaker",
+    "own-tempo",
+    "pickpocket"
+   ],
+   "hidden_ability": "pickpocket"
+  },
+  {
+   "name": "palafin-zero",
+   "species": "palafin",
+   "dex_id": 964,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 70,
+    "defense": 72,
+    "special-attack": 53,
+    "special-defense": 62,
+    "speed": 100
+   },
+   "abilities": [
+    "zero-to-hero"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "palafin-hero",
+   "species": "palafin",
+   "dex_id": 964,
+   "is_default": false,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "water"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 160,
+    "defense": 97,
+    "special-attack": 106,
+    "special-defense": 87,
+    "speed": 100
+   },
+   "abilities": [
+    "zero-to-hero"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "orthworm",
+   "species": "orthworm",
+   "dex_id": 968,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel"
+   ],
+   "stats": {
+    "hp": 70,
+    "attack": 85,
+    "defense": 145,
+    "special-attack": 60,
+    "special-defense": 55,
+    "speed": 65
+   },
+   "abilities": [
+    "earth-eater",
+    "sand-veil"
+   ],
+   "hidden_ability": "sand-veil"
+  },
+  {
+   "name": "glimmora",
+   "species": "glimmora",
+   "dex_id": 970,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "poison"
+   ],
+   "stats": {
+    "hp": 83,
+    "attack": 55,
+    "defense": 90,
+    "special-attack": 130,
+    "special-defense": 81,
+    "speed": 86
+   },
+   "abilities": [
+    "toxic-debris",
+    "corrosion"
+   ],
+   "hidden_ability": "corrosion"
+  },
+  {
+   "name": "glimmora-mega",
+   "species": "glimmora",
+   "dex_id": 970,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": false,
+   "types": [
+    "rock",
+    "poison"
+   ],
+   "stats": {
+    "hp": 83,
+    "attack": 90,
+    "defense": 105,
+    "special-attack": 150,
+    "special-defense": 96,
+    "speed": 101
+   },
+   "abilities": [
+    "adaptability"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "houndstone",
+   "species": "houndstone",
+   "dex_id": 972,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "ghost"
+   ],
+   "stats": {
+    "hp": 72,
+    "attack": 101,
+    "defense": 100,
+    "special-attack": 50,
+    "special-defense": 97,
+    "speed": 68
+   },
+   "abilities": [
+    "sand-rush",
+    "fluffy"
+   ],
+   "hidden_ability": "fluffy"
+  },
+  {
+   "name": "annihilape",
+   "species": "annihilape",
+   "dex_id": 979,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "fighting",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 110,
+    "attack": 115,
+    "defense": 80,
+    "special-attack": 50,
+    "special-defense": 90,
+    "speed": 90
+   },
+   "abilities": [
+    "vital-spirit",
+    "inner-focus",
+    "defiant"
+   ],
+   "hidden_ability": "defiant"
+  },
+  {
+   "name": "farigiraf",
+   "species": "farigiraf",
+   "dex_id": 981,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "normal",
+    "psychic"
+   ],
+   "stats": {
+    "hp": 120,
+    "attack": 90,
+    "defense": 70,
+    "special-attack": 110,
+    "special-defense": 70,
+    "speed": 60
+   },
+   "abilities": [
+    "cud-chew",
+    "armor-tail",
+    "sap-sipper"
+   ],
+   "hidden_ability": "sap-sipper"
+  },
+  {
+   "name": "kingambit",
+   "species": "kingambit",
+   "dex_id": 983,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "dark",
+    "steel"
+   ],
+   "stats": {
+    "hp": 100,
+    "attack": 135,
+    "defense": 120,
+    "special-attack": 60,
+    "special-defense": 85,
+    "speed": 50
+   },
+   "abilities": [
+    "defiant",
+    "supreme-overlord",
+    "pressure"
+   ],
+   "hidden_ability": "pressure"
+  },
+  {
+   "name": "baxcalibur",
+   "species": "baxcalibur",
+   "dex_id": 998,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": true,
+   "types": [
+    "dragon",
+    "ice"
+   ],
+   "stats": {
+    "hp": 115,
+    "attack": 145,
+    "defense": 92,
+    "special-attack": 75,
+    "special-defense": 86,
+    "speed": 87
+   },
+   "abilities": [
+    "thermal-exchange",
+    "ice-body"
+   ],
+   "hidden_ability": "ice-body"
+  },
+  {
+   "name": "baxcalibur-mega",
+   "species": "baxcalibur",
+   "dex_id": 998,
+   "is_default": false,
+   "is_mega": true,
+   "new_in_mc": true,
+   "types": [
+    "dragon",
+    "ice"
+   ],
+   "stats": {
+    "hp": 115,
+    "attack": 175,
+    "defense": 117,
+    "special-attack": 105,
+    "special-defense": 101,
+    "speed": 87
+   },
+   "abilities": [
+    "thermal-exchange"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "gholdengo",
+   "species": "gholdengo",
+   "dex_id": 1000,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 87,
+    "attack": 60,
+    "defense": 95,
+    "special-attack": 133,
+    "special-defense": 91,
+    "speed": 84
+   },
+   "abilities": [
+    "good-as-gold"
+   ],
+   "hidden_ability": null
+  },
+  {
+   "name": "sinistcha",
+   "species": "sinistcha",
+   "dex_id": 1013,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "ghost"
+   ],
+   "stats": {
+    "hp": 71,
+    "attack": 60,
+    "defense": 106,
+    "special-attack": 121,
+    "special-defense": 80,
+    "speed": 70
+   },
+   "abilities": [
+    "hospitality",
+    "heatproof"
+   ],
+   "hidden_ability": "heatproof"
+  },
+  {
+   "name": "archaludon",
+   "species": "archaludon",
+   "dex_id": 1018,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "steel",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 90,
+    "attack": 105,
+    "defense": 130,
+    "special-attack": 125,
+    "special-defense": 65,
+    "speed": 85
+   },
+   "abilities": [
+    "stamina",
+    "sturdy",
+    "stalwart"
+   ],
+   "hidden_ability": "stalwart"
+  },
+  {
+   "name": "hydrapple",
+   "species": "hydrapple",
+   "dex_id": 1019,
+   "is_default": true,
+   "is_mega": false,
+   "new_in_mc": false,
+   "types": [
+    "grass",
+    "dragon"
+   ],
+   "stats": {
+    "hp": 106,
+    "attack": 80,
+    "defense": 110,
+    "special-attack": 120,
+    "special-defense": 80,
+    "speed": 44
+   },
+   "abilities": [
+    "supersweet-syrup",
+    "regenerator",
+    "sticky-hold"
+   ],
+   "hidden_ability": "sticky-hold"
+  }
+ ]
+}
