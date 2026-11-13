@@ -1,28 +1,15 @@
-"""Parser and comparison checks for champions.sources, on tiny hand-made HTML (no network)."""
+"""Parser checks for champions.sources, on real saved pages (tests/fixtures, no network)."""
+import gzip
 import unittest
+from pathlib import Path
 
 from champions.sources import common, championslab, munchstats, pikalytics
 
-MUNCH = """<h2>Moves</h2><ul><li><button><span class="left-text">Protect</span>
-<span class="right-text">80.9%</span></button></li></ul>
-<h2>Items</h2><ul><li><button><div class="image-item"><span class="left-text" style="x">Life Orb</span></div>
-<span class="right-text">22.1%</span></button></li></ul>
-<h2>Stat Point Spreads</h2><ul><li><span class="left-text">2/32/0/0/0/32</span><span class="right-text">22.4%</span></li></ul>
-<span class="info-stat-label">Rank</span> <span class="info-stat-value">#6</span>
-<span id="champions-updated-value">October 06, 2026 at 12:07 UTC</span>
-<button onclick="selectPokemon('Rillaboom')"><span class="right-text">#1</span>
-<button onclick="selectPokemon('Sneasler')"><span class="right-text">#2</span>"""
+FIXTURES = Path(__file__).parent / "fixtures"
 
-PIKA = """<div class="pokemon-ind-summary-title">Usage Percent</div><div class="x">21<span>%</span></div>
-<div class="pokemon-ind-summary-title">Monthly Rank</div><div class="x"><span>#</span>4</div>
-<div id="moves_wrapper"><div class="pokedex-move-entry-new"><div class="pokedex-inline-text-offset">Protect</div>
-<div class="pokedex-inline-right">29.158%</div></div></div>
-<div id="teammate_wrapper"><a class="teammate_entry pokedex-move-entry-new" data-name="Incineroar" href="/x">
-<div class="pokedex-inline-right">38.075%</div></a></div>
-<div id="items_wrapper"><div class="pokedex-move-entry-new"><div class="pokedex-inline-text">Life Orb</div>
-<div class="pokedex-inline-right">33.361%</div></div></div>
-<div id="abilities_wrapper"><div class="pokedex-move-entry-new"><div class="pokedex-inline-text">Rough Skin</div>
-<div class="pokedex-inline-right">92.741%</div></div></div>"""
+
+def page(name):
+    return gzip.decompress((FIXTURES / f"{name}.html.gz").read_bytes()).decode("utf-8")
 
 
 class SourcesTests(unittest.TestCase):
@@ -30,21 +17,46 @@ class SourcesTests(unittest.TestCase):
         self.assertEqual(common.key("Mr. Rime"), common.key("mr-rime"))
         self.assertEqual(common.key("Garchomp-Mega-Z"), "garchompmegaz")
 
-    def test_munchstats(self):
-        e = munchstats.parse(MUNCH)
-        self.assertEqual(e["moves"], {"Protect": 80.9})
-        self.assertEqual(e["items"], {"Life Orb": 22.1})      # name nested in a sprite <div>
-        self.assertEqual(e["spreads"], {"2/32/0/0/0/32": 22.4})
+    def test_munchstats_garchomp(self):
+        html = page("munchstats-garchomp")
+        e = munchstats.parse(html)
+        self.assertEqual(list(e["moves"].items())[:3], [("Protect", 80.9), ("Power Gem", 42.7), ("Rock Slide", 39.3)])
+        self.assertEqual(list(e["items"].items())[:2], [("Garchompite Z", 51.6), ("Life Orb", 22.1)])
+        self.assertEqual(e["abilities"], {"Rough Skin": 96.7, "Sand Veil": 3.3})
+        self.assertEqual(list(e["spreads"].items())[:2], [("2/32/0/0/0/32", 22.4), ("2/0/0/32/0/32", 21.4)])
+        self.assertEqual(list(e["natures"].items())[:2], [("Modest", 40.3), ("Jolly", 26.2)])
         self.assertEqual((e["rank"], e["as_of"]), (6, "October 06, 2026 at 12:07 UTC"))
-        self.assertEqual(munchstats.roster(MUNCH), {"Rillaboom": 1, "Sneasler": 2})
+        self.assertEqual(e["teammate_ranks"][:3], ["Rillaboom", "Incineroar", "Sneasler"])
+        # internal consistency: four moves per set, one item/ability/nature each
+        self.assertLessEqual(sum(e["moves"].values()), 400)
+        self.assertGreater(sum(e["moves"].values()), 300)
+        for f in ("items", "abilities", "natures"):
+            self.assertAlmostEqual(sum(e[f].values()), 100, delta=5, msg=f)
 
-    def test_pikalytics(self):
-        e = pikalytics.parse(PIKA)
-        self.assertEqual(e["moves"], {"Protect": 29.158})
-        self.assertEqual(e["teammates"], {"Incineroar": 38.075})
-        self.assertEqual(e["items"], {"Life Orb": 33.361})
-        self.assertEqual(e["abilities"], {"Rough Skin": 92.741})
-        self.assertEqual((e["usage"], e["rank"]), (21.0, 4))
+    def test_munchstats_roster(self):
+        r = munchstats.roster(page("munchstats-garchomp"))
+        self.assertEqual(len(r), 260)
+        self.assertEqual(list(r.items())[:3], [("Rillaboom", 1), ("Sneasler", 2), ("Incineroar", 3)])
+
+    def test_pikalytics_garchomp(self):
+        html = page("pikalytics-garchomp")
+        e = pikalytics.parse(html)
+        self.assertEqual(list(e["moves"].items())[:3], [("Protect", 29.158), ("Earthquake", 21.688), ("Rock Slide", 17.053)])
+        self.assertEqual(list(e["teammates"].items())[:2], [("Incineroar", 38.075), ("Charizard", 34.451)])
+        self.assertEqual(list(e["items"].items())[:2], [("Garchompite Z", 53.348), ("Life Orb", 33.361)])
+        self.assertEqual(list(e["abilities"].items())[:2], [("Rough Skin", 92.741), ("Levitate", 3.21)])
+        self.assertEqual((e["usage"], e["rank"], e["winrate"]), (21.0, 4, 49.651))
+        self.assertAlmostEqual(sum(e["items"].values()), 100, delta=1)
+        self.assertAlmostEqual(sum(e["abilities"].values()), 100, delta=1)
+        self.assertEqual(len(pikalytics.roster(html)), 27)
+
+    def test_championslab_meta(self):
+        d = championslab.parse(page("championslab-meta"))
+        self.assertEqual(len(d["usage"]), 20)
+        self.assertEqual(d["usage"][0], {"rank": 1, "name": "Garchomp", "usage": 46.32, "winrate": 52.8})
+        self.assertEqual(len(d["teams"]), 8)
+        self.assertTrue(all(len(t["team"]) == 6 for t in d["teams"]))
+        self.assertEqual(d["teams"][0]["player"], "LexiconVGC")
 
     def test_championslab_empty_page(self):
         d = championslab.parse("<html></html>")
