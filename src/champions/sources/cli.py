@@ -2,7 +2,7 @@
 import sys
 from importlib import import_module
 
-NAMES = ["munchstats", "pikalytics", "championslab", "opgg", "compare"]
+NAMES = ["munchstats", "pikalytics", "championslab", "opgg", "icons", "compare"]
 
 
 def main():
