@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "champions"
+dynamic = ["version"]
+description = "Pokémon Champions tooling"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.scripts]
+champions = "champions.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "champions.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
