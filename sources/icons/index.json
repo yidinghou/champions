@@ -1,0 +1,1412 @@
+{
+ "icons": {
+  "venusaur": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/venusaur.png",
+   "bytes": 5706
+  },
+  "venusaur-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/venusaur_mega.png",
+   "bytes": 5241
+  },
+  "charizard": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/charizard.png",
+   "bytes": 4600
+  },
+  "charizard-mega-x": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/charizard_megax.png",
+   "bytes": 4267
+  },
+  "charizard-mega-y": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/charizard_megay.png",
+   "bytes": 5009
+  },
+  "blastoise": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/blastoise.png",
+   "bytes": 5171
+  },
+  "blastoise-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/blastoise_mega.png",
+   "bytes": 4972
+  },
+  "beedrill": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/beedrill.png",
+   "bytes": 4835
+  },
+  "beedrill-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/beedrill_mega.png",
+   "bytes": 5162
+  },
+  "pidgeot": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pidgeot.png",
+   "bytes": 4847
+  },
+  "pidgeot-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pidgeot_mega.png",
+   "bytes": 3942
+  },
+  "arbok": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/arbok.png",
+   "bytes": 4098
+  },
+  "pikachu": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pikachu.png",
+   "bytes": 3249
+  },
+  "raichu": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/raichu.png",
+   "bytes": 4168
+  },
+  "raichu-alola": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/raichu_alola.png",
+   "bytes": 4625
+  },
+  "raichu-mega-x": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/raichu_megax.png",
+   "bytes": 14370
+  },
+  "raichu-mega-y": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/raichu_megay.png",
+   "bytes": 14592
+  },
+  "clefable": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/clefable.png",
+   "bytes": 3725
+  },
+  "clefable-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/clefable_mega.png",
+   "bytes": 3128
+  },
+  "ninetales": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/ninetales.png",
+   "bytes": 5046
+  },
+  "ninetales-alola": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/ninetales_alola.png",
+   "bytes": 4206
+  },
+  "wigglytuff": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/wigglytuff.png",
+   "bytes": 14565
+  },
+  "vileplume": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/vileplume.png",
+   "bytes": 11304
+  },
+  "persian": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/persian.png",
+   "bytes": 15626
+  },
+  "persian-alola": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/persian_alola.png",
+   "bytes": 17307
+  },
+  "arcanine": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/arcanine.png",
+   "bytes": 5119
+  },
+  "arcanine-hisui": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/arcanine_hisui.png",
+   "bytes": 4665
+  },
+  "alakazam": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/alakazam.png",
+   "bytes": 5552
+  },
+  "alakazam-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/alakazam_mega.png",
+   "bytes": 5104
+  },
+  "machamp": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/machamp.png",
+   "bytes": 4707
+  },
+  "victreebel": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/victreebel.png",
+   "bytes": 4096
+  },
+  "victreebel-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/victreebel_mega.png",
+   "bytes": 4432
+  },
+  "slowbro": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/slowbro.png",
+   "bytes": 4836
+  },
+  "slowbro-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/slowbro_mega.png",
+   "bytes": 4448
+  },
+  "slowbro-galar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/slowbro_galar.png",
+   "bytes": 4617
+  },
+  "farfetchd": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/farfetchd.png",
+   "bytes": 12453
+  },
+  "gengar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gengar.png",
+   "bytes": 3693
+  },
+  "gengar-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gengar_mega.png",
+   "bytes": 4326
+  },
+  "kangaskhan": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/kangaskhan.png",
+   "bytes": 4985
+  },
+  "kangaskhan-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/kangaskhan_mega.png",
+   "bytes": 5214
+  },
+  "starmie": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/starmie.png",
+   "bytes": 4719
+  },
+  "starmie-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/starmie_mega.png",
+   "bytes": 4574
+  },
+  "mr-mime": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/mr_mime.png",
+   "bytes": 17115
+  },
+  "pinsir": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pinsir.png",
+   "bytes": 3949
+  },
+  "pinsir-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pinsir_mega.png",
+   "bytes": 4901
+  },
+  "tauros": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/tauros.png",
+   "bytes": 4227
+  },
+  "gyarados": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gyarados.png",
+   "bytes": 6000
+  },
+  "gyarados-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gyarados_mega.png",
+   "bytes": 4766
+  },
+  "ditto": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/ditto.png",
+   "bytes": 2318
+  },
+  "vaporeon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/vaporeon.png",
+   "bytes": 3931
+  },
+  "jolteon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/jolteon.png",
+   "bytes": 4546
+  },
+  "flareon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/flareon.png",
+   "bytes": 4222
+  },
+  "aerodactyl": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/aerodactyl.png",
+   "bytes": 3797
+  },
+  "aerodactyl-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/aerodactyl_mega.png",
+   "bytes": 3164
+  },
+  "snorlax": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/snorlax.png",
+   "bytes": 4090
+  },
+  "dragonite": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/dragonite.png",
+   "bytes": 5078
+  },
+  "dragonite-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/dragonite_mega.png",
+   "bytes": 4983
+  },
+  "meganium": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/meganium.png",
+   "bytes": 4049
+  },
+  "meganium-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/meganium_mega.png",
+   "bytes": 5730
+  },
+  "typhlosion": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/typhlosion.png",
+   "bytes": 4481
+  },
+  "typhlosion-hisui": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/typhlosion_hisui.png",
+   "bytes": 4096
+  },
+  "feraligatr": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/feraligatr.png",
+   "bytes": 5381
+  },
+  "feraligatr-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/feraligatr_mega.png",
+   "bytes": 4594
+  },
+  "ariados": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/ariados.png",
+   "bytes": 3562
+  },
+  "ampharos": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/ampharos.png",
+   "bytes": 3923
+  },
+  "ampharos-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/ampharos_mega.png",
+   "bytes": 4102
+  },
+  "azumarill": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/azumarill.png",
+   "bytes": 3853
+  },
+  "politoed": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/politoed.png",
+   "bytes": 4232
+  },
+  "espeon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/espeon.png",
+   "bytes": 3630
+  },
+  "umbreon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/umbreon.png",
+   "bytes": 3457
+  },
+  "slowking": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/slowking.png",
+   "bytes": 4670
+  },
+  "slowking-galar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/slowking_galar.png",
+   "bytes": 3971
+  },
+  "forretress": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/forretress.png",
+   "bytes": 4199
+  },
+  "steelix": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/steelix.png",
+   "bytes": 4024
+  },
+  "steelix-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/steelix_mega.png",
+   "bytes": 5565
+  },
+  "qwilfish": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/qwilfish.png",
+   "bytes": 11200
+  },
+  "scizor": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scizor.png",
+   "bytes": 4804
+  },
+  "scizor-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scizor_mega.png",
+   "bytes": 4389
+  },
+  "heracross": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/heracross.png",
+   "bytes": 4003
+  },
+  "heracross-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/heracross_mega.png",
+   "bytes": 4073
+  },
+  "skarmory": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/skarmory.png",
+   "bytes": 4177
+  },
+  "skarmory-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/skarmory_mega.png",
+   "bytes": 4862
+  },
+  "houndoom": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/houndoom.png",
+   "bytes": 3911
+  },
+  "houndoom-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/houndoom_mega.png",
+   "bytes": 3972
+  },
+  "tyranitar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/tyranitar.png",
+   "bytes": 4982
+  },
+  "tyranitar-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/tyranitar_mega.png",
+   "bytes": 5026
+  },
+  "sceptile": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sceptile.png",
+   "bytes": 16450
+  },
+  "sceptile-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sceptile_mega.png",
+   "bytes": 13529
+  },
+  "blaziken": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/blaziken.png",
+   "bytes": 17312
+  },
+  "blaziken-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/blaziken_mega.png",
+   "bytes": 13808
+  },
+  "swampert": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/swampert.png",
+   "bytes": 16030
+  },
+  "swampert-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/swampert_mega.png",
+   "bytes": 15267
+  },
+  "pelipper": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pelipper.png",
+   "bytes": 3562
+  },
+  "gardevoir": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gardevoir.png",
+   "bytes": 3745
+  },
+  "gardevoir-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gardevoir_mega.png",
+   "bytes": 3947
+  },
+  "sableye": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sableye.png",
+   "bytes": 3206
+  },
+  "sableye-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sableye_mega.png",
+   "bytes": 4581
+  },
+  "mawile": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/mawile.png",
+   "bytes": 10465
+  },
+  "mawile-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/mawile_mega.png",
+   "bytes": 14870
+  },
+  "aggron": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/aggron.png",
+   "bytes": 5114
+  },
+  "aggron-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/aggron_mega.png",
+   "bytes": 5383
+  },
+  "medicham": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/medicham.png",
+   "bytes": 3603
+  },
+  "medicham-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/medicham_mega.png",
+   "bytes": 4756
+  },
+  "manectric": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/manectric.png",
+   "bytes": 4109
+  },
+  "manectric-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/manectric_mega.png",
+   "bytes": 4936
+  },
+  "swalot": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/swalot.png",
+   "bytes": 12472
+  },
+  "sharpedo": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sharpedo.png",
+   "bytes": 3296
+  },
+  "sharpedo-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sharpedo_mega.png",
+   "bytes": 4063
+  },
+  "camerupt": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/camerupt.png",
+   "bytes": 5303
+  },
+  "camerupt-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/camerupt_mega.png",
+   "bytes": 4849
+  },
+  "torkoal": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/torkoal.png",
+   "bytes": 3813
+  },
+  "altaria": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/altaria.png",
+   "bytes": 3470
+  },
+  "altaria-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/altaria_mega.png",
+   "bytes": 3950
+  },
+  "milotic": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/milotic.png",
+   "bytes": 5140
+  },
+  "castform": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/castform.png",
+   "bytes": 2496
+  },
+  "castform-sunny": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/castform_sunny.png",
+   "bytes": 3530
+  },
+  "castform-rainy": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/castform_rainy.png",
+   "bytes": 2983
+  },
+  "castform-snowy": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/castform_snowy.png",
+   "bytes": 3561
+  },
+  "banette": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/banette.png",
+   "bytes": 3685
+  },
+  "banette-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/banette_mega.png",
+   "bytes": 4203
+  },
+  "chimecho": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/chimecho.png",
+   "bytes": 2478
+  },
+  "chimecho-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/chimecho_mega.png",
+   "bytes": 6255
+  },
+  "absol": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/absol.png",
+   "bytes": 3815
+  },
+  "absol-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/absol_mega.png",
+   "bytes": 4448
+  },
+  "absol-mega-z": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/absol_megaz.png",
+   "bytes": 17802
+  },
+  "glalie": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/glalie.png",
+   "bytes": 4451
+  },
+  "glalie-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/glalie_mega.png",
+   "bytes": 5099
+  },
+  "salamence": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/salamence.png",
+   "bytes": 13633
+  },
+  "salamence-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/salamence_mega.png",
+   "bytes": 14233
+  },
+  "metagross": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/metagross.png",
+   "bytes": 15252
+  },
+  "metagross-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/metagross_mega.png",
+   "bytes": 20151
+  },
+  "torterra": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/torterra.png",
+   "bytes": 5134
+  },
+  "infernape": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/infernape.png",
+   "bytes": 5638
+  },
+  "empoleon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/empoleon.png",
+   "bytes": 4265
+  },
+  "staraptor": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/staraptor.png",
+   "bytes": 14310
+  },
+  "staraptor-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/staraptor_mega.png",
+   "bytes": 19219
+  },
+  "luxray": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/luxray.png",
+   "bytes": 3831
+  },
+  "roserade": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/roserade.png",
+   "bytes": 4318
+  },
+  "rampardos": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rampardos.png",
+   "bytes": 3971
+  },
+  "bastiodon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/bastiodon.png",
+   "bytes": 4629
+  },
+  "lopunny": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/lopunny.png",
+   "bytes": 4088
+  },
+  "lopunny-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/lopunny_mega.png",
+   "bytes": 4667
+  },
+  "spiritomb": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/spiritomb.png",
+   "bytes": 4205
+  },
+  "garchomp": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/garchomp.png",
+   "bytes": 4914
+  },
+  "garchomp-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/garchomp_mega.png",
+   "bytes": 5376
+  },
+  "garchomp-mega-z": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/garchomp_megaz.png",
+   "bytes": 12924
+  },
+  "lucario": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/lucario.png",
+   "bytes": 3588
+  },
+  "lucario-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/lucario_mega.png",
+   "bytes": 4151
+  },
+  "lucario-mega-z": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/lucario_megaz.png",
+   "bytes": 16963
+  },
+  "hippowdon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/hippowdon.png",
+   "bytes": 3965
+  },
+  "toxicroak": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/toxicroak.png",
+   "bytes": 4349
+  },
+  "abomasnow": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/abomasnow.png",
+   "bytes": 4464
+  },
+  "abomasnow-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/abomasnow_mega.png",
+   "bytes": 5583
+  },
+  "weavile": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/weavile.png",
+   "bytes": 4202
+  },
+  "rhyperior": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rhyperior.png",
+   "bytes": 5676
+  },
+  "leafeon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/leafeon.png",
+   "bytes": 4508
+  },
+  "glaceon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/glaceon.png",
+   "bytes": 3805
+  },
+  "gliscor": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gliscor.png",
+   "bytes": 4310
+  },
+  "mamoswine": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/mamoswine.png",
+   "bytes": 4592
+  },
+  "gallade": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gallade.png",
+   "bytes": 3253
+  },
+  "gallade-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gallade_mega.png",
+   "bytes": 4428
+  },
+  "froslass": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/froslass.png",
+   "bytes": 4109
+  },
+  "froslass-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/froslass_mega.png",
+   "bytes": 4650
+  },
+  "rotom": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rotom.png",
+   "bytes": 2523
+  },
+  "rotom-heat": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rotom_heat.png",
+   "bytes": 2984
+  },
+  "rotom-wash": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rotom_wash.png",
+   "bytes": 2876
+  },
+  "rotom-frost": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rotom_frost.png",
+   "bytes": 2984
+  },
+  "rotom-fan": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rotom_fan.png",
+   "bytes": 3023
+  },
+  "rotom-mow": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rotom_mow.png",
+   "bytes": 3125
+  },
+  "serperior": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/serperior.png",
+   "bytes": 4527
+  },
+  "emboar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/emboar.png",
+   "bytes": 5694
+  },
+  "emboar-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/emboar_mega.png",
+   "bytes": 5366
+  },
+  "samurott": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/samurott.png",
+   "bytes": 4180
+  },
+  "samurott-hisui": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/samurott_hisui.png",
+   "bytes": 4278
+  },
+  "watchog": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/watchog.png",
+   "bytes": 3338
+  },
+  "liepard": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/liepard.png",
+   "bytes": 3631
+  },
+  "simisage": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/simisage.png",
+   "bytes": 4130
+  },
+  "simisear": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/simisear.png",
+   "bytes": 4801
+  },
+  "simipour": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/simipour.png",
+   "bytes": 4686
+  },
+  "musharna": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/musharna.png",
+   "bytes": 13549
+  },
+  "excadrill": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/excadrill.png",
+   "bytes": 3434
+  },
+  "excadrill-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/excadrill_mega.png",
+   "bytes": 4208
+  },
+  "audino": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/audino.png",
+   "bytes": 3683
+  },
+  "audino-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/audino_mega.png",
+   "bytes": 15352
+  },
+  "conkeldurr": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/conkeldurr.png",
+   "bytes": 4828
+  },
+  "scolipede": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scolipede.png",
+   "bytes": 11461
+  },
+  "scolipede-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scolipede_mega.png",
+   "bytes": 16337
+  },
+  "whimsicott": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/whimsicott.png",
+   "bytes": 3956
+  },
+  "krookodile": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/krookodile.png",
+   "bytes": 5060
+  },
+  "scrafty": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scrafty.png",
+   "bytes": 11512
+  },
+  "scrafty-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scrafty_mega.png",
+   "bytes": 13846
+  },
+  "cofagrigus": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/cofagrigus.png",
+   "bytes": 4338
+  },
+  "garbodor": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/garbodor.png",
+   "bytes": 4772
+  },
+  "zoroark": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/zoroark.png",
+   "bytes": 4047
+  },
+  "zoroark-hisui": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/zoroark_hisui.png",
+   "bytes": 5294
+  },
+  "reuniclus": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/reuniclus.png",
+   "bytes": 3492
+  },
+  "vanilluxe": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/vanilluxe.png",
+   "bytes": 4509
+  },
+  "emolga": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/emolga.png",
+   "bytes": 3192
+  },
+  "eelektross": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/eelektross.png",
+   "bytes": 17233
+  },
+  "eelektross-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/eelektross_mega.png",
+   "bytes": 17363
+  },
+  "chandelure": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/chandelure.png",
+   "bytes": 4287
+  },
+  "chandelure-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/chandelure_mega.png",
+   "bytes": 4510
+  },
+  "beartic": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/beartic.png",
+   "bytes": 4334
+  },
+  "stunfisk": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/stunfisk.png",
+   "bytes": 3165
+  },
+  "stunfisk-galar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/stunfisk_galar.png",
+   "bytes": 2964
+  },
+  "golurk": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/golurk.png",
+   "bytes": 6097
+  },
+  "golurk-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/golurk_mega.png",
+   "bytes": 6334
+  },
+  "hydreigon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/hydreigon.png",
+   "bytes": 4365
+  },
+  "volcarona": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/volcarona.png",
+   "bytes": 4360
+  },
+  "chesnaught": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/chesnaught.png",
+   "bytes": 5077
+  },
+  "chesnaught-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/chesnaught_mega.png",
+   "bytes": 6097
+  },
+  "delphox": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/delphox.png",
+   "bytes": 4013
+  },
+  "delphox-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/delphox_mega.png",
+   "bytes": 5257
+  },
+  "greninja": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/greninja.png",
+   "bytes": 4211
+  },
+  "greninja-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/greninja_mega.png",
+   "bytes": 3785
+  },
+  "diggersby": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/diggersby.png",
+   "bytes": 4029
+  },
+  "talonflame": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/talonflame.png",
+   "bytes": 4016
+  },
+  "vivillon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/vivillon.png",
+   "bytes": 4943
+  },
+  "pyroar-male": {
+   "source": "https://championslab.xyz/sprites/668.png",
+   "bytes": 172552
+  },
+  "pyroar-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pyroar_mega.png",
+   "bytes": 16761
+  },
+  "floette": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/floette.png",
+   "bytes": 3149
+  },
+  "floette-eternal": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/floette_eternal.png",
+   "bytes": 3149
+  },
+  "floette-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/floette_mega.png",
+   "bytes": 3561
+  },
+  "florges": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/florges.png",
+   "bytes": 4556
+  },
+  "gogoat": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gogoat.png",
+   "bytes": 12895
+  },
+  "pangoro": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pangoro.png",
+   "bytes": 4567
+  },
+  "furfrou": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/furfrou.png",
+   "bytes": 3431
+  },
+  "meowstic-male": {
+   "source": "https://championslab.xyz/sprites/678.png",
+   "bytes": 150726
+  },
+  "meowstic-female": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/meowstic_female.png",
+   "bytes": 3488
+  },
+  "aegislash-shield": {
+   "source": "https://championslab.xyz/sprites/681.png",
+   "bytes": 124110
+  },
+  "aegislash-blade": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/aegislash_blade.png",
+   "bytes": 4084
+  },
+  "aromatisse": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/aromatisse.png",
+   "bytes": 4069
+  },
+  "slurpuff": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/slurpuff.png",
+   "bytes": 3641
+  },
+  "malamar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/malamar.png",
+   "bytes": 15049
+  },
+  "malamar-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/malamar_mega.png",
+   "bytes": 15621
+  },
+  "barbaracle": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/barbaracle.png",
+   "bytes": 20581
+  },
+  "barbaracle-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/barbaracle_mega.png",
+   "bytes": 19435
+  },
+  "dragalge": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/dragalge.png",
+   "bytes": 11464
+  },
+  "dragalge-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/dragalge_mega.png",
+   "bytes": 18246
+  },
+  "clawitzer": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/clawitzer.png",
+   "bytes": 4045
+  },
+  "heliolisk": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/heliolisk.png",
+   "bytes": 3319
+  },
+  "tyrantrum": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/tyrantrum.png",
+   "bytes": 5207
+  },
+  "aurorus": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/aurorus.png",
+   "bytes": 3865
+  },
+  "sylveon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sylveon.png",
+   "bytes": 3813
+  },
+  "hawlucha": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/hawlucha.png",
+   "bytes": 3658
+  },
+  "hawlucha-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/hawlucha_mega.png",
+   "bytes": 5163
+  },
+  "dedenne": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/dedenne.png",
+   "bytes": 3266
+  },
+  "goodra": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/goodra.png",
+   "bytes": 3823
+  },
+  "goodra-hisui": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/goodra_hisui.png",
+   "bytes": 3799
+  },
+  "klefki": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/klefki.png",
+   "bytes": 3019
+  },
+  "trevenant": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/trevenant.png",
+   "bytes": 4551
+  },
+  "gourgeist-average": {
+   "source": "https://championslab.xyz/sprites/711.png",
+   "bytes": 109397
+  },
+  "gourgeist-small": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gourgeist_small.png",
+   "bytes": 3446
+  },
+  "gourgeist-large": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gourgeist_large.png",
+   "bytes": 3865
+  },
+  "avalugg": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/avalugg.png",
+   "bytes": 4687
+  },
+  "avalugg-hisui": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/avalugg_hisui.png",
+   "bytes": 4106
+  },
+  "noivern": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/noivern.png",
+   "bytes": 3857
+  },
+  "decidueye": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/decidueye.png",
+   "bytes": 4397
+  },
+  "decidueye-hisui": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/decidueye_hisui.png",
+   "bytes": 4270
+  },
+  "incineroar": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/incineroar.png",
+   "bytes": 4457
+  },
+  "primarina": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/primarina.png",
+   "bytes": 4653
+  },
+  "toucannon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/toucannon.png",
+   "bytes": 3713
+  },
+  "crabominable": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/crabominable.png",
+   "bytes": 4298
+  },
+  "crabominable-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/crabominable_mega.png",
+   "bytes": 5915
+  },
+  "lycanroc-midday": {
+   "source": "https://championslab.xyz/sprites/745.png",
+   "bytes": 131163
+  },
+  "lycanroc-midnight": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/lycanroc_midnight.png",
+   "bytes": 3822
+  },
+  "lycanroc-dusk": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/lycanroc_dusk.png",
+   "bytes": 3893
+  },
+  "toxapex": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/toxapex.png",
+   "bytes": 4413
+  },
+  "mudsdale": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/mudsdale.png",
+   "bytes": 4166
+  },
+  "araquanid": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/araquanid.png",
+   "bytes": 4595
+  },
+  "salazzle": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/salazzle.png",
+   "bytes": 3419
+  },
+  "tsareena": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/tsareena.png",
+   "bytes": 4180
+  },
+  "oranguru": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/oranguru.png",
+   "bytes": 4774
+  },
+  "passimian": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/passimian.png",
+   "bytes": 4439
+  },
+  "golisopod": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/golisopod.png",
+   "bytes": 24560
+  },
+  "golisopod-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/golisopod_mega.png",
+   "bytes": 23132
+  },
+  "mimikyu-disguised": {
+   "source": "https://championslab.xyz/sprites/778.png",
+   "bytes": 95376
+  },
+  "drampa": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/drampa.png",
+   "bytes": 4500
+  },
+  "drampa-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/drampa_mega.png",
+   "bytes": 4571
+  },
+  "kommo-o": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/kommo_o.png",
+   "bytes": 5599
+  },
+  "rillaboom": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/rillaboom.png",
+   "bytes": 17635
+  },
+  "cinderace": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/cinderace.png",
+   "bytes": 10861
+  },
+  "inteleon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/inteleon.png",
+   "bytes": 8690
+  },
+  "corviknight": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/corviknight.png",
+   "bytes": 3730
+  },
+  "thievul": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/thievul.png",
+   "bytes": 2273
+  },
+  "flapple": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/flapple.png",
+   "bytes": 3365
+  },
+  "appletun": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/appletun.png",
+   "bytes": 3484
+  },
+  "sandaconda": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sandaconda.png",
+   "bytes": 4190
+  },
+  "toxtricity-amped": {
+   "source": "https://championslab.xyz/sprites/849.png",
+   "bytes": 130625
+  },
+  "grapploct": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/grapploct.png",
+   "bytes": 14836
+  },
+  "polteageist": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/polteageist.png",
+   "bytes": 4031
+  },
+  "hatterene": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/hatterene.png",
+   "bytes": 3585
+  },
+  "grimmsnarl": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/grimmsnarl.png",
+   "bytes": 16556
+  },
+  "perrserker": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/perrserker.png",
+   "bytes": 13346
+  },
+  "sirfetchd": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sirfetchd.png",
+   "bytes": 10197
+  },
+  "mr-rime": {
+   "source": "https://championslab.xyz/sprites/866.png",
+   "bytes": 161719
+  },
+  "runerigus": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/runerigus.png",
+   "bytes": 4178
+  },
+  "alcremie": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/alcremie.png",
+   "bytes": 3448
+  },
+  "falinks": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/falinks.png",
+   "bytes": 13607
+  },
+  "falinks-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/falinks_mega.png",
+   "bytes": 14747
+  },
+  "pincurchin": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pincurchin.png",
+   "bytes": 7915
+  },
+  "indeedee-male": {
+   "source": "https://championslab.xyz/sprites/876.png",
+   "bytes": 102904
+  },
+  "morpeko-full-belly": {
+   "source": "https://championslab.xyz/sprites/877.png",
+   "bytes": 109301
+  },
+  "morpeko-hangry": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/morpeko_hangry.png",
+   "bytes": 2818
+  },
+  "dragapult": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/dragapult.png",
+   "bytes": 4540
+  },
+  "wyrdeer": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/wyrdeer.png",
+   "bytes": 3917
+  },
+  "kleavor": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/kleavor.png",
+   "bytes": 3727
+  },
+  "basculegion-male": {
+   "source": "https://championslab.xyz/sprites/902.png",
+   "bytes": 106510
+  },
+  "basculegion-female": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/basculegion_female.png",
+   "bytes": 4917
+  },
+  "sneasler": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sneasler.png",
+   "bytes": 3850
+  },
+  "overqwil": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/overqwil.png",
+   "bytes": 12654
+  },
+  "meowscarada": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/meowscarada.png",
+   "bytes": 4006
+  },
+  "skeledirge": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/skeledirge.png",
+   "bytes": 4692
+  },
+  "quaquaval": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/quaquaval.png",
+   "bytes": 5088
+  },
+  "pawmot": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/pawmot.png",
+   "bytes": 2795
+  },
+  "maushold-family-of-four": {
+   "source": "https://championslab.xyz/sprites/925.png",
+   "bytes": 112417
+  },
+  "arboliva": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/arboliva.png",
+   "bytes": 13547
+  },
+  "squawkabilly-green-plumage": {
+   "source": "https://championslab.xyz/sprites/931.png",
+   "bytes": 123302
+  },
+  "garganacl": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/garganacl.png",
+   "bytes": 4789
+  },
+  "armarouge": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/armarouge.png",
+   "bytes": 3869
+  },
+  "ceruledge": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/ceruledge.png",
+   "bytes": 3693
+  },
+  "bellibolt": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/bellibolt.png",
+   "bytes": 3951
+  },
+  "mabosstiff": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/mabosstiff.png",
+   "bytes": 13874
+  },
+  "scovillain": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scovillain.png",
+   "bytes": 4263
+  },
+  "scovillain-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/scovillain_mega.png",
+   "bytes": 5411
+  },
+  "espathra": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/espathra.png",
+   "bytes": 4411
+  },
+  "tinkaton": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/tinkaton.png",
+   "bytes": 5309
+  },
+  "palafin-zero": {
+   "source": "https://championslab.xyz/sprites/964.png",
+   "bytes": 113336
+  },
+  "palafin-hero": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/palafin_hero.png",
+   "bytes": 4289
+  },
+  "orthworm": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/orthworm.png",
+   "bytes": 4219
+  },
+  "glimmora": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/glimmora.png",
+   "bytes": 3162
+  },
+  "glimmora-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/glimmora_mega.png",
+   "bytes": 5287
+  },
+  "houndstone": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/houndstone.png",
+   "bytes": 16134
+  },
+  "annihilape": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/annihilape.png",
+   "bytes": 17811
+  },
+  "farigiraf": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/farigiraf.png",
+   "bytes": 3619
+  },
+  "kingambit": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/kingambit.png",
+   "bytes": 4510
+  },
+  "baxcalibur": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/baxcalibur.png",
+   "bytes": 13789
+  },
+  "baxcalibur-mega": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/baxcalibur_mega.png",
+   "bytes": 11196
+  },
+  "gholdengo": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/gholdengo.png",
+   "bytes": 12844
+  },
+  "sinistcha": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/sinistcha.png",
+   "bytes": 9823
+  },
+  "archaludon": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/archaludon.png",
+   "bytes": 5532
+  },
+  "hydrapple": {
+   "source": "https://cdn.pikalytics.com/images/championssprites/hydrapple.png",
+   "bytes": 3405
+  }
+ },
+ "misses": [
+  "pikachu-rock-star",
+  "pikachu-belle",
+  "pikachu-pop-star",
+  "pikachu-phd",
+  "pikachu-libre",
+  "pikachu-cosplay",
+  "pikachu-original-cap",
+  "pikachu-hoenn-cap",
+  "pikachu-sinnoh-cap",
+  "pikachu-unova-cap",
+  "pikachu-kalos-cap",
+  "pikachu-alola-cap",
+  "pikachu-partner-cap",
+  "pikachu-starter",
+  "pikachu-world-cap",
+  "farfetchd-galar",
+  "mr-mime-galar",
+  "tauros-paldea-combat-breed",
+  "tauros-paldea-blaze-breed",
+  "tauros-paldea-aqua-breed",
+  "qwilfish-hisui",
+  "greninja-battle-bond",
+  "greninja-ash",
+  "meowstic-male-mega",
+  "meowstic-female-mega",
+  "gourgeist-super",
+  "araquanid-totem",
+  "salazzle-totem",
+  "mimikyu-busted",
+  "mimikyu-totem-disguised",
+  "mimikyu-totem-busted",
+  "kommo-o-totem",
+  "toxtricity-low-key",
+  "indeedee-female",
+  "maushold-family-of-three",
+  "squawkabilly-blue-plumage",
+  "squawkabilly-yellow-plumage",
+  "squawkabilly-white-plumage"
+ ]
+}
