@@ -1,0 +1,72 @@
+{
+  "_about": "Mechanic catalogue (issue #24). One entry per rule; many case stubs per mechanic. Stubs are plain-words scenarios, not runnable cases yet. status: ok = source confirms it; verify = needs checking against Showdown or in-game before the case is written.",
+  "mechanics": [
+    {
+      "id": "intimidate",
+      "name": "Intimidate",
+      "rule": "When the holder enters battle, each adjacent foe's Attack is lowered by 1 stage. Foes with Substitute are skipped. Fires at battle start, on switch-in, on KO replacement, and when a Mega Evolution gains the ability.",
+      "source": [
+        "showdown: data/abilities.ts#intimidate",
+        "showdown: data/abilities.ts#clearbody, #innerfocus, #owntempo, #oblivious, #guarddog, #mirrorarmor, #contrary, #defiant, #competitive",
+        "serebii: attackdex-champions ability listing (Inner Focus, Oblivious, Scrappy list Intimidate immunity)"
+      ],
+      "data": [
+        "abilities.intimidate", "abilities.clearbody", "abilities.whitesmoke", "abilities.hypercutter",
+        "abilities.innerfocus", "abilities.owntempo", "abilities.oblivious", "abilities.scrappy",
+        "abilities.guarddog", "abilities.mirrorarmor", "abilities.contrary", "abilities.defiant",
+        "abilities.competitive", "abilities.rattled", "abilities.flowerveil"
+      ],
+      "depends_on": ["stat stages as engine state", "entry trigger point", "foe-caused vs self-caused stat change"],
+      "cases": [
+        {"id": "base-singles",           "group": "base",     "kind": "positive",    "status": "ok",     "setup": "Incineroar enters vs Garchomp",                       "expect": "Garchomp Atk -1; other stats unchanged"},
+        {"id": "base-user-unchanged",    "group": "base",     "kind": "control",     "status": "ok",     "setup": "same as base-singles",                                "expect": "Incineroar's own stages all 0"},
+        {"id": "base-damage-effect",     "group": "base",     "kind": "interaction", "status": "ok",     "setup": "Garchomp physical hit before vs after the drop",      "expect": "damage at Atk -1 matches the calc's -1 stage multiplier (calc case, not engine)"},
+
+        {"id": "block-clear-body",       "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "Incineroar enters vs Dragapult (Clear Body)",         "expect": "Dragapult Atk 0"},
+        {"id": "block-white-smoke",      "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Torkoal (White Smoke)",                            "expect": "Atk 0"},
+        {"id": "block-hyper-cutter",     "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Pinsir (Hyper Cutter)",                            "expect": "Atk 0"},
+        {"id": "block-inner-focus",      "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Lucario (Inner Focus)",                            "expect": "Atk 0 (Showdown: Intimidate-specific check)"},
+        {"id": "block-own-tempo",        "group": "blocked",  "kind": "control",     "status": "verify", "setup": "vs Slowbro (Own Tempo)",                              "expect": "Atk 0; Champions-specific listing not found"},
+        {"id": "block-oblivious",        "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Mamoswine (Oblivious)",                            "expect": "Atk 0"},
+        {"id": "block-scrappy",          "group": "blocked",  "kind": "control",     "status": "verify", "setup": "vs Kangaskhan (Scrappy)",                             "expect": "Atk 0 in mainline gen 8+; Showdown handler not read, Serebii lists it"},
+
+        {"id": "flip-guard-dog",         "group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "vs Mabosstiff (Guard Dog)",                           "expect": "Atk +1 instead of -1"},
+        {"id": "flip-contrary",          "group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "vs Malamar (Contrary)",                               "expect": "Atk +1"},
+        {"id": "flip-mirror-armor",      "group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "vs Corviknight (Mirror Armor)",                       "expect": "Corviknight Atk 0; Incineroar Atk -1"},
+        {"id": "flip-mirror-armor-floor","group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "Incineroar already at Atk -6, vs Corviknight",        "expect": "no further drop, no error"},
+
+        {"id": "react-defiant",          "group": "reacted",  "kind": "interaction", "status": "ok",     "setup": "vs Kingambit (Defiant)",                              "expect": "Atk -1 then +2 = +1 net"},
+        {"id": "react-competitive",      "group": "reacted",  "kind": "interaction", "status": "ok",     "setup": "vs Milotic (Competitive)",                            "expect": "Atk -1, Sp. Atk +2"},
+        {"id": "react-rattled",          "group": "reacted",  "kind": "interaction", "status": "verify", "setup": "vs Persian-Alola (Rattled)",                          "expect": "Atk -1, Speed +1 (Showdown gen 8+ behaviour; short_desc omits it)"},
+        {"id": "react-self-drop-no-trigger","group": "reacted","kind": "control",    "status": "ok",     "setup": "Kingambit uses Close Combat-style self-drop",         "expect": "Defiant does not trigger (self-caused)"},
+
+        {"id": "side-flower-veil",       "group": "protected","kind": "interaction", "status": "verify", "setup": "Florges (Flower Veil) with a Grass-type partner, doubles", "expect": "Grass partner Atk 0; Florges (Fairy) Atk -1"},
+        {"id": "side-substitute",        "group": "protected","kind": "interaction", "status": "ok",     "setup": "foe behind Substitute",                               "expect": "Atk 0; needs S6 Substitute"},
+        {"id": "side-protect",           "group": "protected","kind": "interaction", "status": "ok",     "setup": "foe used Protect this turn, Intimidate user enters",  "expect": "Atk -1 (Protect blocks moves, not abilities)"},
+
+        {"id": "target-doubles-both",    "group": "targeting","kind": "positive",    "status": "ok",     "setup": "doubles, Incineroar enters vs two foes",              "expect": "both foes Atk -1"},
+        {"id": "target-ally-unaffected", "group": "targeting","kind": "control",     "status": "ok",     "setup": "same, check Incineroar's partner",                    "expect": "partner Atk 0"},
+        {"id": "target-one-fainted",     "group": "targeting","kind": "interaction", "status": "ok",     "setup": "one foe slot fainted or empty",                       "expect": "only the living foe is lowered; no error"},
+        {"id": "target-two-intimidators","group": "targeting","kind": "interaction", "status": "ok",     "setup": "both of p1's active mons have Intimidate",            "expect": "each foe at Atk -2"},
+
+        {"id": "timing-battle-start",    "group": "timing",   "kind": "interaction", "status": "ok",     "setup": "both sides lead with an Intimidate user",             "expect": "both lose 1 Atk; order follows Speed (reversed under Trick Room if set)"},
+        {"id": "timing-switch-in",       "group": "timing",   "kind": "positive",    "status": "ok",     "setup": "Intimidate user switches in mid-battle",              "expect": "foe(s) -1 on entry, before that turn's moves"},
+        {"id": "timing-ko-replacement",  "group": "timing",   "kind": "positive",    "status": "ok",     "setup": "Intimidate user enters as a KO replacement",          "expect": "foe(s) -1"},
+        {"id": "timing-reentry",         "group": "timing",   "kind": "interaction", "status": "ok",     "setup": "Intimidate user switches out and back in",            "expect": "fires again (not once per battle)"},
+        {"id": "timing-foe-switch-reset","group": "timing",   "kind": "interaction", "status": "ok",     "setup": "lowered foe switches out and back in",                "expect": "Atk back to 0"},
+        {"id": "timing-mega-gain",       "group": "timing",   "kind": "interaction", "status": "verify", "setup": "Manectric Mega Evolves into Manectric-Mega",          "expect": "Intimidate fires when the Mega form appears; turn order for Mega is not purely Speed (Smogon research thread)"},
+        {"id": "timing-mega-persist",    "group": "timing",   "kind": "interaction", "status": "ok",     "setup": "Manectric-Mega switches out and back in",             "expect": "still Mega; Intimidate fires on re-entry (decided: Mega persists)"},
+        {"id": "timing-trace",           "group": "timing",   "kind": "interaction", "status": "verify", "setup": "a Trace mon enters opposite an Intimidate user",      "expect": "Trace copies Intimidate and it fires; check Showdown"},
+
+        {"id": "bound-floor",            "group": "boundary", "kind": "control",     "status": "ok",     "setup": "foe already at Atk -6",                               "expect": "stays -6; Defiant/Competitive do not trigger (no drop happened)"},
+        {"id": "bound-ceiling-contrary", "group": "boundary", "kind": "control",     "status": "ok",     "setup": "Contrary foe already at Atk +6",                      "expect": "stays +6; no error"}
+      ],
+      "open": [
+        "Inner Focus / Own Tempo / Oblivious / Scrappy: confirm each blocks Intimidate in Champions (Own Tempo and Scrappy unconfirmed).",
+        "Does Rattled trigger on Intimidate in Champions? Not in the ability's short_desc.",
+        "Does Mold Breaker bypass blockers for Intimidate? Not tested in Champions research thread.",
+        "-1 stage multiplier in Champions: 2/3 or 0.7? Smogon thread lists this as open."
+      ]
+    }
+  ]
+}
