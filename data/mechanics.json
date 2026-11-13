@@ -67,6 +67,73 @@
         "Does Mold Breaker bypass blockers for Intimidate? Not tested in Champions research thread.",
         "-1 stage multiplier in Champions: 2/3 or 0.7? Smogon thread lists this as open."
       ]
+    },
+    {
+      "id": "fake-out",
+      "name": "Fake Out",
+      "rule": "Normal-type physical move, base power 40, priority +3. Works only on the user's first turn out (a switch-in, KO replacement or battle start resets it). A hit makes the target flinch if the target has not moved yet this turn.",
+      "composite": "Three rules in one move: move priority ordering, first-turn-only, and the flinch effect. Expect to split these into their own mechanics once a second move needs them (First Impression is first-turn-only, Upper Hand and Rock Slide use flinch, Quick Guard and Extreme Speed use priority).",
+      "source": [
+        "showdown: data/moves.ts#fakeout (not read verbatim yet; fetch in S0)",
+        "smogon: Champions Battle Mechanics Research thread (Fake Out cannot be selected after the first turn out, reported)",
+        "repo: data/moves.json fakeout (priority 3, bp 40, contact, protect)"
+      ],
+      "data": [
+        "moves.fakeout", "moves.firstimpression", "moves.protect", "moves.quickguard", "moves.wideguard", "moves.helpinghand",
+        "abilities.innerfocus", "abilities.shielddust", "abilities.steadfast", "abilities.sheerforce", "abilities.queenlymajesty",
+        "abilities.armortail", "abilities.stall", "abilities.scrappy"
+      ],
+      "depends_on": ["priority ordering in the turn", "turns-out counter per mon", "flinch volatile", "type immunity", "Protect"],
+      "related": ["intimidate", "protect", "first-impression", "upper-hand", "quick-guard"],
+      "cases": [
+        {"id": "order-goes-first",          "group": "priority",   "kind": "positive",    "status": "ok",     "setup": "Incineroar Fake Out vs Garchomp Dragon Claw (Garchomp is faster)", "expect": "order: Fake Out, then Garchomp's move; Garchomp is flinched and its move never fires"},
+        {"id": "order-protect-beats",       "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "target uses Protect (+4) the same turn",                           "expect": "Protect goes first; Fake Out is blocked; no damage, no flinch; first turn is spent"},
+        {"id": "order-both-fake-out",       "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "two Fake Outs, one per side",                                      "expect": "faster user goes first and flinches the slower one, whose Fake Out never fires; speed ties are random by seed"},
+        {"id": "order-trick-room",          "group": "priority",   "kind": "control",     "status": "ok",     "setup": "Trick Room active, slow Fake Out user vs fast foe",                "expect": "Fake Out still goes first (Trick Room reverses Speed, not priority)"},
+        {"id": "order-switch-before",       "group": "priority",   "kind": "interaction", "status": "verify", "setup": "target switches out the same turn Fake Out is aimed at its slot", "expect": "switch resolves first; Fake Out hits the replacement; check whether the replacement flinches"},
+        {"id": "order-quick-guard",         "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "doubles, foe ally uses Quick Guard (+3)",                          "expect": "if Quick Guard resolves first, Fake Out is blocked; if Fake Out is faster, it hits; Wide Guard does not block (see wide-guard)"},
+        {"id": "order-queenly-majesty",     "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "Fake Out aimed at Tsareena (Queenly Majesty)",                     "expect": "Fake Out fails: no damage, no flinch"},
+        {"id": "order-armor-tail",          "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "Fake Out aimed at Farigiraf (Armor Tail), or at its ally",         "expect": "fails: no damage, no flinch"},
+        {"id": "order-stall",               "group": "priority",   "kind": "interaction", "status": "verify", "setup": "two +3 moves, one user has Stall (Sableye)",                       "expect": "Stall user moves last inside the +3 bracket"},
+        {"id": "order-mega-first",          "group": "priority",   "kind": "interaction", "status": "verify", "setup": "target Mega Evolves the same turn",                                "expect": "Mega Evolution resolves before Fake Out; target flinches in its Mega form, and Mega Evolution still happens"},
+
+        {"id": "first-turn-works",          "group": "first-turn", "kind": "positive",    "status": "ok",     "setup": "Incineroar leads and uses Fake Out on turn 1",                     "expect": "hits and flinches"},
+        {"id": "first-turn-later-fails",    "group": "first-turn", "kind": "control",     "status": "ok",     "setup": "same user uses Fake Out on turn 2",                                "expect": "no damage, no flinch (Showdown: fails; Champions: not selectable, per Smogon thread)"},
+        {"id": "first-turn-after-switch",   "group": "first-turn", "kind": "interaction", "status": "ok",     "setup": "user switches out then back in",                                   "expect": "works again"},
+        {"id": "first-turn-after-ko",       "group": "first-turn", "kind": "interaction", "status": "ok",     "setup": "user enters as a KO replacement",                                  "expect": "works on its first turn out"},
+        {"id": "first-turn-after-protect",  "group": "first-turn", "kind": "interaction", "status": "ok",     "setup": "user used Protect on turn 1, Fake Out on turn 2",                  "expect": "fails; any move counts as a turn out"},
+        {"id": "first-turn-failed-move",    "group": "first-turn", "kind": "interaction", "status": "verify", "setup": "user's first action was a flinched or failed move",                "expect": "decide whether a failed or flinched turn counts as the first turn out"},
+        {"id": "first-turn-partner",        "group": "first-turn", "kind": "control",     "status": "ok",     "setup": "doubles: one mon used a move on turn 1, its partner entered on turn 2", "expect": "the partner's Fake Out works; counters are per mon"},
+        {"id": "first-turn-mega",           "group": "first-turn", "kind": "interaction", "status": "verify", "setup": "Kangaskhan Mega Evolves on turn 1 and uses Fake Out the same turn", "expect": "works; the Mega form does not reset the counter later"},
+        {"id": "first-turn-pp",             "group": "first-turn", "kind": "control",     "status": "verify", "setup": "Fake Out fails on turn 2",                                         "expect": "decide whether PP is spent (needs PP in S2)"},
+        {"id": "first-turn-first-impression","group": "first-turn","kind": "positive",    "status": "ok",     "setup": "First Impression (+2, bp 100) on turn 1 and turn 2",               "expect": "same rule: works turn 1, fails later; no flinch"},
+
+        {"id": "flinch-basic",              "group": "flinch",     "kind": "positive",    "status": "ok",     "setup": "target has not moved yet",                                         "expect": "target loses its move this turn; flinch clears at end of turn"},
+        {"id": "flinch-clears",             "group": "flinch",     "kind": "control",     "status": "ok",     "setup": "turn after a flinch",                                              "expect": "target acts normally"},
+        {"id": "flinch-already-moved",      "group": "flinch",     "kind": "interaction", "status": "verify", "setup": "target used Helping Hand (+5) first",                              "expect": "Fake Out damages it but cannot flinch it"},
+        {"id": "flinch-inner-focus",        "group": "flinch",     "kind": "interaction", "status": "ok",     "setup": "target Dragonite (Inner Focus)",                                   "expect": "takes damage, does not flinch"},
+        {"id": "flinch-shield-dust",        "group": "flinch",     "kind": "interaction", "status": "verify", "setup": "target Vivillon (Shield Dust)",                                    "expect": "takes damage, does not flinch (flinch is a secondary effect)"},
+        {"id": "flinch-steadfast",          "group": "flinch",     "kind": "interaction", "status": "ok",     "setup": "target Lucario (Steadfast)",                                       "expect": "flinches and gains Speed +1"},
+        {"id": "flinch-single-target",      "group": "flinch",     "kind": "control",     "status": "ok",     "setup": "doubles, two foes",                                                "expect": "only the target flinches; the other foe acts"},
+        {"id": "flinch-substitute",         "group": "flinch",     "kind": "interaction", "status": "verify", "setup": "target behind Substitute",                                         "expect": "hits the Substitute, no flinch (needs S6)"},
+
+        {"id": "ghost-immune",              "group": "immunity",   "kind": "control",     "status": "ok",     "setup": "Fake Out aimed at Gengar",                                         "expect": "no damage, no flinch; first turn is still spent"},
+        {"id": "ghost-scrappy",             "group": "immunity",   "kind": "interaction", "status": "ok",     "setup": "Kangaskhan (Scrappy) Fake Out into Gengar",                        "expect": "hits and flinches"},
+        {"id": "protect-blocks",            "group": "immunity",   "kind": "interaction", "status": "ok",     "setup": "target used Protect",                                              "expect": "blocked, no flinch"},
+        {"id": "wide-guard-no-block",       "group": "immunity",   "kind": "control",     "status": "ok",     "setup": "foe ally used Wide Guard",                                         "expect": "does not stop single-target Fake Out"},
+
+        {"id": "calc-damage",               "group": "calc",       "kind": "positive",    "status": "ok",     "setup": "Incineroar Fake Out into Garchomp",                                "expect": "bp 40 physical Normal damage from the calc, no STAB"},
+        {"id": "calc-stab",                 "group": "calc",       "kind": "control",     "status": "ok",     "setup": "Kangaskhan Fake Out into Garchomp",                                "expect": "Normal STAB x1.5"},
+        {"id": "calc-after-intimidate",     "group": "calc",       "kind": "interaction", "status": "ok",     "setup": "Fake Out user at Atk -1 (Intimidated)",                            "expect": "damage uses the -1 stage multiplier"}
+      ],
+      "open": [
+        "Selectable vs fails: the Smogon thread reports Fake Out cannot be selected after the first turn out. Do we model it as a legality rule (not in legal actions) or as a failure?",
+        "Does a flinched or failed first turn still count as the first turn out?",
+        "Known Champions bug: Fake Out fails to flinch Mega Charizard Y (Smogon thread). Do not replicate; note it.",
+        "Does Mega Evolution resolve before priority, and is that order by Speed? The thread says Mega order is not purely Speed-based.",
+        "Confirm Showdown's fakeout entry: activeMoveActions check, secondary flinch 100%.",
+        "Sheer Force + Fake Out: no species in champions.json has both, so there is no stub. Add one only if we want synthetic sets for engine tests (Sheer Force would remove the flinch and give x1.3)."
+      ]
     }
   ]
 }
