@@ -1,10 +1,6 @@
 """Shared helpers: polite cached HTTP, name normalisation, snapshot read/write.
 
-Snapshot shape (one JSON file per source+format, sources/snapshots/<source>-<format>.json):
-  {source, format, url, fetched_at, notes, pokemon: {<key>: entry}}
-Entry fields (all optional; a source fills what it publishes). Values are percentages 0-100:
-  name, rank, usage, winrate, as_of,
-  moves/items/abilities/natures/teammates: {name: pct}, spreads: {"hp/atk/def/spa/spd/spe": pct}
+Snapshot shape and field meanings: see docs/DATA.md.
 """
 import json
 import re

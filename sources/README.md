@@ -13,20 +13,20 @@ champions sources opgg [--limit N] [--refresh] [name ...]       # names as in ch
 champions sources compare
 ```
 
-Snapshots land in `sources/snapshots/*.json` (committed, shape in `src/champions/sources/common.py`);
-raw pages are cached in `sources/cache/` (gitignored) so reruns resume and parsers can be fixed without
-re-downloading. All values are percentages unless noted.
+Snapshots land in `sources/snapshots/*.json` (committed); raw pages are cached in `sources/cache/`
+(gitignored) so reruns resume and parsers can be fixed without re-downloading. What the files and fields
+contain is defined in [`docs/DATA.md`](../docs/DATA.md); this page is about how far to trust them.
 
 ## Summary
 
-| source | what it is | format | gives | fidelity |
-|---|---|---|---|---|
-| MunchStats | screen-reads of the game's own Battle Data screens | Doubles + Singles | rank, moves, items, abilities, natures, Stat Point spreads, teammate rank | **Best.** Closest to ground truth; but served data was dated 2026-10-06 |
-| Pikalytics | Limitless/tournament teams, Reg M-C | Doubles | usage (integer %), rank, winrate, moves, items, abilities, teammates % | Good for tournament play; move % are on an odd scale (see below) |
-| OP.GG | ladder pokédex | Singles (Doubles tab is client-side) | moves, Stat Point spreads | Plausible, singles only; move lists truncated |
-| Champions Lab | ladder + tournaments, own "battle engine" | Doubles | top-20 usage + winrate, 8 winning teams | **Do not trust usage numbers** (smooth curve; disagrees with others) |
-| Pokémon Zone | ranked-season pages | both | moves, items, abilities, teammates, spreads | Not fetched: sits behind a Cloudflare challenge |
-| pokebase.app | tournament teams | – | – | Not fetched: same |
+| source | what it is | fidelity |
+|---|---|---|
+| MunchStats | screen-reads of the game's own Battle Data screens | **Best.** Closest to ground truth; but served data was dated 2026-10-06 |
+| Pikalytics | Limitless/tournament teams, Reg M-C | Good for tournament play; move % are on an odd scale (see below) |
+| OP.GG | ladder pokédex, Singles only (Doubles tab is client-side) | Plausible, singles only; move lists truncated |
+| Champions Lab | ladder + tournaments, own "battle engine" | **Do not trust usage numbers** (smooth curve; disagrees with others) |
+| Pokémon Zone | ranked-season pages | Not fetched: sits behind a Cloudflare challenge |
+| pokebase.app | tournament teams | Not fetched: same |
 
 Pokémon Zone and pokebase.app block non-browser clients. I did not try to get around that. If you want
 them, the options are a browser export or asking the owners; both are your call.
