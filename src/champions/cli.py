@@ -2,7 +2,9 @@
 import sys
 from importlib import import_module
 
-COMMANDS = {}
+COMMANDS = {
+    "sources": ("champions.sources.cli", "usage-stat sources: sources {munchstats|pikalytics|championslab|opgg|compare}"),
+}
 
 
 def main(argv=None):
