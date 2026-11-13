@@ -3,7 +3,7 @@ import sys
 from importlib import import_module
 
 COMMANDS = {
-    "sources": ("champions.sources.cli", "usage-stat sources: sources {munchstats|pikalytics|championslab|opgg|compare}"),
+    "sources": ("champions.sources.cli", "usage-stat sources: sources {munchstats|pikalytics|championslab|opgg|icons}"),
     "check-roster": ("champions.fetch.roster_check", "verify new_in_mc tags against Showdown (network)"),
 }
 FETCHERS = {

@@ -1,7 +1,7 @@
 """Parser and comparison checks for champions.sources, on tiny hand-made HTML (no network)."""
 import unittest
 
-from champions.sources import common, compare, championslab, munchstats, pikalytics
+from champions.sources import common, championslab, munchstats, pikalytics
 
 MUNCH = """<h2>Moves</h2><ul><li><button><span class="left-text">Protect</span>
 <span class="right-text">80.9%</span></button></li></ul>
@@ -49,17 +49,6 @@ class SourcesTests(unittest.TestCase):
     def test_championslab_empty_page(self):
         d = championslab.parse("<html></html>")
         self.assertEqual((d["usage"], d["teams"]), ([], []))
-
-    def test_spearman(self):
-        a = {"x": 1, "y": 2, "z": 3, "w": 4}
-        self.assertEqual(compare.spearman(a, a)[0], 1.0)
-        self.assertEqual(compare.spearman(a, {"x": 4, "y": 3, "z": 2, "w": 1})[0], -1.0)
-        self.assertIsNone(compare.spearman({"x": 1}, {"x": 1})[0])
-
-    def test_move_agreement(self):
-        s = lambda m: {"pokemon": {"a": {"moves": m}}}
-        ov, df = compare.move_agreement(s({"p": 50, "q": 40, "r": 30, "s": 20}), s({"p": 40, "q": 40, "r": 30, "t": 10}))
-        self.assertEqual((ov, df), ([3], [10 / 3]))
 
 
 if __name__ == "__main__":
