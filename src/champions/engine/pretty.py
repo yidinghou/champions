@@ -12,7 +12,7 @@ _CODES = {"bold": "1", "dim": "2", "red": "31", "green": "32", "yellow": "33", "
 _color = False
 SIDE_COLORS = ["blue", "orange"]   # team colors; kept distinct from the red/green event colors
 KIND_COLORS = {"damage": "red", "recoil": "red", "faint": "bold red", "crit": "bold yellow",
-               "heal": "green", "status": "magenta", "volatile": "magenta", "switch": "cyan",
+               "heal": "green", "field": "bold cyan", "status": "magenta", "volatile": "magenta", "switch": "cyan",
                "mega": "bold magenta", "win": "bold green", "fail": "yellow", "immune": "dim",
                "protected": "cyan", "missed": "dim", "blocked": "cyan"}
 
@@ -109,6 +109,10 @@ def _describe(e):
             return f"{mon_name(d['mon'])}'s {stat} won't go any further (stage {d['stage']:+d})"
         word = "rose" if d["change"] > 0 else "fell"
         return f"{mon_name(d['mon'])}'s {stat} {word} by {abs(d['change'])} (stage {d['stage']:+d})"
+    if k == "field" and d["effect"] == "trick_room":
+        if d.get("start"):
+            return f"{mon_name(d['mon'])} twisted the dimensions! (Trick Room, {d['turns']} turns)"
+        return "The twisted dimensions returned to normal!"
     if k == "crit":
         return "A critical hit!"
     if k == "fail" and d.get("reason") == "already_status":

@@ -1,6 +1,6 @@
 """Stage 2: turn the move's target type plus the board into the list of mons it hits.
 
-Supported target kinds: normal, any, self, allyTeam, allAdjacentFoes, allAdjacent, adjacentAlly.
+Supported target kinds: normal, any, self, all, allyTeam, allAdjacentFoes, allAdjacent, adjacentAlly.
 Anything else raises Unsupported. Adjacency is simplified: every slot is adjacent to every other.
 """
 from ..errors import Unsupported
@@ -33,8 +33,8 @@ def resolve(ctx):
         ctx.targets = _foes(b, user)
     elif kind == "allAdjacent":
         ctx.targets = _foes(b, user) + _ally(b, user)
-    elif kind == "allyTeam":
-        ctx.targets = [user]               # the move acts on the whole party, via its handler
+    elif kind in ("allyTeam", "all"):
+        ctx.targets = [user]               # acts on the party or the whole field, via its handler
     elif kind == "adjacentAlly":
         ctx.targets = _ally(b, user)
     else:

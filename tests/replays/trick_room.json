@@ -1,0 +1,65 @@
+{
+ "version": 1,
+ "format": "singles",
+ "seed": 4,
+ "teams": [
+  [
+   {
+    "species": "slowbro",
+    "ability": "owntempo",
+    "moves": [
+     "trickroom",
+     "surf"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "garchomp",
+    "ability": "sandveil",
+    "moves": [
+     "dragonclaw"
+    ]
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "trickroom",
+    "target": null
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "dragonclaw",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ],
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "surf",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "dragonclaw",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ]
+ ]
+}

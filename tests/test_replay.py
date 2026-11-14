@@ -116,6 +116,14 @@ class SampleReplays(unittest.TestCase):
         self.assertLess(out.index("used Extreme Speed"), out.index("used Earthquake"))
 
 
+    def test_trick_room_flips_order_on_the_next_turn(self):
+        out = self.text("trick_room.json")
+        self.assertIn("twisted the dimensions", out)
+        b = replay.replay(REPLAYS / "trick_room.json")
+        turn2 = [e.data["mon"] for e in b.events("move") if e.turn == 2]
+        self.assertEqual(turn2, ["p1:slowbro", "p2:garchomp"])   # slower mon first
+
+
 class Cli(unittest.TestCase):
     def run_cli(self, *args):
         out = io.StringIO()

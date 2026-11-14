@@ -44,6 +44,34 @@ class Ordering(unittest.TestCase):
         acts = order_actions(b, [Move(0, 0, "fakeout", (1, 0)), Move(1, 0, "dragonclaw", (0, 0))])
         self.assertEqual(acts[0].choice.move, "fakeout")
 
+    def test_trick_room_move_sets_counts_down_and_expires(self):
+        b = game.start([[spec("slowbro", ["trickroom", "protect"], "owntempo")],
+                        [spec("garchomp", ["protect"], "sandveil")]], format="singles")
+        game.play_turn(b, [Move(0, 0, "trickroom", None), Move(1, 0, "protect", None)])
+        self.assertEqual(b.arena["trick_room"], 4)            # 5 turns counting the one it was used on
+        self.assertEqual(len(b.events("field", effect="trick_room", start=True)), 1)
+        for _ in range(3):
+            game.play_turn(b, [Move(0, 0, "protect", None), Move(1, 0, "protect", None)])
+        self.assertEqual(b.arena["trick_room"], 1)
+        game.play_turn(b, [Move(0, 0, "protect", None), Move(1, 0, "protect", None)])
+        self.assertNotIn("trick_room", b.arena)
+        self.assertEqual(b.events("field", effect="trick_room", end=True)[0].data["cause"], "expired")
+
+    def test_trick_room_used_again_ends_it(self):
+        b = game.start([[spec("slowbro", ["trickroom"], "owntempo")],
+                        [spec("garchomp", ["dragonclaw"], "sandveil")]], format="singles")
+        b.arena["trick_room"] = 3
+        game.play_turn(b, [Move(0, 0, "trickroom", None), Move(1, 0, "dragonclaw", (0, 0))])
+        self.assertNotIn("trick_room", b.arena)
+        self.assertEqual(b.events("field", effect="trick_room", end=True)[0].data["cause"], "reused")
+
+    def test_trick_room_goes_last_so_it_only_reverses_the_next_turn(self):
+        b = game.start([[spec("slowbro", ["trickroom"], "owntempo")],
+                        [spec("garchomp", ["dragonclaw"], "sandveil")]], format="singles")
+        game.play_turn(b, [Move(0, 0, "trickroom", None), Move(1, 0, "dragonclaw", (0, 0))])
+        first = [e.data["mon"] for e in b.events("move") if e.turn == 1]
+        self.assertEqual(first, ["p2:garchomp", "p1:slowbro"])
+
     def test_speed_tie_is_seeded(self):
         def first(seed):
             b = game.start([[spec("garchomp", ["dragonclaw"], "sandveil")],

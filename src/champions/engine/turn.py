@@ -8,6 +8,7 @@ from collections import namedtuple
 
 from . import status, volatiles
 from .actions import Switch
+from .handlers.field import tick_field
 from .teams import moves_data
 
 Action = namedtuple("Action", "kind choice priority speed")
@@ -69,3 +70,4 @@ def run_residuals(battle):
         volatiles.residual(battle, m)
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)
+    tick_field(battle)
