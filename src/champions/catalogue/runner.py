@@ -66,10 +66,23 @@ def evaluate(battle, chk):
         want = [max(1, m.max_hp // d) * n for n, d in chk["damage_seq"]]   # Showdown floors max/d first, then multiplies
         if got != want:
             return f"damage taken by {chk['mon']} == {want} ({chk['damage_seq']} of {m.max_hp})  (actual: {got})"
+    elif "pp_full" in chk:        # the move was never spent
+        from ..engine.teams import moves_data
+        m = find_mon(battle, chk["mon"])
+        want = moves_data()[chk["pp_full"]]["pp"]
+        if m.pp[chk["pp_full"]] != want:
+            return f"pp of {chk['pp_full']} on {chk['mon']} == {want}  (actual: {m.pp[chk['pp_full']]})"
     elif "volatile" in chk:
-        present = chk["volatile"] in find_mon(battle, chk["mon"]).volatiles
+        vols = find_mon(battle, chk["mon"]).volatiles
+        present = chk["volatile"] in vols
         if present != chk.get("present", True):
             return f"volatile {chk['volatile']} on {chk['mon']} present={chk.get('present', True)}  (actual: {present})"
+        if "eq" in chk and present:       # compare the value, or one key of it ("key")
+            actual = vols[chk["volatile"]]
+            if "key" in chk:
+                actual = actual[chk["key"]]
+            if actual != chk["eq"]:
+                return f"volatile {chk['volatile']}{'.' + chk['key'] if 'key' in chk else ''} on {chk['mon']} == {chk['eq']}  (actual: {actual})"
     elif "event" in chk:
         n = len(_events(battle, chk["event"], chk.get("where")))
         want = chk.get("count")
@@ -111,6 +124,14 @@ def run_case(owner, case):
             find_mon(battle, ref).stages.update(stages)
         battle.arena.update(run.get("arena", {}))              # e.g. {"trick_room": 4}
         for turn in run.get("turns", []):
+            if isinstance(turn, dict):        # {"expect_error": "text", "choices": [...]}: the choice must be refused
+                try:
+                    game.play_turn(battle, [from_dict(c) for c in turn["choices"]])
+                    res.failures.append(f"expected the choices to be refused with {turn['expect_error']!r}, but they were accepted")
+                except ValueError as e:
+                    if turn["expect_error"] not in str(e):
+                        res.failures.append(f"expected a refusal containing {turn['expect_error']!r}  (actual: {e})")
+                continue
             game.play_turn(battle, [from_dict(c) for c in turn])
     except Exception as e:  # noqa: BLE001 - report any engine error as the case's failure
         res.failures.append(f"raised {type(e).__name__}: {e}")

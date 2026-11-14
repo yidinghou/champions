@@ -26,8 +26,9 @@ src/champions/
     turn.py        order_actions (kind, priority, Speed, seeded ties), residuals
     game.py        start, play_turn, validate, run_to_end
     pipeline/      one move as fixed stages; each logs why it stopped a target
+    volatiles.py   confusion, Taunt, Encore, Disable, Leech Seed, trapping
     status.py      major status: apply, immunities, sleep/freeze before a move, residual damage
-    handlers/      self_drop, secondary, recoil/drain, protect, entry (Intimidate), foe_drop, status
+    handlers/      self_drop, secondary, recoil/drain, protect, entry (Intimidate), foe_drop, status, volatile
     replay.py      save/load/play replays; snapshot/restore
   catalogue/   load.py (checks) cases.py runner.py report.py cli.py
 ```
@@ -88,9 +89,14 @@ and secondaries, Rest, Heal Bell, Yawn, Guts (Attack x1.5, ignores the burn halv
 burn halving physical damage, and sleep/freeze stopping the move. The numbers in `engine/status.py`
 (sleep 1-3 turns, 20% thaw) are Showdown's, not yet checked against Champions.
 
+Volatile status (20 of 34 stubs): confusion (2-5 turns, 1/3 self-hit, 40-power typeless), Taunt, Encore,
+Disable, Leech Seed (Grass immune), Fire Spin and Mean Look trapping (Ghost immune), cleared on switch or
+faint, several at once, and a repeat application changes nothing. Timers and chances live in
+`engine/volatiles.py`, again Showdown's values pending a Champions check.
+
 ## Deferred
 
-Substitute, volatile status, major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
+Substitute, volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
 counters on switch, Corrosion, Substitute interaction), weather and terrain, screens, items, Mega Evolution (rejected with
 `Unsupported`), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, redirection (Follow Me, Lightning Rod), real residual effects, `verify` stubs that need a

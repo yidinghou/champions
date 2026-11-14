@@ -1,0 +1,70 @@
+{
+ "version": 1,
+ "format": "singles",
+ "seed": 3,
+ "teams": [
+  [
+   {
+    "species": "venusaur",
+    "ability": "overgrow",
+    "moves": [
+     "leechseed",
+     "firespin"
+    ],
+    "hp": 120
+   }
+  ],
+  [
+   {
+    "species": "snorlax",
+    "ability": "thickfat",
+    "moves": [
+     "bodyslam",
+     "protect"
+    ]
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "leechseed",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "bodyslam",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ],
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "firespin",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "bodyslam",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ]
+ ]
+}

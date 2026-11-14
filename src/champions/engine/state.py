@@ -27,6 +27,7 @@ class Mon:
     status: Optional[str] = None
     volatiles: Dict[str, Any] = field(default_factory=dict)
     status_turns: int = 0       # sleep turns left, or the Toxic damage counter
+    last_move: Optional[str] = None   # Encore and Disable read this
     turns_out: int = 0
     pp: Dict[str, int] = field(default_factory=dict)
     mega: bool = False
@@ -50,6 +51,7 @@ class Mon:
         self.hp -= dealt
         self._emit("damage", amount=dealt, hp=f"{self.hp}/{self.max_hp}")
         if self.hp == 0:
+            self.volatiles = {}
             self._emit("faint")
         return dealt
 
@@ -72,6 +74,10 @@ class Mon:
         self.volatiles[name] = value
         self._emit("volatile", add=name)
 
+    def remove_volatile(self, name):
+        if self.volatiles.pop(name, None) is not None:
+            self._emit("volatile", remove=name)
+
     def set_status(self, status, turns=0):
         self.status, self.status_turns = status, turns
         self._emit("status", add=status)
@@ -87,6 +93,7 @@ class Mon:
             self.status_turns = 0
         self.stages = {k: 0 for k in STAT_KEYS}
         self.volatiles = {}
+        self.last_move = None
         self.turns_out = 0
 
 

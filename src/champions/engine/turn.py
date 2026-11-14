@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from collections import namedtuple
 
-from . import status
+from . import status, volatiles
 from .actions import Switch
 from .teams import moves_data
 
@@ -66,5 +66,6 @@ def run_residuals(battle):
             m.take(dmg)
         if not m.fainted:
             status.tick_yawn(battle, m)
+        volatiles.residual(battle, m)
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)

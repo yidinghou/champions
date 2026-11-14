@@ -10,7 +10,7 @@ from champions.catalogue.runner import format_failure, run_all, upstream_failing
 # Mechanics the engine models. Each must have a runnable positive, control and interaction case.
 MODELED = ["type-immunity", "protect", "stat-stages", "foe-stat-drop", "entry-trigger", "first-turn-only",
            "flinch", "move-priority", "self-drop", "secondary-effect", "recoil-drain-heal",
-           "accuracy-evasion", "crit", "multi-hit", "target-resolution", "move-pipeline", "major-status"]
+           "accuracy-evasion", "crit", "multi-hit", "target-resolution", "move-pipeline", "major-status", "volatile-status"]
 
 
 class CatalogueCases(unittest.TestCase):

@@ -35,7 +35,7 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     guts = attacker.ability == "guts" and attacker.status and not special
     if guts:
         a = a * 3 // 2
-    eff = effectiveness(move["type"], defender.types, ignore_immunity_to)
+    eff = 1.0 if move["type"] is None else effectiveness(move["type"], defender.types, ignore_immunity_to)
     if eff == 0:
         return 0
     dmg = (2 * LEVEL // 5 + 2) * bp * a // d // 50 + 2
@@ -45,7 +45,7 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     if crit:
         dmg = dmg * 3 // 2
     dmg = dmg * roll // 100
-    if move["type"].lower() in attacker.types:  # STAB (TODO: Adaptability)
+    if move["type"] and move["type"].lower() in attacker.types:  # STAB (TODO: Adaptability)
         dmg = dmg * 3 // 2
     dmg = int(dmg * eff)
     if attacker.status == "brn" and not special and not guts:

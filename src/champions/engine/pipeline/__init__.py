@@ -48,6 +48,7 @@ def run_move(battle, user, move_id, chosen=None):
     if not can_move.check(ctx):
         return ctx
     battle.log_event("move", mon=user.ref, move=move_id)
+    user.last_move = move_id
     user.pp[move_id] = max(0, user.pp.get(move_id, 0) - 1)
     for stage in STAGES:
         stage(ctx)

@@ -34,6 +34,8 @@ def side_style(ref):
     return "bold " + SIDE_COLORS[0 if side == "p1" else 1]
 STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
                 "slp": "asleep", "frz": "frozen"}
+VOLATILE_WORDS = {"confusion": "confused", "taunt": "taunted", "encore": "encored", "disable": "disabled",
+                  "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy"}
 STAT_NAMES = {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def",
               "spe": "Speed", "acc": "Accuracy", "eva": "Evasion"}
 
@@ -95,7 +97,9 @@ def _describe(e):
     if k == "faint":
         return f"{mon_name(d['mon'])} fainted!"
     if k == "volatile":
-        return f"{mon_name(d['mon'])} gets {d['add']}"
+        if "remove" in d:
+            return f"{mon_name(d['mon'])} is no longer {VOLATILE_WORDS.get(d['remove'], d['remove'])}"
+        return f"{mon_name(d['mon'])} is {VOLATILE_WORDS.get(d['add'], 'now ' + d['add'])}"
     if k == "boost":
         stat = STAT_NAMES.get(d["stat"], d["stat"])
         if d["change"] == 0:

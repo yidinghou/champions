@@ -7,7 +7,8 @@ from .effects_table import check_ability, move_effects
 from .errors import Unsupported
 from .hooks import fire
 from .pipeline import run_move
-from .teams import build_battle
+from . import volatiles
+from .teams import build_battle, moves_data
 from .turn import order_actions, run_residuals, speed
 
 MAX_TURNS = 100
@@ -44,10 +45,12 @@ def legal_choices(battle, side):
     for slot, mon in s.alive_active():
         foes = battle.sides[1 - side].alive_active()
         for mv in mon.moves:
+            if not volatiles.can_choose(mon, mv, moves_data()[mv]):
+                continue
             for fslot, _ in foes or [(0, None)]:
                 out.append(Move(side, slot, mv, (1 - side, fslot)))
         for i, m in enumerate(s.team):
-            if not m.fainted and i not in s.active:
+            if not m.fainted and i not in s.active and not volatiles.is_trapped(mon):
                 out.append(Switch(side, slot, i))
     return out
 
@@ -65,6 +68,8 @@ def validate(battle, choices):
             s = battle.sides[c.side]
             if not 0 <= c.to < len(s.team) or s.team[c.to].fainted or c.to in s.active:
                 raise ValueError(f"illegal switch to {c.to}")
+            if volatiles.is_trapped(mon):
+                raise ValueError(f"{mon.species} is trapped and cannot switch")
             continue
         if c.move not in mon.moves:
             raise ValueError(f"{mon.species} does not know {c.move}")
@@ -89,7 +94,8 @@ def run_action(battle, act):
     if isinstance(act, Switch):
         return run_switch(battle, act)
     target = tuple(act.target) if act.target else None
-    run_move(battle, mon, act.move, target)
+    move_id = volatiles.forced_move(mon, act.move)
+    run_move(battle, mon, move_id, target)
     if "protect" not in move_effects(act.move):
         mon.volatiles.pop("protect_chain", None)      # the Protect chain breaks on any other move
     mon.turns_out += 1
@@ -118,10 +124,10 @@ def request_replacements(battle):
 
 
 def play_turn(battle, choices):
+    validate(battle, choices)                         # refuse bad choices before anything changes
     battle.turn += 1
     battle.arena["moved"] = []
     battle.log_event("turn", number=battle.turn)
-    validate(battle, choices)
     for act in order_actions(battle, choices):
         c = act.choice
         mon = battle.mon(c.side, c.slot)

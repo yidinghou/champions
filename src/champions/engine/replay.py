@@ -62,7 +62,7 @@ def save_log(path, battle):
 
 
 _MON_FIELDS = ("species", "types", "ability", "item", "moves", "stats", "hp", "max_hp", "side", "idx",
-               "stages", "status", "status_turns", "volatiles", "turns_out", "pp", "mega")
+               "stages", "status", "status_turns", "volatiles", "last_move", "turns_out", "pp", "mega")
 
 
 def snapshot(b):
