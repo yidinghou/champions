@@ -1,6 +1,6 @@
 """Damage in Showdown's modifier order, flooring each step. Level is fixed at 50 in Champions.
 
-Stubbed to 1.0 for now (TODO S1): weather, screens, items, abilities, terrain, Helping Hand.
+Stubbed to 1.0 for now (TODO S1): weather, screens, items, abilities (except Guts), terrain, Helping Hand.
 """
 from __future__ import annotations
 
@@ -32,6 +32,9 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     a = _stat(attacker.stats[a_key], a_stage)
     d = _stat(defender.stats[d_key], d_stage)
 
+    guts = attacker.ability == "guts" and attacker.status and not special
+    if guts:
+        a = a * 3 // 2
     eff = effectiveness(move["type"], defender.types, ignore_immunity_to)
     if eff == 0:
         return 0
@@ -45,6 +48,6 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     if move["type"].lower() in attacker.types:  # STAB (TODO: Adaptability)
         dmg = dmg * 3 // 2
     dmg = int(dmg * eff)
-    if attacker.status == "brn" and not special:
+    if attacker.status == "brn" and not special and not guts:
         dmg //= 2
     return max(1, dmg)

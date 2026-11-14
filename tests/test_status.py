@@ -74,3 +74,57 @@ class SleepAndFreeze(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GutsAndMagicGuard(unittest.TestCase):
+    def dmg(self, status, ability):
+        a = mon("heracross", ability, ["bodyslam"], status=status)
+        d = mon("clefable", "unaware", ["protect"])
+        return damage(a, d, moves_data()["bodyslam"], crit=False, roll=100, spread=False)
+
+    def test_guts_boosts_attack_and_ignores_burn(self):
+        base = self.dmg(None, "swarm")
+        guts_burned = self.dmg("brn", "guts")
+        self.assertGreater(guts_burned, base)                     # about x1.5, and not halved
+        self.assertAlmostEqual(guts_burned / base, 1.5, delta=0.05)
+
+    def test_guts_needs_a_status(self):
+        self.assertEqual(self.dmg(None, "guts"), self.dmg(None, "swarm"))
+
+    def test_guts_ignores_special_moves(self):
+        a = mon("heracross", "guts", ["shadowball"], status="brn")
+        b = mon("heracross", "swarm", ["shadowball"])
+        d = mon("clefable", "unaware", [])
+        mv = moves_data()["shadowball"]
+        self.assertEqual(damage(a, d, mv, roll=100), damage(b, d, mv, roll=100))
+
+    def test_magic_guard_blocks_all_status_damage(self):
+        for status in ("brn", "psn", "tox"):
+            m = mon("clefable", "magicguard", [], status=status)
+            self.assertEqual(residual_damage(m), 0, status)
+
+    def test_magic_guard_toxic_counter_still_ticks(self):
+        m = mon("clefable", "magicguard", [], status="tox")
+        residual_damage(m)
+        self.assertEqual(m.status_turns, 1)
+
+
+class Yawn(unittest.TestCase):
+    def test_switching_out_cancels_yawn(self):
+        m = mon("jolteon", "quickfeet", [])
+        m.volatiles["yawn"] = 1
+        m.clear_on_switch()
+        self.assertNotIn("yawn", m.volatiles)
+
+
+class RestAndBell(unittest.TestCase):
+    def test_sleeper_cannot_act_so_rest_does_not_run(self):
+        b = game.start([[{"species": "snorlax", "ability": "thickfat", "moves": ["rest"],
+                          "status": "slp", "status_turns": 5, "hp": 100}],
+                        [{"species": "clefable", "ability": "unaware", "moves": ["protect"]}]],
+                       seed=1, format="singles", rng=LabeledRng({}))
+        b.mon(0, 0).status_turns = 5
+        game.play_turn(b, [game.Move(0, 0, "rest", None)])
+        # asleep mons cannot act at all, so Rest never ran; the counter just dropped
+        self.assertEqual(b.mon(0, 0).status, "slp")
+        self.assertEqual(b.mon(0, 0).status_turns, 4)

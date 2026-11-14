@@ -83,15 +83,15 @@ Hyper Cutter, Guard Dog), Intimidate and its blockers, first-turn-only, flinch, 
 ordering, self-drops, 100%/chance secondaries (flinch and stat drops), recoil and drain, accuracy and
 evasion stages, crits and crit stages, multi-hit counts, spread damage and target resolution.
 
-Major status (23 of 38 stubs): burn, poison, Toxic, paralysis speed, sleep and freeze applied by status moves
-and secondaries, type immunities, one status at a time, persistence through switching, end-of-turn damage,
+Major status (30 of 38 stubs): burn, poison, Toxic, paralysis speed, sleep and freeze applied by status moves
+and secondaries, Rest, Heal Bell, Yawn, Guts (Attack x1.5, ignores the burn halving), Magic Guard, type immunities, one status at a time, persistence through switching, end-of-turn damage,
 burn halving physical damage, and sleep/freeze stopping the move. The numbers in `engine/status.py`
 (sleep 1-3 turns, 20% thaw) are Showdown's, not yet checked against Champions.
 
 ## Deferred
 
-Substitute, volatile status, major-status leftovers (full paralysis, Rest, Heal Bell, Yawn, Guts, Magic Guard,
-Corrosion, Substitute interaction and the `verify` stubs), weather and terrain, screens, items, Mega Evolution (rejected with
+Substitute, volatile status, major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
+counters on switch, Corrosion, Substitute interaction), weather and terrain, screens, items, Mega Evolution (rejected with
 `Unsupported`), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, redirection (Follow Me, Lightning Rod), real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.

@@ -15,6 +15,8 @@ IMMUNE_TYPES = {"brn": ("fire",), "psn": ("poison", "steel"), "tox": ("poison", 
 # End-of-turn damage as (numerator, denominator) of max HP.
 RESIDUAL = {"brn": (1, 16), "psn": (1, 8)}
 TOXIC_CAP = 15
+REST_TURNS = 3               # sleeps through 2 turns, wakes on the 3rd attempt
+YAWN_TURNS = 2               # sleep arrives at the end of the next turn
 
 
 def try_set_status(battle, target, status, user=None, move_id=None, announce=True):
@@ -56,6 +58,10 @@ def before_move(battle, mon, move):
 
 def residual_damage(mon):
     """HP lost to burn, poison or Toxic at end of turn (0 if none). Toxic grows by 1/16 each turn."""
+    if mon.ability == "magicguard":
+        if mon.status == "tox":
+            mon.status_turns = min(mon.status_turns + 1, TOXIC_CAP)    # the counter still ticks
+        return 0
     if mon.status in RESIDUAL:
         n, d = RESIDUAL[mon.status]
         return max(1, mon.max_hp * n // d)
@@ -63,3 +69,13 @@ def residual_damage(mon):
         mon.status_turns = min(mon.status_turns + 1, TOXIC_CAP)
         return max(1, mon.max_hp // 16) * mon.status_turns
     return 0
+
+
+def tick_yawn(battle, mon):
+    """End of turn: a yawning mon falls asleep once its counter runs out (if it has no status by then)."""
+    if "yawn" not in mon.volatiles:
+        return
+    mon.volatiles["yawn"] -= 1
+    if mon.volatiles["yawn"] <= 0:
+        del mon.volatiles["yawn"]
+        try_set_status(battle, mon, "slp", announce=False)

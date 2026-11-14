@@ -64,5 +64,7 @@ def run_residuals(battle):
         dmg = status.residual_damage(m)
         if dmg:
             m.take(dmg)
+        if not m.fainted:
+            status.tick_yawn(battle, m)
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)

@@ -2,7 +2,7 @@
 
 moves.json has numbers (power, priority, target, flags) but no structured effects, only prose. So the
 engine lists, per move, the effects it implements. A move missing from here raises Unsupported.
-Effect keys: first_turn_only, status, type_immunity, secondary [{chance, volatile|boost|status}], self_drop {stat: -n}, recoil [n, d],
+Effect keys: first_turn_only, status, rest, cure_team, yawn, type_immunity, secondary [{chance, volatile|boost|status}], self_drop {stat: -n}, recoil [n, d],
 drain [n, d], protect, crit_stage.
 """
 from __future__ import annotations
@@ -43,17 +43,20 @@ MOVES = {
     "sludgebomb": {"secondary": [{"chance": 30, "status": "psn"}]},
     "flamethrower": {"secondary": [{"chance": 10, "status": "brn"}]},
     "bodyslam": {},
+    "rest": {"rest": True},
+    "healbell": {"cure_team": True},
+    "yawn": {"yawn": True},
     "icebeam": {"secondary": [{"chance": 10, "status": "frz"}]},
 }
 
 # Abilities with modeled behaviour live in handlers/. These have none that matters for the mechanics
 # modeled so far (checked by hand); anything else raises Unsupported when a team uses it.
-INERT_ABILITIES = {"noability", "blaze", "overgrow", "sandveil", "goodasgold", "justified",
+INERT_ABILITIES = {"noability", "blaze", "overgrow", "sandveil", "goodasgold", "justified", "levitate",
                    # no effect on the status cases that use them (status is applied by moves only):
                    "thickfat", "cursedbody", "unaware", "quickfeet", "merciless", "pressure", "angerpoint"}
 MODELED_ABILITIES = {
     "intimidate", "innerfocus", "oblivious", "owntempo", "scrappy", "guarddog",
-    "clearbody", "whitesmoke", "hypercutter",
+    "clearbody", "whitesmoke", "hypercutter", "guts", "magicguard",
 }
 
 
