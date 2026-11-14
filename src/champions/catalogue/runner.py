@@ -114,7 +114,25 @@ def run_case(owner, case):
     return res
 
 
-def format_failure(res):
+def run_all(pairs):
+    """Run (owner, case) pairs; return the Results in order."""
+    return [run_case(o, c) for o, c in pairs]
+
+
+def upstream_failing(owner, results, mechanics):
+    """Ids of mechanics this owner depends on (directly or through the chain) that have failing cases."""
+    failing = {r.owner["id"] for r in results if not r.passed}
+    deps = {m["id"]: m.get("depends_on", []) for m in mechanics}
+    seen, todo = set(), list(owner.get("depends_on", []))
+    while todo:
+        d = todo.pop()
+        if d not in seen:
+            seen.add(d)
+            todo += deps.get(d, [])
+    return sorted(seen & failing)
+
+
+def format_failure(res, upstream=()):
     o, c = res.owner, res.case
     lines = [f"{o['id']}::{c['id']}  [{c['kind']}, status={c['status']}]",
              f"  setup:   {c['setup']}", f"  expect:  {c['expect']}"]
@@ -123,6 +141,8 @@ def format_failure(res):
         lines.append(f"  source:  {src}")
     lines.append("")
     lines += [f"  FAILED check: {f}" for f in res.failures]
+    if upstream:
+        lines += ["", f"  note: upstream mechanics also have failing cases: {', '.join(upstream)}; fix those first"]
     if res.log:
         lines += ["", "  event log:"] + [f"    {ln}" for ln in res.log]
     return "\n".join(lines)

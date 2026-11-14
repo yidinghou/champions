@@ -102,12 +102,12 @@ _Notes: `substitute` and `damage-calc` are left stub only (Substitute is not mod
 **Gate 5:** every mechanic listed above has at least one runnable positive, one control and one interaction case, all passing; `pytest`-free `python3 -m unittest tests.test_catalogue_cases` green; suite green. Commit one per 2-3 mechanics, last one: "Initial mechanics: handlers and runnable cases".
 
 ### Phase 6: Catalogue runner and report
-- [ ] `catalogue/cases.py`: `runnable_cases()` (stubs with `run`; skips `status: verify` unless `CHAMPIONS_INCLUDE_VERIFY=1`).
-- [ ] `catalogue/runner.py`: `run_case(mech, case)` builds teams, plays `run.turns`, evaluates all `check` entries (`stage`, `hp`, `status`, `volatile`, `event`, `no_event`); returns every failing check, not just the first; a `ForcedRng` when `run.rolls` is present.
-- [ ] Failure message format from #25: id, kind, status, setup, expect, source, failing checks with actual values, the turn's event log, and a note when an upstream `depends_on` mechanic has failing cases.
-- [ ] `tests/test_catalogue_cases.py`: one `unittest` `subTest` per runnable case, named `mechanic::case`. Filter with `CHAMPIONS_CASE=self-drop` (substring match on the id).
-- [ ] `catalogue/report.py` and CLI `champions catalogue status`: per mechanic, counts of stub-only / runnable / passing, split by kind; flags mechanics missing a positive, control or interaction case.
-- [ ] A test that deliberately breaks one handler through a fixture and checks the failure message contains the stub's `expect` and the event log.
+- [x] `catalogue/cases.py`: `runnable_cases()` (stubs with `run`; skips `status: verify` unless `CHAMPIONS_INCLUDE_VERIFY=1`).
+- [x] `catalogue/runner.py`: `run_case(mech, case)` builds teams, plays `run.turns`, evaluates all `check` entries (`stage`, `hp`, `status`, `volatile`, `event`, `no_event`); returns every failing check, not just the first; a `ForcedRng` when `run.rolls` is present.
+- [x] Failure message format from #25: id, kind, status, setup, expect, source, failing checks with actual values, the turn's event log, and a note when an upstream `depends_on` mechanic has failing cases.
+- [x] `tests/test_catalogue_cases.py`: one `unittest` `subTest` per runnable case, named `mechanic::case`. Filter with `CHAMPIONS_CASE=self-drop` (substring match on the id).
+- [x] `catalogue/report.py` and CLI `champions catalogue status`: per mechanic, counts of stub-only / runnable / passing, split by kind; flags mechanics missing a positive, control or interaction case.
+- [x] A test that deliberately breaks one handler through a fixture and checks the failure message contains the stub's `expect` and the event log.
 
 **Gate 6:** `champions catalogue status` prints the table with no errors; the broken-handler test shows the readable failure; suite green. Commit: "Catalogue runner and status report".
 
