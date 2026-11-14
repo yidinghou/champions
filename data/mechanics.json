@@ -295,6 +295,49 @@
       "open": ["whether Sand Veil, Snow Cloak and Unaware accuracy behaviour is unchanged in Champions", "weather accuracy rules in Champions (Thunder and Hurricane in rain, Blizzard in snow)", "OHKO move rules in Champions (none flagged in moves.json)", "Gravity, Minimize, Lock-On and Mind Reader accuracy effects are not catalogued yet"]
     },
     {
+      "id": "self-drop",
+      "name": "Self stat drop",
+      "type": "mechanic",
+      "rule": "Some moves lower the user's own stats as a guaranteed effect once they hit (Close Combat, Superpower, Overheat, Draco Meteor, Leaf Storm, Hammer Arm, Make It Rain, Clanging Scales, Armor Cannon, Headlong Rush, Ice Hammer). The drop runs after damage, only for a target that was actually hit. An immune, missed, Protect-blocked or never-started move gives no drop. A spread move drops the user once, not once per target. Drops stop at -6. The drop is self-caused, so foe-drop blockers and reactors (Clear Body, Mirror Armor, Defiant, Competitive) ignore it, and Contrary inverts it.",
+      "source": [
+        "showdown: sim/battle-actions.ts#spreadMoveHit, #hitStepMoveHitLoop (self boosts run after the target is removed on immune, miss or Protect)",
+        "repo: data/moves.json short_desc ('Lowers the user's ...' on 11 moves)",
+        "docs: ENGINE_PLAN.md key finding 1"
+      ],
+      "data": ["moves.closecombat", "moves.superpower", "moves.hammerarm", "moves.overheat", "moves.dracometeor", "moves.leafstorm", "moves.makeitrain", "moves.clangingscales", "abilities.contrary", "abilities.clear-body", "abilities.mirror-armor", "abilities.defiant", "abilities.competitive", "abilities.sheer-force", "items.whiteherb", "items.ejectbutton"],
+      "depends_on": ["move-pipeline", "stat-stages", "type-immunity", "protect"],
+      "cases": [
+        {"id": "hit-drops", "group": "trigger", "kind": "positive", "status": "ok", "setup": "Machamp Close Combat into Tauros, Tauros survives", "expect": "Machamp Defense -1 and Sp. Def -1; Tauros stat stages unchanged"},
+        {"id": "drop-after-damage", "group": "trigger", "kind": "positive", "status": "ok", "setup": "Machamp Close Combat KOs Tauros", "expect": "Machamp still drops Defense and Sp. Def -1 (a KO does not cancel the drop)"},
+        {"id": "one-stat-drop", "group": "trigger", "kind": "positive", "status": "ok", "setup": "Garganacl Hammer Arm into a foe", "expect": "only Speed -1; Attack, Defense and Sp. Def unchanged"},
+        {"id": "two-stage-drop", "group": "trigger", "kind": "positive", "status": "ok", "setup": "Charizard Overheat into a foe", "expect": "Sp. Atk -2"},
+        {"id": "always-fires", "group": "trigger", "kind": "control", "status": "ok", "setup": "Close Combat hits on three separate turns", "expect": "drop fires every time; there is no chance roll (contrast the secondary-effect entry)"},
+        {"id": "immune-no-drop", "group": "abort", "kind": "positive", "status": "ok", "setup": "Machamp Close Combat into Gengar (Ghost)", "expect": "0 damage; Machamp stages unchanged (the seed case)"},
+        {"id": "protect-no-drop", "group": "abort", "kind": "positive", "status": "ok", "setup": "foe Protects, Machamp uses Close Combat at it", "expect": "blocked; Machamp stages unchanged"},
+        {"id": "miss-no-drop", "group": "abort", "kind": "positive", "status": "ok", "setup": "Close Combat vs a foe with +6 evasion, roll misses", "expect": "miss; Machamp stages unchanged"},
+        {"id": "failed-user-no-drop", "group": "abort", "kind": "control", "status": "ok", "setup": "Machamp is asleep or flinched and cannot move", "expect": "no move runs; no drop"},
+        {"id": "spread-one-hit-drops", "group": "spread", "kind": "interaction", "status": "verify", "setup": "doubles, Make It Rain hits foe A, foe B is Protected", "expect": "user's Sp. Atk -1 once, since at least one target was hit"},
+        {"id": "spread-both-drop-once", "group": "spread", "kind": "interaction", "status": "verify", "setup": "doubles, Clanging Scales hits both foes", "expect": "user's Defense drops by 1 total, not by 2"},
+        {"id": "spread-all-blocked", "group": "spread", "kind": "interaction", "status": "ok", "setup": "doubles, Make It Rain, both foes Protect", "expect": "no damage and no drop"},
+        {"id": "substitute-hit-drops", "group": "edge", "kind": "edge", "status": "verify", "setup": "Close Combat into a foe behind a Substitute", "expect": "damage goes to the Substitute; user's Defense and Sp. Def still -1"},
+        {"id": "stage-floor", "group": "edge", "kind": "edge", "status": "ok", "setup": "user already at -6 Sp. Atk uses Draco Meteor", "expect": "hit still lands; Sp. Atk stays -6, no error"},
+        {"id": "partial-floor", "group": "edge", "kind": "edge", "status": "ok", "setup": "user at -5 Sp. Atk uses Overheat", "expect": "Sp. Atk -6, not -7"},
+        {"id": "contrary", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Malamar (Contrary) uses Superpower", "expect": "Attack +1 and Defense +1 instead of dropping"},
+        {"id": "clear-body-ignored", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Dragapult (Clear Body) uses Draco Meteor", "expect": "Sp. Atk still -2; Clear Body only blocks foe-caused drops"},
+        {"id": "mirror-armor-ignored", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Corviknight (Mirror Armor) uses a self-drop move (hypothetical, it learns none; a rule check)", "expect": "still drops; no reflection onto the target"},
+        {"id": "defiant-not-triggered", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Passimian (Defiant) uses Superpower", "expect": "Attack -1 and Defense -1 only; no Defiant +2"},
+        {"id": "competitive-not-triggered", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Milotic (Competitive) uses a self-drop move (hypothetical, it learns none; a rule check)", "expect": "the drop applies; no Competitive boost"},
+        {"id": "sheer-force", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Sheer Force user uses Close Combat", "expect": "drop still fires: Close Combat has no secondary effect for Sheer Force to remove"},
+        {"id": "item-white-herb", "group": "item", "kind": "interaction", "status": "ok", "setup": "White Herb holder uses Close Combat", "expect": "Defense and Sp. Def drop, then White Herb restores both to 0 and is consumed"}
+      ],
+      "open": [
+        "Sheer Force: confirm Close Combat's drop is kept (only moves with secondaries lose their self effect)",
+        "whether a spread move drops once or per target in Showdown (selfDropped flag)",
+        "Substitute: confirm the drop applies when the hit lands on the Substitute",
+        "Eject Pack is not in this game's items list; if it is added it triggers on self-drops"
+      ]
+    },
+    {
       "id": "damage-calc",
       "name": "Damage calculation",
       "type": "calc",
