@@ -1,0 +1,58 @@
+{
+  "_about": "Composition catalogue (issue #24). Each entry is one move or ability that lists the mechanics in mechanics.json it uses (uses). Compositions point to mechanics, never the other way. Stubs here are only the cases that need several mechanics at once; involves lists the mechanics a stub needs and must be a subset of uses. status: ok = source confirms it; verify = needs checking before the case is written.",
+  "compositions": [
+    {
+      "id": "fake-out",
+      "name": "Fake Out",
+      "type": "composition",
+      "rule": "Normal-type physical move, base power 40, priority +3. It uses the priority, first-turn-only and flinch rules together; the stubs here are the ones that need several of them at once.",
+      "source": [
+        "repo: data/moves.json fakeout (priority 3, bp 40, contact, protect)",
+        "showdown: data/moves.ts#fakeout (not read verbatim yet; fetch in S0)"
+      ],
+      "data": ["moves.fakeout"],
+      "depends_on": ["move-priority", "first-turn-only", "flinch"],
+      "uses": ["move-priority", "first-turn-only", "flinch", "type-immunity", "protect", "damage-calc"],
+      "cases": [
+        {"id": "order-protect-beats", "group": "priority", "kind": "interaction", "status": "ok", "setup": "target uses Protect (+4) the same turn", "expect": "Protect goes first; Fake Out is blocked; no damage, no flinch; first turn is spent", "involves": ["move-priority", "protect"]},
+        {"id": "order-switch-before", "group": "priority", "kind": "interaction", "status": "verify", "setup": "target switches out the same turn Fake Out is aimed at its slot", "expect": "switch resolves first; Fake Out hits the replacement; check whether the replacement flinches", "involves": ["move-priority", "flinch"]},
+        {"id": "order-mega-first", "group": "priority", "kind": "interaction", "status": "verify", "setup": "target Mega Evolves the same turn", "expect": "Mega Evolution resolves before Fake Out; target flinches in its Mega form, and Mega Evolution still happens", "involves": ["move-priority", "flinch"]}
+      ],
+      "open": [
+        "Confirm Showdown's fakeout entry: activeMoveActions check, secondary flinch 100%."
+      ]
+    },
+    {
+      "id": "intimidate",
+      "name": "Intimidate",
+      "type": "composition",
+      "rule": "When the holder enters battle, each adjacent foe's Attack is lowered by 1 stage. Foes with Substitute are skipped. It uses the entry-trigger and foe-stat-drop rules; the stubs here are the Intimidate-only rules and doubles targeting.",
+      "source": [
+        "showdown: data/abilities.ts#intimidate",
+        "serebii: attackdex-champions ability listing (Inner Focus, Oblivious, Scrappy list Intimidate immunity)"
+      ],
+      "data": ["abilities.intimidate", "abilities.inner-focus", "abilities.own-tempo", "abilities.oblivious", "abilities.scrappy", "abilities.guard-dog", "abilities.rattled"],
+      "depends_on": ["entry-trigger", "foe-stat-drop"],
+      "uses": ["entry-trigger", "foe-stat-drop", "stat-stages", "substitute", "protect", "damage-calc"],
+      "cases": [
+        {"id": "base-singles", "group": "base", "kind": "positive", "status": "ok", "setup": "Incineroar enters vs Garchomp", "expect": "Garchomp Atk -1; other stats unchanged", "involves": ["entry-trigger", "foe-stat-drop"]},
+        {"id": "base-user-unchanged", "group": "base", "kind": "control", "status": "ok", "setup": "same as base-singles", "expect": "Incineroar's own stages all 0", "involves": ["foe-stat-drop"]},
+        {"id": "block-inner-focus", "group": "blocked", "kind": "control", "status": "ok", "setup": "vs Lucario (Inner Focus)", "expect": "Atk 0 (Showdown: Intimidate-specific check)", "involves": ["foe-stat-drop"]},
+        {"id": "block-own-tempo", "group": "blocked", "kind": "control", "status": "verify", "setup": "vs Slowbro (Own Tempo)", "expect": "Atk 0; Champions-specific listing not found", "involves": ["foe-stat-drop"]},
+        {"id": "block-oblivious", "group": "blocked", "kind": "control", "status": "ok", "setup": "vs Mamoswine (Oblivious)", "expect": "Atk 0", "involves": ["foe-stat-drop"]},
+        {"id": "block-scrappy", "group": "blocked", "kind": "control", "status": "verify", "setup": "vs Kangaskhan (Scrappy)", "expect": "Atk 0 in mainline gen 8+; Showdown handler not read, Serebii lists it", "involves": ["foe-stat-drop"]},
+        {"id": "flip-guard-dog", "group": "flipped", "kind": "interaction", "status": "ok", "setup": "vs Mabosstiff (Guard Dog)", "expect": "Atk +1 instead of -1", "involves": ["foe-stat-drop"]},
+        {"id": "react-rattled", "group": "reacted", "kind": "interaction", "status": "verify", "setup": "vs Persian-Alola (Rattled)", "expect": "Atk -1, Speed +1 (Showdown gen 8+ behaviour; short_desc omits it)", "involves": ["foe-stat-drop"]},
+        {"id": "side-protect", "group": "protected", "kind": "interaction", "status": "ok", "setup": "foe used Protect this turn, Intimidate user enters", "expect": "Atk -1 (Protect blocks moves, not abilities)", "involves": ["protect", "entry-trigger"]},
+        {"id": "target-doubles-both", "group": "targeting", "kind": "positive", "status": "ok", "setup": "doubles, Incineroar enters vs two foes", "expect": "both foes Atk -1", "involves": ["entry-trigger"]},
+        {"id": "target-ally-unaffected", "group": "targeting", "kind": "control", "status": "ok", "setup": "same, check Incineroar's partner", "expect": "partner Atk 0", "involves": ["entry-trigger"]},
+        {"id": "target-one-fainted", "group": "targeting", "kind": "interaction", "status": "ok", "setup": "one foe slot fainted or empty", "expect": "only the living foe is lowered; no error", "involves": ["entry-trigger"]},
+        {"id": "target-two-intimidators", "group": "targeting", "kind": "interaction", "status": "ok", "setup": "both of p1's active mons have Intimidate", "expect": "each foe at Atk -2", "involves": ["entry-trigger", "foe-stat-drop"]}
+      ],
+      "open": [
+        "Do Own Tempo and Scrappy block Intimidate in Champions? Inner Focus, Oblivious and Own Tempo are Intimidate-specific in Showdown; Scrappy was not confirmed.",
+        "Does Rattled trigger on Intimidate in Champions? Not in the ability's short description."
+      ]
+    }
+  ]
+}
