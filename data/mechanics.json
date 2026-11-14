@@ -11,7 +11,7 @@
         "repo: data/moves.json priority field (-7 to +5)",
         "smogon: Champions Battle Mechanics Research thread (Mega Evolution order is not purely Speed-based)"
       ],
-      "data": ["moves.fakeout", "moves.quickguard", "moves.protect", "abilities.queenlymajesty", "abilities.armortail", "abilities.stall"],
+      "data": ["moves.fakeout", "moves.quickguard", "moves.protect", "abilities.queenly-majesty", "abilities.armor-tail", "abilities.stall"],
       "depends_on": ["turn action ordering", "per-mon Speed", "Trick Room field state"],
       "cases": [
         {"id": "order-goes-first", "group": "priority", "kind": "positive", "status": "ok", "setup": "Incineroar Fake Out vs Garchomp Dragon Claw (Garchomp is faster)", "expect": "order: Fake Out, then Garchomp's move; Garchomp is flinched and its move never fires"},
@@ -63,7 +63,7 @@
         "showdown: data/conditions.ts#flinch (not read yet; fetch in S0)",
         "repo: 20 moves in data/moves.json mention flinch"
       ],
-      "data": ["moves.fakeout", "moves.upperhand", "moves.ironhead", "abilities.innerfocus", "abilities.shielddust", "abilities.steadfast", "abilities.sheerforce"],
+      "data": ["moves.fakeout", "moves.upperhand", "moves.ironhead", "abilities.inner-focus", "abilities.shield-dust", "abilities.steadfast", "abilities.sheer-force"],
       "depends_on": ["secondary effect pipeline", "has-the-target-moved flag"],
       "cases": [
         {"id": "flinch-basic", "group": "flinch", "kind": "positive", "status": "ok", "setup": "target has not moved yet", "expect": "target loses its move this turn; flinch clears at end of turn"},
@@ -158,7 +158,7 @@
         "showdown: data/abilities.ts#clearbody, #contrary, #mirrorarmor, #defiant, #competitive",
         "repo: data/abilities.json"
       ],
-      "data": ["abilities.clearbody", "abilities.whitesmoke", "abilities.hypercutter", "abilities.contrary", "abilities.mirrorarmor", "abilities.defiant", "abilities.competitive", "abilities.flowerveil"],
+      "data": ["abilities.clear-body", "abilities.white-smoke", "abilities.hyper-cutter", "abilities.contrary", "abilities.mirror-armor", "abilities.defiant", "abilities.competitive", "abilities.flower-veil"],
       "depends_on": ["stat stages as engine state", "foe-caused vs self-caused stat change"],
       "cases": [
         {"id": "block-clear-body", "group": "blocked", "kind": "control", "status": "ok", "setup": "Incineroar enters vs Dragapult (Clear Body)", "expect": "Dragapult Atk 0"},
@@ -253,7 +253,7 @@
         "showdown: data/abilities.ts#intimidate",
         "serebii: attackdex-champions ability listing (Inner Focus, Oblivious, Scrappy list Intimidate immunity)"
       ],
-      "data": ["abilities.intimidate", "abilities.innerfocus", "abilities.owntempo", "abilities.oblivious", "abilities.scrappy", "abilities.guarddog", "abilities.rattled"],
+      "data": ["abilities.intimidate", "abilities.inner-focus", "abilities.own-tempo", "abilities.oblivious", "abilities.scrappy", "abilities.guard-dog", "abilities.rattled"],
       "depends_on": ["entry-trigger", "foe-stat-drop"],
       "uses": ["entry-trigger", "foe-stat-drop", "stat-stages", "substitute", "protect", "damage-calc"],
       "cases": [
