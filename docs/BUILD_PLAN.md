@@ -61,16 +61,18 @@ docs/BUILD_PLAN.md              # this checklist, ticked as work proceeds
 **Gate 2:** state, boost-clamp and team-building tests pass; suite green. Commit: "Engine core: state, RNG, events, teams".
 
 ### Phase 3: Calc and pipeline skeleton
-- [ ] `calc/typechart.py`: `effectiveness(move_type, defender_types)` from `types.json`; `is_immune`.
-- [ ] `calc/damage.py`: Showdown-order damage (base + 2, spread, crit, roll, STAB, type, burn, minimum 1), flooring each step; `rolls` parameter so tests can pin it. Weather, screens and item/ability modifiers: stubbed to 1.0 with `# TODO(S1)`.
-- [ ] `hooks.py`: registry with `on(event_name)` decorator and `fire(battle, name, ctx, ...)`; handlers run in Speed order; `HOOK_NAMES` from `events.py`; unknown name raises.
-- [ ] `effects_table.py`: hand-written data for the supported moves/abilities (initial set: Fake Out, Close Combat, Flare Blitz, Dragon Claw, Protect, Intimidate, plus what Phase 5 mechanics need). Lookup of anything else raises `Unsupported`.
-- [ ] `pipeline/`: `run_move(battle, act)` running stages in order; each stage removes targets from `ctx.targets` or aborts, and logs the abort (`fail`, `immune`, `protected`, `missed`): `can_move`, `targets` (singles + doubles, adjacency simplified), `protect`, `immunity`, `accuracy`, then `hit` loop and `after` (recoil, faint).
-- [ ] `turn.py`: `order_actions` (switch, Mega flag split out, priority, Speed, seeded tie-break; Trick Room reverses Speed), `run_residuals` (weather and status ticks stubbed, flinch clears).
-- [ ] `game.py`: `start`, `play_turn`, `legal_choices` (simple), `validate` (raises `Unsupported`), `run_to_end(teams, seed, policy)`, `check_winner`, `request_replacements` (auto-pick first living mon for now).
-- [ ] Tests: type immunity (Fighting into Ghost = 0), damage known value for one fixed roll, `order_actions` (Fake Out before a faster mon), Fake Out turn from #25 produces the expected event list.
+- [x] `calc/typechart.py`: `effectiveness(move_type, defender_types)` from `types.json`; `is_immune`.
+- [x] `calc/damage.py`: Showdown-order damage (base + 2, spread, crit, roll, STAB, type, burn, minimum 1), flooring each step; `rolls` parameter so tests can pin it. Weather, screens and item/ability modifiers: stubbed to 1.0 with `# TODO(S1)`.
+- [x] `hooks.py`: registry with `on(event_name)` decorator and `fire(battle, name, ctx, ...)`; handlers run in Speed order; `HOOK_NAMES` from `events.py`; unknown name raises.
+- [x] `effects_table.py`: hand-written data for the supported moves/abilities (initial set: Fake Out, Close Combat, Flare Blitz, Dragon Claw, Protect, Intimidate, plus what Phase 5 mechanics need). Lookup of anything else raises `Unsupported`.
+- [x] `pipeline/`: `run_move(battle, act)` running stages in order; each stage removes targets from `ctx.targets` or aborts, and logs the abort (`fail`, `immune`, `protected`, `missed`): `can_move`, `targets` (singles + doubles, adjacency simplified), `protect`, `immunity`, `accuracy`, then `hit` loop and `after` (recoil, faint).
+- [x] `turn.py`: `order_actions` (switch, Mega flag split out, priority, Speed, seeded tie-break; Trick Room reverses Speed), `run_residuals` (weather and status ticks stubbed, flinch clears).
+- [x] `game.py`: `start`, `play_turn`, `legal_choices` (simple), `validate` (raises `Unsupported`), `run_to_end(teams, seed, policy)`, `check_winner`, `request_replacements` (auto-pick first living mon for now).
+- [x] Tests: type immunity (Fighting into Ghost = 0), damage known value for one fixed roll, `order_actions` (Fake Out before a faster mon), Fake Out turn from #25 produces the expected event list.
 
 **Gate 3:** the Fake Out vs Garchomp turn test passes (Garchomp flinched, its move logged as `fail(flinch)`); an unsupported move raises `Unsupported` in `validate`; suite green. Commit: "Calc and move pipeline skeleton with a playable turn".
+
+_Notes: `pipeline/after.py` is a placeholder; recoil and drain run as `on_after_all_hits` handlers in Phase 5. Abilities not modeled and not in `INERT_ABILITIES` raise `Unsupported` at `start()`; Mega Evolution choices raise `Unsupported` in `validate`._
 
 ### Phase 4: Replay and saving
 - [ ] `replay.py`: `save_replay(path, teams, seed, turns)`, `load_replay`, `replay(path) -> Battle`, `save_log(path, battle)`; replay JSON has `version`, `format`, `seed`, `teams`, `turns` (see #25).
