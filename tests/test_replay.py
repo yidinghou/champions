@@ -118,6 +118,16 @@ class Cli(unittest.TestCase):
     def test_rng_flag_shows_rolls(self):
         self.assertIn("roll damage_roll", self.run_cli("--turn", "1", "--rng"))
 
+    def test_color_is_off_when_not_a_terminal(self):
+        self.assertNotIn("\033[", self.run_cli("--turn", "1"))
+
+    def test_color_always_adds_ansi_and_keeps_text(self):
+        plain = self.run_cli("--turn", "1")
+        colored = self.run_cli("--turn", "1", "--color", "always")
+        self.assertIn("\033[", colored)
+        import re
+        self.assertEqual(re.sub(r"\033\[[0-9;]*m", "", colored), plain)
+
     def test_turn_out_of_range(self):
         with self.assertRaises(SystemExit):
             self.run_cli("--turn", "9")

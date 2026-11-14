@@ -6,6 +6,32 @@ from functools import lru_cache
 from pathlib import Path
 
 BAR_WIDTH = 20
+
+_CODES = {"bold": "1", "dim": "2", "red": "31", "green": "32", "yellow": "33", "blue": "34",
+          "magenta": "35", "cyan": "36", "orange": "38;5;208"}
+_color = False
+SIDE_COLORS = ["blue", "orange"]   # team colors; kept distinct from the red/green event colors
+KIND_COLORS = {"damage": "red", "recoil": "red", "faint": "bold red", "crit": "bold yellow",
+               "heal": "green", "status": "magenta", "volatile": "magenta", "switch": "cyan",
+               "mega": "bold magenta", "win": "bold green", "fail": "yellow", "immune": "dim",
+               "protected": "cyan", "missed": "dim", "blocked": "cyan"}
+
+
+def set_color(on):
+    global _color
+    _color = bool(on)
+
+
+def paint(text, style):
+    """Wrap text in ANSI codes for a space-separated style like 'bold red'. No-op when color is off."""
+    if not _color or not style:
+        return text
+    return "\033[" + ";".join(_CODES[w] for w in style.split()) + "m" + text + "\033[0m"
+
+
+def side_style(ref):
+    side = ref.partition(":")[0]
+    return "bold " + SIDE_COLORS[0 if side == "p1" else 1]
 STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
                 "slp": "asleep", "frz": "frozen"}
 STAT_NAMES = {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def",
@@ -33,7 +59,9 @@ def mon_name(ref):
 
 def hp_bar(hp, max_hp, width=BAR_WIDTH):
     filled = 0 if hp <= 0 else max(1, round(width * hp / max_hp))
-    return "[" + "#" * filled + "." * (width - filled) + "]"
+    frac = hp / max_hp if max_hp else 0
+    style = "green" if frac > 0.5 else "yellow" if frac > 0.2 else "red"
+    return "[" + paint("#" * filled, style) + paint("." * (width - filled), "dim") + "]"
 
 
 def hp_table(b):
@@ -50,7 +78,8 @@ def hp_table(b):
             extra += [f"{STAT_NAMES.get(k, k)} {v:+d}" for k, v in m.stages.items() if v]
             extra += [k for k in m.volatiles]
             tail = f"  ({', '.join(extra)})" if extra else ""
-            lines.append(f"  {name:<22}{m.hp:>4}/{m.max_hp:<4} {hp_bar(m.hp, m.max_hp)}{tail}")
+            lines.append(f"  {paint(f'{name:<22}', side_style(m.ref))}{m.hp:>4}/{m.max_hp:<4} "
+                         f"{hp_bar(m.hp, m.max_hp)}{paint(tail, 'yellow')}")
     return lines
 
 
@@ -108,15 +137,24 @@ def render_turn(events, show_rng=False):
     for e in events:
         d = e.data
         if e.kind == "move":
-            out.append(f"{mon_name(d['mon'])} used {move_name(d['move'])}!")
+            out.append(f"{paint(mon_name(d['mon']), side_style(d['mon']))} used "
+                       f"{paint(move_name(d['move']), 'bold')}!")
         elif e.kind == "rng":
             if show_rng:
-                out.append(f"      (roll {d['label']} = {d['value']})")
+                out.append(paint(f"      (roll {d['label']} = {d['value']})", "dim"))
         elif e.kind == "hit" and d.get("spread"):
-            out.append(f"  hits {mon_name(d['mon'])} (spread)")
+            out.append(paint(f"  hits {mon_name(d['mon'])} (spread)", "dim"))
         else:
             line = _describe(e)
             if line:
+                style = KIND_COLORS.get(e.kind)
+                if e.kind == "boost":
+                    style = "green" if d["change"] > 0 else "red" if d["change"] < 0 else "dim"
+                name = mon_name(d["mon"]) if "mon" in d else None
+                if name and line.startswith(name):     # team-colored name, event-colored rest
+                    line = paint(name, side_style(d["mon"])) + paint(line[len(name):], style)
+                else:
+                    line = paint(line, style)
                 out.append("  " + line)
     return out
 
@@ -132,9 +170,11 @@ def render(replay_data, turn, play, show_rng=False):
     before = play({**replay_data, "turns": replay_data["turns"][:turn - 1]})
     after = play({**replay_data, "turns": replay_data["turns"][:turn]})
     evs = [e for e in after.log if e.turn == turn]
-    lines = [f"=== Turn {turn} ===", "", "Start of turn:", *hp_table(before), ""]
+    lines = [paint(f"=== Turn {turn} ===", "bold cyan"), "", paint("Start of turn:", "bold"),
+             *hp_table(before), ""]
     lines += render_turn(evs, show_rng)
-    lines += ["", "End of turn:", *hp_table(after)]
+    lines += ["", paint("End of turn:", "bold"), *hp_table(after)]
     if after.winner is not None:
-        lines.append("Winner: " + ("draw" if after.winner == -1 else f"P{after.winner + 1}"))
+        lines.append(paint("Winner: " + ("draw" if after.winner == -1 else f"P{after.winner + 1}"),
+                           "bold green"))
     return "\n".join(lines)

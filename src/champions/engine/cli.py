@@ -1,8 +1,9 @@
 """champions sim replay <file> [--turn N] [--rng] [--raw]   play a saved replay and print it."""
 import argparse
+import os
 import sys
 
-from .pretty import render
+from .pretty import render, set_color
 from .replay import ReplayError, load_replay, play_replay
 
 
@@ -14,7 +15,11 @@ def main():
     r.add_argument("--turn", type=int, help="show only this turn (1-based), with HP before and after")
     r.add_argument("--rng", action="store_true", help="also show the random rolls")
     r.add_argument("--raw", action="store_true", help="print the raw event log, one line per event")
+    r.add_argument("--color", choices=["auto", "always", "never"], default="auto",
+                   help="colorize output (auto: only on a terminal, and not if NO_COLOR is set)")
     args = p.parse_args()
+    set_color(args.color == "always" or (args.color == "auto" and sys.stdout.isatty()
+                                         and "NO_COLOR" not in os.environ))
     try:
         data = load_replay(args.file)
         if args.raw:
