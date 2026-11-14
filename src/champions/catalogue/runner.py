@@ -52,6 +52,20 @@ def evaluate(battle, chk):
         m = find_mon(battle, chk["mon"])
         if m.hp != chk["hp_eq"]:
             return f"hp of {chk['mon']} == {chk['hp_eq']}  (actual: {m.hp})"
+    elif "status" in chk:
+        actual = find_mon(battle, chk["mon"]).status
+        if actual != chk["status"]:
+            return f"status of {chk['mon']} == {chk['status']}  (actual: {actual})"
+    elif "status_turns" in chk:
+        actual = find_mon(battle, chk["mon"]).status_turns
+        if actual != chk["status_turns"]:
+            return f"status_turns of {chk['mon']} == {chk['status_turns']}  (actual: {actual})"
+    elif "damage_seq" in chk:     # end-of-turn hits taken, in order, as [n, d] of max HP
+        m = find_mon(battle, chk["mon"])
+        got = [e.data["amount"] for e in battle.log if e.kind == "damage" and e.data["mon"] == m.ref]
+        want = [max(1, m.max_hp // d) * n for n, d in chk["damage_seq"]]   # Showdown floors max/d first, then multiplies
+        if got != want:
+            return f"damage taken by {chk['mon']} == {want} ({chk['damage_seq']} of {m.max_hp})  (actual: {got})"
     elif "volatile" in chk:
         present = chk["volatile"] in find_mon(battle, chk["mon"]).volatiles
         if present != chk.get("present", True):

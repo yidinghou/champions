@@ -6,6 +6,8 @@ from functools import lru_cache
 from pathlib import Path
 
 BAR_WIDTH = 20
+STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
+                "slp": "asleep", "frz": "frozen"}
 STAT_NAMES = {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def",
               "spe": "Speed", "acc": "Accuracy", "eva": "Evasion"}
 
@@ -73,6 +75,8 @@ def _describe(e):
         return f"{mon_name(d['mon'])}'s {stat} {word} by {abs(d['change'])} (stage {d['stage']:+d})"
     if k == "crit":
         return "A critical hit!"
+    if k == "fail" and d.get("reason") == "already_status":
+        return f"{mon_name(d['mon'])} already has a status, so {move_name(d['move'])} fails"
     if k == "fail":
         return f"{mon_name(d['mon'])} can't use {move_name(d['move'])}: {d['reason'].replace('_', ' ')}"
     if k == "immune":
@@ -84,7 +88,9 @@ def _describe(e):
     if k == "blocked":
         return f"{mon_name(d['mon'])}'s {d.get('ability', 'ability')} blocked the {d.get('stat')} drop"
     if k == "status":
-        return f"{mon_name(d['mon'])} is now {d.get('status', d.get('add', '?'))}"
+        if "cure" in d:
+            return f"{mon_name(d['mon'])} is no longer {STATUS_WORDS.get(d['cure'], d['cure'])}"
+        return f"{mon_name(d['mon'])} is {STATUS_WORDS.get(d['add'], d['add'])}"
     if k == "switch":
         return f"{mon_name(d['mon'])} was sent out"
     if k == "mega":

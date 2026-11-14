@@ -26,6 +26,7 @@ class Mon:
     stages: Dict[str, int] = field(default_factory=lambda: {k: 0 for k in STAT_KEYS})
     status: Optional[str] = None
     volatiles: Dict[str, Any] = field(default_factory=dict)
+    status_turns: int = 0       # sleep turns left, or the Toxic damage counter
     turns_out: int = 0
     pp: Dict[str, int] = field(default_factory=dict)
     mega: bool = False
@@ -71,8 +72,19 @@ class Mon:
         self.volatiles[name] = value
         self._emit("volatile", add=name)
 
+    def set_status(self, status, turns=0):
+        self.status, self.status_turns = status, turns
+        self._emit("status", add=status)
+
+    def cure_status(self):
+        old, self.status, self.status_turns = self.status, None, 0
+        if old:
+            self._emit("status", cure=old)
+
     def clear_on_switch(self):
-        """Stages and volatiles reset when a mon leaves the field."""
+        """Stages and volatiles reset when a mon leaves the field. A status stays; Toxic restarts at 1."""
+        if self.status == "tox":
+            self.status_turns = 0
         self.stages = {k: 0 for k in STAT_KEYS}
         self.volatiles = {}
         self.turns_out = 0

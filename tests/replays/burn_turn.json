@@ -1,0 +1,70 @@
+{
+ "version": 1,
+ "format": "singles",
+ "seed": 7,
+ "teams": [
+  [
+   {
+    "species": "gengar",
+    "ability": "cursedbody",
+    "moves": [
+     "willowisp",
+     "poisonjab",
+     "thunderwave"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "snorlax",
+    "ability": "thickfat",
+    "moves": [
+     "bodyslam",
+     "protect"
+    ]
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "willowisp",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "bodyslam",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ],
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "thunderwave",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "bodyslam",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ]
+ ]
+}

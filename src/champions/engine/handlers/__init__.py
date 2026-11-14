@@ -1,2 +1,2 @@
 """Importing this package registers every handler with the hook registry."""
-from . import entry, foe_drop, protect, recoil, secondary, self_drop  # noqa: F401
+from . import entry, foe_drop, protect, recoil, secondary, self_drop, status  # noqa: F401

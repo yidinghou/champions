@@ -1,4 +1,4 @@
-"""Stage 4: type immunity. Status moves and self-targeted moves skip it."""
+"""Stage 4: type immunity. Status moves skip it unless the move says `type_immunity` (Thunder Wave)."""
 from ...calc.typechart import is_immune
 
 SCRAPPY_HITS = ("ghost",)
@@ -12,7 +12,7 @@ def ignore_for(user, move):
 
 def check(ctx):
     move = ctx.move
-    if move["category"] == "Status" or not move["base_power"]:
+    if (move["category"] == "Status" or not move["base_power"]) and not ctx.effects.get("type_immunity"):
         return
     kept = []
     for t in ctx.targets:

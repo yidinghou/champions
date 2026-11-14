@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from collections import namedtuple
 
+from . import status
 from .actions import Switch
 from .teams import moves_data
 
@@ -55,10 +56,13 @@ def order_actions(battle, choices):
 
 
 def run_residuals(battle):
-    """End of turn, in Speed order. Initial version clears flinch only.
-    TODO(residuals): weather, terrain, status damage, items, screens and Tailwind countdowns."""
+    """End of turn, in Speed order. Burn, poison and Toxic damage, then clears flinch.
+    TODO(residuals): weather, terrain, items, screens and Tailwind countdowns."""
     mons = [m for s in battle.sides for _, m in s.alive_active()]
     mons.sort(key=lambda m: -speed(battle, m))
     for m in mons:
+        dmg = status.residual_damage(m)
+        if dmg:
+            m.take(dmg)
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)
