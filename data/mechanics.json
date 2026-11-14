@@ -205,6 +205,30 @@
       ]
     },
     {
+      "id": "move-pipeline",
+      "name": "Move pipeline",
+      "type": "mechanic",
+      "rule": "A move runs fixed stages in order and any stage can abort the rest: can the user move at all, resolve targets and redirects, Protect-style block, type immunity, powder and Prankster immunity, accuracy, then per hit: damage, move effects, self-drops, secondaries, forced switch; after all hits: faint resolution, then recoil. An aborted target gets no later stage, so an immune, protected or missed target takes no damage, effects or self-drops.",
+      "source": [
+        "showdown: sim/battle-actions.ts#useMove, #useMoveInner, #trySpreadMoveHit, #hitStepTryHit, #hitStepTypeImmunity, #hitStepAccuracy, #spreadMoveHit",
+        "docs: ENGINE_PLAN.md key finding 2"
+      ],
+      "data": ["moves.closecombat", "moves.doubleedge", "moves.protect", "moves.rockslide"],
+      "depends_on": ["type-immunity", "protect", "accuracy-evasion", "target-resolution"],
+      "cases": [
+        {"id": "stage-order-hit", "group": "order", "kind": "positive", "status": "ok", "setup": "Machamp Close Combat into Tauros, Tauros survives", "expect": "stages run in order: damage, then self-drop (Machamp Defense and Sp. Def -1); nothing after the hit loop fires early"},
+        {"id": "abort-immune", "group": "abort", "kind": "control", "status": "ok", "setup": "Machamp Close Combat into Gengar", "expect": "aborts at the immunity stage: 0 damage, no effects, no self-drop"},
+        {"id": "abort-protect", "group": "abort", "kind": "control", "status": "ok", "setup": "Gengar used Protect; Machamp Close Combat aimed at it", "expect": "aborts at the Protect stage: 0 damage, no self-drop"},
+        {"id": "abort-miss", "group": "abort", "kind": "control", "status": "ok", "setup": "Garchomp Rock Slide (90%) with the accuracy roll forced to miss", "expect": "no damage, no secondary effect, no self-drop"},
+        {"id": "protect-before-immunity", "group": "order", "kind": "interaction", "status": "verify", "setup": "Gengar used Protect; Machamp Close Combat aimed at it", "expect": "reported as blocked by Protect, not as immune; check Showdown's message order"},
+        {"id": "immunity-before-accuracy", "group": "order", "kind": "interaction", "status": "ok", "setup": "Machamp Close Combat into Gengar with the accuracy roll forced to miss", "expect": "immunity stage aborts first; the accuracy roll is never made (the random number stream is not advanced)"},
+        {"id": "faint-before-recoil", "group": "order", "kind": "interaction", "status": "ok", "setup": "Tauros Double-Edge KOs its target", "expect": "target faints first, then Tauros takes recoil (1/3 of damage dealt)"},
+        {"id": "user-faints-before-move", "group": "abort", "kind": "edge", "status": "ok", "setup": "Machamp is KO'd by a faster move before it acts", "expect": "Machamp's move never starts; no PP spent"},
+        {"id": "target-gone-before-move", "group": "abort", "kind": "edge", "status": "verify", "setup": "Doubles: the chosen foe fainted earlier this turn, the other foe is still up", "expect": "move retargets to the other foe, or fails if none; check Showdown getRandomTarget"}
+      ],
+      "open": ["exact Showdown order of Protect versus immunity versus powder checks (stub protect-before-immunity)", "retarget rules when the chosen target has fainted (stub target-gone-before-move)"]
+    },
+    {
       "id": "damage-calc",
       "name": "Damage calculation",
       "type": "calc",
