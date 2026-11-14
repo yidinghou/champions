@@ -1,0 +1,44 @@
+{
+ "version": 1,
+ "format": "singles",
+ "seed": 5,
+ "teams": [
+  [
+   {
+    "species": "incineroar",
+    "ability": "blaze",
+    "moves": [
+     "extremespeed"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "garchomp",
+    "ability": "sandveil",
+    "moves": [
+     "earthquake"
+    ]
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "extremespeed",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "earthquake",
+    "target": null
+   }
+  ]
+ ]
+}

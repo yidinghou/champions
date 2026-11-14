@@ -36,6 +36,7 @@ STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "pa
                 "slp": "asleep", "frz": "frozen"}
 VOLATILE_WORDS = {"confusion": "confused", "taunt": "taunted", "encore": "encored", "disable": "disabled",
                   "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy"}
+HIDDEN_VOLATILES = {"protect_chain"}      # engine bookkeeping, not something a player sees
 STAT_NAMES = {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def",
               "spe": "Speed", "acc": "Accuracy", "eva": "Evasion"}
 
@@ -78,7 +79,7 @@ def hp_table(b):
             if m.status:
                 extra.append(m.status)
             extra += [f"{STAT_NAMES.get(k, k)} {v:+d}" for k, v in m.stages.items() if v]
-            extra += [k for k in m.volatiles]
+            extra += [k for k in m.volatiles if k not in HIDDEN_VOLATILES]
             tail = f"  ({', '.join(extra)})" if extra else ""
             lines.append(f"  {paint(f'{name:<22}', side_style(m.ref))}{m.hp:>4}/{m.max_hp:<4} "
                          f"{hp_bar(m.hp, m.max_hp)}{paint(tail, 'yellow')}")
@@ -99,6 +100,8 @@ def _describe(e):
     if k == "volatile":
         if "remove" in d:
             return f"{mon_name(d['mon'])} is no longer {VOLATILE_WORDS.get(d['remove'], d['remove'])}"
+        if d["add"] == "protect":
+            return f"{mon_name(d['mon'])} braced behind Protect"
         return f"{mon_name(d['mon'])} is {VOLATILE_WORDS.get(d['add'], 'now ' + d['add'])}"
     if k == "boost":
         stat = STAT_NAMES.get(d["stat"], d["stat"])
@@ -174,8 +177,11 @@ def render(replay_data, turn, play, show_rng=False):
     before = play({**replay_data, "turns": replay_data["turns"][:turn - 1]})
     after = play({**replay_data, "turns": replay_data["turns"][:turn]})
     evs = [e for e in after.log if e.turn == turn]
-    lines = [paint(f"=== Turn {turn} ===", "bold cyan"), "", paint("Start of turn:", "bold"),
-             *hp_table(before), ""]
+    lines = [paint(f"=== Turn {turn} ===", "bold cyan"), ""]
+    entry = render_turn([e for e in after.log if e.turn == 0], show_rng) if turn == 1 else []
+    if entry:                                  # battle-start effects, e.g. Intimidate
+        lines += [paint("Switch-in:", "bold"), *entry, ""]
+    lines += [paint("Start of turn:", "bold"), *hp_table(before), ""]
     lines += render_turn(evs, show_rng)
     lines += ["", paint("End of turn:", "bold"), *hp_table(after)]
     if after.winner is not None:

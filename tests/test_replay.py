@@ -91,6 +91,31 @@ class Snapshot(unittest.TestCase):
         self.assertEqual(replay.log_to_list(b), replay.log_to_list(clone))
 
 
+class SampleReplays(unittest.TestCase):
+    def text(self, name):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            cli.main(["sim", "replay", str(REPLAYS / name), "--turn", "1"])
+        return out.getvalue()
+
+    def test_intimidate_shows_drop_and_block_on_entry(self):
+        out = self.text("intimidate_doubles.json")
+        self.assertIn("Switch-in:", out)
+        self.assertIn("Garchomp (P2)'s Attack fell by 1", out)
+        self.assertIn("Lucario (P2)'s innerfocus blocked", out)
+
+    def test_protect_blocks_the_hit(self):
+        out = self.text("protect_turn.json")
+        self.assertIn("Garchomp (P2) protected itself", out)
+        self.assertNotIn("damage", out)
+        self.assertIn("Garchomp (P2) braced behind Protect", out)
+        self.assertNotIn("protect_chain", out)
+
+    def test_extreme_speed_goes_before_a_faster_mon(self):
+        out = self.text("priority_order.json")
+        self.assertLess(out.index("used Extreme Speed"), out.index("used Earthquake"))
+
+
 class Cli(unittest.TestCase):
     def run_cli(self, *args):
         out = io.StringIO()

@@ -1,0 +1,79 @@
+{
+ "version": 1,
+ "format": "doubles",
+ "seed": 11,
+ "teams": [
+  [
+   {
+    "species": "incineroar",
+    "ability": "intimidate",
+    "moves": [
+     "nightslash"
+    ]
+   },
+   {
+    "species": "rillaboom",
+    "ability": "overgrow",
+    "moves": [
+     "woodhammer"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "garchomp",
+    "ability": "sandveil",
+    "moves": [
+     "dragonclaw"
+    ]
+   },
+   {
+    "species": "lucario",
+    "ability": "innerfocus",
+    "moves": [
+     "closecombat"
+    ]
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "nightslash",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 0,
+    "slot": 1,
+    "move": "woodhammer",
+    "target": [
+     1,
+     1
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "dragonclaw",
+    "target": [
+     0,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 1,
+    "move": "closecombat",
+    "target": [
+     0,
+     1
+    ]
+   }
+  ]
+ ]
+}
