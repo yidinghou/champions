@@ -1,138 +1,279 @@
 {
-  "_about": "Mechanic catalogue (issue #24). One entry per rule; many case stubs per mechanic. Stubs are plain-words scenarios, not runnable cases yet. status: ok = source confirms it; verify = needs checking against Showdown or in-game before the case is written.",
+  "_about": "Mechanic catalogue (issue #24). type=mechanic is one atomic rule; type=composition is a move or ability that lists the mechanics it uses; type=calc is damage-calculator cases. Many case stubs per entry. Stubs are plain-words scenarios, not runnable cases yet. status: ok = source confirms it; verify = needs checking before the case is written. In a composition, involves lists the mechanics a stub needs and must be a subset of uses.",
   "mechanics": [
     {
-      "id": "intimidate",
-      "name": "Intimidate",
-      "rule": "When the holder enters battle, each adjacent foe's Attack is lowered by 1 stage. Foes with Substitute are skipped. Fires at battle start, on switch-in, on KO replacement, and when a Mega Evolution gains the ability.",
+      "id": "move-priority",
+      "name": "Move priority and turn order",
+      "type": "mechanic",
+      "rule": "Within a turn, actions resolve by priority bracket first, then Speed (highest first), then a seeded random tie-break. Trick Room reverses Speed, not priority. Abilities and moves can block priority moves or reorder within a bracket (Queenly Majesty, Armor Tail, Quick Guard, Stall).",
       "source": [
-        "showdown: data/abilities.ts#intimidate",
-        "showdown: data/abilities.ts#clearbody, #innerfocus, #owntempo, #oblivious, #guarddog, #mirrorarmor, #contrary, #defiant, #competitive",
-        "serebii: attackdex-champions ability listing (Inner Focus, Oblivious, Scrappy list Intimidate immunity)"
+        "showdown: sim/battle.ts#comparePriority, #getActionSpeed, #speedSort",
+        "repo: data/moves.json priority field (-7 to +5)",
+        "smogon: Champions Battle Mechanics Research thread (Mega Evolution order is not purely Speed-based)"
       ],
-      "data": [
-        "abilities.intimidate", "abilities.clearbody", "abilities.whitesmoke", "abilities.hypercutter",
-        "abilities.innerfocus", "abilities.owntempo", "abilities.oblivious", "abilities.scrappy",
-        "abilities.guarddog", "abilities.mirrorarmor", "abilities.contrary", "abilities.defiant",
-        "abilities.competitive", "abilities.rattled", "abilities.flowerveil"
-      ],
-      "depends_on": ["stat stages as engine state", "entry trigger point", "foe-caused vs self-caused stat change"],
+      "data": ["moves.fakeout", "moves.quickguard", "moves.protect", "abilities.queenlymajesty", "abilities.armortail", "abilities.stall"],
+      "depends_on": ["turn action ordering", "per-mon Speed", "Trick Room field state"],
       "cases": [
-        {"id": "base-singles",           "group": "base",     "kind": "positive",    "status": "ok",     "setup": "Incineroar enters vs Garchomp",                       "expect": "Garchomp Atk -1; other stats unchanged"},
-        {"id": "base-user-unchanged",    "group": "base",     "kind": "control",     "status": "ok",     "setup": "same as base-singles",                                "expect": "Incineroar's own stages all 0"},
-        {"id": "base-damage-effect",     "group": "base",     "kind": "interaction", "status": "ok",     "setup": "Garchomp physical hit before vs after the drop",      "expect": "damage at Atk -1 matches the calc's -1 stage multiplier (calc case, not engine)"},
-
-        {"id": "block-clear-body",       "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "Incineroar enters vs Dragapult (Clear Body)",         "expect": "Dragapult Atk 0"},
-        {"id": "block-white-smoke",      "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Torkoal (White Smoke)",                            "expect": "Atk 0"},
-        {"id": "block-hyper-cutter",     "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Pinsir (Hyper Cutter)",                            "expect": "Atk 0"},
-        {"id": "block-inner-focus",      "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Lucario (Inner Focus)",                            "expect": "Atk 0 (Showdown: Intimidate-specific check)"},
-        {"id": "block-own-tempo",        "group": "blocked",  "kind": "control",     "status": "verify", "setup": "vs Slowbro (Own Tempo)",                              "expect": "Atk 0; Champions-specific listing not found"},
-        {"id": "block-oblivious",        "group": "blocked",  "kind": "control",     "status": "ok",     "setup": "vs Mamoswine (Oblivious)",                            "expect": "Atk 0"},
-        {"id": "block-scrappy",          "group": "blocked",  "kind": "control",     "status": "verify", "setup": "vs Kangaskhan (Scrappy)",                             "expect": "Atk 0 in mainline gen 8+; Showdown handler not read, Serebii lists it"},
-
-        {"id": "flip-guard-dog",         "group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "vs Mabosstiff (Guard Dog)",                           "expect": "Atk +1 instead of -1"},
-        {"id": "flip-contrary",          "group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "vs Malamar (Contrary)",                               "expect": "Atk +1"},
-        {"id": "flip-mirror-armor",      "group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "vs Corviknight (Mirror Armor)",                       "expect": "Corviknight Atk 0; Incineroar Atk -1"},
-        {"id": "flip-mirror-armor-floor","group": "flipped",  "kind": "interaction", "status": "ok",     "setup": "Incineroar already at Atk -6, vs Corviknight",        "expect": "no further drop, no error"},
-
-        {"id": "react-defiant",          "group": "reacted",  "kind": "interaction", "status": "ok",     "setup": "vs Kingambit (Defiant)",                              "expect": "Atk -1 then +2 = +1 net"},
-        {"id": "react-competitive",      "group": "reacted",  "kind": "interaction", "status": "ok",     "setup": "vs Milotic (Competitive)",                            "expect": "Atk -1, Sp. Atk +2"},
-        {"id": "react-rattled",          "group": "reacted",  "kind": "interaction", "status": "verify", "setup": "vs Persian-Alola (Rattled)",                          "expect": "Atk -1, Speed +1 (Showdown gen 8+ behaviour; short_desc omits it)"},
-        {"id": "react-self-drop-no-trigger","group": "reacted","kind": "control",    "status": "ok",     "setup": "Kingambit uses Close Combat-style self-drop",         "expect": "Defiant does not trigger (self-caused)"},
-
-        {"id": "side-flower-veil",       "group": "protected","kind": "interaction", "status": "verify", "setup": "Florges (Flower Veil) with a Grass-type partner, doubles", "expect": "Grass partner Atk 0; Florges (Fairy) Atk -1"},
-        {"id": "side-substitute",        "group": "protected","kind": "interaction", "status": "ok",     "setup": "foe behind Substitute",                               "expect": "Atk 0; needs S6 Substitute"},
-        {"id": "side-protect",           "group": "protected","kind": "interaction", "status": "ok",     "setup": "foe used Protect this turn, Intimidate user enters",  "expect": "Atk -1 (Protect blocks moves, not abilities)"},
-
-        {"id": "target-doubles-both",    "group": "targeting","kind": "positive",    "status": "ok",     "setup": "doubles, Incineroar enters vs two foes",              "expect": "both foes Atk -1"},
-        {"id": "target-ally-unaffected", "group": "targeting","kind": "control",     "status": "ok",     "setup": "same, check Incineroar's partner",                    "expect": "partner Atk 0"},
-        {"id": "target-one-fainted",     "group": "targeting","kind": "interaction", "status": "ok",     "setup": "one foe slot fainted or empty",                       "expect": "only the living foe is lowered; no error"},
-        {"id": "target-two-intimidators","group": "targeting","kind": "interaction", "status": "ok",     "setup": "both of p1's active mons have Intimidate",            "expect": "each foe at Atk -2"},
-
-        {"id": "timing-battle-start",    "group": "timing",   "kind": "interaction", "status": "ok",     "setup": "both sides lead with an Intimidate user",             "expect": "both lose 1 Atk; order follows Speed (reversed under Trick Room if set)"},
-        {"id": "timing-switch-in",       "group": "timing",   "kind": "positive",    "status": "ok",     "setup": "Intimidate user switches in mid-battle",              "expect": "foe(s) -1 on entry, before that turn's moves"},
-        {"id": "timing-ko-replacement",  "group": "timing",   "kind": "positive",    "status": "ok",     "setup": "Intimidate user enters as a KO replacement",          "expect": "foe(s) -1"},
-        {"id": "timing-reentry",         "group": "timing",   "kind": "interaction", "status": "ok",     "setup": "Intimidate user switches out and back in",            "expect": "fires again (not once per battle)"},
-        {"id": "timing-foe-switch-reset","group": "timing",   "kind": "interaction", "status": "ok",     "setup": "lowered foe switches out and back in",                "expect": "Atk back to 0"},
-        {"id": "timing-mega-gain",       "group": "timing",   "kind": "interaction", "status": "verify", "setup": "Manectric Mega Evolves into Manectric-Mega",          "expect": "Intimidate fires when the Mega form appears; turn order for Mega is not purely Speed (Smogon research thread)"},
-        {"id": "timing-mega-persist",    "group": "timing",   "kind": "interaction", "status": "ok",     "setup": "Manectric-Mega switches out and back in",             "expect": "still Mega; Intimidate fires on re-entry (decided: Mega persists)"},
-        {"id": "timing-trace",           "group": "timing",   "kind": "interaction", "status": "verify", "setup": "a Trace mon enters opposite an Intimidate user",      "expect": "Trace copies Intimidate and it fires; check Showdown"},
-
-        {"id": "bound-floor",            "group": "boundary", "kind": "control",     "status": "ok",     "setup": "foe already at Atk -6",                               "expect": "stays -6; Defiant/Competitive do not trigger (no drop happened)"},
-        {"id": "bound-ceiling-contrary", "group": "boundary", "kind": "control",     "status": "ok",     "setup": "Contrary foe already at Atk +6",                      "expect": "stays +6; no error"}
+        {"id": "order-goes-first", "group": "priority", "kind": "positive", "status": "ok", "setup": "Incineroar Fake Out vs Garchomp Dragon Claw (Garchomp is faster)", "expect": "order: Fake Out, then Garchomp's move; Garchomp is flinched and its move never fires"},
+        {"id": "order-both-fake-out", "group": "priority", "kind": "interaction", "status": "ok", "setup": "two Fake Outs, one per side", "expect": "faster user goes first and flinches the slower one, whose Fake Out never fires; speed ties are random by seed"},
+        {"id": "order-trick-room", "group": "priority", "kind": "control", "status": "ok", "setup": "Trick Room active, slow Fake Out user vs fast foe", "expect": "Fake Out still goes first (Trick Room reverses Speed, not priority)"},
+        {"id": "order-quick-guard", "group": "priority", "kind": "interaction", "status": "ok", "setup": "doubles, foe ally uses Quick Guard (+3)", "expect": "if Quick Guard resolves first, Fake Out is blocked; if Fake Out is faster, it hits; Wide Guard does not block (see wide-guard)"},
+        {"id": "order-queenly-majesty", "group": "priority", "kind": "interaction", "status": "ok", "setup": "Fake Out aimed at Tsareena (Queenly Majesty)", "expect": "Fake Out fails: no damage, no flinch"},
+        {"id": "order-armor-tail", "group": "priority", "kind": "interaction", "status": "ok", "setup": "Fake Out aimed at Farigiraf (Armor Tail), or at its ally", "expect": "fails: no damage, no flinch"},
+        {"id": "order-stall", "group": "priority", "kind": "interaction", "status": "verify", "setup": "two +3 moves, one user has Stall (Sableye)", "expect": "Stall user moves last inside the +3 bracket"}
       ],
       "open": [
-        "Inner Focus / Own Tempo / Oblivious / Scrappy: confirm each blocks Intimidate in Champions (Own Tempo and Scrappy unconfirmed).",
-        "Does Rattled trigger on Intimidate in Champions? Not in the ability's short_desc.",
-        "Does Mold Breaker bypass blockers for Intimidate? Not tested in Champions research thread.",
-        "-1 stage multiplier in Champions: 2/3 or 0.7? Smogon thread lists this as open."
+        "Does Mega Evolution resolve before priority, and is that order by Speed? The Smogon thread says it is not purely Speed-based."
       ]
+    },
+    {
+      "id": "first-turn-only",
+      "name": "First turn out only",
+      "type": "mechanic",
+      "rule": "Some moves (Fake Out, First Impression) work only on the user's first turn out. A per-mon turns-out counter resets on switch-in, KO replacement and battle start. Any move used counts as a turn out.",
+      "source": [
+        "showdown: data/moves.ts#fakeout, #firstimpression (not read verbatim yet; fetch in S0)",
+        "smogon: Champions Battle Mechanics Research thread (Fake Out cannot be selected after the first turn out, reported)"
+      ],
+      "data": ["moves.fakeout", "moves.firstimpression"],
+      "depends_on": ["turns-out counter per mon", "switch-in and replacement events"],
+      "cases": [
+        {"id": "first-turn-works", "group": "first-turn", "kind": "positive", "status": "ok", "setup": "Incineroar leads and uses Fake Out on turn 1", "expect": "hits and flinches"},
+        {"id": "first-turn-later-fails", "group": "first-turn", "kind": "control", "status": "ok", "setup": "same user uses Fake Out on turn 2", "expect": "no damage, no flinch (Showdown: fails; Champions: not selectable, per Smogon thread)"},
+        {"id": "first-turn-after-switch", "group": "first-turn", "kind": "interaction", "status": "ok", "setup": "user switches out then back in", "expect": "works again"},
+        {"id": "first-turn-after-ko", "group": "first-turn", "kind": "interaction", "status": "ok", "setup": "user enters as a KO replacement", "expect": "works on its first turn out"},
+        {"id": "first-turn-after-protect", "group": "first-turn", "kind": "interaction", "status": "ok", "setup": "user used Protect on turn 1, Fake Out on turn 2", "expect": "fails; any move counts as a turn out"},
+        {"id": "first-turn-failed-move", "group": "first-turn", "kind": "interaction", "status": "verify", "setup": "user's first action was a flinched or failed move", "expect": "decide whether a failed or flinched turn counts as the first turn out"},
+        {"id": "first-turn-partner", "group": "first-turn", "kind": "control", "status": "ok", "setup": "doubles: one mon used a move on turn 1, its partner entered on turn 2", "expect": "the partner's Fake Out works; counters are per mon"},
+        {"id": "first-turn-mega", "group": "first-turn", "kind": "interaction", "status": "verify", "setup": "Kangaskhan Mega Evolves on turn 1 and uses Fake Out the same turn", "expect": "works; the Mega form does not reset the counter later"},
+        {"id": "first-turn-pp", "group": "first-turn", "kind": "control", "status": "verify", "setup": "Fake Out fails on turn 2", "expect": "decide whether PP is spent (needs PP in S2)"},
+        {"id": "first-turn-first-impression", "group": "first-turn", "kind": "positive", "status": "ok", "setup": "First Impression (+2, bp 100) on turn 1 and turn 2", "expect": "same rule: works turn 1, fails later; no flinch"}
+      ],
+      "open": [
+        "Selectable vs fails: the Smogon thread reports Fake Out cannot be selected after the first turn out. Model it as a legality rule (absent from legal actions) or as a failure?",
+        "Does a flinched or failed first turn still count as the first turn out?"
+      ]
+    },
+    {
+      "id": "flinch",
+      "name": "Flinch",
+      "type": "mechanic",
+      "rule": "A flinch makes the target lose its move this turn if it has not acted yet. It is a secondary effect, so Shield Dust and Sheer Force interfere. It clears at the end of the turn. Inner Focus prevents it, and Steadfast turns it into Speed +1.",
+      "source": [
+        "showdown: data/conditions.ts#flinch (not read yet; fetch in S0)",
+        "repo: 20 moves in data/moves.json mention flinch"
+      ],
+      "data": ["moves.fakeout", "moves.upperhand", "moves.ironhead", "abilities.innerfocus", "abilities.shielddust", "abilities.steadfast", "abilities.sheerforce"],
+      "depends_on": ["secondary effect pipeline", "has-the-target-moved flag"],
+      "cases": [
+        {"id": "flinch-basic", "group": "flinch", "kind": "positive", "status": "ok", "setup": "target has not moved yet", "expect": "target loses its move this turn; flinch clears at end of turn"},
+        {"id": "flinch-clears", "group": "flinch", "kind": "control", "status": "ok", "setup": "turn after a flinch", "expect": "target acts normally"},
+        {"id": "flinch-already-moved", "group": "flinch", "kind": "interaction", "status": "verify", "setup": "target used Helping Hand (+5) first", "expect": "Fake Out damages it but cannot flinch it"},
+        {"id": "flinch-inner-focus", "group": "flinch", "kind": "interaction", "status": "ok", "setup": "target Dragonite (Inner Focus)", "expect": "takes damage, does not flinch"},
+        {"id": "flinch-shield-dust", "group": "flinch", "kind": "interaction", "status": "verify", "setup": "target Vivillon (Shield Dust)", "expect": "takes damage, does not flinch (flinch is a secondary effect)"},
+        {"id": "flinch-steadfast", "group": "flinch", "kind": "interaction", "status": "ok", "setup": "target Lucario (Steadfast)", "expect": "flinches and gains Speed +1"},
+        {"id": "flinch-single-target", "group": "flinch", "kind": "control", "status": "ok", "setup": "doubles, two foes", "expect": "only the target flinches; the other foe acts"}
+      ],
+      "open": [
+        "Known Champions bug: Fake Out fails to flinch Mega Charizard Y (Smogon thread). Do not replicate; note it.",
+        "Sheer Force + Fake Out: no species in champions.json has both, so there is no stub. Add one only if we want synthetic sets for engine tests (Sheer Force would remove the flinch and give x1.3)."
+      ]
+    },
+    {
+      "id": "type-immunity",
+      "name": "Type immunity",
+      "type": "mechanic",
+      "rule": "A move of a type the target is immune to deals no damage and applies no effects, including secondaries and self-drops. Some abilities lift an immunity (Scrappy lets Normal and Fighting hit Ghost).",
+      "source": [
+        "showdown: sim/battle-actions.ts#runImmunity, #spreadMoveHit (self-drops skipped for immune targets)",
+        "repo: data/types.json type chart"
+      ],
+      "data": ["abilities.scrappy", "file.types"],
+      "depends_on": ["type chart"],
+      "cases": [
+        {"id": "ghost-immune", "group": "immunity", "kind": "control", "status": "ok", "setup": "Fake Out aimed at Gengar", "expect": "no damage, no flinch; first turn is still spent"},
+        {"id": "ghost-scrappy", "group": "immunity", "kind": "interaction", "status": "ok", "setup": "Kangaskhan (Scrappy) Fake Out into Gengar", "expect": "hits and flinches"}
+      ],
+      "open": []
+    },
+    {
+      "id": "protect",
+      "name": "Protect",
+      "type": "mechanic",
+      "rule": "Protect-family moves (+4 priority) block moves that have the protect flag for the turn they are used. Some moves and effects pass through. Wide Guard blocks only spread moves and Quick Guard only priority moves.",
+      "source": [
+        "showdown: sim/battle-actions.ts#hitStepTryHit",
+        "smogon: Champions Battle Mechanics Research thread (Piercing Drill and Unseen Fist ignore Protect for 1/4 damage)"
+      ],
+      "data": ["moves.protect", "moves.wideguard", "moves.quickguard"],
+      "depends_on": ["per-turn protected flag", "consecutive-use chain (1/3 each repeat)"],
+      "cases": [
+        {"id": "protect-blocks", "group": "immunity", "kind": "interaction", "status": "ok", "setup": "target used Protect", "expect": "blocked, no flinch"},
+        {"id": "wide-guard-no-block", "group": "immunity", "kind": "control", "status": "ok", "setup": "foe ally used Wide Guard", "expect": "does not stop single-target Fake Out"}
+      ],
+      "open": []
+    },
+    {
+      "id": "substitute",
+      "name": "Substitute",
+      "type": "mechanic",
+      "rule": "A Substitute absorbs hits and blocks secondary effects and some abilities. Needed by several stubs from other mechanics.",
+      "source": [
+        "showdown: data/abilities.ts#intimidate (skips Substitute targets)"
+      ],
+      "data": ["moves.substitute"],
+      "depends_on": ["per-mon volatiles", "HP cost on use"],
+      "cases": [
+        {"id": "side-substitute", "group": "protected", "kind": "interaction", "status": "ok", "setup": "foe behind Substitute", "expect": "Atk 0; needs S6 Substitute"},
+        {"id": "flinch-substitute", "group": "flinch", "kind": "interaction", "status": "verify", "setup": "target behind Substitute", "expect": "hits the Substitute, no flinch (needs S6)"}
+      ],
+      "open": [
+        "Built in a late stage. Confirm Substitute details when it is catalogued in full."
+      ]
+    },
+    {
+      "id": "stat-stages",
+      "name": "Stat stages",
+      "type": "mechanic",
+      "rule": "Stages run from -6 to +6 for Attack, Defense, Sp. Atk, Sp. Def, Speed, accuracy and evasion. They reset when the mon switches out.",
+      "source": [
+        "repo: thechampionspedia stat-changes page",
+        "showdown: sim/battle-actions.ts#getDamage (crits ignore harmful stages)"
+      ],
+      "data": ["moves.closecombat", "moves.moonblast", "abilities.intimidate"],
+      "depends_on": ["per-mon stage table"],
+      "cases": [
+        {"id": "timing-foe-switch-reset", "group": "timing", "kind": "interaction", "status": "ok", "setup": "lowered foe switches out and back in", "expect": "Atk back to 0"}
+      ],
+      "open": [
+        "-1 stage multiplier in Champions: 2/3 or 0.7? The Smogon thread lists this as open."
+      ]
+    },
+    {
+      "id": "foe-stat-drop",
+      "name": "Foe-caused stat drop",
+      "type": "mechanic",
+      "rule": "A stat drop caused by a foe (Intimidate, Snarl, Parting Shot) can be blocked (Clear Body, White Smoke, Hyper Cutter), flipped (Contrary, Mirror Armor), reacted to (Defiant, Competitive) and bottoms out at -6. Self-caused drops (Close Combat) do not trigger Defiant or Competitive.",
+      "source": [
+        "showdown: data/abilities.ts#clearbody, #contrary, #mirrorarmor, #defiant, #competitive",
+        "repo: data/abilities.json"
+      ],
+      "data": ["abilities.clearbody", "abilities.whitesmoke", "abilities.hypercutter", "abilities.contrary", "abilities.mirrorarmor", "abilities.defiant", "abilities.competitive", "abilities.flowerveil"],
+      "depends_on": ["stat stages as engine state", "foe-caused vs self-caused stat change"],
+      "cases": [
+        {"id": "block-clear-body", "group": "blocked", "kind": "control", "status": "ok", "setup": "Incineroar enters vs Dragapult (Clear Body)", "expect": "Dragapult Atk 0"},
+        {"id": "block-white-smoke", "group": "blocked", "kind": "control", "status": "ok", "setup": "vs Torkoal (White Smoke)", "expect": "Atk 0"},
+        {"id": "block-hyper-cutter", "group": "blocked", "kind": "control", "status": "ok", "setup": "vs Pinsir (Hyper Cutter)", "expect": "Atk 0"},
+        {"id": "flip-contrary", "group": "flipped", "kind": "interaction", "status": "ok", "setup": "vs Malamar (Contrary)", "expect": "Atk +1"},
+        {"id": "flip-mirror-armor", "group": "flipped", "kind": "interaction", "status": "ok", "setup": "vs Corviknight (Mirror Armor)", "expect": "Corviknight Atk 0; Incineroar Atk -1"},
+        {"id": "flip-mirror-armor-floor", "group": "flipped", "kind": "interaction", "status": "ok", "setup": "Incineroar already at Atk -6, vs Corviknight", "expect": "no further drop, no error"},
+        {"id": "react-defiant", "group": "reacted", "kind": "interaction", "status": "ok", "setup": "vs Kingambit (Defiant)", "expect": "Atk -1 then +2 = +1 net"},
+        {"id": "react-competitive", "group": "reacted", "kind": "interaction", "status": "ok", "setup": "vs Milotic (Competitive)", "expect": "Atk -1, Sp. Atk +2"},
+        {"id": "react-self-drop-no-trigger", "group": "reacted", "kind": "control", "status": "ok", "setup": "Kingambit uses Close Combat-style self-drop", "expect": "Defiant does not trigger (self-caused)"},
+        {"id": "bound-floor", "group": "boundary", "kind": "control", "status": "ok", "setup": "foe already at Atk -6", "expect": "stays -6; Defiant/Competitive do not trigger (no drop happened)"},
+        {"id": "bound-ceiling-contrary", "group": "boundary", "kind": "control", "status": "ok", "setup": "Contrary foe already at Atk +6", "expect": "stays +6; no error"},
+        {"id": "side-flower-veil", "group": "protected", "kind": "interaction", "status": "verify", "setup": "Florges (Flower Veil) with a Grass-type partner, doubles", "expect": "Grass partner Atk 0; Florges (Fairy) Atk -1"}
+      ],
+      "open": [
+        "Does Mold Breaker bypass blockers for Intimidate? Not tested in the Champions research thread.",
+        "This is the largest entry (12 stubs) and may split into blockers, flips and reactors."
+      ]
+    },
+    {
+      "id": "entry-trigger",
+      "name": "Entry triggers",
+      "type": "mechanic",
+      "rule": "When a mon enters (battle start, switch-in, KO replacement, or a Mega form gaining an ability) its entry abilities fire in Speed order. Entry abilities in the data include Intimidate, the weather and terrain setters, Trace, Imposter, Frisk, Anticipation and Forewarn.",
+      "source": [
+        "showdown: sim/battle.ts#runAction (SwitchIn event, Speed-sorted)",
+        "showdown: data/abilities.ts#intimidate (onStart)",
+        "repo: 16 entry-triggered abilities in data/abilities.json"
+      ],
+      "data": ["abilities.intimidate", "abilities.trace", "abilities.drizzle", "abilities.drought"],
+      "depends_on": ["switch, replacement and battle-start events", "Mega Evolution as a turn action"],
+      "cases": [
+        {"id": "timing-battle-start", "group": "timing", "kind": "interaction", "status": "ok", "setup": "both sides lead with an Intimidate user", "expect": "both lose 1 Atk; order follows Speed (reversed under Trick Room if set)"},
+        {"id": "timing-switch-in", "group": "timing", "kind": "positive", "status": "ok", "setup": "Intimidate user switches in mid-battle", "expect": "foe(s) -1 on entry, before that turn's moves"},
+        {"id": "timing-ko-replacement", "group": "timing", "kind": "positive", "status": "ok", "setup": "Intimidate user enters as a KO replacement", "expect": "foe(s) -1"},
+        {"id": "timing-reentry", "group": "timing", "kind": "interaction", "status": "ok", "setup": "Intimidate user switches out and back in", "expect": "fires again (not once per battle)"},
+        {"id": "timing-mega-gain", "group": "timing", "kind": "interaction", "status": "verify", "setup": "Manectric Mega Evolves into Manectric-Mega", "expect": "Intimidate fires when the Mega form appears; turn order for Mega is not purely Speed (Smogon research thread)"},
+        {"id": "timing-mega-persist", "group": "timing", "kind": "interaction", "status": "ok", "setup": "Manectric-Mega switches out and back in", "expect": "still Mega; Intimidate fires on re-entry (decided: Mega persists)"},
+        {"id": "timing-trace", "group": "timing", "kind": "interaction", "status": "verify", "setup": "a Trace mon enters opposite an Intimidate user", "expect": "Trace copies Intimidate and it fires; check Showdown"}
+      ],
+      "open": [
+        "Mega Evolution order is not purely Speed-based (Smogon thread)."
+      ]
+    },
+    {
+      "id": "damage-calc",
+      "name": "Damage calculation",
+      "type": "calc",
+      "rule": "Damage maths used by the calculator: base damage + 2, spread, weather, crit, random roll, STAB, type effectiveness, burn, other modifiers, minimum 1. These are calc cases, not engine rules.",
+      "source": [
+        "showdown: sim/battle-actions.ts#modifyDamage",
+        "smogon: Champions Battle Mechanics Research thread (formula matches Scarlet/Violet)"
+      ],
+      "data": ["moves.fakeout", "file.types"],
+      "depends_on": ["level-50 stats", "type chart"],
+      "cases": [
+        {"id": "base-damage-effect", "group": "base", "kind": "interaction", "status": "ok", "setup": "Garchomp physical hit before vs after the drop", "expect": "damage at Atk -1 matches the calc's -1 stage multiplier (calc case, not engine)"},
+        {"id": "calc-damage", "group": "calc", "kind": "positive", "status": "ok", "setup": "Incineroar Fake Out into Garchomp", "expect": "bp 40 physical Normal damage from the calc, no STAB"},
+        {"id": "calc-stab", "group": "calc", "kind": "control", "status": "ok", "setup": "Kangaskhan Fake Out into Garchomp", "expect": "Normal STAB x1.5"},
+        {"id": "calc-after-intimidate", "group": "calc", "kind": "interaction", "status": "ok", "setup": "Fake Out user at Atk -1 (Intimidated)", "expect": "damage uses the -1 stage multiplier"}
+      ],
+      "open": []
     },
     {
       "id": "fake-out",
       "name": "Fake Out",
-      "rule": "Normal-type physical move, base power 40, priority +3. Works only on the user's first turn out (a switch-in, KO replacement or battle start resets it). A hit makes the target flinch if the target has not moved yet this turn.",
-      "composite": "Three rules in one move: move priority ordering, first-turn-only, and the flinch effect. Expect to split these into their own mechanics once a second move needs them (First Impression is first-turn-only, Upper Hand and Rock Slide use flinch, Quick Guard and Extreme Speed use priority).",
+      "type": "composition",
+      "rule": "Normal-type physical move, base power 40, priority +3. It uses the priority, first-turn-only and flinch rules together; the stubs here are the ones that need several of them at once.",
       "source": [
-        "showdown: data/moves.ts#fakeout (not read verbatim yet; fetch in S0)",
-        "smogon: Champions Battle Mechanics Research thread (Fake Out cannot be selected after the first turn out, reported)",
-        "repo: data/moves.json fakeout (priority 3, bp 40, contact, protect)"
+        "repo: data/moves.json fakeout (priority 3, bp 40, contact, protect)",
+        "showdown: data/moves.ts#fakeout (not read verbatim yet; fetch in S0)"
       ],
-      "data": [
-        "moves.fakeout", "moves.firstimpression", "moves.protect", "moves.quickguard", "moves.wideguard", "moves.helpinghand",
-        "abilities.innerfocus", "abilities.shielddust", "abilities.steadfast", "abilities.sheerforce", "abilities.queenlymajesty",
-        "abilities.armortail", "abilities.stall", "abilities.scrappy"
-      ],
-      "depends_on": ["priority ordering in the turn", "turns-out counter per mon", "flinch volatile", "type immunity", "Protect"],
-      "related": ["intimidate", "protect", "first-impression", "upper-hand", "quick-guard"],
+      "data": ["moves.fakeout"],
+      "depends_on": ["move-priority", "first-turn-only", "flinch"],
+      "uses": ["move-priority", "first-turn-only", "flinch", "type-immunity", "protect", "damage-calc"],
       "cases": [
-        {"id": "order-goes-first",          "group": "priority",   "kind": "positive",    "status": "ok",     "setup": "Incineroar Fake Out vs Garchomp Dragon Claw (Garchomp is faster)", "expect": "order: Fake Out, then Garchomp's move; Garchomp is flinched and its move never fires"},
-        {"id": "order-protect-beats",       "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "target uses Protect (+4) the same turn",                           "expect": "Protect goes first; Fake Out is blocked; no damage, no flinch; first turn is spent"},
-        {"id": "order-both-fake-out",       "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "two Fake Outs, one per side",                                      "expect": "faster user goes first and flinches the slower one, whose Fake Out never fires; speed ties are random by seed"},
-        {"id": "order-trick-room",          "group": "priority",   "kind": "control",     "status": "ok",     "setup": "Trick Room active, slow Fake Out user vs fast foe",                "expect": "Fake Out still goes first (Trick Room reverses Speed, not priority)"},
-        {"id": "order-switch-before",       "group": "priority",   "kind": "interaction", "status": "verify", "setup": "target switches out the same turn Fake Out is aimed at its slot", "expect": "switch resolves first; Fake Out hits the replacement; check whether the replacement flinches"},
-        {"id": "order-quick-guard",         "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "doubles, foe ally uses Quick Guard (+3)",                          "expect": "if Quick Guard resolves first, Fake Out is blocked; if Fake Out is faster, it hits; Wide Guard does not block (see wide-guard)"},
-        {"id": "order-queenly-majesty",     "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "Fake Out aimed at Tsareena (Queenly Majesty)",                     "expect": "Fake Out fails: no damage, no flinch"},
-        {"id": "order-armor-tail",          "group": "priority",   "kind": "interaction", "status": "ok",     "setup": "Fake Out aimed at Farigiraf (Armor Tail), or at its ally",         "expect": "fails: no damage, no flinch"},
-        {"id": "order-stall",               "group": "priority",   "kind": "interaction", "status": "verify", "setup": "two +3 moves, one user has Stall (Sableye)",                       "expect": "Stall user moves last inside the +3 bracket"},
-        {"id": "order-mega-first",          "group": "priority",   "kind": "interaction", "status": "verify", "setup": "target Mega Evolves the same turn",                                "expect": "Mega Evolution resolves before Fake Out; target flinches in its Mega form, and Mega Evolution still happens"},
-
-        {"id": "first-turn-works",          "group": "first-turn", "kind": "positive",    "status": "ok",     "setup": "Incineroar leads and uses Fake Out on turn 1",                     "expect": "hits and flinches"},
-        {"id": "first-turn-later-fails",    "group": "first-turn", "kind": "control",     "status": "ok",     "setup": "same user uses Fake Out on turn 2",                                "expect": "no damage, no flinch (Showdown: fails; Champions: not selectable, per Smogon thread)"},
-        {"id": "first-turn-after-switch",   "group": "first-turn", "kind": "interaction", "status": "ok",     "setup": "user switches out then back in",                                   "expect": "works again"},
-        {"id": "first-turn-after-ko",       "group": "first-turn", "kind": "interaction", "status": "ok",     "setup": "user enters as a KO replacement",                                  "expect": "works on its first turn out"},
-        {"id": "first-turn-after-protect",  "group": "first-turn", "kind": "interaction", "status": "ok",     "setup": "user used Protect on turn 1, Fake Out on turn 2",                  "expect": "fails; any move counts as a turn out"},
-        {"id": "first-turn-failed-move",    "group": "first-turn", "kind": "interaction", "status": "verify", "setup": "user's first action was a flinched or failed move",                "expect": "decide whether a failed or flinched turn counts as the first turn out"},
-        {"id": "first-turn-partner",        "group": "first-turn", "kind": "control",     "status": "ok",     "setup": "doubles: one mon used a move on turn 1, its partner entered on turn 2", "expect": "the partner's Fake Out works; counters are per mon"},
-        {"id": "first-turn-mega",           "group": "first-turn", "kind": "interaction", "status": "verify", "setup": "Kangaskhan Mega Evolves on turn 1 and uses Fake Out the same turn", "expect": "works; the Mega form does not reset the counter later"},
-        {"id": "first-turn-pp",             "group": "first-turn", "kind": "control",     "status": "verify", "setup": "Fake Out fails on turn 2",                                         "expect": "decide whether PP is spent (needs PP in S2)"},
-        {"id": "first-turn-first-impression","group": "first-turn","kind": "positive",    "status": "ok",     "setup": "First Impression (+2, bp 100) on turn 1 and turn 2",               "expect": "same rule: works turn 1, fails later; no flinch"},
-
-        {"id": "flinch-basic",              "group": "flinch",     "kind": "positive",    "status": "ok",     "setup": "target has not moved yet",                                         "expect": "target loses its move this turn; flinch clears at end of turn"},
-        {"id": "flinch-clears",             "group": "flinch",     "kind": "control",     "status": "ok",     "setup": "turn after a flinch",                                              "expect": "target acts normally"},
-        {"id": "flinch-already-moved",      "group": "flinch",     "kind": "interaction", "status": "verify", "setup": "target used Helping Hand (+5) first",                              "expect": "Fake Out damages it but cannot flinch it"},
-        {"id": "flinch-inner-focus",        "group": "flinch",     "kind": "interaction", "status": "ok",     "setup": "target Dragonite (Inner Focus)",                                   "expect": "takes damage, does not flinch"},
-        {"id": "flinch-shield-dust",        "group": "flinch",     "kind": "interaction", "status": "verify", "setup": "target Vivillon (Shield Dust)",                                    "expect": "takes damage, does not flinch (flinch is a secondary effect)"},
-        {"id": "flinch-steadfast",          "group": "flinch",     "kind": "interaction", "status": "ok",     "setup": "target Lucario (Steadfast)",                                       "expect": "flinches and gains Speed +1"},
-        {"id": "flinch-single-target",      "group": "flinch",     "kind": "control",     "status": "ok",     "setup": "doubles, two foes",                                                "expect": "only the target flinches; the other foe acts"},
-        {"id": "flinch-substitute",         "group": "flinch",     "kind": "interaction", "status": "verify", "setup": "target behind Substitute",                                         "expect": "hits the Substitute, no flinch (needs S6)"},
-
-        {"id": "ghost-immune",              "group": "immunity",   "kind": "control",     "status": "ok",     "setup": "Fake Out aimed at Gengar",                                         "expect": "no damage, no flinch; first turn is still spent"},
-        {"id": "ghost-scrappy",             "group": "immunity",   "kind": "interaction", "status": "ok",     "setup": "Kangaskhan (Scrappy) Fake Out into Gengar",                        "expect": "hits and flinches"},
-        {"id": "protect-blocks",            "group": "immunity",   "kind": "interaction", "status": "ok",     "setup": "target used Protect",                                              "expect": "blocked, no flinch"},
-        {"id": "wide-guard-no-block",       "group": "immunity",   "kind": "control",     "status": "ok",     "setup": "foe ally used Wide Guard",                                         "expect": "does not stop single-target Fake Out"},
-
-        {"id": "calc-damage",               "group": "calc",       "kind": "positive",    "status": "ok",     "setup": "Incineroar Fake Out into Garchomp",                                "expect": "bp 40 physical Normal damage from the calc, no STAB"},
-        {"id": "calc-stab",                 "group": "calc",       "kind": "control",     "status": "ok",     "setup": "Kangaskhan Fake Out into Garchomp",                                "expect": "Normal STAB x1.5"},
-        {"id": "calc-after-intimidate",     "group": "calc",       "kind": "interaction", "status": "ok",     "setup": "Fake Out user at Atk -1 (Intimidated)",                            "expect": "damage uses the -1 stage multiplier"}
+        {"id": "order-protect-beats", "group": "priority", "kind": "interaction", "status": "ok", "setup": "target uses Protect (+4) the same turn", "expect": "Protect goes first; Fake Out is blocked; no damage, no flinch; first turn is spent", "involves": ["move-priority", "protect"]},
+        {"id": "order-switch-before", "group": "priority", "kind": "interaction", "status": "verify", "setup": "target switches out the same turn Fake Out is aimed at its slot", "expect": "switch resolves first; Fake Out hits the replacement; check whether the replacement flinches", "involves": ["move-priority", "flinch"]},
+        {"id": "order-mega-first", "group": "priority", "kind": "interaction", "status": "verify", "setup": "target Mega Evolves the same turn", "expect": "Mega Evolution resolves before Fake Out; target flinches in its Mega form, and Mega Evolution still happens", "involves": ["move-priority", "flinch"]}
       ],
       "open": [
-        "Selectable vs fails: the Smogon thread reports Fake Out cannot be selected after the first turn out. Do we model it as a legality rule (not in legal actions) or as a failure?",
-        "Does a flinched or failed first turn still count as the first turn out?",
-        "Known Champions bug: Fake Out fails to flinch Mega Charizard Y (Smogon thread). Do not replicate; note it.",
-        "Does Mega Evolution resolve before priority, and is that order by Speed? The thread says Mega order is not purely Speed-based.",
-        "Confirm Showdown's fakeout entry: activeMoveActions check, secondary flinch 100%.",
-        "Sheer Force + Fake Out: no species in champions.json has both, so there is no stub. Add one only if we want synthetic sets for engine tests (Sheer Force would remove the flinch and give x1.3)."
+        "Confirm Showdown's fakeout entry: activeMoveActions check, secondary flinch 100%."
+      ]
+    },
+    {
+      "id": "intimidate",
+      "name": "Intimidate",
+      "type": "composition",
+      "rule": "When the holder enters battle, each adjacent foe's Attack is lowered by 1 stage. Foes with Substitute are skipped. It uses the entry-trigger and foe-stat-drop rules; the stubs here are the Intimidate-only rules and doubles targeting.",
+      "source": [
+        "showdown: data/abilities.ts#intimidate",
+        "serebii: attackdex-champions ability listing (Inner Focus, Oblivious, Scrappy list Intimidate immunity)"
+      ],
+      "data": ["abilities.intimidate", "abilities.innerfocus", "abilities.owntempo", "abilities.oblivious", "abilities.scrappy", "abilities.guarddog", "abilities.rattled"],
+      "depends_on": ["entry-trigger", "foe-stat-drop"],
+      "uses": ["entry-trigger", "foe-stat-drop", "stat-stages", "substitute", "protect", "damage-calc"],
+      "cases": [
+        {"id": "base-singles", "group": "base", "kind": "positive", "status": "ok", "setup": "Incineroar enters vs Garchomp", "expect": "Garchomp Atk -1; other stats unchanged", "involves": ["entry-trigger", "foe-stat-drop"]},
+        {"id": "base-user-unchanged", "group": "base", "kind": "control", "status": "ok", "setup": "same as base-singles", "expect": "Incineroar's own stages all 0", "involves": ["foe-stat-drop"]},
+        {"id": "block-inner-focus", "group": "blocked", "kind": "control", "status": "ok", "setup": "vs Lucario (Inner Focus)", "expect": "Atk 0 (Showdown: Intimidate-specific check)", "involves": ["foe-stat-drop"]},
+        {"id": "block-own-tempo", "group": "blocked", "kind": "control", "status": "verify", "setup": "vs Slowbro (Own Tempo)", "expect": "Atk 0; Champions-specific listing not found", "involves": ["foe-stat-drop"]},
+        {"id": "block-oblivious", "group": "blocked", "kind": "control", "status": "ok", "setup": "vs Mamoswine (Oblivious)", "expect": "Atk 0", "involves": ["foe-stat-drop"]},
+        {"id": "block-scrappy", "group": "blocked", "kind": "control", "status": "verify", "setup": "vs Kangaskhan (Scrappy)", "expect": "Atk 0 in mainline gen 8+; Showdown handler not read, Serebii lists it", "involves": ["foe-stat-drop"]},
+        {"id": "flip-guard-dog", "group": "flipped", "kind": "interaction", "status": "ok", "setup": "vs Mabosstiff (Guard Dog)", "expect": "Atk +1 instead of -1", "involves": ["foe-stat-drop"]},
+        {"id": "react-rattled", "group": "reacted", "kind": "interaction", "status": "verify", "setup": "vs Persian-Alola (Rattled)", "expect": "Atk -1, Speed +1 (Showdown gen 8+ behaviour; short_desc omits it)", "involves": ["foe-stat-drop"]},
+        {"id": "side-protect", "group": "protected", "kind": "interaction", "status": "ok", "setup": "foe used Protect this turn, Intimidate user enters", "expect": "Atk -1 (Protect blocks moves, not abilities)", "involves": ["protect", "entry-trigger"]},
+        {"id": "target-doubles-both", "group": "targeting", "kind": "positive", "status": "ok", "setup": "doubles, Incineroar enters vs two foes", "expect": "both foes Atk -1", "involves": ["entry-trigger"]},
+        {"id": "target-ally-unaffected", "group": "targeting", "kind": "control", "status": "ok", "setup": "same, check Incineroar's partner", "expect": "partner Atk 0", "involves": ["entry-trigger"]},
+        {"id": "target-one-fainted", "group": "targeting", "kind": "interaction", "status": "ok", "setup": "one foe slot fainted or empty", "expect": "only the living foe is lowered; no error", "involves": ["entry-trigger"]},
+        {"id": "target-two-intimidators", "group": "targeting", "kind": "interaction", "status": "ok", "setup": "both of p1's active mons have Intimidate", "expect": "each foe at Atk -2", "involves": ["entry-trigger", "foe-stat-drop"]}
+      ],
+      "open": [
+        "Do Own Tempo and Scrappy block Intimidate in Champions? Inner Focus, Oblivious and Own Tempo are Intimidate-specific in Showdown; Scrappy was not confirmed.",
+        "Does Rattled trigger on Intimidate in Champions? Not in the ability's short description."
       ]
     }
   ]
