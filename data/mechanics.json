@@ -260,6 +260,41 @@
       "open": ["whether Storm Drain exists in Champions (absent from abilities.json, so no case)", "x0.75 when one of two spread targets is protected (stub spread-with-protect)", "Follow Me versus Lightning Rod priority (stub redirect-both-sources)", "Stalwart and Propeller Tail behaviour in Champions (stub follow-me-ignored)"]
     },
     {
+      "id": "accuracy-evasion",
+      "name": "Accuracy and evasion",
+      "type": "mechanic",
+      "rule": "A move with numeric accuracy hits if a roll from 0 to 99 is below the final accuracy; accuracy true skips the roll. Final accuracy is move accuracy times the accuracy and evasion stage multipliers (3/3 at 0, 4/3 at +1 up to 9/3 at +6; inverse for evasion), times ability and item modifiers. Each target of a spread move gets its own roll. A miss stops the rest of the move for that target. Some abilities, items and weather change or skip the roll.",
+      "source": [
+        "showdown: sim/battle-actions.ts#hitStepAccuracy, #hitStepMoveHitLoop; sim/battle.ts#boost tables",
+        "repo: data/moves.json accuracy and champions_overrides (Crabhammer 95, Make It Rain 95, Syrup Bomb 90)"
+      ],
+      "data": ["moves.rockslide", "moves.aerialace", "moves.stoneedge", "moves.dynamicpunch", "moves.crabhammer", "moves.hurricane", "moves.dragonrush", "moves.dragonpulse", "moves.thunder", "moves.toxic", "moves.fissure", "abilities.no-guard", "abilities.compound-eyes", "abilities.hustle", "abilities.sand-veil", "abilities.unaware", "items.widelens", "items.brightpowder"],
+      "depends_on": ["stat-stages", "move-pipeline", "weather state"],
+      "cases": [
+        {"id": "always-hits", "group": "roll", "kind": "positive", "status": "ok", "setup": "Garchomp Aerial Ace (accuracy true) against a target at +6 evasion", "expect": "never rolls; always hits"},
+        {"id": "roll-hit", "group": "roll", "kind": "positive", "status": "ok", "setup": "Garchomp Rock Slide (90) with the roll forced to 89", "expect": "hits (roll must be under accuracy)"},
+        {"id": "roll-miss", "group": "roll", "kind": "control", "status": "ok", "setup": "Garchomp Rock Slide (90) with the roll forced to 90", "expect": "misses; no damage, no secondary effect"},
+        {"id": "spread-rolls-per-target", "group": "roll", "kind": "interaction", "status": "verify", "setup": "Doubles: Rock Slide, roll hits foe A and misses foe B", "expect": "foe A takes damage, foe B does not; each target has its own roll"},
+        {"id": "miss-skips-secondary", "group": "roll", "kind": "control", "status": "ok", "setup": "Garchomp Rock Slide (30% flinch secondary) misses", "expect": "no flinch chance is rolled"},
+        {"id": "accuracy-stage-up", "group": "stages", "kind": "positive", "status": "ok", "setup": "Machamp at +1 accuracy uses Stone Edge (80)", "expect": "effective accuracy 80 x 4/3 = 106, so always hits"},
+        {"id": "evasion-stage-up", "group": "stages", "kind": "positive", "status": "ok", "setup": "Target at +1 evasion; Machamp Dynamic Punch (50)", "expect": "effective accuracy 50 x 3/4 = 37"},
+        {"id": "stages-combine", "group": "stages", "kind": "interaction", "status": "ok", "setup": "Machamp at +1 accuracy against a target at +1 evasion", "expect": "net effect equals no stage change"},
+        {"id": "stage-cap", "group": "stages", "kind": "edge", "status": "ok", "setup": "Machamp at +6 accuracy uses Dynamic Punch (50)", "expect": "multiplier is 3, so effective accuracy 150 and it always hits"},
+        {"id": "champions-override", "group": "data", "kind": "interaction", "status": "ok", "setup": "Gliscor Crabhammer (moves.json champions_overrides accuracy 95)", "expect": "rolls against 95, not the mainline 90"},
+        {"id": "no-guard", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Machamp (No Guard) Dynamic Punch against anything, or a foe using a move against Machamp", "expect": "moves always hit in both directions; no roll"},
+        {"id": "compound-eyes", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Vivillon (Compound Eyes) Hurricane (70)", "expect": "effective accuracy 70 x 1.3 = 91"},
+        {"id": "hustle", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Flapple (Hustle) Dragon Rush (75, physical) and Dragon Pulse (special)", "expect": "physical move accuracy x0.8 = 60; special move unchanged; attack stat x1.5 is a calc case"},
+        {"id": "sand-veil", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Sandstorm active; Garchomp (Sand Veil) is the target of a 90% move", "expect": "evasion x0.8, effective about 72; check the ability still works this way in Champions"},
+        {"id": "unaware", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Clefable (Unaware) targeted by a Machamp at +2 accuracy; and Clefable attacking a target at +2 evasion", "expect": "both sets of accuracy and evasion stages are ignored; check Showdown's Unaware handling"},
+        {"id": "wide-lens", "group": "item", "kind": "interaction", "status": "ok", "setup": "Machamp holds Wide Lens, Stone Edge (80)", "expect": "accuracy x1.1 = 88"},
+        {"id": "bright-powder", "group": "item", "kind": "interaction", "status": "ok", "setup": "Target holds Bright Powder; Machamp Stone Edge (80)", "expect": "accuracy x0.9 = 72"},
+        {"id": "weather-never-misses", "group": "weather", "kind": "interaction", "status": "verify", "setup": "Rain active; Pikachu Thunder (70)", "expect": "never misses in rain; in sun accuracy drops to 50; check Champions weather rules"},
+        {"id": "poison-toxic", "group": "special", "kind": "edge", "status": "verify", "setup": "Toxicroak (Poison-type) uses Toxic (90)", "expect": "never misses when the user is Poison-type"},
+        {"id": "ohko-moves", "group": "special", "kind": "edge", "status": "verify", "setup": "Snorlax Fissure (30), user and target both level 50", "expect": "30% chance; at level 50 both sides there is no level scaling; check any OHKO rules in Champions"}
+      ],
+      "open": ["whether Sand Veil, Snow Cloak and Unaware accuracy behaviour is unchanged in Champions", "weather accuracy rules in Champions (Thunder and Hurricane in rain, Blizzard in snow)", "OHKO move rules in Champions (none flagged in moves.json)", "Gravity, Minimize, Lock-On and Mind Reader accuracy effects are not catalogued yet"]
+    },
+    {
       "id": "damage-calc",
       "name": "Damage calculation",
       "type": "calc",
