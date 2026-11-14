@@ -92,16 +92,35 @@ class Snapshot(unittest.TestCase):
 
 
 class Cli(unittest.TestCase):
-    def test_sim_replay_prints_log(self):
+    def run_cli(self, *args):
         out = io.StringIO()
-        with redirect_stdout(out):
-            import sys
-            old = sys.argv
-            try:
-                cli.main(["sim", "replay", str(REPLAYS / "fakeout_turn.json")])
-            finally:
-                sys.argv = old
-        self.assertIn("reason=flinch", out.getvalue())
+        import sys
+        old = sys.argv
+        try:
+            with redirect_stdout(out):
+                cli.main(["sim", "replay", str(REPLAYS / "fakeout_turn.json"), *args])
+        finally:
+            sys.argv = old
+        return out.getvalue()
+
+    def test_raw_prints_event_log(self):
+        self.assertIn("reason=flinch", self.run_cli("--raw"))
+
+    def test_single_turn_is_readable(self):
+        out = self.run_cli("--turn", "1")
+        self.assertIn("=== Turn 1 ===", out)
+        self.assertNotIn("=== Turn 2 ===", out)
+        self.assertIn("Incineroar (P1) used Fake Out!", out)
+        self.assertIn("Garchomp (P2) can't use Dragon Claw: flinch", out)
+        self.assertIn("Garchomp (P2)          164/183", out)   # end-of-turn HP
+        self.assertNotIn("roll", out)
+
+    def test_rng_flag_shows_rolls(self):
+        self.assertIn("roll damage_roll", self.run_cli("--turn", "1", "--rng"))
+
+    def test_turn_out_of_range(self):
+        with self.assertRaises(SystemExit):
+            self.run_cli("--turn", "9")
 
 
 if __name__ == "__main__":
