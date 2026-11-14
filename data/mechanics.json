@@ -338,6 +338,53 @@
       ]
     },
     {
+      "id": "secondary-effect",
+      "name": "Secondary effects",
+      "type": "mechanic",
+      "rule": "Some moves add a chance of an extra effect on the target (status, flinch, a stat drop) or on the user (a stat raise). The effect is rolled after damage and after any self-drop, once per target. It applies only to a target that was actually hit and is still alive, and not when the hit landed on a Substitute. A chance of 100 skips the roll. Existing status, type immunity to the status, and the stat floor can still make it do nothing. Shield Dust blocks it on the holder; Sheer Force removes it from the user's moves and boosts their power ×1.3; held items and abilities can add a flinch chance to moves with no secondary.",
+      "source": [
+        "showdown: sim/battle-actions.ts#secondaries (in #spreadMoveHit), #runMoveEffects; data/abilities.ts#sheerforce, #shielddust, #stench; data/items.ts#kingsrock",
+        "repo: data/moves.json short_desc ('N% chance ...' on 91 moves)",
+        "docs: ENGINE_PLAN.md key finding 2"
+      ],
+      "data": ["moves.flamethrower", "moves.thunderbolt", "moves.nuzzle", "moves.shadowball", "moves.triattack", "moves.rockslide", "moves.airslash", "moves.bodyslam", "moves.meteormash", "abilities.shield-dust", "abilities.sheer-force", "abilities.stench", "items.kingsrock"],
+      "depends_on": ["move-pipeline", "self-drop", "stat-stages", "type-immunity", "protect", "substitute", "flinch"],
+      "cases": [
+        {"id": "roll-fires", "group": "roll", "kind": "positive", "status": "ok", "setup": "Charizard Flamethrower into Snorlax, secondary roll comes in under 10", "expect": "Snorlax is burned"},
+        {"id": "roll-fails", "group": "roll", "kind": "control", "status": "ok", "setup": "same move, roll at or above 10", "expect": "damage only; no burn"},
+        {"id": "guaranteed-100", "group": "roll", "kind": "positive", "status": "ok", "setup": "Pikachu Nuzzle into Gyarados", "expect": "Gyarados is always paralyzed (100% chance, no roll)"},
+        {"id": "stat-secondary", "group": "roll", "kind": "positive", "status": "ok", "setup": "Gengar Shadow Ball, roll under 20 into Snorlax", "expect": "Snorlax Sp. Def -1"},
+        {"id": "tri-attack-one-of-three", "group": "roll", "kind": "positive", "status": "verify", "setup": "Alakazam Tri Attack, 20% roll fires", "expect": "exactly one of paralysis, burn or freeze is applied, never several"},
+        {"id": "after-self-drop", "group": "roll", "kind": "interaction", "status": "ok", "setup": "a move with both a self-drop and a secondary lands", "expect": "the self-drop is applied first, then the secondary (pipeline order)"},
+        {"id": "spread-roll-per-target", "group": "spread", "kind": "interaction", "status": "verify", "setup": "doubles, Garchomp Rock Slide hits both foes", "expect": "flinch is rolled separately for each foe"},
+        {"id": "self-secondary", "group": "roll", "kind": "positive", "status": "ok", "setup": "a move with a chance to raise the user's stat (Meteor Mash) lands, roll fires", "expect": "user's Attack +1; the target is untouched"},
+        {"id": "miss-no-secondary", "group": "abort", "kind": "positive", "status": "ok", "setup": "Flamethrower misses", "expect": "no damage and no burn"},
+        {"id": "immune-no-secondary", "group": "abort", "kind": "positive", "status": "ok", "setup": "Pikachu Nuzzle into a Ground-type", "expect": "0 damage and no paralysis"},
+        {"id": "protect-no-secondary", "group": "abort", "kind": "positive", "status": "ok", "setup": "foe Protects against Flamethrower", "expect": "blocked; no burn"},
+        {"id": "ko-no-secondary", "group": "abort", "kind": "edge", "status": "ok", "setup": "Flamethrower KOs the target", "expect": "the target is fainted and gets no burn"},
+        {"id": "substitute-blocks", "group": "abort", "kind": "interaction", "status": "verify", "setup": "Thunderbolt into a foe behind a Substitute", "expect": "damage hits the Substitute; no paralysis"},
+        {"id": "fire-type-no-burn", "group": "block", "kind": "control", "status": "ok", "setup": "Flamethrower into a Fire-type, roll fires", "expect": "damage only; Fire types cannot be burned"},
+        {"id": "electric-type-no-par", "group": "block", "kind": "control", "status": "ok", "setup": "Thunderbolt into Rotom-Wash (Electric), roll fires", "expect": "damage only; Electric types cannot be paralyzed"},
+        {"id": "already-statused", "group": "block", "kind": "control", "status": "ok", "setup": "target is already burned, Body Slam paralysis roll fires", "expect": "no change; a second major status never overwrites the first"},
+        {"id": "stage-floor-secondary", "group": "block", "kind": "edge", "status": "ok", "setup": "target at -6 Sp. Def, Shadow Ball secondary fires", "expect": "no change, no error"},
+        {"id": "shield-dust", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Charizard Air Slash into Vivillon (Shield Dust), flinch roll fires", "expect": "damage only; Shield Dust blocks the secondary"},
+        {"id": "shield-dust-self-secondary", "group": "ability", "kind": "control", "status": "verify", "setup": "a move with a self-boost secondary used by a Shield Dust holder", "expect": "the user's own boost still applies; Shield Dust only protects the holder as a target"},
+        {"id": "sheer-force-removes", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Tauros (Sheer Force) uses Flamethrower", "expect": "no burn roll at all; damage ×1.3"},
+        {"id": "sheer-force-no-secondary", "group": "ability", "kind": "control", "status": "ok", "setup": "Tauros (Sheer Force) uses a move with no secondary", "expect": "no ×1.3 boost"},
+        {"id": "sheer-force-keeps-drop", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Tauros (Sheer Force) uses Close Combat-style self-drop", "expect": "self-drop kept (see self-drop open item)"},
+        {"id": "stench", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Garbodor (Stench) uses Body Slam", "expect": "extra flinch chance on the target when the move has no flinch secondary (10%)"},
+        {"id": "kings-rock", "group": "item", "kind": "interaction", "status": "verify", "setup": "King's Rock holder uses a move with no secondary", "expect": "10% flinch chance on the target"},
+        {"id": "kings-rock-with-secondary", "group": "item", "kind": "control", "status": "verify", "setup": "King's Rock holder uses Flamethrower", "expect": "flinch not added: the move already has a secondary"}
+      ],
+      "open": [
+        "whether Champions changes any secondary chance beyond the move overrides in the data",
+        "Tri Attack: confirm it picks one status, not independent rolls",
+        "Sheer Force: confirm the 1.3x boost and whether it also removes self-drop effects (see self-drop open item)",
+        "Serene Grace and Covert Cloak are not in this game's data; if added they change the chance and the Shield Dust-style block",
+        "Stench and King's Rock: confirm the 10% flinch chance and the no-secondary condition"
+      ]
+    },
+    {
       "id": "damage-calc",
       "name": "Damage calculation",
       "type": "calc",
