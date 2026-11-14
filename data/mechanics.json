@@ -12,7 +12,8 @@
         "smogon: Champions Battle Mechanics Research thread (Mega Evolution order is not purely Speed-based)"
       ],
       "data": ["moves.fakeout", "moves.quickguard", "moves.protect", "abilities.queenly-majesty", "abilities.armor-tail", "abilities.stall"],
-      "depends_on": ["turn action ordering", "per-mon Speed", "Trick Room field state"],
+      "depends_on": [],
+      "needs": ["turn action ordering", "per-mon Speed", "Trick Room field state"],
       "cases": [
         {"id": "order-goes-first", "group": "priority", "kind": "positive", "status": "ok", "setup": "Incineroar Fake Out vs Garchomp Dragon Claw (Garchomp is faster)", "expect": "order: Fake Out, then Garchomp's move; Garchomp is flinched and its move never fires"},
         {"id": "order-both-fake-out", "group": "priority", "kind": "interaction", "status": "ok", "setup": "two Fake Outs, one per side", "expect": "faster user goes first and flinches the slower one, whose Fake Out never fires; speed ties are random by seed"},
@@ -36,7 +37,8 @@
         "smogon: Champions Battle Mechanics Research thread (Fake Out cannot be selected after the first turn out, reported)"
       ],
       "data": ["moves.fakeout", "moves.firstimpression"],
-      "depends_on": ["turns-out counter per mon", "switch-in and replacement events"],
+      "depends_on": [],
+      "needs": ["turns-out counter per mon", "switch-in and replacement events"],
       "cases": [
         {"id": "first-turn-works", "group": "first-turn", "kind": "positive", "status": "ok", "setup": "Incineroar leads and uses Fake Out on turn 1", "expect": "hits and flinches"},
         {"id": "first-turn-later-fails", "group": "first-turn", "kind": "control", "status": "ok", "setup": "same user uses Fake Out on turn 2", "expect": "no damage, no flinch (Showdown: fails; Champions: not selectable, per Smogon thread)"},
@@ -64,7 +66,8 @@
         "repo: 20 moves in data/moves.json mention flinch"
       ],
       "data": ["moves.fakeout", "moves.upperhand", "moves.ironhead", "abilities.inner-focus", "abilities.shield-dust", "abilities.steadfast", "abilities.sheer-force"],
-      "depends_on": ["secondary effect pipeline", "has-the-target-moved flag"],
+      "depends_on": [],
+      "needs": ["secondary effect pipeline", "has-the-target-moved flag"],
       "cases": [
         {"id": "flinch-basic", "group": "flinch", "kind": "positive", "status": "ok", "setup": "target has not moved yet", "expect": "target loses its move this turn; flinch clears at end of turn"},
         {"id": "flinch-clears", "group": "flinch", "kind": "control", "status": "ok", "setup": "turn after a flinch", "expect": "target acts normally"},
@@ -89,7 +92,8 @@
         "repo: data/types.json type chart"
       ],
       "data": ["abilities.scrappy", "file.types"],
-      "depends_on": ["type chart"],
+      "depends_on": [],
+      "needs": ["type chart"],
       "cases": [
         {"id": "ghost-immune", "group": "immunity", "kind": "control", "status": "ok", "setup": "Fake Out aimed at Gengar", "expect": "no damage, no flinch; first turn is still spent"},
         {"id": "ghost-scrappy", "group": "immunity", "kind": "interaction", "status": "ok", "setup": "Kangaskhan (Scrappy) Fake Out into Gengar", "expect": "hits and flinches"}
@@ -106,7 +110,8 @@
         "smogon: Champions Battle Mechanics Research thread (Piercing Drill and Unseen Fist ignore Protect for 1/4 damage)"
       ],
       "data": ["moves.protect", "moves.wideguard", "moves.quickguard"],
-      "depends_on": ["per-turn protected flag", "consecutive-use chain (1/3 each repeat)"],
+      "depends_on": [],
+      "needs": ["per-turn protected flag", "consecutive-use chain (1/3 each repeat)"],
       "cases": [
         {"id": "protect-blocks", "group": "immunity", "kind": "interaction", "status": "ok", "setup": "target used Protect", "expect": "blocked, no flinch"},
         {"id": "wide-guard-no-block", "group": "immunity", "kind": "control", "status": "ok", "setup": "foe ally used Wide Guard", "expect": "does not stop single-target Fake Out"}
@@ -122,7 +127,8 @@
         "showdown: data/abilities.ts#intimidate (skips Substitute targets)"
       ],
       "data": ["moves.substitute"],
-      "depends_on": ["per-mon volatiles", "HP cost on use"],
+      "depends_on": [],
+      "needs": ["per-mon volatiles", "HP cost on use"],
       "cases": [
         {"id": "side-substitute", "group": "protected", "kind": "interaction", "status": "ok", "setup": "foe behind Substitute", "expect": "Atk 0; needs S6 Substitute"},
         {"id": "flinch-substitute", "group": "flinch", "kind": "interaction", "status": "verify", "setup": "target behind Substitute", "expect": "hits the Substitute, no flinch (needs S6)"}
@@ -141,7 +147,8 @@
         "showdown: sim/battle-actions.ts#getDamage (crits ignore harmful stages)"
       ],
       "data": ["moves.closecombat", "moves.moonblast", "abilities.intimidate"],
-      "depends_on": ["per-mon stage table"],
+      "depends_on": [],
+      "needs": ["per-mon stage table"],
       "cases": [
         {"id": "timing-foe-switch-reset", "group": "timing", "kind": "interaction", "status": "ok", "setup": "lowered foe switches out and back in", "expect": "Atk back to 0"}
       ],
@@ -159,7 +166,8 @@
         "repo: data/abilities.json"
       ],
       "data": ["abilities.clear-body", "abilities.white-smoke", "abilities.hyper-cutter", "abilities.contrary", "abilities.mirror-armor", "abilities.defiant", "abilities.competitive", "abilities.flower-veil"],
-      "depends_on": ["stat stages as engine state", "foe-caused vs self-caused stat change"],
+      "depends_on": [],
+      "needs": ["stat stages as engine state", "foe-caused vs self-caused stat change"],
       "cases": [
         {"id": "block-clear-body", "group": "blocked", "kind": "control", "status": "ok", "setup": "Incineroar enters vs Dragapult (Clear Body)", "expect": "Dragapult Atk 0"},
         {"id": "block-white-smoke", "group": "blocked", "kind": "control", "status": "ok", "setup": "vs Torkoal (White Smoke)", "expect": "Atk 0"},
@@ -190,7 +198,8 @@
         "repo: 16 entry-triggered abilities in data/abilities.json"
       ],
       "data": ["abilities.intimidate", "abilities.trace", "abilities.drizzle", "abilities.drought"],
-      "depends_on": ["switch, replacement and battle-start events", "Mega Evolution as a turn action"],
+      "depends_on": [],
+      "needs": ["switch, replacement and battle-start events", "Mega Evolution as a turn action"],
       "cases": [
         {"id": "timing-battle-start", "group": "timing", "kind": "interaction", "status": "ok", "setup": "both sides lead with an Intimidate user", "expect": "both lose 1 Atk; order follows Speed (reversed under Trick Room if set)"},
         {"id": "timing-switch-in", "group": "timing", "kind": "positive", "status": "ok", "setup": "Intimidate user switches in mid-battle", "expect": "foe(s) -1 on entry, before that turn's moves"},
@@ -215,6 +224,7 @@
       ],
       "data": ["moves.closecombat", "moves.doubleedge", "moves.protect", "moves.rockslide"],
       "depends_on": ["type-immunity", "protect", "accuracy-evasion", "target-resolution"],
+      "needs": [],
       "cases": [
         {"id": "stage-order-hit", "group": "order", "kind": "positive", "status": "ok", "setup": "Sneasler Close Combat into Tauros, Tauros survives", "expect": "stages run in order: damage, then self-drop (Sneasler Defense and Sp. Def -1); nothing after the hit loop fires early"},
         {"id": "abort-immune", "group": "abort", "kind": "control", "status": "ok", "setup": "Sneasler Close Combat into Gengar", "expect": "aborts at the immunity stage: 0 damage, no effects, no self-drop"},
@@ -238,7 +248,8 @@
         "repo: data/moves.json target field (14 kinds)"
       ],
       "data": ["moves.rockslide", "moves.earthquake", "moves.helpinghand", "moves.followme", "moves.ragepowder", "moves.swordsdance", "moves.thunderbolt", "abilities.lightning-rod", "abilities.stalwart"],
-      "depends_on": ["doubles board with adjacency", "move-pipeline"],
+      "depends_on": [],
+      "needs": ["doubles board with adjacency"],
       "cases": [
         {"id": "single-target", "group": "targets", "kind": "positive", "status": "ok", "setup": "Doubles: Garchomp Dragon Claw aimed at foe A", "expect": "hits foe A only; foe B and the ally are untouched"},
         {"id": "spread-both-foes", "group": "targets", "kind": "positive", "status": "ok", "setup": "Doubles: Garchomp Rock Slide (allAdjacentFoes), both foes up", "expect": "hits both foes; each takes spread-reduced damage (x0.75)"},
@@ -269,7 +280,8 @@
         "repo: data/moves.json accuracy and champions_overrides (Crabhammer 95, Make It Rain 95, Syrup Bomb 90)"
       ],
       "data": ["moves.rockslide", "moves.aerialace", "moves.stoneedge", "moves.dynamicpunch", "moves.crabhammer", "moves.hurricane", "moves.dragonrush", "moves.dragonpulse", "moves.thunder", "moves.toxic", "moves.fissure", "abilities.no-guard", "abilities.compound-eyes", "abilities.hustle", "abilities.sand-veil", "abilities.unaware", "items.widelens", "items.brightpowder"],
-      "depends_on": ["stat-stages", "move-pipeline", "weather state"],
+      "depends_on": ["stat-stages"],
+      "needs": ["weather state"],
       "cases": [
         {"id": "always-hits", "group": "roll", "kind": "positive", "status": "ok", "setup": "Garchomp Aerial Ace (accuracy true) against a target at +6 evasion", "expect": "never rolls; always hits"},
         {"id": "roll-hit", "group": "roll", "kind": "positive", "status": "ok", "setup": "Garchomp Rock Slide (90) with the roll forced to 89", "expect": "hits (roll must be under accuracy)"},
@@ -306,6 +318,7 @@
       ],
       "data": ["moves.closecombat", "moves.superpower", "moves.hammerarm", "moves.overheat", "moves.dracometeor", "moves.leafstorm", "moves.makeitrain", "moves.clangingscales", "abilities.contrary", "abilities.clear-body", "abilities.mirror-armor", "abilities.defiant", "abilities.competitive", "abilities.sheer-force", "items.whiteherb", "items.ejectbutton"],
       "depends_on": ["move-pipeline", "stat-stages", "type-immunity", "protect"],
+      "needs": [],
       "cases": [
         {"id": "hit-drops", "group": "trigger", "kind": "positive", "status": "ok", "setup": "Sneasler Close Combat into Tauros, Tauros survives", "expect": "Sneasler Defense -1 and Sp. Def -1; Tauros stat stages unchanged"},
         {"id": "drop-after-damage", "group": "trigger", "kind": "positive", "status": "ok", "setup": "Sneasler Close Combat KOs Tauros", "expect": "Sneasler still drops Defense and Sp. Def -1 (a KO does not cancel the drop)"},
@@ -349,6 +362,7 @@
       ],
       "data": ["moves.flamethrower", "moves.thunderbolt", "moves.nuzzle", "moves.shadowball", "moves.triattack", "moves.rockslide", "moves.airslash", "moves.bodyslam", "moves.meteormash", "abilities.shield-dust", "abilities.sheer-force", "abilities.stench", "items.kingsrock"],
       "depends_on": ["move-pipeline", "self-drop", "stat-stages", "type-immunity", "protect", "substitute", "flinch"],
+      "needs": [],
       "cases": [
         {"id": "roll-fires", "group": "roll", "kind": "positive", "status": "ok", "setup": "Charizard Flamethrower into Snorlax, secondary roll comes in under 10", "expect": "Snorlax is burned"},
         {"id": "roll-fails", "group": "roll", "kind": "control", "status": "ok", "setup": "same move, roll at or above 10", "expect": "damage only; no burn"},
@@ -396,6 +410,7 @@
       ],
       "data": ["moves.doubleedge", "moves.headsmash", "moves.wildcharge", "moves.bravebird", "moves.gigadrain", "moves.drainingkiss", "moves.paraboliccharge", "moves.recover", "moves.roost", "moves.synthesis", "moves.healpulse", "moves.psychicnoise", "abilities.rock-head", "abilities.magic-guard", "abilities.liquid-ooze", "abilities.reckless", "items.bigroot", "items.shellbell", "items.lifeorb"],
       "depends_on": ["move-pipeline", "stat-stages", "protect", "substitute", "type-immunity"],
+      "needs": [],
       "cases": [
         {"id": "recoil-fraction", "group": "recoil", "kind": "positive", "status": "verify", "setup": "Snorlax Double-Edge deals 90 damage", "expect": "Snorlax loses 30 HP (33% of damage dealt; check rounding)"},
         {"id": "recoil-half", "group": "recoil", "kind": "positive", "status": "ok", "setup": "Arcanine-Hisui Head Smash deals 100 damage (no Rock Head)", "expect": "user loses 50 HP (1/2 of damage dealt)"},
@@ -454,6 +469,7 @@
       ],
       "data": ["moves.doublehit", "moves.tripleaxel", "moves.populationbomb", "moves.pinmissile", "moves.rockblast", "moves.scaleshot", "moves.dragondarts", "abilities.skill-link", "abilities.parental-bond", "abilities.technician", "abilities.sturdy", "items.focussash", "items.rockyhelmet", "items.lifeorb", "items.shellbell"],
       "depends_on": ["move-pipeline", "accuracy-evasion", "secondary-effect", "self-drop", "recoil-drain-heal", "crit"],
+      "needs": [],
       "cases": [
         {"id": "fixed-two", "group": "count", "kind": "positive", "status": "ok", "setup": "Kangaskhan Double Hit into a foe that survives", "expect": "exactly 2 hits, each rolled for damage separately"},
         {"id": "fixed-three", "group": "count", "kind": "positive", "status": "ok", "setup": "Weavile Triple Axel, all hits land", "expect": "exactly 3 hits; power rises each hit (20, 40, 60)"},
@@ -503,7 +519,8 @@
         "docs: ENGINE_PLAN.md key finding 3 (crit x1.5 step)"
       ],
       "data": ["moves.nightslash", "moves.stoneedge", "moves.frostbreath", "moves.stormthrow", "moves.flowertrick", "moves.focusenergy", "moves.dragoncheer", "moves.reflect", "abilities.battle-armor", "abilities.shell-armor", "abilities.super-luck", "abilities.sniper", "abilities.merciless", "abilities.anger-point", "abilities.mold-breaker", "items.scopelens", "items.leek"],
-      "depends_on": ["move-pipeline", "stat-stages", "damage-calc", "multi-hit"],
+      "depends_on": ["move-pipeline", "stat-stages", "damage-calc"],
+      "needs": [],
       "cases": [
         {"id": "base-rate", "group": "chance", "kind": "positive", "status": "verify", "setup": "Kleavor Rock Slide, no crit boosts, many seeded runs", "expect": "crit chance is 1/24 per hit"},
         {"id": "high-crit-move", "group": "chance", "kind": "positive", "status": "verify", "setup": "Kleavor Night Slash (high crit ratio)", "expect": "crit chance is 1/8 (stage +1)"},
@@ -555,7 +572,8 @@
         "docs: ENGINE_PLAN.md open question 1 (paralysis, sleep, freeze in Champions)"
       ],
       "data": ["moves.willowisp", "moves.toxic", "moves.thunderwave", "moves.sleeppowder", "moves.hypnosis", "moves.yawn", "moves.rest", "moves.healbell", "moves.icebeam", "abilities.guts", "abilities.magic-guard", "abilities.corrosion"],
-      "depends_on": ["secondary-effect", "type-immunity", "substitute", "stat-stages", "move-pipeline", "residual order", "switching"],
+      "depends_on": ["secondary-effect", "type-immunity", "substitute", "stat-stages", "move-pipeline"],
+      "needs": ["residual order", "switching"],
       "cases": [
         {"id": "burn-applies", "group": "apply", "kind": "positive", "status": "ok", "setup": "Gengar Will-O-Wisp into Snorlax, move hits", "expect": "Snorlax is burned"},
         {"id": "poison-applies", "group": "apply", "kind": "positive", "status": "ok", "setup": "a poisoning move hits Tauros", "expect": "Tauros is poisoned"},
@@ -617,7 +635,8 @@
         "docs: ENGINE_PLAN.md S6 and key finding 7"
       ],
       "data": ["moves.confuseray", "moves.swagger", "moves.taunt", "moves.encore", "moves.disable", "moves.torment", "moves.leechseed", "moves.firespin", "moves.meanlook", "moves.uturn"],
-      "depends_on": ["major-status", "stat-stages", "switching", "residual order", "substitute", "move-pipeline"],
+      "depends_on": ["major-status", "stat-stages", "substitute", "move-pipeline"],
+      "needs": ["switching", "residual order"],
       "cases": [
         {"id": "clear-on-switch", "group": "general", "kind": "positive", "status": "ok", "setup": "a confused, taunted and Leech Seeded mon switches out and back in", "expect": "all three are gone"},
         {"id": "clear-on-faint", "group": "general", "kind": "positive", "status": "ok", "setup": "a taunted mon faints and its replacement enters", "expect": "the replacement has no taunt"},
@@ -673,7 +692,8 @@
         "smogon: Champions Battle Mechanics Research thread (formula matches Scarlet/Violet)"
       ],
       "data": ["moves.fakeout", "file.types"],
-      "depends_on": ["level-50 stats", "type chart"],
+      "depends_on": [],
+      "needs": ["level-50 stats", "type chart"],
       "cases": [
         {"id": "base-damage-effect", "group": "base", "kind": "interaction", "status": "ok", "setup": "Garchomp physical hit before vs after the drop", "expect": "damage at Atk -1 matches the calc's -1 stage multiplier (calc case, not engine)"},
         {"id": "calc-damage", "group": "calc", "kind": "positive", "status": "ok", "setup": "Incineroar Fake Out into Garchomp", "expect": "bp 40 physical Normal damage from the calc, no STAB"},

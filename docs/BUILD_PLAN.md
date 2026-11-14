@@ -41,11 +41,11 @@ docs/BUILD_PLAN.md              # this checklist, ticked as work proceeds
 **Gate 0:** `scripts/gate.sh` passes on the untouched repo (baseline). Commit: "Add build plan and gate script".
 
 ### Phase 1: Catalogue hygiene and loader
-- [ ] Fix the two `depends_on` cycles in `data/mechanics.json` (see Findings).
-- [ ] Split free-text prerequisites out of `depends_on` into a new `needs` list on every mechanic; `depends_on` holds mechanic ids only.
-- [ ] `catalogue/load.py`: `load_mechanics()`, `load_compositions()`, `check_catalogue()` (ids unique; `depends_on`, `uses`, `involves` exist; `involves` subset of `uses`; no cycles; every case has id, group, kind, status).
-- [ ] `tests/test_catalogue_load.py` calls `check_catalogue()`, plus a test that a deliberately cyclic fixture is rejected.
-- [ ] Update `_about` in both JSON files to mention `needs` and the optional `run` block.
+- [x] Fix the two `depends_on` cycles in `data/mechanics.json` (see Findings). Also fixed a third cycle found by the loader: `accuracy-evasion` -> `move-pipeline`.
+- [x] Split free-text prerequisites out of `depends_on` into a new `needs` list on every mechanic; `depends_on` holds mechanic ids only.
+- [x] `catalogue/load.py`: `load_mechanics()`, `load_compositions()`, `check_catalogue()` (ids unique; `depends_on`, `uses`, `involves` exist; `involves` subset of `uses`; no cycles; every case has id, group, kind, status).
+- [x] `tests/test_catalogue_load.py` calls `check_catalogue()`, plus a test that a deliberately cyclic fixture is rejected.
+- [x] Update `_about` in both JSON files to mention `needs` and the optional `run` block.
 
 **Gate 1:** `check_catalogue()` passes on the real files; cycle fixture test fails as intended; full suite green. Commit: "Catalogue: fix depends_on cycles, add loader and checks".
 
