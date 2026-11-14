@@ -75,11 +75,11 @@ docs/BUILD_PLAN.md              # this checklist, ticked as work proceeds
 _Notes: `pipeline/after.py` is a placeholder; recoil and drain run as `on_after_all_hits` handlers in Phase 5. Abilities not modeled and not in `INERT_ABILITIES` raise `Unsupported` at `start()`; Mega Evolution choices raise `Unsupported` in `validate`._
 
 ### Phase 4: Replay and saving
-- [ ] `replay.py`: `save_replay(path, teams, seed, turns)`, `load_replay`, `replay(path) -> Battle`, `save_log(path, battle)`; replay JSON has `version`, `format`, `seed`, `teams`, `turns` (see #25).
-- [ ] `snapshot(b)` / `restore(d)` as plain dicts including RNG state (stub: round-trip test only).
-- [ ] A recorded sample replay in `tests/replays/fakeout_turn.json`.
-- [ ] Tests: replay twice gives identical logs; snapshot/restore round trip equals the original; a replay with a `version` mismatch is rejected with a clear error.
-- [ ] CLI: `champions sim replay <file>` prints the event log (register in `COMMANDS` in `cli.py`).
+- [x] `replay.py`: `save_replay(path, teams, seed, turns)`, `load_replay`, `replay(path) -> Battle`, `save_log(path, battle)`; replay JSON has `version`, `format`, `seed`, `teams`, `turns` (see #25).
+- [x] `snapshot(b)` / `restore(d)` as plain dicts including RNG state (stub: round-trip test only).
+- [x] A recorded sample replay in `tests/replays/fakeout_turn.json`.
+- [x] Tests: replay twice gives identical logs; snapshot/restore round trip equals the original; a replay with a `version` mismatch is rejected with a clear error.
+- [x] CLI: `champions sim replay <file>` prints the event log (register in `COMMANDS` in `cli.py`).
 
 **Gate 4:** determinism and round-trip tests pass; `champions sim replay tests/replays/fakeout_turn.json` prints the log and exits 0; suite green. Commit: "Replay, save and snapshot".
 

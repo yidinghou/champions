@@ -1,0 +1,113 @@
+{
+ "version": 1,
+ "format": "doubles",
+ "seed": 482913,
+ "teams": [
+  [
+   {
+    "species": "incineroar",
+    "ability": "blaze",
+    "moves": [
+     "fakeout",
+     "woodhammer"
+    ]
+   },
+   {
+    "species": "rillaboom",
+    "ability": "overgrow",
+    "moves": [
+     "woodhammer"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "garchomp",
+    "ability": "sandveil",
+    "moves": [
+     "dragonclaw",
+     "earthquake"
+    ]
+   },
+   {
+    "species": "gholdengo",
+    "ability": "goodasgold",
+    "moves": [
+     "makeitrain"
+    ]
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "fakeout",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 0,
+    "slot": 1,
+    "move": "woodhammer",
+    "target": [
+     1,
+     1
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "dragonclaw",
+    "target": [
+     0,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 1,
+    "move": "makeitrain",
+    "target": null
+   }
+  ],
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "woodhammer",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 0,
+    "slot": 1,
+    "move": "woodhammer",
+    "target": [
+     1,
+     1
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "dragonclaw",
+    "target": [
+     0,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 1,
+    "move": "makeitrain",
+    "target": null
+   }
+  ]
+ ]
+}
