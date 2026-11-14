@@ -493,6 +493,58 @@
       ]
     },
     {
+      "id": "crit",
+      "name": "Critical hits",
+      "type": "mechanic",
+      "rule": "Each hit rolls for a crit unless the move is a status move or always crits. The chance depends on a crit stage: 0 gives 1/24, +1 gives 1/8, +2 gives 1/2, +3 or more always crits. The stage rises from high-crit moves (+1), Focus Energy (+2), Dragon Cheer (+1 or +2), Super Luck (+1), Scope Lens (+1) and Leek (+2 for Farfetch'd). Battle Armor and Shell Armor block crits, even always-crit moves, unless Mold Breaker. Merciless always crits a poisoned target. A crit multiplies damage by 1.5 (Sniper: 2.25 in total), ignores the attacker's Attack drops and the target's Defense boosts, and ignores screens, but keeps burn. Anger Point sets Attack to +6 when the holder takes a crit.",
+      "source": [
+        "showdown: sim/battle-actions.ts#getDamage (crit stage and multiplier), #hitStepMoveHitLoop; data/moves.ts critRatio and willCrit; data/abilities.ts#battlearmor, #superluck, #sniper, #merciless, #angerpoint; data/items.ts#scopelens, #leek",
+        "repo: data/moves.json short_desc (high crit on 15 moves, always crit on 3)",
+        "docs: ENGINE_PLAN.md key finding 3 (crit x1.5 step)"
+      ],
+      "data": ["moves.nightslash", "moves.stoneedge", "moves.frostbreath", "moves.stormthrow", "moves.flowertrick", "moves.focusenergy", "moves.dragoncheer", "moves.reflect", "abilities.battle-armor", "abilities.shell-armor", "abilities.super-luck", "abilities.sniper", "abilities.merciless", "abilities.anger-point", "abilities.mold-breaker", "items.scopelens", "items.leek"],
+      "depends_on": ["move-pipeline", "stat-stages", "damage-calc", "multi-hit"],
+      "cases": [
+        {"id": "base-rate", "group": "chance", "kind": "positive", "status": "verify", "setup": "Kleavor Rock Slide, no crit boosts, many seeded runs", "expect": "crit chance is 1/24 per hit"},
+        {"id": "high-crit-move", "group": "chance", "kind": "positive", "status": "verify", "setup": "Kleavor Night Slash (high crit ratio)", "expect": "crit chance is 1/8 (stage +1)"},
+        {"id": "stage-three", "group": "chance", "kind": "positive", "status": "verify", "setup": "Kleavor uses Focus Energy then Night Slash", "expect": "stages add to +3: always crits (confirm the cap)"},
+        {"id": "focus-energy", "group": "chance", "kind": "positive", "status": "verify", "setup": "Kleavor uses Focus Energy, then a normal move", "expect": "stage +2: crit chance is 1/2"},
+        {"id": "always-crit", "group": "chance", "kind": "positive", "status": "ok", "setup": "Frost Breath or Storm Throw", "expect": "always crits; no crit roll"},
+        {"id": "always-crit-flower-trick", "group": "chance", "kind": "positive", "status": "ok", "setup": "Flower Trick", "expect": "always crits and never misses"},
+        {"id": "no-crit-on-status", "group": "chance", "kind": "control", "status": "ok", "setup": "a status move", "expect": "no crit roll and no crit"},
+        {"id": "crit-per-hit", "group": "chance", "kind": "interaction", "status": "ok", "setup": "a multi-hit move lands 3 hits", "expect": "each hit rolls crit separately; hits can differ"},
+        {"id": "no-crit-on-immune", "group": "abort", "kind": "control", "status": "ok", "setup": "Night Slash into a Normal-type", "expect": "0 damage; no crit"},
+        {"id": "crit-multiplier", "group": "effect", "kind": "positive", "status": "ok", "setup": "Weavile Night Slash crits Snorlax", "expect": "damage x1.5 at the crit step of the formula"},
+        {"id": "ignores-atk-drop", "group": "effect", "kind": "interaction", "status": "ok", "setup": "attacker at -2 Attack crits", "expect": "the Attack drop is ignored; the stage is treated as 0"},
+        {"id": "keeps-atk-boost", "group": "effect", "kind": "control", "status": "ok", "setup": "attacker at +2 Attack crits", "expect": "the +2 is kept"},
+        {"id": "ignores-def-boost", "group": "effect", "kind": "interaction", "status": "ok", "setup": "target at +2 Defense is crit", "expect": "the Defense boost is ignored"},
+        {"id": "keeps-def-drop", "group": "effect", "kind": "control", "status": "ok", "setup": "target at -2 Defense is crit", "expect": "the drop is kept"},
+        {"id": "ignores-screens", "group": "effect", "kind": "interaction", "status": "ok", "setup": "target behind Reflect is crit by a physical move", "expect": "Reflect is ignored"},
+        {"id": "keeps-burn", "group": "effect", "kind": "control", "status": "ok", "setup": "a burned attacker crits with a physical move", "expect": "burn's x0.5 still applies"},
+        {"id": "crit-through-sub", "group": "effect", "kind": "edge", "status": "verify", "setup": "crit hits a Substitute", "expect": "damage to the Substitute uses the crit multiplier"},
+        {"id": "battle-armor", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Falinks (Battle Armor) is hit by Night Slash", "expect": "no crit, even from an always-crit move"},
+        {"id": "shell-armor", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Torkoal (Shell Armor) is hit by Frost Breath", "expect": "no crit"},
+        {"id": "mold-breaker-armor", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Mold Breaker user hits a Battle Armor target with an always-crit move", "expect": "crit goes through"},
+        {"id": "super-luck", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Absol (Super Luck) uses a normal move", "expect": "crit stage +1 (1/8)"},
+        {"id": "sniper", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Beedrill (Sniper) crits", "expect": "damage is x2.25 in total (1.5 x 1.5)"},
+        {"id": "merciless", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Toxapex (Merciless) hits a poisoned target", "expect": "always crits"},
+        {"id": "merciless-not-poisoned", "group": "ability", "kind": "control", "status": "ok", "setup": "Toxapex hits an unpoisoned target", "expect": "normal crit chance"},
+        {"id": "anger-point", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Tauros (Anger Point) takes a crit and survives", "expect": "Attack goes to +6"},
+        {"id": "anger-point-no-crit", "group": "ability", "kind": "control", "status": "ok", "setup": "Tauros takes a normal hit", "expect": "no Attack change"},
+        {"id": "scope-lens", "group": "item", "kind": "interaction", "status": "ok", "setup": "Scope Lens holder uses a normal move", "expect": "crit stage +1 (1/8)"},
+        {"id": "leek", "group": "item", "kind": "interaction", "status": "verify", "setup": "Farfetch'd holding Leek uses a normal move", "expect": "crit stage +2; only works for Farfetch'd and Sirfetch'd"},
+        {"id": "dragon-cheer", "group": "chance", "kind": "interaction", "status": "verify", "setup": "doubles, ally uses Dragon Cheer on a Dragon-type, then it attacks", "expect": "crit stage +2 for a Dragon target, +1 otherwise"}
+      ],
+      "open": [
+        "crit stage table and cap (1/24, 1/8, 1/2, 1) in Champions; the game may differ from mainline",
+        "Sniper x2.25 total or x1.5 extra on a x1.5 crit",
+        "Mold Breaker versus Battle Armor and always-crit moves",
+        "Razor Claw is not in this game's items; Lucky Chant is not in moves.json",
+        "Laser Focus is not in the data",
+        "whether Ability and item effects on the target side (Anger Point) fire on a crit that hits a Substitute"
+      ]
+    },
+    {
       "id": "damage-calc",
       "name": "Damage calculation",
       "type": "calc",
