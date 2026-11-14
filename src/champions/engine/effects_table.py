@@ -24,11 +24,21 @@ MOVES = {
     "bulletseed": {},
     "stoneedge": {"crit_stage": 1},
     "protect": {"protect": True},
+    "snarl": {"secondary": [{"chance": 100, "boost": {"spa": -1}}]},
+    "shadowball": {"secondary": [{"chance": 20, "boost": {"spd": -1}}]},
+    "ironhead": {"secondary": [{"chance": 30, "volatile": "flinch"}]},
+    "rockslide": {"secondary": [{"chance": 30, "volatile": "flinch"}]},
+    "dracometeor": {"self_drop": {"spa": -2}},
+    "doublehit": {},
+    "pinmissile": {},
+    "rockblast": {},
+    "nightslash": {"crit_stage": 1},
+    "aerialace": {},
 }
 
 # Abilities with modeled behaviour live in handlers/. These have none that matters for the mechanics
 # modeled so far (checked by hand); anything else raises Unsupported when a team uses it.
-INERT_ABILITIES = {"blaze", "overgrow", "sandveil", "goodasgold", "justified"}
+INERT_ABILITIES = {"noability", "blaze", "overgrow", "sandveil", "goodasgold", "justified"}
 MODELED_ABILITIES = {
     "intimidate", "innerfocus", "oblivious", "owntempo", "scrappy", "guarddog",
     "clearbody", "whitesmoke", "hypercutter",

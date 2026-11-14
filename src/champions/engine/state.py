@@ -59,12 +59,12 @@ class Mon:
             self._emit("heal", amount=gained, hp=f"{self.hp}/{self.max_hp}")
         return gained
 
-    def boost(self, stat, n):
+    def boost(self, stat, n, **extra):
         """Change a stage, clamped to -6..+6. Returns the change actually applied."""
         before = self.stages[stat]
         after = max(STAGE_MIN, min(STAGE_MAX, before + n))
         self.stages[stat] = after
-        self._emit("boost", stat=stat, change=after - before, stage=after)
+        self._emit("boost", stat=stat, change=after - before, stage=after, **extra)
         return after - before
 
     def add_volatile(self, name, value=True):

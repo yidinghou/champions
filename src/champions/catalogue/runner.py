@@ -1,0 +1,128 @@
+"""Run one catalogue case: build the battle, play the scripted turns, evaluate every check."""
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import List
+
+from ..engine import game
+from ..engine.actions import from_dict
+from ..engine.rng import LabeledRng
+
+
+@dataclass
+class Result:
+    owner: dict
+    case: dict
+    failures: List[str] = field(default_factory=list)
+    log: List[str] = field(default_factory=list)
+
+    @property
+    def passed(self):
+        return not self.failures
+
+
+def find_mon(battle, ref):
+    for side in battle.sides:
+        for m in side.team:
+            if m.ref == ref:
+                return m
+    raise KeyError(f"no mon {ref!r}; refs are {[m.ref for s in battle.sides for m in s.team]}")
+
+
+def _match(event, where):
+    return all(event.data.get(k) == v for k, v in (where or {}).items())
+
+
+def _events(battle, kind, where):
+    return [e for e in battle.log if e.kind == kind and _match(e, where)]
+
+
+def evaluate(battle, chk):
+    """Return None if the check holds, else a message with the actual value."""
+    if "stage" in chk:
+        actual = find_mon(battle, chk["mon"]).stages[chk["stage"]]
+        if actual != chk["eq"]:
+            return f"stage {chk['stage']} of {chk['mon']} == {chk['eq']}  (actual: {actual})"
+    elif "hp" in chk:
+        m = find_mon(battle, chk["mon"])
+        state = "fainted" if m.fainted else "full" if m.hp == m.max_hp else "damaged"
+        if state != chk["hp"]:
+            return f"hp of {chk['mon']} is {chk['hp']}  (actual: {state}, {m.hp}/{m.max_hp})"
+    elif "hp_eq" in chk:
+        m = find_mon(battle, chk["mon"])
+        if m.hp != chk["hp_eq"]:
+            return f"hp of {chk['mon']} == {chk['hp_eq']}  (actual: {m.hp})"
+    elif "volatile" in chk:
+        present = chk["volatile"] in find_mon(battle, chk["mon"]).volatiles
+        if present != chk.get("present", True):
+            return f"volatile {chk['volatile']} on {chk['mon']} present={chk.get('present', True)}  (actual: {present})"
+    elif "event" in chk:
+        n = len(_events(battle, chk["event"], chk.get("where")))
+        want = chk.get("count")
+        if (want is not None and n != want) or (want is None and n < chk.get("min", 1)):
+            return f"event {chk['event']} {chk.get('where') or ''} count {want if want is not None else '>= ' + str(chk.get('min', 1))}  (actual: {n})"
+    elif "no_event" in chk:
+        n = len(_events(battle, chk["no_event"], chk.get("where")))
+        if n:
+            return f"no {chk['no_event']} event {chk.get('where') or ''}  (actual: {n} found)"
+    elif "recoil" in chk or "heal" in chk:
+        who, kind = (chk["recoil"], "recoil") if "recoil" in chk else (chk["heal"], "heal")
+        dealt = sum(e.data["amount"] for e in battle.log if e.kind == "damage" and e.data["mon"] == chk["of_damage_to"])
+        got = sum(e.data["amount"] for e in battle.log if e.kind == kind and e.data["mon"] == who)
+        want = max(1, dealt * chk["n"] // chk["d"]) if dealt else 0
+        if got != want:
+            return f"{kind} of {who} == {chk['n']}/{chk['d']} of {dealt} damage dealt to {chk['of_damage_to']} = {want}  (actual: {got})"
+    elif "order" in chk:
+        i = 0
+        for e in battle.log:
+            kind, where = chk["order"][i]
+            if e.kind == kind and _match(e, where):
+                i += 1
+                if i == len(chk["order"]):
+                    return None
+        return f"events in order {chk['order']}  (stopped at step {i + 1})"
+    else:
+        return f"unknown check {chk}"
+    return None
+
+
+def run_case(owner, case):
+    res = Result(owner, case)
+    run = case["run"]
+    battle = None
+    try:
+        battle = game.start(run["teams"], seed=run.get("seed", 1), format=run.get("format", "doubles"),
+                            rng=LabeledRng(run.get("rolls")))
+        for ref, stages in run.get("stages", {}).items():      # start-of-case stage setup
+            find_mon(battle, ref).stages.update(stages)
+        battle.arena.update(run.get("arena", {}))              # e.g. {"trick_room": 4}
+        for turn in run.get("turns", []):
+            game.play_turn(battle, [from_dict(c) for c in turn])
+    except Exception as e:  # noqa: BLE001 - report any engine error as the case's failure
+        res.failures.append(f"raised {type(e).__name__}: {e}")
+    if not run.get("check"):
+        res.failures.append("case has no checks, so it proves nothing")
+    if battle is not None:
+        res.log = [str(e) for e in battle.log]
+        for chk in run.get("check", []):
+            try:
+                msg = evaluate(battle, chk)
+            except (KeyError, IndexError) as e:        # a bad check is a failing case, not a crash
+                msg = f"could not evaluate {chk}: {e}"
+            if msg:
+                res.failures.append(msg)
+    return res
+
+
+def format_failure(res):
+    o, c = res.owner, res.case
+    lines = [f"{o['id']}::{c['id']}  [{c['kind']}, status={c['status']}]",
+             f"  setup:   {c['setup']}", f"  expect:  {c['expect']}"]
+    src = c.get("source") or (o.get("source") or [None])[0]
+    if src:
+        lines.append(f"  source:  {src}")
+    lines.append("")
+    lines += [f"  FAILED check: {f}" for f in res.failures]
+    if res.log:
+        lines += ["", "  event log:"] + [f"    {ln}" for ln in res.log]
+    return "\n".join(lines)

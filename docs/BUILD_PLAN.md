@@ -86,16 +86,18 @@ _Notes: `pipeline/after.py` is a placeholder; recoil and drain run as `on_after_
 ### Phase 5: Initial mechanics (stubbed but working)
 For each mechanic below: (a) add structured `run` blocks and `source` to a representative positive, control and interaction stub in `data/mechanics.json`; (b) write the handler; (c) the cases pass. Edge cases and `verify` stubs stay "stub only". Order follows dependencies:
 
-- [ ] `type-immunity` (2 stubs): immunity stage; Scrappy override stubbed.
-- [ ] `protect`: block, blocked-effects, no stacking chain beyond a 1/3 stub.
-- [ ] `stat-stages` and `foe-stat-drop` and `entry-trigger` with `intimidate` (composition): drop on entry, blockers (Inner Focus, Oblivious, Own Tempo, Scrappy), Guard Dog flip, doubles both foes.
-- [ ] `first-turn-only` and `flinch` and `move-priority` with `fake-out` (composition): the full turn from #25.
-- [ ] `self-drop`: Close Combat drop; control: immune into Ghost gives no drop; control: Protect gives no drop.
-- [ ] `secondary-effect`: chance roll via `ForcedRng`; Substitute stub skipped.
-- [ ] `recoil-drain-heal`: recoil fraction after the hit loop; drain fraction; capped by remaining HP.
-- [ ] `accuracy-evasion`: roll against accuracy; stage multipliers.
-- [ ] `crit` and `multi-hit`: crit stage chance table, 1.5x; fixed and 2-5 hit counts with 35/35/15/15.
-- [ ] `target-resolution`, `substitute`, `damage-calc`, `move-pipeline`: covered by the above or left "stub only", recorded in the status report (Phase 6).
+- [x] `type-immunity` (2 stubs): immunity stage; Scrappy override stubbed.
+- [x] `protect`: block, blocked-effects, no stacking chain beyond a 1/3 stub.
+- [x] `stat-stages` and `foe-stat-drop` and `entry-trigger` with `intimidate` (composition): drop on entry, blockers (Inner Focus, Oblivious, Own Tempo, Scrappy), Guard Dog flip, doubles both foes.
+- [x] `first-turn-only` and `flinch` and `move-priority` with `fake-out` (composition): the full turn from #25.
+- [x] `self-drop`: Close Combat drop; control: immune into Ghost gives no drop; control: Protect gives no drop.
+- [x] `secondary-effect`: chance roll via `ForcedRng`; Substitute stub skipped.
+- [x] `recoil-drain-heal`: recoil fraction after the hit loop; drain fraction; capped by remaining HP.
+- [x] `accuracy-evasion`: roll against accuracy; stage multipliers.
+- [x] `crit` and `multi-hit`: crit stage chance table, 1.5x; fixed and 2-5 hit counts with 35/35/15/15.
+- [x] `target-resolution`, `substitute`, `damage-calc`, `move-pipeline`: covered by the above or left "stub only", recorded in the status report (Phase 6).
+
+_Notes: `substitute` and `damage-calc` are left stub only (Substitute is not modeled). New stubs were added where an existing one used an unmodeled move (e.g. `stat-secondary` was rewritten: Ghost into Normal is immune, so Shadow Ball needs a non-Normal target). The case runner, report and a first `champions catalogue status` landed in this phase because the gate needs them; Phase 6 refines them._
 
 **Gate 5:** every mechanic listed above has at least one runnable positive, one control and one interaction case, all passing; `pytest`-free `python3 -m unittest tests.test_catalogue_cases` green; suite green. Commit one per 2-3 mechanics, last one: "Initial mechanics: handlers and runnable cases".
 

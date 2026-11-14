@@ -90,6 +90,8 @@ def run_action(battle, act):
         return run_switch(battle, act)
     target = tuple(act.target) if act.target else None
     run_move(battle, mon, act.move, target)
+    if "protect" not in move_effects(act.move):
+        mon.volatiles.pop("protect_chain", None)      # the Protect chain breaks on any other move
     mon.turns_out += 1
     battle.arena["moved"].append(mon.ref)
 

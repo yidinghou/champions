@@ -51,8 +51,9 @@ def build_mon(spec, side=0, idx=0):
     moves = [key(m) for m in spec.get("moves", [])]
     mv = moves_data()
     pp = {m: mv[m]["pp"] for m in moves if m in mv}
+    hp = st["hp"] if spec.get("hp") is None else max(0, min(st["hp"], spec["hp"]))  # "hp" is for tests
     return Mon(species=sp["name"], types=list(sp["types"]), ability=ability,
-               item=spec.get("item"), moves=moves, stats=st, hp=st["hp"], max_hp=st["hp"],
+               item=spec.get("item"), moves=moves, stats=st, hp=hp, max_hp=st["hp"],
                side=side, idx=idx, pp=pp)
 
 

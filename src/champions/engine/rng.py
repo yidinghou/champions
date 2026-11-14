@@ -59,3 +59,36 @@ class ForcedRng(Rng):
         if pct >= 100:
             return True
         return self._note(label, bool(self._next(label)))
+
+
+class LabeledRng(Rng):
+    """Forced outcomes chosen by label prefix, for catalogue cases.
+
+    rolls: {"accuracy": [False], "crit": [True]} - each key is a label prefix with a queue of outcomes.
+    Once a queue is empty (or no key matches) a default applies: damage rolls 100, crit False,
+    speed ties pick the first, every other chance succeeds, every other randint takes its low end.
+    """
+    DEFAULTS = {"damage_roll": 100, "crit": False, "speed_tie": 0}
+
+    def __init__(self, rolls=None):
+        super().__init__(0)
+        self.rolls = {k: list(v) for k, v in (rolls or {}).items()}
+
+    def _take(self, label):
+        for prefix, queue in self.rolls.items():
+            if label.startswith(prefix) and queue:
+                return True, queue.pop(0)
+        for prefix, v in self.DEFAULTS.items():
+            if label.startswith(prefix):
+                return True, v
+        return False, None
+
+    def randint(self, a, b, label="randint"):
+        ok, v = self._take(label)
+        return self._note(label, max(a, min(b, int(v))) if ok else a)
+
+    def chance(self, pct, label="chance"):
+        if pct >= 100:
+            return True
+        ok, v = self._take(label)
+        return self._note(label, bool(v) if ok else True)

@@ -23,7 +23,7 @@ class MoveContext:
     effects: Dict[str, Any]         # effects_table entry
     chosen: Optional[tuple] = None  # (side, slot) the player picked
     targets: List[Any] = field(default_factory=list)
-    spread: bool = False
+    spread: bool = False   # unused: hit.run decides spread from the targets that are actually hit
     damage: Dict[str, int] = field(default_factory=dict)   # target ref -> total damage dealt
     hit_count: Dict[str, int] = field(default_factory=dict)
     stopped: bool = False
