@@ -50,13 +50,13 @@ docs/BUILD_PLAN.md              # this checklist, ticked as work proceeds
 **Gate 1:** `check_catalogue()` passes on the real files; cycle fixture test fails as intended; full suite green. Commit: "Catalogue: fix depends_on cycles, add loader and checks".
 
 ### Phase 2: Engine core (state, RNG, events, teams)
-- [ ] `errors.py`: `Unsupported(ValueError)`.
-- [ ] `rng.py`: seeded `Rng` (wraps `random.Random`, logs each draw as an `rng` event) and `ForcedRng(values)` for tests.
-- [ ] `events.py`: frozen `Event(turn, kind, data)`; the fixed list of event kinds and hook names (single source of truth).
-- [ ] `state.py`: dataclasses `Mon`, `Side`, `Battle` (as in #25); methods that mutate state also append events: `Mon.take(dmg)`, `Mon.boost(stat, n)`, `Mon.add_volatile(name)`, `Battle.log_event(...)`.
-- [ ] `actions.py`: frozen `Move`, `Switch`, with `to_dict` / `from_dict`.
-- [ ] `teams.py`: `build_mon(spec)` from `champions.json` + `stats.level50`; spec is `{"species", "ability", "item", "moves", "sp", "nature"}`; `build_teams(...)`.
-- [ ] `tests/test_engine_state.py`: stats match `stats.level50` (reuse the Garchomp numbers from `tests/test_data.py`), `boost` clamps at -6/+6, `take` floors at 0 and logs faint.
+- [x] `errors.py`: `Unsupported(ValueError)`.
+- [x] `rng.py`: seeded `Rng` (wraps `random.Random`, logs each draw as an `rng` event) and `ForcedRng(values)` for tests.
+- [x] `events.py`: frozen `Event(turn, kind, data)`; the fixed list of event kinds and hook names (single source of truth).
+- [x] `state.py`: dataclasses `Mon`, `Side`, `Battle` (as in #25; its `field` attribute is named `arena` because `field` clashes with `dataclasses.field`); methods that mutate state also append events: `Mon.take(dmg)`, `Mon.boost(stat, n)`, `Mon.add_volatile(name)`, `Battle.log_event(...)`.
+- [x] `actions.py`: frozen `Move`, `Switch`, with `to_dict` / `from_dict`.
+- [x] `teams.py`: `build_mon(spec)` from `champions.json` + `stats.level50`; spec is `{"species", "ability", "item", "moves", "sp", "nature"}`; `build_teams(...)`.
+- [x] `tests/test_engine_state.py`: stats match `stats.level50` (reuse the Garchomp numbers from `tests/test_data.py`), `boost` clamps at -6/+6, `take` floors at 0 and logs faint.
 
 **Gate 2:** state, boost-clamp and team-building tests pass; suite green. Commit: "Engine core: state, RNG, events, teams".
 
