@@ -229,6 +229,37 @@
       "open": ["exact Showdown order of Protect versus immunity versus powder checks (stub protect-before-immunity)", "retarget rules when the chosen target has fainted (stub target-gone-before-move)"]
     },
     {
+      "id": "target-resolution",
+      "name": "Target resolution",
+      "type": "mechanic",
+      "rule": "Before a move runs, its target type (normal, self, adjacentAlly, allAdjacentFoes, allAdjacent, and so on) plus the board state give the list of Pokémon it hits. Fainted and absent Pokémon are not targets. Spread moves hit more than one target and get x0.75 damage only when two or more are actually hit. Single-target moves from a foe can be redirected by Follow Me, Rage Powder, Lightning Rod and similar; spread moves cannot. If the chosen target is gone, the move retargets to a living foe or fails.",
+      "source": [
+        "showdown: sim/battle.ts#getTarget, #getRandomTarget; sim/battle-actions.ts#getSpreadDamage (spread modifier)",
+        "repo: data/moves.json target field (14 kinds)"
+      ],
+      "data": ["moves.rockslide", "moves.earthquake", "moves.helpinghand", "moves.followme", "moves.ragepowder", "moves.swordsdance", "moves.thunderbolt", "abilities.lightning-rod", "abilities.stalwart"],
+      "depends_on": ["doubles board with adjacency", "move-pipeline"],
+      "cases": [
+        {"id": "single-target", "group": "targets", "kind": "positive", "status": "ok", "setup": "Doubles: Garchomp Dragon Claw aimed at foe A", "expect": "hits foe A only; foe B and the ally are untouched"},
+        {"id": "spread-both-foes", "group": "targets", "kind": "positive", "status": "ok", "setup": "Doubles: Garchomp Rock Slide (allAdjacentFoes), both foes up", "expect": "hits both foes; each takes spread-reduced damage (x0.75)"},
+        {"id": "spread-one-left", "group": "targets", "kind": "control", "status": "ok", "setup": "Doubles: Garchomp Rock Slide, one foe fainted earlier this turn", "expect": "hits the remaining foe at full damage, no x0.75"},
+        {"id": "spread-hits-ally", "group": "targets", "kind": "interaction", "status": "ok", "setup": "Doubles: Garchomp Earthquake (allAdjacent) with an ally beside it", "expect": "hits both foes and the ally, each with x0.75"},
+        {"id": "spread-with-protect", "group": "targets", "kind": "interaction", "status": "verify", "setup": "Doubles: Garchomp Rock Slide, foe A used Protect", "expect": "foe B is hit; check whether the x0.75 still applies when one target is protected"},
+        {"id": "self-target", "group": "targets", "kind": "positive", "status": "ok", "setup": "Machamp uses Swords Dance (self)", "expect": "no target resolution beyond the user; effect applies to Machamp"},
+        {"id": "ally-target", "group": "targets", "kind": "positive", "status": "ok", "setup": "Doubles: Clefable Helping Hand (adjacentAlly)", "expect": "targets the partner; the partner's next move gets x1.5"},
+        {"id": "ally-gone", "group": "targets", "kind": "edge", "status": "ok", "setup": "Doubles: Clefable Helping Hand, partner fainted", "expect": "move fails; no effect"},
+        {"id": "singles-resolves", "group": "targets", "kind": "control", "status": "ok", "setup": "Singles: Garchomp Rock Slide and Earthquake", "expect": "both resolve to the one opponent; no x0.75"},
+        {"id": "follow-me-redirects", "group": "redirect", "kind": "interaction", "status": "ok", "setup": "Doubles: Clefable used Follow Me (+2); foe Garchomp Dragon Claw aimed at Clefable's ally", "expect": "redirected to Clefable"},
+        {"id": "follow-me-spread", "group": "redirect", "kind": "control", "status": "ok", "setup": "Doubles: Clefable used Follow Me; foe uses Rock Slide", "expect": "not redirected; spread hits both as normal"},
+        {"id": "follow-me-ignored", "group": "redirect", "kind": "interaction", "status": "verify", "setup": "Doubles: Clefable used Follow Me; foe Archaludon (Stalwart) uses a single-target move", "expect": "Stalwart ignores the redirect (check Showdown and that the ability behaves this way in Champions)"},
+        {"id": "rage-powder-grass", "group": "redirect", "kind": "interaction", "status": "verify", "setup": "Doubles: Volcarona used Rage Powder; foe Grass-type uses a single-target move", "expect": "a Grass-type attacker is not redirected (powder immunity); check Showdown"},
+        {"id": "lightning-rod-redirect", "group": "redirect", "kind": "interaction", "status": "verify", "setup": "Doubles: Pikachu (Lightning Rod) beside an ally; foe Thunderbolt aimed at the ally", "expect": "redirected to Pikachu, which takes no damage and gains +1 Sp. Atk"},
+        {"id": "redirect-both-sources", "group": "redirect", "kind": "edge", "status": "verify", "setup": "Doubles: Follow Me user and a Lightning Rod mon on the same side, foe uses an Electric single-target move", "expect": "Follow Me wins over the ability, or the latest wins; check Showdown order"},
+        {"id": "target-fainted-retarget", "group": "retarget", "kind": "edge", "status": "verify", "setup": "Doubles: foe A fainted earlier this turn; Garchomp's Dragon Claw was aimed at foe A", "expect": "retargets to foe B; if no foe is left the move fails"}
+      ],
+      "open": ["whether Storm Drain exists in Champions (absent from abilities.json, so no case)", "x0.75 when one of two spread targets is protected (stub spread-with-protect)", "Follow Me versus Lightning Rod priority (stub redirect-both-sources)", "Stalwart and Propeller Tail behaviour in Champions (stub follow-me-ignored)"]
+    },
+    {
       "id": "damage-calc",
       "name": "Damage calculation",
       "type": "calc",
