@@ -443,6 +443,56 @@
       ]
     },
     {
+      "id": "multi-hit",
+      "name": "Multi-hit moves",
+      "type": "mechanic",
+      "rule": "A multi-hit move runs the per-hit stages once per hit. Hit count is fixed (2, 3 or 10) or random for the 2-5 range (2 and 3 at 35% each, 4 and 5 at 15% each). Each hit has its own damage roll, crit roll and secondary roll. Accuracy is rolled once for the sequence, except Triple Axel and Population Bomb, which roll before each hit and stop at the first miss. Hits stop when the target faints. An immune or Protected target gets no hits. The user's own stat changes (Scale Shot) and Life Orb apply once, after the last hit; contact items and abilities and Focus Sash react per hit. Skill Link makes the 2-5 range always 5; Parental Bond adds a weaker second hit to single-hit moves.",
+      "source": [
+        "showdown: sim/battle-actions.ts#hitStepMoveHitLoop (multihit, multiaccuracy), #spreadMoveHit; data/moves.ts multihit and multiaccuracy fields; data/abilities.ts#skilllink, #parentalbond",
+        "repo: data/moves.json multihit field ([2,5] x8, fixed 2 x4, 3 x1, 10 x1)",
+        "docs: ENGINE_PLAN.md key finding 2 (per-hit loop)"
+      ],
+      "data": ["moves.doublehit", "moves.tripleaxel", "moves.populationbomb", "moves.pinmissile", "moves.rockblast", "moves.scaleshot", "moves.dragondarts", "abilities.skill-link", "abilities.parental-bond", "abilities.technician", "abilities.sturdy", "items.focussash", "items.rockyhelmet", "items.lifeorb", "items.shellbell"],
+      "depends_on": ["move-pipeline", "accuracy-evasion", "secondary-effect", "self-drop", "recoil-drain-heal", "crit"],
+      "cases": [
+        {"id": "fixed-two", "group": "count", "kind": "positive", "status": "ok", "setup": "Kangaskhan Double Hit into a foe that survives", "expect": "exactly 2 hits, each rolled for damage separately"},
+        {"id": "fixed-three", "group": "count", "kind": "positive", "status": "ok", "setup": "Weavile Triple Axel, all hits land", "expect": "exactly 3 hits; power rises each hit (20, 40, 60)"},
+        {"id": "fixed-ten", "group": "count", "kind": "positive", "status": "ok", "setup": "a Population Bomb user, all hits land", "expect": "up to 10 hits"},
+        {"id": "random-two-to-five", "group": "count", "kind": "positive", "status": "verify", "setup": "Heracross Pin Missile, many seeded runs", "expect": "hit count is 2, 3, 4 or 5 with weights 35%, 35%, 15%, 15%"},
+        {"id": "per-hit-damage-roll", "group": "count", "kind": "positive", "status": "ok", "setup": "a [2,5] move hits 3 times", "expect": "each hit has its own damage roll and its own crit roll"},
+        {"id": "stops-on-ko", "group": "count", "kind": "edge", "status": "ok", "setup": "Rock Blast hits a foe with little HP", "expect": "hits stop once the target faints; no extra hits"},
+        {"id": "hit-count-reported", "group": "count", "kind": "control", "status": "ok", "setup": "Pin Missile hits twice", "expect": "the result records 2 hits, not 5"},
+        {"id": "single-accuracy-roll", "group": "accuracy", "kind": "positive", "status": "verify", "setup": "Rock Blast (90% accuracy), many seeded runs", "expect": "one accuracy roll for the whole sequence: all hits or none"},
+        {"id": "per-hit-accuracy", "group": "accuracy", "kind": "positive", "status": "verify", "setup": "Triple Axel or Population Bomb", "expect": "accuracy is rolled before each hit; the sequence ends at the first miss and earlier hits keep their damage"},
+        {"id": "miss-first-hit", "group": "accuracy", "kind": "edge", "status": "ok", "setup": "Triple Axel misses on its first hit", "expect": "no damage and no later hits"},
+        {"id": "immune-no-hits", "group": "abort", "kind": "positive", "status": "ok", "setup": "Double Hit into a Ghost-type", "expect": "0 hits; the move stops at the immunity stage"},
+        {"id": "protect-no-hits", "group": "abort", "kind": "positive", "status": "ok", "setup": "foe Protects against Pin Missile", "expect": "0 hits"},
+        {"id": "substitute-breaks", "group": "edge", "kind": "edge", "status": "verify", "setup": "Pin Missile hits a foe's Substitute and breaks it on hit 2", "expect": "later hits go to the foe itself"},
+        {"id": "secondary-per-hit", "group": "effect", "kind": "interaction", "status": "ok", "setup": "a multi-hit move with a secondary lands 3 hits", "expect": "the secondary is rolled after each hit"},
+        {"id": "self-effect-after-last", "group": "effect", "kind": "interaction", "status": "ok", "setup": "Dragonite Scale Shot lands 4 hits", "expect": "the user's Defense -1 and Speed +1 apply once, after the last hit"},
+        {"id": "sash-multi-hit", "group": "effect", "kind": "interaction", "status": "ok", "setup": "a Focus Sash holder at full HP is hit by Pin Missile", "expect": "the first hit leaves 1 HP and consumes the Sash; a later hit KOs"},
+        {"id": "sturdy-multi-hit", "group": "effect", "kind": "interaction", "status": "ok", "setup": "a Sturdy holder at full HP is hit by Pin Missile", "expect": "the first hit leaves 1 HP; a later hit KOs; Sturdy does not recharge between hits"},
+        {"id": "rocky-helmet-per-hit", "group": "effect", "kind": "interaction", "status": "ok", "setup": "a Rocky Helmet holder is hit by a contact multi-hit move 3 times", "expect": "the attacker takes helmet damage after each contact hit"},
+        {"id": "life-orb-once", "group": "effect", "kind": "interaction", "status": "ok", "setup": "Life Orb holder uses Pin Missile for 4 hits", "expect": "user loses 10% max HP once, not per hit"},
+        {"id": "shell-bell-total", "group": "effect", "kind": "interaction", "status": "ok", "setup": "Shell Bell holder uses a multi-hit move", "expect": "heal is 1/8 of the total damage across all hits"},
+        {"id": "technician-per-hit", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Technician user Triple Axel (20, 40, 60 power)", "expect": "the x1.5 applies only to hits whose power is 60 or lower; check each hit"},
+        {"id": "skill-link-five", "group": "ability", "kind": "interaction", "status": "ok", "setup": "Heracross (Skill Link) uses Pin Missile", "expect": "always exactly 5 hits"},
+        {"id": "skill-link-fixed", "group": "ability", "kind": "control", "status": "verify", "setup": "Skill Link user uses Double Hit or Triple Axel", "expect": "hit count unchanged (2 and 3); Skill Link affects only the 2-5 range"},
+        {"id": "parental-bond", "group": "ability", "kind": "interaction", "status": "verify", "setup": "Kangaskhan-Mega (Parental Bond) uses Double-Edge", "expect": "hits twice; the second hit has reduced damage"},
+        {"id": "parental-bond-excluded", "group": "ability", "kind": "control", "status": "ok", "setup": "Parental Bond user uses Dragon Darts (flagged noparentalbond) or a multi-hit move", "expect": "no extra hit"},
+        {"id": "dragon-darts-doubles", "group": "target", "kind": "interaction", "status": "verify", "setup": "doubles, Dragapult Dragon Darts with both foes alive", "expect": "one hit on each foe"},
+        {"id": "dragon-darts-one-protected", "group": "target", "kind": "interaction", "status": "verify", "setup": "doubles, Dragon Darts with one foe Protected", "expect": "the second hit retargets to the other foe, so both hits land on it"}
+      ],
+      "open": [
+        "hit-count weights 35/35/15/15 and Skill Link behaviour: confirm in Showdown source",
+        "whether Population Bomb and Triple Axel roll accuracy per hit in Champions as in mainline",
+        "Parental Bond: second-hit damage fraction (25% in mainline) and which moves are excluded",
+        "Loaded Dice is not in this game's items list, so it is not catalogued",
+        "Dragon Darts retargeting when one foe is Protected",
+        "Technician and other per-hit power abilities need a calc case once the formula exists"
+      ]
+    },
+    {
       "id": "damage-calc",
       "name": "Damage calculation",
       "type": "calc",
