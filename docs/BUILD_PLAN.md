@@ -112,10 +112,10 @@ _Notes: `substitute` and `damage-calc` are left stub only (Substitute is not mod
 **Gate 6:** `champions catalogue status` prints the table with no errors; the broken-handler test shows the readable failure; suite green. Commit: "Catalogue runner and status report".
 
 ### Phase 7: Wrap up
-- [ ] Update `docs/ENGINE_PLAN.md`: status section (what exists), point to `docs/BUILD_PLAN.md` and #25; note the unittest decision.
-- [ ] Update `docs/DATA.md` or a new `docs/ENGINE.md`: layout, how to add a mechanic (steps from #25), how to run one case.
-- [ ] Final checklist review: every box in `docs/BUILD_PLAN.md` ticked or marked "deferred" with a reason; list the deferred edge cases.
-- [ ] Post a short comment on #25 with the outcome and the deferred list (do this only if the user wants it; otherwise report in the chat).
+- [x] Update `docs/ENGINE_PLAN.md`: status section (what exists), point to `docs/BUILD_PLAN.md` and #25; note the unittest decision.
+- [x] Update `docs/DATA.md` or a new `docs/ENGINE.md`: layout, how to add a mechanic (steps from #25), how to run one case.
+- [x] Final checklist review: every box in `docs/BUILD_PLAN.md` ticked or marked "deferred" with a reason; list the deferred edge cases.
+- [x] (deferred to the user: not posted) Post a short comment on #25 with the outcome and the deferred list (do this only if the user wants it; otherwise report in the chat).
 
 **Gate 7:** full suite green; `git status` clean; `git log --oneline` shows one commit per gate. Final commit: "Docs: engine status and how to add a mechanic".
 
@@ -138,3 +138,19 @@ Weather and terrain, screens, Tera, Mega Evolution details beyond the ordering f
 - `python3 -m champions catalogue status` shows per-mechanic coverage and no mechanic marked done without positive, control and interaction cases.
 - `CHAMPIONS_CASE=self-drop python3 -m unittest tests.test_catalogue_cases -v` runs only the self-drop cases; the Close Combat into Ghost control case passes.
 - Break `handlers/self_drop.py` on purpose (drop even when immune): the failure shows the stub's `expect`, the failing check and the event log; then revert.
+
+## Outcome and deferred list (filled in at the end)
+
+Built: engine core, calc, pipeline, hooks and handlers, replay and snapshot, catalogue loader, runner and
+report. 101 runnable catalogue cases pass (with `CHAMPIONS_INCLUDE_VERIFY=1`); every modeled mechanic has a
+positive, a control and an interaction case.
+
+Deferred (each has a `TODO(...)` in code or a stub-only entry in `champions catalogue status`):
+Substitute, major status, volatile status, damage-calc stubs, weather and terrain, screens, items, Mega
+Evolution form changes, Defiant/Competitive/Contrary/Mirror Armor, per-hit accuracy for Triple Axel and
+Population Bomb, redirection, real residuals, random tie-breaks for entry order at battle start, replacement
+choice by the policy, the catalogue's remaining `verify` items.
+
+Found while building: the catalogue had three `depends_on` cycles (not two): `move-pipeline` <->
+`target-resolution`, `move-pipeline` <-> `accuracy-evasion`, `multi-hit` <-> `crit`. The `stat-secondary` stub
+asked for Shadow Ball into Snorlax, which is immune (Ghost into Normal); it now uses Dragonite.

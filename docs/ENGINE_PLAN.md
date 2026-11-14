@@ -1,6 +1,6 @@
 # Battle engine and calculator: staged plan
 
-Status: planning only. No engine, calc or test code exists yet in this repo (it has data and scrapers). This file is the spec to build from.
+Status: initial engine built (branch `engine-skeleton`): a seeded battle loop, calc, replay, and runnable catalogue cases for the first mechanics. See `docs/ENGINE.md` for the layout and `docs/BUILD_PLAN.md` for what was built and what is deferred. Design discussion: #25. This file remains the spec; tests use `unittest` (the repo has no pytest).
 
 ## How this was derived
 
