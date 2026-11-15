@@ -85,7 +85,7 @@ MODELED_ABILITIES = {
     # weather and terrain (see engine/arena.py)
     "drizzle", "drought", "sandstream", "snowwarning", "electricsurge", "grassysurge", "mistysurge", "psychicsurge",
     "chlorophyll", "swiftswim", "sandrush", "slushrush", "surgesurfer", "sandforce", "sandveil", "snowcloak",
-    "overcoat", "raindish", "icebody",
+    "overcoat", "raindish", "icebody", "unnerve",
 }
 
 

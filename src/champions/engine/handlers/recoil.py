@@ -23,4 +23,7 @@ def drain(battle, ctx):
     if total <= 0:
         return
     n, d = ctx.effects["drain"]
-    ctx.user.heal(max(1, total * n // d))
+    amount = max(1, total * n // d)
+    if ctx.user.item == "bigroot":
+        amount = amount * 5324 // 4096           # x1.3
+    ctx.user.heal(amount)

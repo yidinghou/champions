@@ -59,7 +59,10 @@ def trap(battle, target, user, move_id, turns, dmg):
             battle.log_event("immune", mon=target.ref, move=move_id)
         return False
     n = battle.rng.randint(*turns, "trap_turns") if turns else None
-    target.add_volatile("trapped", {"by": user.ref, "turns": n, "dmg": dmg})
+    info = {"by": user.ref, "turns": n, "dmg": dmg}
+    if user.item == "bindingband":
+        info["band"] = True                  # 1/6 max HP a turn instead of 1/8
+    target.add_volatile("trapped", info)
     return True
 
 
@@ -86,6 +89,12 @@ def forced_move(mon, move_id):
     return enc["move"] if enc else move_id
 
 
+def choice_allows(mon, move_id):
+    """Choice Scarf locks the holder into the first move it uses (until it switches out or loses the item)."""
+    lock = mon.volatiles.get("choicelock")
+    return not (lock and mon.item == "choicescarf" and move_id != lock)
+
+
 def can_choose(mon, move_id, move):
     """Would the engine let this mon use this move now? (Used for legal choices, not for validation.)"""
     enc = mon.volatiles.get("encore")
@@ -98,7 +107,7 @@ def can_choose(mon, move_id, move):
 
 
 def is_trapped(mon):
-    return "trapped" in mon.volatiles and "ghost" not in mon.types
+    return "trapped" in mon.volatiles and "ghost" not in mon.types and mon.item != "shedshell"
 
 
 def _trapper_present(battle, ref):
@@ -117,14 +126,14 @@ def residual(battle, mon):
         side, slot = seed["by"]
         seeder = battle.mon(side, slot)
         if seeder is not None and not seeder.fainted:
-            seeder.heal(dealt)
+            seeder.heal(dealt * 5324 // 4096 if seeder.item == "bigroot" else dealt)
     tr = mon.volatiles.get("trapped")
     if tr and not mon.fainted:
         if not _trapper_present(battle, tr["by"]):
             mon.remove_volatile("trapped")
         else:
             if tr["dmg"]:
-                mon.take(max(1, mon.max_hp // 8))
+                mon.take(max(1, mon.max_hp // (6 if tr.get("band") else 8)))
             if tr["turns"] is not None and not mon.fainted:
                 tr["turns"] -= 1
                 if tr["turns"] <= 0:

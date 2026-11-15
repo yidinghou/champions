@@ -21,7 +21,7 @@ class Event:
 # What can appear in the log. Stages that stop a target log one of the abort kinds.
 EVENT_KINDS = frozenset({
     "start", "turn", "switch", "mega", "move", "damage", "heal", "recoil", "boost", "status",
-    "volatile", "faint", "win", "rng", "crit", "hit", "field",
+    "volatile", "faint", "win", "rng", "crit", "hit", "field", "item",
     # aborts
     "fail", "immune", "protected", "missed", "blocked",
 })
@@ -34,4 +34,8 @@ HOOK_NAMES = frozenset({
     "on_hit",              # after each hit's damage: self-drops, secondaries
     "on_after_all_hits",   # after the hit loop: recoil, drain
     "on_residual",         # end of turn
+    "on_update",           # after every action and at the end of the turn: berries, herbs, seeds
+    "on_damaging_hit",     # the holder was hit by a damaging move (item sources of the target only)
+    "on_user_hit",         # the holder's move hit a target (item sources of the user only)
+    "on_after_hit_target", # the holder was hit and survived the move
 })

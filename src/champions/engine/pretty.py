@@ -15,7 +15,7 @@ SIDE_COLORS = ["purple", "crimson"]   # team colors (as in the game's team selec
 KIND_COLORS = {"damage": "orange", "recoil": "orange", "faint": "bold orange", "crit": "bold yellow",
                "heal": "green", "field": "bold cyan", "status": "sky", "volatile": "sky", "switch": "cyan",
                "mega": "bold sky", "win": "bold green", "fail": "yellow", "immune": "dim",
-               "protected": "cyan", "missed": "dim", "blocked": "cyan"}
+               "item": "yellow", "protected": "cyan", "missed": "dim", "blocked": "cyan"}
 
 
 def set_color(on):
@@ -36,9 +36,10 @@ def side_style(ref):
 STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
                 "slp": "asleep", "frz": "frozen"}
 VOLATILE_WORDS = {"confusion": "confused", "taunt": "taunted", "encore": "encored", "disable": "disabled",
-                  "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy"}
+                  "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy", "choicelock": "locked into a move"}
 HIDDEN_VOLATILES = {"protect_chain"}      # engine bookkeeping, not something a player sees
 from .arena import TERRAIN_WORDS, WEATHER_WORDS  # noqa: E402
+from .items import item_name  # noqa: E402
 
 STAT_NAMES = {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def",
               "spe": "Speed", "acc": "Accuracy", "eva": "Evasion"}
@@ -124,6 +125,12 @@ def _describe(e):
         if d.get("start"):
             return f"{TERRAIN_WORDS[d['which']]} covers the battlefield! ({d['turns']} turns)"
         return f"{TERRAIN_WORDS[d['which']]} faded"
+    if k == "item":
+        who, name = mon_name(d["mon"]), item_name(d["item"])
+        return {"eat": f"{who} ate its {name}", "weaken": f"{name} weakened the damage to {who}",
+                "survive": f"{who} hung on using its {name}", "popped": f"{who}'s {name} popped",
+                "eject": f"{who} was switched out by its {name}", "red_card": f"{who} held up its {name}"
+                }.get(d.get("cause"), f"{who} used its {name}")
     if k == "crit":
         return "A critical hit!"
     if k == "fail" and d.get("reason") == "already_status":

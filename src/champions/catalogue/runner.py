@@ -66,12 +66,20 @@ def evaluate(battle, chk):
         want = [max(1, m.max_hp // d) * n for n, d in chk["damage_seq"]]   # Showdown floors max/d first, then multiplies
         if got != want:
             return f"damage taken by {chk['mon']} == {want} ({chk['damage_seq']} of {m.max_hp})  (actual: {got})"
+    elif "pp_eq" in chk:          # {"mon", "pp_eq": move, "eq": n}
+        actual = find_mon(battle, chk["mon"]).pp[chk["pp_eq"]]
+        if actual != chk["eq"]:
+            return f"pp of {chk['pp_eq']} on {chk['mon']} == {chk['eq']}  (actual: {actual})"
     elif "pp_full" in chk:        # the move was never spent
         from ..engine.teams import moves_data
         m = find_mon(battle, chk["mon"])
         want = moves_data()[chk["pp_full"]]["pp"]
         if m.pp[chk["pp_full"]] != want:
             return f"pp of {chk['pp_full']} on {chk['mon']} == {want}  (actual: {m.pp[chk['pp_full']]})"
+    elif "holds" in chk:          # the held item right now (null = used up or none)
+        actual = find_mon(battle, chk["mon"]).item
+        if actual != chk["holds"]:
+            return f"{chk['mon']} holds {chk['holds']}  (actual: {actual})"
     elif "arena" in chk:          # field state: weather, weather_turns, terrain, terrain_turns, trick_room (null = absent)
         actual = battle.arena.get(chk["arena"])
         if actual != chk["eq"]:

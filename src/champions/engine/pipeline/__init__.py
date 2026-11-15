@@ -52,11 +52,18 @@ def run_move(battle, user, move_id, chosen=None):
         return ctx
     battle.log_event("move", mon=user.ref, move=move_id)
     user.last_move = move_id
+    if user.item == "choicescarf" and "choicelock" not in user.volatiles:
+        user.add_volatile("choicelock", move_id)
     user.pp[move_id] = max(0, user.pp.get(move_id, 0) - 1)
     for stage in STAGES:
         stage(ctx)
         if ctx.stopped or not ctx.targets:
             return ctx
     hit.run(ctx)
-    fire(battle, "on_after_all_hits", ctx, ctx.sources(user))
+    fire(battle, "on_after_all_hits", ctx, ctx.sources(user) + ([f"item:{user.item}"] if user.item else []))
+    if ctx.move["category"] != "Status":
+        for t in list(ctx.targets):                   # Eject Button and Red Card: the holder was hit and survived
+            if t is not user and t.item and not t.fainted and ctx.damage.get(t.ref):
+                ctx.current = t
+                fire(battle, "on_after_hit_target", ctx, [f"item:{t.item}"])
     return ctx

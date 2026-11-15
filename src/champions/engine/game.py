@@ -4,6 +4,7 @@ from __future__ import annotations
 from . import handlers  # noqa: F401  (registers handlers)
 from .actions import Move, Switch
 from .effects_table import check_ability, move_effects
+from .items import check_item, update_all
 from .errors import Unsupported
 from .hooks import fire
 from .pipeline import run_move
@@ -18,6 +19,7 @@ def validate_teams(battle):
     for side in battle.sides:
         for m in side.team:
             check_ability(m.ability)
+            check_item(m.item)
             for mv in m.moves:
                 move_effects(mv)
 
@@ -30,6 +32,7 @@ def start(teams, seed=0, format="doubles", rng=None):
     entering = [m for s in b.sides for _, m in s.alive_active()]
     for m in sorted(entering, key=lambda m: -speed(b, m)):   # TODO: random speed ties
         send_in(b, m)
+    update_all(b)                                            # seeds, herbs and berries that are ready on entry
     return b
 
 
@@ -45,7 +48,7 @@ def legal_choices(battle, side):
     for slot, mon in s.alive_active():
         foes = battle.sides[1 - side].alive_active()
         for mv in mon.moves:
-            if not volatiles.can_choose(mon, mv, moves_data()[mv]):
+            if not volatiles.can_choose(mon, mv, moves_data()[mv]) or not volatiles.choice_allows(mon, mv):
                 continue
             for fslot, _ in foes or [(0, None)]:
                 out.append(Move(side, slot, mv, (1 - side, fslot)))
@@ -74,6 +77,8 @@ def validate(battle, choices):
         if c.move not in mon.moves:
             raise ValueError(f"{mon.species} does not know {c.move}")
         move_effects(c.move)  # Unsupported if not modeled
+        if not volatiles.choice_allows(mon, c.move):
+            raise ValueError(f"{mon.species} is locked into {mon.volatiles['choicelock']} by its Choice item")
         if c.mega:
             raise Unsupported("Mega Evolution is not modeled yet")
 
@@ -87,6 +92,7 @@ def run_switch(battle, act):
     new = s.team[act.to]
     battle.log_event("switch", mon=new.ref, slot=act.slot)
     send_in(battle, new)
+    update_all(battle)
 
 
 def run_action(battle, act):
@@ -98,7 +104,8 @@ def run_action(battle, act):
     run_move(battle, mon, move_id, target)
     if "protect" not in move_effects(act.move):
         mon.volatiles.pop("protect_chain", None)      # the Protect chain breaks on any other move
-    mon.turns_out += 1
+    if battle.sides[mon.side].mon_at(act.slot) is mon:        # not if an Eject Button or Red Card moved it out
+        mon.turns_out += 1
     battle.arena["moved"].append(mon.ref)
 
 
@@ -128,18 +135,23 @@ def play_turn(battle, choices):
     battle.turn += 1
     battle.arena["moved"] = []
     battle.log_event("turn", number=battle.turn)
+    chosen_by = {(c.side, c.slot): battle.mon(c.side, c.slot) for c in choices}
     for act in order_actions(battle, choices):
         c = act.choice
         mon = battle.mon(c.side, c.slot)
         if mon is None or mon.fainted:
             continue                                  # KO'd earlier this turn: loses its action
+        if mon is not chosen_by[(c.side, c.slot)]:
+            continue                                  # switched out earlier this turn (Eject Button, Red Card): its choice lapses
         if act.kind == 1:
             battle.log_event("mega", mon=mon.ref)
             continue                                  # TODO(mega): form change
         run_action(battle, c)
+        update_all(battle)
         if check_winner(battle) is not None:
             return battle
     run_residuals(battle)
+    update_all(battle)
     request_replacements(battle)
     check_winner(battle)
     return battle

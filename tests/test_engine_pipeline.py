@@ -22,7 +22,7 @@ class Accuracy(unittest.TestCase):
         self.assertAlmostEqual(accuracy.multiplier(-6), 1 / 3)
 
     def test_final_accuracy_from_stage_difference(self):
-        u, t = NS(stages={"acc": 1}), NS(stages={"eva": 0})
+        u, t = NS(stages={"acc": 1}, item=None), NS(stages={"eva": 0}, item=None, ability=None)
         self.assertEqual(accuracy.final_accuracy(u, t, 80), 106)       # 80 x 4/3
         t.stages["eva"] = 1
         self.assertEqual(accuracy.final_accuracy(u, t, 80), 80)        # +1 acc and +1 eva cancel
@@ -35,7 +35,7 @@ class Accuracy(unittest.TestCase):
 
 class Crit(unittest.TestCase):
     def test_chance_by_stage(self):
-        pct = lambda stage: hit.crit_pct(NS(effects={"crit_stage": stage}))
+        pct = lambda stage: hit.crit_pct(NS(effects={"crit_stage": stage}, user=NS(item=None)))
         self.assertAlmostEqual(pct(0), 100 / 24)
         self.assertEqual([pct(1), pct(2), pct(3), pct(7)], [12.5, 50, 100, 100])
 

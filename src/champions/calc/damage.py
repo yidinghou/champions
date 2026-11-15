@@ -1,11 +1,13 @@
 """Damage in Showdown's modifier order, flooring each step. Level is fixed at 50 in Champions.
 
 Weather (Sun/Rain damage, Sand Sp. Def for Rock, Snow Def for Ice) and terrain (base power) are modeled.
-Stubbed to 1.0 for now (TODO S1): screens, items, abilities (except Guts), Helping Hand.
+Items (type boosts, Muscle Band, Wise Glasses, Life Orb, Expert Belt, Light Ball, resist berries) are in items.py.
+Stubbed to 1.0 for now (TODO S1): screens, abilities (except Guts), Helping Hand.
 """
 from __future__ import annotations
 
-from .field import modify, field_base_power, weather_damage_mod
+from . import items
+from .field import field_bp_mod, modify, weather_damage_mod
 from .typechart import effectiveness
 
 LEVEL = 50
@@ -21,20 +23,26 @@ def _stat(value, stage):
 
 
 def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, ignore_immunity_to=(),
-           weather=None, terrain=None):
+           weather=None, terrain=None, berry_ok=True):
     """attacker/defender: engine Mon-like (stats, stages, types, status). move: a moves.json entry.
+    berry_ok: False when the defender cannot eat its berry (a foe's Unnerve), so a resist berry does nothing.
     weather: "sun" | "rain" | "sand" | "snow" | None; terrain: "electric" | "grassy" | "misty" | "psychic" | None.
     Returns an int; 0 if the defender is immune."""
     bp = move["base_power"]
     if not bp or move["category"] == "Status":
         return 0
-    bp = field_base_power(weather, terrain, bp, move, attacker, defender)
+    held = attacker is not defender        # confusion's self-hit ignores items, terrain and weather
+    chain = field_bp_mod(weather, terrain, move, attacker, defender)
+    if held:
+        chain = items.chain(chain, items.base_power_mod(attacker, move))
+    if chain != 4096:
+        bp = max(1, modify(bp, chain))
     special = move["category"] == "Special"
     a_key, d_key = ("spa", "spd") if special else ("atk", "def")
     a_stage, d_stage = attacker.stages[a_key], defender.stages[d_key]
     if crit:  # a crit ignores the attacker's drops and the defender's boosts
         a_stage, d_stage = max(a_stage, 0), min(d_stage, 0)
-    a = _stat(attacker.stats[a_key], a_stage)
+    a = _stat(attacker.stats[a_key], a_stage) * (items.attack_stat_mod(attacker) if held else 1)
     d = _stat(defender.stats[d_key], d_stage)
 
     if weather == "sand" and special and "rock" in defender.types:
@@ -62,4 +70,8 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     dmg = int(dmg * eff)
     if attacker.status == "brn" and not special and not guts:
         dmg //= 2
+    if held:
+        fm = items.final_mod(attacker, defender, move, eff, berry_ok)
+        if fm != 4096:
+            dmg = modify(dmg, fm)
     return max(1, dmg)

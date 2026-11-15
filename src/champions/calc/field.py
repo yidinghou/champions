@@ -18,8 +18,10 @@ def modify(value, num):
 
 
 def is_grounded(mon):
-    """Terrain only touches grounded mons. TODO(items): Air Balloon, Iron Ball; TODO(gravity)."""
-    return "flying" not in mon.types and mon.ability != "levitate"
+    """Terrain and Ground moves only touch grounded mons. Iron Ball grounds; Air Balloon lifts. TODO(gravity)."""
+    if mon.item == "ironball":
+        return True
+    return "flying" not in mon.types and mon.ability != "levitate" and mon.item != "airballoon"
 
 
 def weather_damage_mod(weather, move_type):
@@ -34,16 +36,16 @@ def weather_damage_mod(weather, move_type):
     return None
 
 
-def field_base_power(weather, terrain, bp, move, attacker, defender):
-    """Base power after terrain and Sand Force. The multipliers chain, so they apply to the power, not the damage."""
+def field_bp_mod(weather, terrain, move, attacker, defender):
+    """Chained base-power modifier (4096 = none) from terrain and Sand Force. They chain with item boosts."""
     mtype = move["type"]
     num = 4096
     if weather == "sand" and attacker.ability == "sandforce" and mtype in ("Rock", "Ground", "Steel"):
-        num = num * TERRAIN_BOOST // 4096     # Sand Force: x1.3
+        num = (num * TERRAIN_BOOST + 2048) >> 12     # Sand Force: x1.3
     if terrain in TERRAIN_BOOSTED_TYPE and mtype == TERRAIN_BOOSTED_TYPE[terrain] and is_grounded(attacker):
-        num = num * TERRAIN_BOOST // 4096
+        num = (num * TERRAIN_BOOST + 2048) >> 12
     if terrain == "misty" and mtype == "Dragon" and is_grounded(defender):
-        num = num // 2
+        num = (num * 2048 + 2048) >> 12
     if terrain == "grassy" and move.get("name") in GRASSY_HALVED and is_grounded(defender):
-        num = num // 2
-    return max(1, modify(bp, num)) if num != 4096 else bp
+        num = (num * 2048 + 2048) >> 12
+    return num

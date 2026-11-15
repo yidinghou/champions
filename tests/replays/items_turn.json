@@ -1,0 +1,67 @@
+{
+ "version": 1,
+ "format": "singles",
+ "seed": 2,
+ "teams": [
+  [
+   {
+    "species": "clefable",
+    "ability": "unaware",
+    "item": "lifeorb",
+    "moves": [
+     "bodyslam",
+     "flamethrower"
+    ]
+   },
+   {
+    "species": "garchomp",
+    "ability": "sandveil",
+    "moves": [
+     "protect"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "snorlax",
+    "ability": "thickfat",
+    "item": "ejectbutton",
+    "moves": [
+     "bodyslam"
+    ],
+    "hp": 150
+   },
+   {
+    "species": "rillaboom",
+    "ability": "overgrow",
+    "item": "sitrusberry",
+    "moves": [
+     "protect"
+    ],
+    "hp": 100
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "bodyslam",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "bodyslam",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ]
+ ]
+}

@@ -8,6 +8,7 @@ from collections import namedtuple
 
 from . import arena, status, volatiles
 from .actions import Switch
+from .hooks import fire
 from .handlers.field import tick_field
 from .teams import moves_data
 
@@ -23,7 +24,12 @@ def speed(battle, mon):
         s //= 2
     if battle.sides[mon.side].conditions.get("tailwind"):
         s *= 2
-    return s * arena.speed_multiplier(battle, mon)
+    s *= arena.speed_multiplier(battle, mon)
+    if mon.item == "choicescarf":
+        s = s * 3 // 2
+    elif mon.item == "ironball":
+        s //= 2
+    return s
 
 
 def order_actions(battle, choices):
@@ -62,6 +68,8 @@ def run_residuals(battle):
     down in tick_field. TODO(residuals): items, screens and Tailwind countdowns."""
     arena.weather_residual(battle)
     arena.terrain_heal(battle)
+    for m in sorted((m for s in battle.sides for _, m in s.alive_active() if m.item), key=lambda m: -speed(battle, m)):
+        fire(battle, "on_residual", m, [f"item:{m.item}"])          # Leftovers
     mons = [m for s in battle.sides for _, m in s.alive_active()]
     mons.sort(key=lambda m: -speed(battle, m))
     for m in mons:
