@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Turn Solver Demo</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e3e2dc;
+    --p1: #6a4fd0; --p2: #c2335a; --good: #2f9e5b; --bad: #e07a1f; --accent: #6a4fd0;
+    --p1-soft: rgba(106,79,208,.16); --p2-soft: rgba(194,51,90,.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151514; --panel: #1f1f1d; --ink: #ecebe6; --muted: #9a9993; --line: #34332f;
+      --p1: #9b8cf5; --p2: #f0698f; --good: #54c283; --bad: #f0a05a; --accent: #9b8cf5;
+      --p1-soft: rgba(155,140,245,.22); --p2-soft: rgba(240,105,143,.22);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  p.lead { color: var(--muted); margin: 0 0 20px; max-width: 70ch; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .sides { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .sides { grid-template-columns: 1fr; } }
+  .side h3 { margin: 0 0 8px; font-size: 14px; }
+  .side.s0 h3 { color: var(--p1); } .side.s1 h3 { color: var(--p2); }
+  .mon { display: grid; grid-template-columns: 110px 1fr 70px; gap: 8px; align-items: center; font-size: 13px; margin: 4px 0; }
+  .mon .tag { font-size: 10px; color: var(--muted); }
+  .bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--good); }
+  .bar.low > i { background: var(--bad); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; background: transparent; color: var(--ink); padding: 7px 12px; cursor: pointer; font: inherit; font-size: 13px; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .stats { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 12px; font-size: 13px; color: var(--muted); }
+  .stats b { color: var(--ink); font-size: 15px; display: block; }
+  .matrix-wrap { overflow-x: auto; }
+  table.m { border-collapse: separate; border-spacing: 3px; font-size: 12.5px; min-width: 560px; }
+  table.m th { font-weight: 500; padding: 4px 6px; text-align: center; vertical-align: bottom; }
+  table.m th.rowh { text-align: right; white-space: nowrap; color: var(--p1); }
+  table.m th.colh { color: var(--p2); }
+  .mix { display: block; height: 4px; border-radius: 2px; margin-top: 3px; }
+  th.colh .mix { background: var(--p2); } th.rowh .mix { background: var(--p1); margin-left: auto; }
+  td.cell { text-align: center; padding: 10px 6px; border-radius: 6px; cursor: pointer; min-width: 72px;
+            font-variant-numeric: tabular-nums; border: 2px solid transparent; }
+  td.cell:hover { border-color: var(--ink); }
+  td.cell.sel { border-color: var(--ink); box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink); }
+  td.cell small { display: block; color: var(--muted); font-size: 10px; }
+  td.cell.pruned { background: repeating-linear-gradient(45deg, transparent 0 5px, var(--line) 5px 6px) !important; color: var(--muted); cursor: default; font-size: 11px; }
+  td.cell.pruned:hover { border-color: transparent; }
+  .cmp { margin-top: 10px; padding: 8px 10px; border-radius: 8px; background: var(--p1-soft); font-size: 13px; }
+  .legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .legend i { width: 120px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--p2), var(--line), var(--p1)); }
+  .out { display: grid; grid-template-columns: 56px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .out:first-of-type { border-top: 0; }
+  .pct { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 16px; }
+  .pbar { height: 4px; background: var(--accent); border-radius: 2px; margin-top: 4px; }
+  .hp-line { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; }
+  .hp-line .s0 { color: var(--p1); } .hp-line .s1 { color: var(--p2); }
+  details { margin-top: 4px; font-size: 12px; color: var(--muted); }
+  details pre { margin: 6px 0 0; white-space: pre-wrap; font: 11.5px/1.5 ui-monospace, Menlo, monospace; color: var(--ink); }
+  .ev { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12px; }
+  .sol { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .sol { grid-template-columns: 1fr; } }
+  .mixrow { display: grid; grid-template-columns: 130px 1fr 44px; gap: 8px; align-items: center; font-size: 13px; margin: 4px 0; }
+  .mixrow .bar > i { background: var(--p1); } .sol .c .mixrow .bar > i { background: var(--p2); }
+  ol { padding-left: 20px; margin: 0; } ol li { margin: 6px 0; }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  .big { font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Solver Demo: 2v2</h1>
+  <p class="lead">Both players pick at the same time, so there is no "best move", only a best <em>mix</em>.
+    For every pair of choices we play the turn under every chance outcome, score each result, and average.
+    That grid is the payoff matrix, and solving it gives each side's best mix. Looking <em>two turns</em> ahead
+    scores each outcome by solving the next turn too. Switch between the searches below to compare them.</p>
+
+  <div class="card">
+    <h2>1 · The position</h2>
+    <div class="sides" id="position"></div>
+  </div>
+
+  <div class="card">
+    <h2>2 · How far to look</h2>
+    <div class="seg" id="variants" role="group" aria-label="Damage-roll buckets"></div>
+    <div class="stats" id="stats"></div>
+    <div class="note" id="vnote"></div><div class="cmp" id="cmp" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <h2>3 · The payoff matrix (blue-purple = Purple ahead)</h2>
+    <div class="matrix-wrap"><table class="m" id="matrix"></table></div>
+    <div class="legend"><span>better for crimson</span><i></i><span>better for purple</span><span style="margin-left:auto">cell = expected value, −1…+1. Click a cell.</span></div>
+    <div class="note">Score = difference in average team HP remaining (±1 for a win or loss). Bars on the labels show the solved mix. Hatched cells were skipped by pruning.</div>
+  </div>
+
+  <div class="card">
+    <h2>4 · What happens in the selected cell</h2>
+    <div id="detail"></div>
+  </div>
+
+  <div class="card">
+    <h2>5 · The solution</h2>
+    <div class="sol" id="solution"></div>
+  </div>
+
+  <div class="card">
+    <h2>How this fits together</h2>
+    <ol>
+      <li><b>EnumRng</b> turns each random draw (hit, crit, damage roll, proc) into a branch with a probability instead of a random number.</li>
+      <li><b>resolve()</b> replays the turn from a cheap copy of the battle once per branch and returns <code>(probability, end state)</code>, merging identical states.</li>
+      <li><b>Evaluate</b> each end state, then average by probability. One matrix cell is one <code>resolve()</code> call.</li>
+      <li><b>Solve</b> the matrix exactly for the mixed strategy neither side can improve on.</li>
+      <li><b>Look deeper</b> by replacing each outcome's score with the value of solving the next turn from there. Cost multiplies at every level.</li>
+      <li><b>Prune</b> by searching deeper only for each side's most promising choices after one turn. It is a heuristic, so it can be wrong, and the comparison line above shows by how much.</li>
+    </ol>
+  </div>
+</main>
+
+<script>
+const D = __DATA__;
+let vi = 1, sel = [0, 0];
+const $ = id => document.getElementById(id);
+const pct = x => (x * 100).toFixed(x < 0.1 && x > 0 ? 1 : 0) + "%";
+const sgn = x => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(2);
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+
+function monRow(m) {
+  const f = m.hp / m.max;
+  return `<div class="mon"><div>${esc(m.name)}${m.active ? '' : ' <span class="tag">bench</span>'}${m.status ? ` <span class="tag">${m.status}</span>` : ''}</div>
+    <div class="bar ${f < 0.3 ? 'low' : ''}"><i style="width:${(f * 100).toFixed(0)}%"></i></div><div>${m.hp}/${m.max}</div></div>`;
+}
+function renderPosition() {
+  $("position").innerHTML = D.teams.map((t, i) =>
+    `<div class="side s${i}"><h3>${i ? "Crimson (side 1)" : "Purple (side 0)"}</h3>${t.map(monRow).join("")}</div>`).join("");
+}
+function renderVariants() {
+  $("variants").innerHTML = D.variants.map((v, i) =>
+    `<button aria-pressed="${i === vi}" data-i="${i}">${esc(v.name)}</button>`).join("");
+  $("variants").querySelectorAll("button").forEach(b => b.onclick = () => { vi = +b.dataset.i; renderAll(); });
+  const v = D.variants[vi], st = v.stats, total = D.rows.length * D.cols.length;
+  $("stats").innerHTML =
+    `<div><b>${st.seconds < 0.1 ? (st.seconds * 1000).toFixed(0) + " ms" : st.seconds.toFixed(2) + " s"}</b>solve time</div>` +
+    `<div><b>${st.cells.toLocaleString()}</b>cells resolved (all depths)</div>` +
+    `<div><b>${st.outcomes.toLocaleString()}</b>chance outcomes simulated</div>` +
+    `<div><b>${st.nodes.toLocaleString()}</b>matrices solved</div>`;
+  $("vnote").innerHTML = v.depth === 1
+    ? `Each cell is played once under every chance outcome, split into ${v.buckets} damage-roll buckets, then scored. Outcomes under 1% are dropped.`
+    : `Each outcome is scored by solving the next turn from there (${v.buckets} damage-roll buckets).` +
+      (v.keep ? ` <b>Pruned:</b> below the first turn only each side's best ${v.keep} choice${v.keep > 1 ? "s" : ""} by one-turn value (plus best replies) are searched deeper.`
+              : " <b>Exact:</b> every choice is searched.");
+  const exact = D.variants.find(x => x.depth === v.depth && !x.keep);
+  if (v.keep && exact) {
+    const topOf = x => D.rows.map((r, i) => [x.row_mix[i], r]).sort((a, b) => b[0] - a[0])[0][1];
+    const same = topOf(v) === topOf(exact);
+    $("cmp").innerHTML = `Compared with exact: value ${sgn(v.value)} vs ${sgn(exact.value)} (difference ${Math.abs(v.value - exact.value).toFixed(3)}), `+
+      `${same ? "same" : "<b>different</b>"} top choice for Purple (${esc(topOf(v))}), `+
+      `<b>${(exact.stats.seconds / v.stats.seconds).toFixed(1)}× faster</b>, ${(exact.stats.cells / v.stats.cells).toFixed(1)}× fewer cells resolved.`;
+    $("cmp").style.display = "";
+  } else { $("cmp").style.display = "none"; }
+}
+function shade(ev) {
+  const a = Math.min(1, Math.abs(ev) / 0.6), c = ev >= 0 ? "var(--p1)" : "var(--p2)";
+  return `color-mix(in srgb, ${c} ${Math.round(a * 60)}%, transparent)`;
+}
+function renderMatrix() {
+  const v = D.variants[vi];
+  let h = "<tr><th></th>" + D.cols.map((c, j) =>
+    `<th class="colh">${esc(c)}<span class="mix" style="width:${(v.col_mix[j] * 100).toFixed(0)}%"></span></th>`).join("") + "</tr>";
+  D.rows.forEach((r, i) => {
+    h += `<tr><th class="rowh">${esc(r)}<span class="mix" style="width:${(v.row_mix[i] * 100).toFixed(0)}%"></span></th>`;
+    D.cols.forEach((c, j) => {
+      const cell = v.matrix[i][j];
+      if (cell.pruned) { h += `<td class="cell pruned">pruned</td>`; return; }
+      h += `<td class="cell ${sel[0] === i && sel[1] === j ? 'sel' : ''}" data-i="${i}" data-j="${j}" style="background:${shade(cell.ev)}">${sgn(cell.ev)}<small>${cell.n} outcomes</small></td>`;
+    });
+    h += "</tr>";
+  });
+  $("matrix").innerHTML = h;
+  $("matrix").querySelectorAll("td.cell:not(.pruned)").forEach(td => td.onclick = () => { sel = [+td.dataset.i, +td.dataset.j]; renderMatrix(); renderDetail(); });
+}
+function renderDetail() {
+  const v = D.variants[vi];
+  let cell = v.matrix[sel[0]][sel[1]];
+  if (cell.pruned) { const k = v.matrix.flatMap((r, i) => r.map((c, j) => [i, j, c])).find(x => !x[2].pruned); sel = [k[0], k[1]]; cell = k[2]; }
+  const shown = cell.outcomes.reduce((a, o) => a + o.p, 0), deep = v.depth > 1;
+  let h = `<p style="margin-top:0"><b style="color:var(--p1)">${esc(D.rows[sel[0]])}</b> vs <b style="color:var(--p2)">${esc(D.cols[sel[1]])}</b> — expected value <b>${sgn(cell.ev)}</b>
+    from ${cell.n} outcome${cell.n === 1 ? "" : "s"} (most likely first${cell.n > cell.outcomes.length ? `, top ${cell.outcomes.length} shown = ${pct(shown)}` : ""}).
+    ${deep ? "The cell value is the probability-weighted average of each outcome's <em>value after solving the next turn</em>." : ""}</p>`;
+  cell.outcomes.forEach(o => {
+    const act = o.teams.map((t, s) => t.filter(m => m.active).map(m => `<span class="s${s}">${esc(m.name)} ${m.hp}/${m.max}${m.status ? " (" + m.status + ")" : ""}</span>`).join(" ")).join("");
+    const win = o.winner === null ? "" : ` <b>${o.winner === -1 ? "draw" : o.winner === 0 ? "Purple wins" : "Crimson wins"}</b>`;
+    h += `<div class="out"><div><div class="pct">${pct(o.p)}</div><div class="pbar" style="width:${Math.max(4, o.p * 100)}%"></div></div>
+      <div><div class="hp-line">${act}${win}</div>
+      <div class="ev">score after this turn ${sgn(o.now)}${deep && o.next !== null ? ` · value after solving the next turn <b>${sgn(o.next)}</b>` : ""}</div>
+      <details><summary>what happened</summary><pre>${esc(o.log.join("\n"))}</pre></details></div></div>`;
+  });
+  $("detail").innerHTML = h;
+}
+function mixList(names, mix) {
+  return names.map((n, i) => ({n, p: mix[i]})).sort((a, b) => b.p - a.p)
+    .map(x => `<div class="mixrow"><div>${esc(x.n)}</div><div class="bar"><i style="width:${(x.p * 100).toFixed(0)}%"></i></div><div>${pct(x.p)}</div></div>`).join("");
+}
+function renderSolution() {
+  const v = D.variants[vi];
+  $("solution").innerHTML =
+    `<div><div class="note" style="margin:0 0 4px">Game value for Purple</div><div class="big">${sgn(v.value)}</div>
+      <div class="note">what Purple can guarantee on average with best play, looking ${v.depth} turn${v.depth > 1 ? "s" : ""} ahead</div></div><div></div>
+     <div><h2 style="color:var(--p1)">Purple's best mix</h2>${mixList(D.rows, v.row_mix)}</div>
+     <div class="c"><h2 style="color:var(--p2)">Crimson's best mix</h2>${mixList(D.cols, v.col_mix)}</div>`;
+}
+function renderAll() { renderVariants(); renderMatrix(); renderDetail(); renderSolution(); }
+renderPosition(); renderAll();
+</script>
+</body>
+</html>
