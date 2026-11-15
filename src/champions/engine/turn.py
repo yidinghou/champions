@@ -96,8 +96,13 @@ def run_residuals(battle):
             m.boost("spe", 1, cause="speedboost")
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)
+        m.volatiles.pop("endure", None)
         m.volatiles.pop("followme", None)
         m.volatiles.pop("ragepowder", None)
+    for side in battle.sides:
+        for g in ("wideguard", "quickguard"):          # these last the turn they were used
+            if side.conditions.pop(g, None):
+                battle.log_event("field", effect="side", which=g, side=battle.sides.index(side), end=True, cause="turn")
     screens.tick(battle)
     tick_field(battle)
     arena.terrain_tick(battle)

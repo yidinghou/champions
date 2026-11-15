@@ -1,19 +1,21 @@
 """Side conditions: Reflect, Light Screen, Aurora Veil and Tailwind. State in `battle.sides[i].conditions`
 as name -> turns left (the turn it was set counts, and it ends at the end of its last turn).
 
-Reflect and Light Screen last 5 turns (8 with Light Clay), Aurora Veil 5 (8) and only starts in snow, Tailwind 4.
+Safeguard lasts 5 turns and stops status and confusion that another mon would inflict (Yawn's sleep, Rest and
+Infiltrator users get through). Reflect and Light Screen last 5 turns (8 with Light Clay), Aurora Veil 5 (8) and only starts in snow, Tailwind 4.
 A screen cuts damage by 1/2 (singles) or 2732/4096 (doubles) unless the hit is a crit; Aurora Veil covers both
 categories, and several screens never stack. Brick Break and Psychic Fangs remove them. Numbers are Showdown's
 gen 9 values; Champions may differ (flagged `verify` in the catalogue).
 """
 from __future__ import annotations
 
-SIDE_CONDITIONS = ("reflect", "lightscreen", "auroraveil", "tailwind")      # also the end-of-turn order
-DURATION = {"reflect": 5, "lightscreen": 5, "auroraveil": 5, "tailwind": 4}
+SIDE_CONDITIONS = ("reflect", "lightscreen", "auroraveil", "safeguard", "tailwind")      # also the end-of-turn order
+DURATION = {"reflect": 5, "lightscreen": 5, "auroraveil": 5, "safeguard": 5, "tailwind": 4}
 CLAY = ("reflect", "lightscreen", "auroraveil")
 SCREENS = CLAY
 CATEGORY = {"reflect": "Physical", "lightscreen": "Special"}     # Aurora Veil covers both
-SIDE_WORDS = {"reflect": "Reflect", "lightscreen": "Light Screen", "auroraveil": "Aurora Veil", "tailwind": "Tailwind"}
+SIDE_WORDS = {"reflect": "Reflect", "lightscreen": "Light Screen", "auroraveil": "Aurora Veil", "safeguard": "Safeguard", "tailwind": "Tailwind",
+              "wideguard": "Wide Guard", "quickguard": "Quick Guard"}
 
 
 def active_screens(battle, side):

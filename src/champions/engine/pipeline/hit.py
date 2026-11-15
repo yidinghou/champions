@@ -75,6 +75,8 @@ def run(ctx):
                     fire(b, "on_hit", ctx, ["effect:self_drop"] if "self_drop" in ctx.effects else [])   # the user's own drop still happens
                     continue
                 dmg = items.cap_damage(b, target, dmg)
+                if "endure" in target.volatiles and dmg >= target.hp:
+                    dmg = target.hp - 1                  # Endure: left on 1 HP
                 before = target.hp
                 dealt = target.take(dmg)
                 if target.fainted and target.ability == "innardsout" and not user.fainted:

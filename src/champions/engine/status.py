@@ -37,6 +37,11 @@ def try_set_status(battle, target, status, user=None, move_id=None, announce=Tru
         if announce:
             battle.log_event("immune", mon=target.ref, move=move_id, ability=target.ability)
         return False
+    if user is not None and user is not target and battle.sides[target.side].conditions.get("safeguard") \
+            and user.ability != "infiltrator":
+        if announce:
+            battle.log_event("fail", mon=target.ref, move=move_id, reason="safeguard")
+        return False
     reason = arena.blocks_status(battle, target, status)
     if reason:
         if announce:

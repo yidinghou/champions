@@ -28,6 +28,9 @@ def apply(battle, target, name, user, move_id, announce=True):
         return False
     if name in target.volatiles:
         return announce and fail(battle, target, move_id, f"already_{name}")
+    if name == "confusion" and user is not None and user is not target \
+            and battle.sides[target.side].conditions.get("safeguard") and user.ability != "infiltrator":
+        return announce and fail(battle, target, move_id, "safeguard")
     reason = arena.blocks_volatile(battle, target, name)
     if reason:
         return announce and fail(battle, target, move_id, reason)

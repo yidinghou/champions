@@ -164,6 +164,7 @@ def play_turn(battle, choices):
     while queue:
         queue = resort(battle, queue, chosen_by)      # Speed is re-read after every action
         act = queue.pop(0)
+        battle.arena["pending"] = sum(1 for a in queue if a.kind != 1)     # actions still to come (a Mega is not one)
         c = act.choice
         mon = battle.mon(c.side, c.slot)
         if mon is None or mon.fainted:
@@ -177,7 +178,9 @@ def play_turn(battle, choices):
         run_action(battle, c)
         update_all(battle)
         if check_winner(battle) is not None:
+            battle.arena.pop("pending", None)
             return battle
+    battle.arena.pop("pending", None)
     run_residuals(battle)
     update_all(battle)
     request_replacements(battle)

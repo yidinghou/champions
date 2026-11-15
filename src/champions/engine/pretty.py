@@ -158,6 +158,10 @@ def _describe(e):
         return f"It doesn't affect {mon_name(d['mon'])}"
     if k == "redirect":
         return f"{move_name(d['move'])} was drawn to {mon_name(d['mon'])} ({d['cause']})"
+    if k == "protected" and d.get("by") in ("wideguard", "quickguard"):
+        return f"{mon_name(d['mon'])} was protected by {'Wide' if d['by'] == 'wideguard' else 'Quick'} Guard"
+    if k == "protected" and d.get("by") in ("kingsshield", "spikyshield", "banefulbunker"):
+        return f"{mon_name(d['mon'])} protected itself ({d['by']})"
     if k == "protected":
         return f"{mon_name(d['mon'])} protected itself"
     if k == "missed":

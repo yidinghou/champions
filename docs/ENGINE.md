@@ -34,6 +34,7 @@ src/champions/
     mega.py        Mega Evolution: stone -> form, once-per-side rule, the form change
     items.py       held items: which are modeled, consume(), Update checks, Focus Sash/Band
     redirect.py    Follow Me, Rage Powder, Lightning Rod, Storm Drain redirection; type-absorbing abilities
+    (handlers/protect.py, pipeline/protect.py: Protect family, Wide Guard, Quick Guard; screens.py also holds Safeguard)
     screens.py     side conditions: Reflect, Light Screen, Aurora Veil, Tailwind (state in side.conditions)
     arena.py       weather and terrain: state in battle.arena, setting, residuals, speed, blocks
     status.py      major status: apply, immunities, sleep/freeze before a move, residual damage
@@ -177,10 +178,19 @@ and Life Orb still work, and the user's self-drop and pivot still happen. Status
 holder. Baton Pass keeps the decoy (copied); Shed Tail costs half max HP rounded up and gives the replacement half of that.
 New `substitute` event. Numbers in `tests/test_substitute.py`.
 
+Guard moves (46 stubs, 45 run): `handlers/protect.py` and `pipeline/protect.py`. Protect, Detect, King's Shield (damaging
+moves only; contact -1 Atk), Spiky Shield (contact: 1/8 max HP), Baneful Bunker (contact: poison), Endure (left on 1
+HP) and Wide and Quick Guard (side conditions that last the turn) share the 1/3 stalling chain, and any of them fails
+if nothing is left to act after it (`arena["pending"]`, set per action in `play_turn`, counts the actions still to
+come; a Mega is not one). Wide Guard stops spread moves aimed at its side, Quick Guard moves with natural positive
+priority (so not a Prankster-boosted one). Safeguard is a 5-turn side condition in `screens.py`: it stops status and
+confusion another mon inflicts (not Rest, not a Yawn already applied, not Infiltrator). The Protect volatile's value is
+the shield kind; `protected` events carry `by`. Numbers in `tests/test_guards.py`.
+
 ## Deferred
 
 volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
 counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
-Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Teleport, Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Teleport, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Mist, Silk Trap, Burning Bulwark, Obstruct, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.

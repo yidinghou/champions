@@ -3,7 +3,7 @@
 moves.json has numbers (power, priority, target, flags) but no structured effects, only prose. So the
 engine lists, per move, the effects it implements. A move missing from here raises Unsupported.
 Effect keys: first_turn_only, volatile, target_boost, trap, status, rest, cure_team, yawn, type_immunity, secondary [{chance, volatile|boost|status}], self_drop {stat: -n}, recoil [n, d],
-drain [n, d], protect, crit_stage, trick_room, weather (sun|rain|sand|snow), terrain (electric|grassy|misty|psychic),
+drain [n, d], protect (True | kingsshield | spikyshield | banefulbunker | endure | wideguard | quickguard), crit_stage, trick_room, weather (sun|rain|sand|snow), terrain (electric|grassy|misty|psychic),
 weather_heal, weather_ball, weather_accuracy {weather: True | percent}, side_condition (reflect|lightscreen|auroraveil|tailwind),
 break_screens, redirect (followme|ragepowder), pivot (True | "baton" | "shed"), force_switch, substitute, shed_tail.
 """
@@ -26,6 +26,14 @@ MOVES = {
     "bulletseed": {},
     "stoneedge": {"crit_stage": 1},
     "protect": {"protect": True},
+    "detect": {"protect": True},
+    "kingsshield": {"protect": "kingsshield"},
+    "spikyshield": {"protect": "spikyshield"},
+    "banefulbunker": {"protect": "banefulbunker"},
+    "endure": {"protect": "endure"},
+    "wideguard": {"protect": "wideguard"},
+    "quickguard": {"protect": "quickguard"},
+    "safeguard": {"side_condition": "safeguard"},
     "snarl": {"secondary": [{"chance": 100, "boost": {"spa": -1}}]},
     "shadowball": {"secondary": [{"chance": 20, "boost": {"spd": -1}}]},
     "ironhead": {"secondary": [{"chance": 30, "volatile": "flinch"}]},

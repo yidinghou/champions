@@ -34,6 +34,9 @@ def cure_team(battle, ctx):
 @on("on_hit", "effect:yawn")
 def yawn(battle, ctx):
     t = ctx.current
+    if battle.sides[t.side].conditions.get("safeguard") and t is not ctx.user and ctx.user.ability != "infiltrator":
+        battle.log_event("fail", mon=t.ref, move=ctx.move_id, reason="safeguard")
+        return
     if t.status or "yawn" in t.volatiles:
         battle.log_event("fail", mon=t.ref, move=ctx.move_id, reason="already_status" if t.status else "already_yawning")
         return
