@@ -36,7 +36,7 @@ def side_style(ref):
 STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
                 "slp": "asleep", "frz": "frozen"}
 VOLATILE_WORDS = {"confusion": "confused", "taunt": "taunted", "encore": "encored", "disable": "disabled",
-                  "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy", "choicelock": "locked into a move"}
+                  "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy", "followme": "the center of attention", "ragepowder": "the center of attention", "choicelock": "locked into a move"}
 HIDDEN_VOLATILES = {"protect_chain"}      # engine bookkeeping, not something a player sees
 from .arena import TERRAIN_WORDS, WEATHER_WORDS  # noqa: E402
 from .items import item_name  # noqa: E402
@@ -143,8 +143,12 @@ def _describe(e):
         return f"{mon_name(d['mon'])} already has a status, so {move_name(d['move'])} fails"
     if k == "fail":
         return f"{mon_name(d['mon'])} can't use {move_name(d['move'])}: {d['reason'].replace('_', ' ')}"
+    if k == "immune" and d.get("ability"):
+        return f"{mon_name(d['mon'])}'s {d['ability']} absorbed {move_name(d['move'])}"
     if k == "immune":
         return f"It doesn't affect {mon_name(d['mon'])}"
+    if k == "redirect":
+        return f"{move_name(d['move'])} was drawn to {mon_name(d['mon'])} ({d['cause']})"
     if k == "protected":
         return f"{mon_name(d['mon'])} protected itself"
     if k == "missed":

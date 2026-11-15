@@ -74,6 +74,12 @@ for _ab, _kind in TERRAIN_SETTERS.items():
     on("on_switch_in", f"ability:{_ab}")(_terrain_setter(_kind))
 
 
+@on("on_hit", "effect:redirect")
+def redirect_move(battle, ctx):
+    """Follow Me and Rage Powder: this turn the foes' single-target moves come to the user. The value orders them."""
+    ctx.user.add_volatile(ctx.effects["redirect"], len(battle.arena.get("moved", ())) + 1)
+
+
 @on("on_hit", "effect:side_condition")
 def side_condition(battle, ctx):
     name = ctx.effects["side_condition"]

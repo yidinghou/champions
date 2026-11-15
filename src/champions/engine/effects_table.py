@@ -5,7 +5,7 @@ engine lists, per move, the effects it implements. A move missing from here rais
 Effect keys: first_turn_only, volatile, target_boost, trap, status, rest, cure_team, yawn, type_immunity, secondary [{chance, volatile|boost|status}], self_drop {stat: -n}, recoil [n, d],
 drain [n, d], protect, crit_stage, trick_room, weather (sun|rain|sand|snow), terrain (electric|grassy|misty|psychic),
 weather_heal, weather_ball, weather_accuracy {weather: True | percent}, side_condition (reflect|lightscreen|auroraveil|tailwind),
-break_screens.
+break_screens, redirect (followme|ragepowder).
 """
 from __future__ import annotations
 
@@ -72,6 +72,10 @@ MOVES = {
     "weatherball": {"weather_ball": True},
     "thunder": {"secondary": [{"chance": 30, "status": "par"}], "weather_accuracy": {"rain": True, "sun": 50}},
     "hurricane": {"secondary": [{"chance": 30, "volatile": "confusion"}], "weather_accuracy": {"rain": True, "sun": 50}},
+    "followme": {"redirect": "followme"},
+    "ragepowder": {"redirect": "ragepowder"},
+    "thunderbolt": {"secondary": [{"chance": 10, "status": "par"}]},
+    "hydropump": {},
     "reflect": {"side_condition": "reflect"},
     "lightscreen": {"side_condition": "lightscreen"},
     "auroraveil": {"side_condition": "auroraveil"},
@@ -93,6 +97,7 @@ MODELED_ABILITIES = {
     "drizzle", "drought", "sandstream", "snowwarning", "electricsurge", "grassysurge", "mistysurge", "psychicsurge",
     "chlorophyll", "swiftswim", "sandrush", "slushrush", "surgesurfer", "sandforce", "sandveil", "snowcloak",
     "overcoat", "raindish", "icebody", "unnerve",
+    "lightningrod", "stormdrain", "sapsipper", "motordrive", "voltabsorb", "waterabsorb",
 }
 
 

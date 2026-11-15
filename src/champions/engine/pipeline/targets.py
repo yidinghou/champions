@@ -3,6 +3,7 @@
 Supported target kinds: normal, any, self, all, allyTeam, allAdjacentFoes, allAdjacent, adjacentAlly.
 Anything else raises Unsupported. Adjacency is simplified: every slot is adjacent to every other.
 """
+from .. import redirect
 from ..errors import Unsupported
 
 SPREAD = {"allAdjacentFoes", "allAdjacent"}
@@ -28,6 +29,8 @@ def resolve(ctx):
         if t is None:
             b.log_event("fail", mon=user.ref, move=ctx.move_id, reason="no_target")
             return ctx.stop()
+        if t is not None and kind in redirect.SINGLE_TARGET:
+            t = redirect.redirect_target(b, user, ctx.move, ctx.move_id, t)
         ctx.targets = [t]
     elif kind == "allAdjacentFoes":
         ctx.targets = _foes(b, user)

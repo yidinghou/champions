@@ -1,6 +1,6 @@
 """One move, as fixed stages. Each stage removes targets from ctx.targets or stops the move, and logs why.
 
-can_move -> targets -> protect -> terrain -> screens -> immunity -> accuracy -> per hit: damage, on_hit -> on_after_all_hits.
+can_move -> targets -> protect -> terrain -> screens -> absorb -> immunity -> accuracy -> per hit: damage, on_hit -> on_after_all_hits.
 A target removed by a stage gets no later stage: no damage, no effects, no self-drop.
 """
 from __future__ import annotations
@@ -12,7 +12,7 @@ from ..effects_table import move_effects
 from ..hooks import fire
 from ..teams import moves_data
 from .. import arena
-from . import accuracy, can_move, hit, immunity, protect, screens, targets, terrain
+from . import absorb, accuracy, can_move, hit, immunity, protect, screens, targets, terrain
 
 
 @dataclass
@@ -41,7 +41,7 @@ class MoveContext:
         return out
 
 
-STAGES = [targets.resolve, protect.check, terrain.check, screens.check, immunity.check, accuracy.check]
+STAGES = [targets.resolve, protect.check, terrain.check, screens.check, absorb.check, immunity.check, accuracy.check]
 
 
 def run_move(battle, user, move_id, chosen=None):

@@ -29,6 +29,7 @@ src/champions/
     pipeline/      one move as fixed stages; each logs why it stopped a target
     volatiles.py   confusion, Taunt, Encore, Disable, Leech Seed, trapping
     items.py       held items: which are modeled, consume(), Update checks, Focus Sash/Band
+    redirect.py    Follow Me, Rage Powder, Lightning Rod, Storm Drain redirection; type-absorbing abilities
     screens.py     side conditions: Reflect, Light Screen, Aurora Veil, Tailwind (state in side.conditions)
     arena.py       weather and terrain: state in battle.arena, setting, residuals, speed, blocks
     status.py      major status: apply, immunities, sleep/freeze before a move, residual damage
@@ -128,11 +129,18 @@ hit (not if the target is immune or Protected). Speed is now re-read after every
 Room or paralysis set mid-turn reorders the actions still to come. `side` checks: `condition`; `sides` presets
 conditions. Damage numbers are in `tests/test_screens.py`.
 
+Redirection and absorbing abilities (30 of 31 stubs; one is `verify`): see `engine/redirect.py`. In doubles a
+single-target move ("normal"/"any") is redirected while targets are chosen: Follow Me and Rage Powder (a volatile for
+the turn, the latest user wins, Rage Powder skips Grass and Overcoat), then Lightning Rod (Electric) and Storm Drain
+(Water) on any other mon, the fastest first. Spread moves and singles are never redirected. A new `absorb` stage
+(after Protect) lets Volt Absorb, Water Absorb, Lightning Rod, Storm Drain, Sap Sipper and Motor Drive eat their type
+and heal 1/4 or boost. The log has a `redirect` event. Numbers in `tests/test_redirect.py`.
+
 ## Deferred
 
 Substitute, volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
 counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Solar Power, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
-Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Wide Guard and Quick Guard, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), Mega Evolution (rejected with
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), Mega Evolution (rejected with
 `Unsupported`), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
-accuracy, redirection (Follow Me, Lightning Rod), real residual effects, `verify` stubs that need a
+accuracy, real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.

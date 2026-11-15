@@ -84,6 +84,8 @@ def run_residuals(battle):
         volatiles.residual(battle, m)
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)
+        m.volatiles.pop("followme", None)
+        m.volatiles.pop("ragepowder", None)
     screens.tick(battle)
     tick_field(battle)
     arena.terrain_tick(battle)
