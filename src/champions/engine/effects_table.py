@@ -79,3 +79,13 @@ def move_effects(move_id):
 def check_ability(ability):
     if ability not in MODELED_ABILITIES and ability not in INERT_ABILITIES:
         raise Unsupported(f"ability not modeled: {ability}")
+
+
+def is_supported_move(move_id):
+    """Non-raising check: would the engine simulate this move? (`move_effects` raises Unsupported instead.)"""
+    return move_id in MOVES
+
+
+def is_supported_ability(ability_id):
+    """Non-raising check: is this ability modeled, or known to be inert? (`check_ability` raises instead.)"""
+    return ability_id in MODELED_ABILITIES or ability_id in INERT_ABILITIES
