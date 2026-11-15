@@ -5,6 +5,8 @@ named once here and flagged `verify` in the catalogue until checked.
 """
 from __future__ import annotations
 
+from . import arena
+
 SLEEP_TURNS = (1, 3)         # verify: Champions sleep length
 FREEZE_THAW_PCT = 20         # verify: Champions freeze thaw chance per turn
 STATUS_NAMES = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
@@ -30,6 +32,11 @@ def try_set_status(battle, target, status, user=None, move_id=None, announce=Tru
     if target.status:
         if announce:
             battle.log_event("fail", mon=target.ref, move=move_id, reason="already_status")
+        return False
+    reason = arena.blocks_status(battle, target, status)
+    if reason:
+        if announce:
+            battle.log_event("fail", mon=target.ref, move=move_id, reason=reason)
         return False
     if any(t in IMMUNE_TYPES.get(status, ()) for t in target.types):
         if announce:

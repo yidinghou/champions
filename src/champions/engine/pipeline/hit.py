@@ -1,5 +1,6 @@
 """Per-target hit loop: per hit, crit roll, damage roll, damage, then on_hit handlers."""
 from ...calc.damage import damage
+from .. import arena
 from ..hooks import fire
 from .immunity import ignore_for
 from .targets import SPREAD
@@ -38,7 +39,8 @@ def run(ctx):
                     b.log_event("crit", mon=target.ref, move=ctx.move_id)
                 roll = b.rng.randint(85, 100, "damage_roll")
                 dmg = damage(user, target, ctx.move, crit=crit, roll=roll, spread=spread,
-                             ignore_immunity_to=ignore_for(user, ctx.move))
+                             ignore_immunity_to=ignore_for(user, ctx.move),
+                             weather=arena.weather(b), terrain=arena.terrain(b))
                 total += target.take(dmg)
             ctx.current = target
             fire(b, "on_hit", ctx, ctx.sources(user, target))

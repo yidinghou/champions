@@ -1,0 +1,67 @@
+{
+ "version": 1,
+ "format": "singles",
+ "seed": 3,
+ "teams": [
+  [
+   {
+    "species": "tyranitar",
+    "ability": "sandstream",
+    "moves": [
+     "flamethrower",
+     "protect"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "rillaboom",
+    "ability": "grassysurge",
+    "moves": [
+     "gigadrain",
+     "protect"
+    ],
+    "hp": 90
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "flamethrower",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "gigadrain",
+    "target": [
+     0,
+     0
+    ]
+   }
+  ],
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "flamethrower",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "protect",
+    "target": null
+   }
+  ]
+ ]
+}

@@ -21,7 +21,7 @@ class Event:
 # What can appear in the log. Stages that stop a target log one of the abort kinds.
 EVENT_KINDS = frozenset({
     "start", "turn", "switch", "mega", "move", "damage", "heal", "recoil", "boost", "status",
-    "volatile", "faint", "win", "rng", "crit", "hit",
+    "volatile", "faint", "win", "rng", "crit", "hit", "field",
     # aborts
     "fail", "immune", "protected", "missed", "blocked",
 })

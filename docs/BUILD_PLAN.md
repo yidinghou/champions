@@ -129,7 +129,7 @@ _Notes: `substitute` and `damage-calc` are left stub only (Substitute is not mod
 
 ## Out of scope (deferred on purpose)
 
-Weather and terrain, screens, Tera, Mega Evolution details beyond the ordering flag, held-item effects other than a stub or two, abilities beyond Intimidate and its blockers, Substitute, semi-invulnerable moves, Taunt, Encore, Disable, full legal-move generation, a UI or search bot.
+Screens, Tera (weather and terrain were built later, see `docs/ENGINE.md`), Mega Evolution details beyond the ordering flag, held-item effects other than a stub or two, abilities beyond Intimidate and its blockers, Substitute, semi-invulnerable moves, Taunt, Encore, Disable, full legal-move generation, a UI or search bot.
 
 ## Verification (end to end)
 

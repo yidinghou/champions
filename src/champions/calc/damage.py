@@ -1,9 +1,11 @@
 """Damage in Showdown's modifier order, flooring each step. Level is fixed at 50 in Champions.
 
-Stubbed to 1.0 for now (TODO S1): weather, screens, items, abilities (except Guts), terrain, Helping Hand.
+Weather (Sun/Rain damage, Sand Sp. Def for Rock, Snow Def for Ice) and terrain (base power) are modeled.
+Stubbed to 1.0 for now (TODO S1): screens, items, abilities (except Guts), Helping Hand.
 """
 from __future__ import annotations
 
+from .field import modify, field_base_power, weather_damage_mod
 from .typechart import effectiveness
 
 LEVEL = 50
@@ -18,12 +20,15 @@ def _stat(value, stage):
     return int(value * stage_multiplier(stage))
 
 
-def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, ignore_immunity_to=()):
+def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, ignore_immunity_to=(),
+           weather=None, terrain=None):
     """attacker/defender: engine Mon-like (stats, stages, types, status). move: a moves.json entry.
+    weather: "sun" | "rain" | "sand" | "snow" | None; terrain: "electric" | "grassy" | "misty" | "psychic" | None.
     Returns an int; 0 if the defender is immune."""
     bp = move["base_power"]
     if not bp or move["category"] == "Status":
         return 0
+    bp = field_base_power(weather, terrain, bp, move, attacker, defender)
     special = move["category"] == "Special"
     a_key, d_key = ("spa", "spd") if special else ("atk", "def")
     a_stage, d_stage = attacker.stages[a_key], defender.stages[d_key]
@@ -31,6 +36,11 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
         a_stage, d_stage = max(a_stage, 0), min(d_stage, 0)
     a = _stat(attacker.stats[a_key], a_stage)
     d = _stat(defender.stats[d_key], d_stage)
+
+    if weather == "sand" and special and "rock" in defender.types:
+        d = d * 3 // 2                       # Sand: Rock-types get 1.5x Sp. Def
+    elif weather == "snow" and not special and "ice" in defender.types:
+        d = d * 3 // 2                       # Snow: Ice-types get 1.5x Defense
 
     guts = attacker.ability == "guts" and attacker.status and not special
     if guts:
@@ -41,7 +51,9 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     dmg = (2 * LEVEL // 5 + 2) * bp * a // d // 50 + 2
     if spread:
         dmg = dmg * 3 // 4
-    # TODO(S1): weather
+    wm = weather_damage_mod(weather, move["type"])
+    if wm:
+        dmg = modify(dmg, 6144 if wm == (3, 2) else 2048)
     if crit:
         dmg = dmg * 3 // 2
     dmg = dmg * roll // 100

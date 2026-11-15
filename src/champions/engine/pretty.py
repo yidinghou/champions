@@ -38,6 +38,8 @@ STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "pa
 VOLATILE_WORDS = {"confusion": "confused", "taunt": "taunted", "encore": "encored", "disable": "disabled",
                   "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy"}
 HIDDEN_VOLATILES = {"protect_chain"}      # engine bookkeeping, not something a player sees
+from .arena import TERRAIN_WORDS, WEATHER_WORDS  # noqa: E402
+
 STAT_NAMES = {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def",
               "spe": "Speed", "acc": "Accuracy", "eva": "Evasion"}
 
@@ -114,6 +116,14 @@ def _describe(e):
         if d.get("start"):
             return f"{mon_name(d['mon'])} twisted the dimensions! (Trick Room, {d['turns']} turns)"
         return "The twisted dimensions returned to normal!"
+    if k == "field" and d["effect"] == "weather":
+        if d.get("start"):
+            return f"The weather turned to {WEATHER_WORDS[d['which']]}! ({d['turns']} turns)"
+        return f"The {WEATHER_WORDS[d['which']].removeprefix('a ')} ended"
+    if k == "field" and d["effect"] == "terrain":
+        if d.get("start"):
+            return f"{TERRAIN_WORDS[d['which']]} covers the battlefield! ({d['turns']} turns)"
+        return f"{TERRAIN_WORDS[d['which']]} faded"
     if k == "crit":
         return "A critical hit!"
     if k == "fail" and d.get("reason") == "already_status":
@@ -126,6 +136,8 @@ def _describe(e):
         return f"{mon_name(d['mon'])} protected itself"
     if k == "missed":
         return f"{mon_name(d['mon'])} avoided the attack"
+    if k == "blocked" and d.get("reason") == "psychic_terrain":
+        return f"Psychic Terrain protects {mon_name(d['mon'])} from {move_name(d['move'])}"
     if k == "blocked":
         return f"{mon_name(d['mon'])}'s {d.get('ability', 'ability')} blocked the {d.get('stat')} drop"
     if k == "status":

@@ -7,6 +7,7 @@ The numbers are Showdown's; Champions may differ (flagged `verify` in the catalo
 from __future__ import annotations
 
 from ..calc.damage import damage
+from . import arena
 
 CONFUSION_TURNS = (2, 5)
 CONFUSION_SELF_HIT_PCT = 100 / 3
@@ -21,12 +22,15 @@ def fail(battle, mon, move_id, reason):
     return False
 
 
-def apply(battle, target, name, user, move_id):
-    """Put a volatile on `target`. Returns True if it took hold; logs a `fail`/`immune` otherwise."""
+def apply(battle, target, name, user, move_id, announce=True):
+    """Put a volatile on `target`. Returns True if it took hold; logs a `fail`/`immune` otherwise (if announce)."""
     if target.fainted:
         return False
     if name in target.volatiles:
-        return fail(battle, target, move_id, f"already_{name}")
+        return announce and fail(battle, target, move_id, f"already_{name}")
+    reason = arena.blocks_volatile(battle, target, name)
+    if reason:
+        return announce and fail(battle, target, move_id, reason)
     if name == "confusion":
         target.add_volatile(name, battle.rng.randint(*CONFUSION_TURNS, "confusion_turns"))
     elif name == "taunt":

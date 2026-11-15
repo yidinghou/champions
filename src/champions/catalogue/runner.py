@@ -72,6 +72,10 @@ def evaluate(battle, chk):
         want = moves_data()[chk["pp_full"]]["pp"]
         if m.pp[chk["pp_full"]] != want:
             return f"pp of {chk['pp_full']} on {chk['mon']} == {want}  (actual: {m.pp[chk['pp_full']]})"
+    elif "arena" in chk:          # field state: weather, weather_turns, terrain, terrain_turns, trick_room (null = absent)
+        actual = battle.arena.get(chk["arena"])
+        if actual != chk["eq"]:
+            return f"arena {chk['arena']} == {chk['eq']}  (actual: {actual})"
     elif "volatile" in chk:
         vols = find_mon(battle, chk["mon"]).volatiles
         present = chk["volatile"] in vols

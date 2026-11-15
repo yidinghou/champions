@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from collections import namedtuple
 
-from . import status, volatiles
+from . import arena, status, volatiles
 from .actions import Switch
 from .handlers.field import tick_field
 from .teams import moves_data
@@ -23,7 +23,7 @@ def speed(battle, mon):
         s //= 2
     if battle.sides[mon.side].conditions.get("tailwind"):
         s *= 2
-    return s
+    return s * arena.speed_multiplier(battle, mon)
 
 
 def order_actions(battle, choices):
@@ -58,10 +58,15 @@ def order_actions(battle, choices):
 
 def run_residuals(battle):
     """End of turn, in Speed order. Burn, poison and Toxic damage, then clears flinch.
-    TODO(residuals): weather, terrain, items, screens and Tailwind countdowns."""
+    Weather runs first (sand damage, Rain Dish, Ice Body), then Grassy Terrain healing; the terrain counts
+    down in tick_field. TODO(residuals): items, screens and Tailwind countdowns."""
+    arena.weather_residual(battle)
+    arena.terrain_heal(battle)
     mons = [m for s in battle.sides for _, m in s.alive_active()]
     mons.sort(key=lambda m: -speed(battle, m))
     for m in mons:
+        if m.fainted:
+            continue                                  # fainted to the sandstorm
         dmg = status.residual_damage(m)
         if dmg:
             m.take(dmg)
@@ -71,3 +76,4 @@ def run_residuals(battle):
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)
     tick_field(battle)
+    arena.terrain_tick(battle)

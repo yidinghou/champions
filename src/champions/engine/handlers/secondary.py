@@ -3,6 +3,7 @@
 Supports volatiles (flinch), stat drops and major status. TODO(secondary-effect): Shield Dust, Sheer Force,
 Substitute, flinch-adding items.
 """
+from .. import volatiles
 from ..hooks import on
 from ..stages import change_stat
 from ..status import try_set_status
@@ -19,7 +20,9 @@ def secondary(battle, ctx):
             continue                          # too late to flinch it, or it cannot flinch
         if not battle.rng.chance(sec["chance"], f"secondary:{ctx.move_id}"):
             continue
-        if vol:
+        if vol == "confusion":
+            volatiles.apply(battle, target, vol, ctx.user, ctx.move_id, announce=False)
+        elif vol:
             target.add_volatile(vol)
         if sec.get("status"):
             try_set_status(battle, target, sec["status"], ctx.user, ctx.move_id, announce=False)

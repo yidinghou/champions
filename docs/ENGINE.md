@@ -13,7 +13,7 @@ All randomness goes through `engine/rng.py`; ordering never depends on dict or s
 
 ```
 src/champions/
-  calc/        typechart.py damage.py            pure functions, never import engine/
+  calc/        typechart.py damage.py field.py   pure functions, never import engine/ (field.py: grounded, weather and terrain modifiers)
   engine/
     state.py       Mon, Side, Battle; mutators log events
     actions.py     Move, Switch (frozen, serialisable)
@@ -27,13 +27,14 @@ src/champions/
     game.py        start, play_turn, validate, run_to_end
     pipeline/      one move as fixed stages; each logs why it stopped a target
     volatiles.py   confusion, Taunt, Encore, Disable, Leech Seed, trapping
+    arena.py       weather and terrain: state in battle.arena, setting, residuals, speed, blocks
     status.py      major status: apply, immunities, sleep/freeze before a move, residual damage
     handlers/      self_drop, secondary, recoil/drain, protect, entry (Intimidate), foe_drop, status, volatile
     replay.py      save/load/play replays; snapshot/restore
   catalogue/   load.py (checks) cases.py runner.py report.py cli.py
 ```
 
-The pipeline order is `can_move -> targets -> protect -> immunity -> accuracy -> per hit: crit, damage,
+The pipeline order is `can_move -> targets -> protect -> terrain -> immunity -> accuracy -> per hit: crit, damage,
 on_hit -> on_after_all_hits`. A target removed by a stage gets no later stage, so an immune, protected or
 missed target takes no damage, effects or self-drop.
 
@@ -63,7 +64,7 @@ A stub becomes runnable when it has a `run` block:
 ```
 
 Checks: `stage`, `hp` (full/damaged/fainted), `hp_eq`, `volatile`, `event` (+`where`, `count`/`min`),
-`no_event`, `order`, `recoil`/`heal` (fraction of damage dealt). A case with no checks fails. Team specs
+`no_event`, `order`, `recoil`/`heal` (fraction of damage dealt), `arena` (+`eq`: `weather`, `weather_turns`, `terrain`, `terrain_turns`, `trick_room`; null = absent). A case may preset `"arena"` after the leads enter, so ability setters need their own case. A case with no checks fails. Team specs
 may carry `"hp"` to start a mon damaged. A failure prints the stub's setup and expect, each failing
 check with its actual value, the event log, and which upstream mechanics also fail.
 
@@ -94,10 +95,21 @@ Disable, Leech Seed (Grass immune), Fire Spin and Mean Look trapping (Ghost immu
 faint, several at once, and a repeat application changes nothing. Timers and chances live in
 `engine/volatiles.py`, again Showdown's values pending a Champions check.
 
+Weather and terrain (114 of 131 stubs): see `engine/arena.py`. Sun, rain, sand, snow and Electric, Grassy, Misty,
+Psychic Terrain, set by moves and entry abilities (slower setter wins), 5 turns or 8 with the matching rock or Terrain
+Extender, one of each at a time. The weather ends before its residual effect on its last turn; the terrain ends after
+everything, so Grassy Terrain still heals on its last turn. Effects: Sun/Rain damage, Sand Sp. Def and Snow Def for
+Rock/Ice, sand chip and its immunities, Rain Dish, Ice Body, the four speed abilities and Surge Surfer, Sand Force,
+Sand Veil and Snow Cloak, no freezing in sun, Thunder/Hurricane/Blizzard accuracy, Weather Ball, Moonlight-style healing,
+terrain base-power boosts, Grassy healing, Electric (no sleep, Rest, Yawn), Misty (no status, no confusion), Psychic
+(priority moves blocked). Damage and accuracy numbers are checked in `tests/test_weather.py`, not as replay cases.
+The numbers (5 turns, x1.3 terrain, 1/16) are Showdown's gen 9, not yet checked against Champions.
+
 ## Deferred
 
 Substitute, volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
-counters on switch, Corrosion, Substitute interaction), weather and terrain, screens, items, Mega Evolution (rejected with
+counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Solar Power, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), terrain seeds, screens, items, Mega Evolution (rejected with
 `Unsupported`), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, redirection (Follow Me, Lightning Rod), real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.
