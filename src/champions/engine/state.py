@@ -11,6 +11,15 @@ STAT_KEYS = ("atk", "def", "spa", "spd", "spe", "acc", "eva")
 STAGE_MIN, STAGE_MAX = -6, 6
 
 
+def _cp(v):
+    """Copy the mutable containers (dict, list) inside a value; everything else is immutable here."""
+    if isinstance(v, dict):
+        return {k: _cp(x) for k, x in v.items()}
+    if isinstance(v, list):
+        return [_cp(x) for x in v]
+    return v
+
+
 @dataclass
 class Mon:
     species: str
@@ -87,6 +96,19 @@ class Mon:
         if old:
             self._emit("status", cure=old)
 
+    def clone(self, log=None):
+        """Fast copy for search. Much cheaper than deepcopy: copies only the mutable fields."""
+        c = Mon.__new__(Mon)
+        c.__dict__.update(self.__dict__)
+        c.types = list(self.types)
+        c.moves = list(self.moves)
+        c.stats = dict(self.stats)
+        c.stages = dict(self.stages)
+        c.volatiles = _cp(self.volatiles)
+        c.pp = dict(self.pp)
+        c._log = log
+        return c
+
     def clear_on_switch(self):
         """Stages and volatiles reset when a mon leaves the field. A status stays; Toxic restarts at 1."""
         if self.status == "tox":
@@ -115,6 +137,10 @@ class Side:
     def has_living(self):
         return any(not m.fainted for m in self.team)
 
+    def clone(self, log=None):
+        return Side(team=[m.clone(log) for m in self.team], active=list(self.active),
+                    conditions=_cp(self.conditions), mega_used=self.mega_used)
+
 
 @dataclass
 class Battle:
@@ -125,6 +151,7 @@ class Battle:
     turn: int = 0
     log: List[Event] = field(default_factory=list)
     winner: Optional[int] = None
+    record: bool = True        # False = skip the event log (for search)
 
     def __post_init__(self):
         self.rng.sink = self.log_event
@@ -133,7 +160,21 @@ class Battle:
                 m._log = self.log_event
 
     def log_event(self, kind, **data):
-        self.log.append(Event(self.turn, kind, data))
+        if self.record:
+            self.log.append(Event(self.turn, kind, data))
+
+    def clone(self, rng=None, record=None):
+        """Independent copy for search. rng: a Rng to use (default: a copy of this one, same stream).
+        record: keep logging in the copy (default: same as this battle; a copy that records gets this log)."""
+        record = self.record if record is None else record
+        b = Battle.__new__(Battle)
+        b.format, b.turn, b.winner, b.record = self.format, self.turn, self.winner, record
+        b.arena = _cp(self.arena)
+        b.log = list(self.log) if record else []
+        b.rng = rng if rng is not None else self.rng.clone()
+        b.rng.sink = b.log_event if record else None
+        b.sides = [s.clone(b.log_event if record else None) for s in self.sides]
+        return b
 
     def mon(self, side, slot):
         return self.sides[side].mon_at(slot)

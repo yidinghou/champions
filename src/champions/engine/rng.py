@@ -27,6 +27,15 @@ class Rng:
     def choice(self, seq, label="choice"):
         return seq[self.randint(0, len(seq) - 1, label)]
 
+    def clone(self):
+        """Independent copy that continues the same stream. The sink is not copied."""
+        c = self.__class__.__new__(self.__class__)
+        c.__dict__.update(self.__dict__)
+        c._r = random.Random.__new__(random.Random)   # skips Random()'s slow OS-entropy seeding
+        c._r.setstate(self._r.getstate())
+        c.sink = None
+        return c
+
     def getstate(self):
         v, internal, g = self._r.getstate()
         return [v, list(internal), g]
@@ -43,6 +52,11 @@ class ForcedRng(Rng):
         super().__init__(0)
         self.values = list(values)
         self.default = default
+
+    def clone(self):
+        c = super().clone()
+        c.values = list(self.values)
+        return c
 
     def _next(self, label):
         if self.values:
@@ -73,6 +87,11 @@ class LabeledRng(Rng):
     def __init__(self, rolls=None):
         super().__init__(0)
         self.rolls = {k: list(v) for k, v in (rolls or {}).items()}
+
+    def clone(self):
+        c = super().clone()
+        c.rolls = {k: list(v) for k, v in self.rolls.items()}
+        return c
 
     def _take(self, label):
         for prefix, queue in self.rolls.items():
