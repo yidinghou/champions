@@ -40,6 +40,7 @@ src/champions/
     status.py      major status: apply, immunities, sleep/freeze before a move, residual damage
     handlers/      items (berries, herbs, seeds, Leftovers, Rocky Helmet, Life Orb, Eject Button, Red Card...), self_drop, secondary, recoil/drain, protect, entry (Intimidate), foe_drop, status, volatile
     replay.py      save/load/play replays; snapshot/restore
+    viewer/        replay -> one HTML page; engine state captured after every event (build.py, viewer.html)
   catalogue/   load.py (checks) cases.py runner.py report.py cli.py
 ```
 
@@ -53,6 +54,7 @@ missed target takes no damage, effects or self-drop.
 scripts/gate.sh                                   full test suite (python3 -m unittest)
 python3 -m champions catalogue status [--verify]  coverage per mechanic; exit 1 if a case fails
 python3 -m champions sim replay <file>            play a replay and print the event log
+python3 -m champions sim view <file> [-o out.html]  step through a replay in the browser (self-contained page)
 CHAMPIONS_CASE=self-drop python3 -m unittest tests.test_catalogue_cases -v     one mechanic
 CHAMPIONS_CASE=self-drop::immune-no-drop python3 -m unittest tests.test_catalogue_cases    one case
 CHAMPIONS_INCLUDE_VERIFY=1 ...                    also run `status: verify` stubs

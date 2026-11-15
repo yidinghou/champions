@@ -1,0 +1,112 @@
+"""Play a replay, capture the battle state after every event, and write a single HTML file."""
+from __future__ import annotations
+
+import base64
+import json
+from pathlib import Path
+
+from ..actions import from_dict
+from ..game import play_turn, start
+from ..items import item_name
+from ..pretty import HIDDEN_VOLATILES, _describe, mon_name, move_name
+from ..replay import load_replay
+from ..screens import SIDE_WORDS
+
+HERE = Path(__file__).resolve().parent
+ICONS = Path(__file__).resolve().parents[4] / "sources" / "icons"
+# Events shown as steps. rng rolls and per-hit bookkeeping are kept only as raw detail on the step before.
+QUIET = {"hit", "rng", "turn", "start"}
+
+
+def _mon(m, on_field, slot):
+    vols = {k: (v if isinstance(v, (int, float, str, bool)) else True) for k, v in m.volatiles.items()
+            if k not in HIDDEN_VOLATILES}
+    return {"ref": m.ref, "species": m.species, "types": list(m.types), "ability": m.ability,
+            "item": m.item, "item_name": item_name(m.item) if m.item else None,
+            "moves": [{"id": mv, "name": move_name(mv), "pp": m.pp.get(mv)} for mv in m.moves],
+            "hp": m.hp, "max_hp": m.max_hp, "status": m.status, "stages": {k: v for k, v in m.stages.items() if v},
+            "volatiles": vols, "mega": m.mega, "fainted": m.fainted, "slot": slot if on_field else None,
+            "stats": {k: v for k, v in m.stats.items() if k != "hp"}}
+
+
+def snapshot(b):
+    sides = []
+    for s in b.sides:
+        slots = {i: n for n, i in enumerate(s.active) if i is not None}
+        sides.append({"active": list(s.active),
+                      "team": [_mon(m, i in slots, slots.get(i)) for i, m in enumerate(s.team)],
+                      "conditions": {SIDE_WORDS.get(k, k): (v if isinstance(v, (int, float, bool, str)) else True)
+                                     for k, v in s.conditions.items()},
+                      "mega_used": s.mega_used})
+    arena = {k: v for k, v in b.arena.items() if k not in ("moved", "pending")}
+    return {"turn": b.turn, "sides": sides, "arena": arena, "winner": b.winner}
+
+
+def build_frames(replay):
+    """Return {frames, final, ...}. A frame = {turn, kind, text, data, raw, state}; the first is the starting board.
+
+    State is read from the live battle right after each event is logged, by wrapping Battle.log_event
+    for the duration of the game.
+    """
+    from ..state import Battle
+    frames, pending_raw, holder = [], [], {}
+    original = Battle.log_event
+
+    def tap(self, kind, **data):
+        original(self, kind, **data)
+        if not self.record:
+            return
+        e = self.log[-1]
+        raw = {"turn": e.turn, "kind": e.kind, "data": e.data}
+        if kind == "start":
+            text = "Battle start"
+        elif kind == "move":
+            text = f"{mon_name(data['mon'])} used {move_name(data['move'])}!"
+        elif kind in QUIET or (kind == "hit" and data.get("spread")):
+            text = None
+        else:
+            text = _describe(e)
+        if text is None:
+            pending_raw.append(raw)
+            return
+        frames.append({"turn": e.turn, "kind": kind, "text": text, "data": data,
+                       "raw": pending_raw[:] + [raw], "state": snapshot(self)})
+        pending_raw.clear()
+
+    Battle.log_event = tap
+    try:
+        b = start(replay["teams"], replay["seed"], replay["format"])
+        for n, choices in enumerate(replay["turns"], 1):
+            play_turn(b, [from_dict(c) for c in choices])
+            end = snapshot(b)
+            if not frames or {**frames[-1]["state"], "turn": 0} != {**end, "turn": 0}:   # silent end-of-turn changes
+                frames.append({"turn": n, "kind": "turn_end", "text": f"End of turn {n}", "data": {},
+                               "raw": pending_raw[:], "state": end})
+                pending_raw.clear()
+    finally:
+        Battle.log_event = original
+    return {"format": replay["format"], "seed": replay["seed"], "frames": frames, "final": snapshot(b)}
+
+
+def _icon(species):
+    for name in (species, species.split("-")[0]):
+        p = ICONS / f"{name}.png"
+        if p.exists():
+            return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode()
+    return None
+
+
+def render_html(replay, title="Replay"):
+    data = build_frames(replay)
+    species = {m["species"] for f in data["frames"][:1] for s in f["state"]["sides"] for m in s["team"]}
+    species |= {m["species"] for f in data["frames"] for s in f["state"]["sides"] for m in s["team"]}
+    data["icons"] = {sp: _icon(sp) for sp in sorted(species)}
+    html = (HERE / "viewer.html").read_text()
+    return html.replace("__TITLE__", title).replace("__DATA__", json.dumps(data, separators=(",", ":")).replace("</", "<\\/"))
+
+
+def write_html(replay_path, out=None):
+    replay = load_replay(replay_path)
+    out = Path(out) if out else Path(replay_path).with_suffix(".html")
+    out.write_text(render_html(replay, Path(replay_path).stem))
+    return out

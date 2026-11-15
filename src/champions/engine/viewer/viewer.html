@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__ · replay</title>
+<style>
+:root {
+  --bg: radial-gradient(circle at 30% 20%, #3a2f5c, #1d1830 70%);
+  --panel-bg: rgba(20,18,42,.85); --panel: #14122a; --band: #1b1a3d;
+  --ink: #fff; --mute: #b8b4e0; --edge: #c9c4ff;
+  --me: #9ed0ff; --foe: #ffb3bd;
+  --lime: #c8ec3a; --lime-pale: #f1ff9e;
+  --up: #5fe08a; --down: #ff7a6b;
+  --hp-ok: #3fd47a; --hp-mid: #e0bc2d; --hp-lo: #ff5d5d;
+  --mega-a: #ff6ad5; --mega-b: #7af0ff;
+  font: 600 14px system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 14px; min-height: 100vh; background: #1d1830; background-image: var(--bg); background-attachment: fixed; color: var(--ink); }
+header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+header h1 { margin: 0; font-size: 18px; font-style: italic; }
+header .meta { color: var(--mute); font-weight: 500; font-size: 12px; }
+.grow { flex: 1; }
+button { font: inherit; background: #4a3fd6; color: #fff; border: 1px solid var(--edge); border-radius: 6px; padding: 5px 12px; cursor: pointer; }
+button:hover:not(:disabled) { background: #5b50e8; }
+button:disabled { opacity: .4; cursor: default; }
+button.go { background: var(--lime); color: var(--band); border-color: var(--lime-pale); }
+select { font: inherit; background: var(--panel); color: #fff; border: 1px solid var(--edge); border-radius: 6px; padding: 4px 6px; }
+label.chk { color: var(--mute); font-weight: 500; font-size: 12px; display: inline-flex; gap: 4px; align-items: center; }
+
+.transport { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.transport input[type=range] { flex: 1; min-width: 200px; accent-color: var(--lime); }
+.transport .pos { color: var(--mute); font-weight: 500; font-size: 12px; min-width: 130px; text-align: right; }
+
+.field { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; min-height: 28px; }
+.chip { background: rgba(74,63,214,.25); color: var(--mute); border: 1px solid rgba(201,196,255,.35); border-radius: 999px; padding: 3px 12px; font-size: 12px; }
+.chip.on { background: var(--lime); border-color: var(--lime-pale); color: var(--band); }
+.chip.me { border-color: rgba(158,208,255,.7); color: var(--me); } .chip.foe { border-color: rgba(255,179,189,.7); color: var(--foe); }
+.chip small { font-weight: 500; opacity: .8; margin-left: 4px; }
+
+#board { display: grid; grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr); gap: 14px; align-items: start; }
+.sides { display: flex; flex-direction: column; gap: 14px; }
+.row-panel { display: flex; gap: 14px; padding: 12px; border-radius: 16px; align-items: flex-start; }
+.row-panel.foe { background: rgba(184,40,63,.16); border: 2px solid rgba(255,179,189,.5); }
+.row-panel.mine { background: rgba(74,63,214,.16); border: 2px solid rgba(201,196,255,.5); }
+.row-panel .side { background: rgba(255,255,255,.05); border-radius: 10px; padding: 8px; width: 210px; flex-shrink: 0; }
+.row-panel h3 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); }
+.cards { display: flex; gap: 12px; flex: 1; min-width: 0; padding-top: 4px; }
+.cards > * { flex: 1; min-width: 0; }
+
+/* mini */
+.pmini { position: relative; display: flex; align-items: center; margin-bottom: 6px; font-size: 12px; transition: filter .6s, opacity .6s; }
+.pmini .spr { flex-shrink: 0; width: 34px; height: 34px; margin-right: -14px; z-index: 1; border-radius: 50%; overflow: hidden; background: var(--panel); border: 2px solid var(--edge); }
+.pmini .spr img { width: 130%; height: 130%; margin: -15%; object-fit: contain; }
+.pmini .pnl { flex: 1; min-width: 0; overflow: hidden; background: var(--panel); border: 2px solid var(--edge); border-radius: 0 10px 10px 0; }
+.pmini .ban { display: flex; align-items: center; gap: 4px; padding: 2px 8px 2px 20px; background: linear-gradient(90deg, #4a3fd6, #6a5cf0); }
+.pmini.foe .ban { background: linear-gradient(90deg, #b8283f, #e2566a); }
+.pmini.foe .spr, .pmini.foe .pnl { border-color: var(--foe); }
+.pmini .nm { font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pmini .hpv { margin-left: auto; font-style: italic; font-weight: 800; font-size: 11px; white-space: nowrap; }
+.pmini .bar { height: 5px; background: #2a2850; margin-left: 14px; }
+.pmini .bar i { display: block; height: 100%; background: var(--hp-ok); transition: width .6s ease, background .4s; }
+.pmini .bar i.mid { background: var(--hp-mid); } .pmini .bar i.lo { background: var(--hp-lo); }
+.pmini.active .spr, .pmini.active .pnl { border-color: var(--lime); box-shadow: 0 0 8px rgba(200,236,58,.45); }
+.pmini.fainted { filter: grayscale(1) brightness(.65); opacity: .6; }
+
+/* card */
+.pcard { position: relative; padding: 8px 10px; border-radius: 14px; background: rgba(20,18,42,.55); border: 2px solid rgba(201,196,255,.25); transition: filter .6s, opacity .6s, transform .6s, border-color .3s, box-shadow .3s; }
+.pcard.foe { border-color: rgba(255,140,155,.3); }
+.pcard.slot-empty { display: flex; align-items: center; justify-content: center; border-style: dashed; color: var(--mute); }
+.pcard.acting { border-color: var(--lime); box-shadow: 0 0 14px rgba(200,236,58,.45); }
+.pcard.fainted { filter: grayscale(1) brightness(.6); opacity: .6; transform: translateY(8px); }
+.pcard.mega .np { border-color: var(--mega-a); box-shadow: 0 0 10px rgba(255,106,213,.55); }
+.pcard .np { display: flex; overflow: hidden; background: var(--panel); border: 2px solid var(--edge); border-radius: 14px; height: 76px; }
+.pcard.foe .np { border-color: var(--foe); }
+.pcard .sprite { width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.pcard .sprite img { width: 120%; height: 120%; object-fit: contain; }
+.pcard.hit .sprite img { animation: hit .45s; }
+@keyframes hit { 0%,100% { transform: translateX(0) } 20% { transform: translateX(-6px) } 40% { transform: translateX(6px) } 60% { transform: translateX(-4px) } 80% { transform: translateX(4px) } }
+.pcard .body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pcard .banner { height: 46%; display: flex; align-items: center; gap: 6px; padding: 0 10px 0 22px; margin-left: -8px; background: linear-gradient(90deg, #4a3fd6, #6a5cf0); clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%); }
+.pcard.foe .banner { background: linear-gradient(90deg, #b8283f, #e2566a); }
+.pcard .name { font-style: italic; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcard .hp { flex: 1; display: flex; align-items: center; gap: 8px; padding: 0 10px 0 28px; background: linear-gradient(90deg, rgba(106,92,240,.35), rgba(106,92,240,.12)); clip-path: polygon(22px 0, 100% 0, 100% 100%, 10px 100%); }
+.pcard.foe .hp { background: linear-gradient(90deg, rgba(226,86,106,.35), rgba(226,86,106,.12)); }
+.pcard .bar { position: relative; flex: 1; height: 11px; background: #2a2850; clip-path: polygon(7px 0, 100% 0, 100% 100%, 0 100%); }
+.pcard .bar i { display: block; height: 100%; background: linear-gradient(90deg, #e9e23a, #8ae03a); transition: width .6s ease, background .4s; }
+.pcard .bar i.mid { background: linear-gradient(90deg, #e0bc2d, #e9e23a); } .pcard .bar i.lo { background: linear-gradient(90deg, #ff5d5d, #ff8a5d); }
+.pcard .lbl { font-style: italic; font-weight: 800; font-size: 20px; line-height: 1; white-space: nowrap; }
+.pcard .lbl small { font-size: 12px; opacity: .85; }
+.pcard .dmgpop { position: absolute; right: 8px; top: -6px; font-style: italic; font-weight: 800; font-size: 20px; pointer-events: none; animation: pop 1.1s ease forwards; z-index: 4; text-shadow: 0 1px 2px #000; }
+.pcard .dmgpop.dn { color: var(--down); } .pcard .dmgpop.upp { color: var(--up); }
+@keyframes pop { 0% { opacity: 1; transform: translateY(0) } 100% { opacity: 0; transform: translateY(-26px) } }
+.tychips { display: inline-flex; gap: 3px; margin-left: auto; }
+.ty { font-size: 10px; font-weight: 800; letter-spacing: .03em; padding: 1px 6px; border-radius: 4px; color: #fff; text-transform: uppercase; text-shadow: 0 1px 1px rgba(0,0,0,.4); }
+.status { font-size: 10px; font-weight: 800; letter-spacing: .05em; padding: 1px 5px; border-radius: 4px; animation: spop .35s; }
+@keyframes spop { 0% { transform: scale(0) } 70% { transform: scale(1.2) } 100% { transform: scale(1) } }
+.status.brn { background: #e4613e; } .status.par { background: #e0bc2d; color: var(--band); } .status.psn, .status.tox { background: #9454cc; }
+.status.slp { background: #8a8aa0; } .status.frz { background: #49c8c9; color: var(--band); }
+.pcard .info { display: flex; flex-wrap: wrap; gap: 4px; margin: 7px 0 0; font-size: 11px; font-weight: 500; }
+.tag { padding: 1px 8px; border-radius: 6px; background: #24214a; border: 1px solid rgba(201,196,255,.45); color: var(--mute); }
+.pcard.foe .tag.item { background: #3a1a2c; border-color: rgba(255,179,189,.5); }
+.tag.item { color: #fff; } .tag.used { text-decoration: line-through; opacity: .6; }
+.tag.vol { background: rgba(224,188,45,.15); border-color: rgba(224,188,45,.6); color: #f5dd7a; }
+.tag.mega { border-color: var(--mega-a); color: #ffd6f3; }
+.stages { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-top: 7px; }
+.stat { text-align: center; background: var(--band); border-radius: 5px; padding: 2px 0; color: var(--mute); }
+.stat .nm { display: block; font-size: 10px; font-weight: 800; letter-spacing: .03em; }
+.stat .val { font-style: italic; color: #fff; font-size: 15px; }
+.stat .stg { display: block; font-size: 10px; min-height: 12px; }
+.stat.up .stg, .stat.up .val { color: var(--up); } .stat.down .stg, .stat.down .val { color: var(--down); }
+.stat.pulse .val { animation: pulse .5s; } @keyframes pulse { 0% { transform: scale(1.5) } 100% { transform: scale(1) } }
+.moves { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+.move { display: flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 13px; border: 2px solid var(--edge); background: linear-gradient(90deg, #4a3fd6, #6a5cf0); font-size: 12px; transition: background .2s; }
+.move .mn { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.move .pp { font-style: italic; font-weight: 800; font-size: 12px; margin-left: 6px; opacity: .85; }
+.move.sel { background: linear-gradient(90deg, var(--lime), #a3d41b); border-color: var(--lime-pale); color: var(--band); box-shadow: 0 0 8px rgba(200,236,58,.5); }
+.move.sel .pp { opacity: 1; }
+
+.panel { background: var(--panel-bg); border: 1px solid rgba(201,196,255,.25); border-radius: 10px; padding: 10px 12px; }
+.panel h2 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); display: flex; align-items: center; gap: 8px; }
+aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: flex; flex-direction: column; min-width: 0; }
+#log { overflow-y: auto; flex: 1; min-height: 200px; }
+.turnhead { margin: 10px 0 4px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); cursor: pointer; }
+.turnhead:first-child { margin-top: 0; }
+.ev { display: block; padding: 3px 8px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border-left: 3px solid transparent; }
+.ev:hover { background: rgba(201,196,255,.1); }
+.ev.cur { background: rgba(200,236,58,.18); border-left-color: var(--lime); font-weight: 700; }
+.ev.future { opacity: .35; }
+.ev.k-move { font-weight: 700; margin-top: 4px; }
+.ev.k-damage, .ev.k-recoil { color: #ffb27a; } .ev.k-heal { color: var(--up); } .ev.k-faint { color: #ff8a7a; font-weight: 800; }
+.ev.k-win { color: var(--up); font-weight: 800; } .ev.k-fail, .ev.k-missed, .ev.k-immune, .ev.k-blocked, .ev.k-protected { color: #f1e08a; }
+.ev.k-turn_end, .ev.k-start { color: var(--mute); font-style: italic; }
+.ev .p1 { color: var(--me); } .ev .p2 { color: var(--foe); }
+.raw { margin: 2px 0 0; padding: 4px 6px; border-radius: 5px; background: #0d0c1c; color: var(--mute); font: 11px/1.4 ui-monospace, monospace; white-space: pre-wrap; word-break: break-all; font-weight: 400; }
+.hint { color: var(--mute); font-weight: 500; font-size: 11px; margin-top: 8px; }
+.banner-win { margin-bottom: 10px; padding: 8px 12px; border-radius: 10px; background: rgba(95,224,138,.18); border: 1px solid var(--up); color: var(--up); font-weight: 800; display: none; }
+@media (max-width: 1000px) { #board { grid-template-columns: 1fr; } aside { position: static; max-height: none; } .row-panel { flex-direction: column; } .row-panel .side { width: 100%; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>__TITLE__</h1><span class="meta" id="meta"></span><span class="grow"></span>
+  <label class="chk"><input type="checkbox" id="raw"> raw events &amp; rolls</label>
+  <label class="chk"><input type="checkbox" id="exact" checked> exact HP</label>
+</header>
+<div class="transport">
+  <button id="first" title="Home">⏮</button><button id="prevturn" title="Shift+←">◀ turn</button><button id="prev" title="←">◀</button>
+  <button id="play" class="go" title="Space">▶ Play</button>
+  <button id="next" title="→">▶</button><button id="nextturn" title="Shift+→">turn ▶</button><button id="last" title="End">⏭</button>
+  <input type="range" id="seek" min="0" value="0">
+  <select id="speed"><option value="1600">slow</option><option value="900" selected>normal</option><option value="400">fast</option><option value="150">very fast</option></select>
+  <span class="pos" id="pos"></span>
+</div>
+<div class="banner-win" id="winner"></div>
+<div class="field" id="field"></div>
+<div id="board">
+  <div class="sides">
+    <div class="row-panel foe"><div class="side"><h3>P2 team</h3><div id="bench-p2"></div></div><div class="cards" id="cards-p2"></div></div>
+    <div class="row-panel mine"><div class="side"><h3>P1 team</h3><div id="bench-p1"></div></div><div class="cards" id="cards-p1"></div></div>
+  </div>
+  <aside><div class="panel" style="display:flex;flex-direction:column;min-height:0;flex:1"><h2>Log</h2><div id="log"></div>
+    <div class="hint">← → step · Shift+← → turn · Space play · click a line to jump</div></div></aside>
+</div>
+<script>
+const DATA = __DATA__;
+const F = DATA.frames;
+const TYPE_COLORS = {normal:"#9a9a7a",fire:"#e8602c",water:"#4d82e8",electric:"#d9b414",grass:"#5cae3c",ice:"#6cc6c6",fighting:"#b02820",poison:"#8f3a8f",ground:"#c9a54a",flying:"#8a72d6",psychic:"#e84a7e",bug:"#8fa012",rock:"#a58c28",ghost:"#614a86",dragon:"#5a22e8",dark:"#5a4538",steel:"#9a9ab8",fairy:"#e888a8"};
+const STAT_NAMES = {atk:"Atk",def:"Def",spa:"SpA",spd:"SpD",spe:"Spe"};
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const title = (s) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const $ = (id) => document.getElementById(id);
+let i = 0, timer = null;
+
+function find(state, ref) { for (const s of state.sides) for (const m of s.team) if (m.ref === ref) return m; return null; }
+function hpClass(m) { const f = m.hp / m.max_hp; return f <= .2 ? "lo" : f <= .5 ? "mid" : ""; }
+function icon(sp) { const u = DATA.icons[sp]; return u ? `<img src="${u}" alt="">` : `<span style="font-size:11px;color:var(--mute)">${esc(sp.slice(0,2))}</span>`; }
+function hpText(m, side) { return $("exact").checked ? `<b>${m.hp}</b><small>/${m.max_hp}</small>` : `<b>${Math.round(100 * m.hp / m.max_hp)}</b><small>%</small>`; }
+
+function stat(m, k) {
+  const s = m.stages[k] || 0, base = m.stats[k];
+  const val = Math.floor(base * (s >= 0 ? (2 + s) / 2 : 2 / (2 - s)));
+  return `<div class="stat ${s > 0 ? "up" : s < 0 ? "down" : ""}" data-k="${k}"><span class="nm">${STAT_NAMES[k]}</span><span class="val">${val}</span><span class="stg">${s ? (s > 0 ? "+" : "") + s : ""}</span></div>`;
+}
+function otherStages(m) { return ["acc", "eva"].filter((k) => m.stages[k]).map((k) => `<span class="tag vol">${k === "acc" ? "Accuracy" : "Evasion"} ${m.stages[k] > 0 ? "+" : ""}${m.stages[k]}</span>`).join(""); }
+
+function cardHtml(m, side, f, prev) {
+  const ev = f.data || {};
+  const acting = f.kind === "move" && ev.mon === m.ref;
+  const pm = prev && find(prev.state, m.ref);
+  const diff = pm && pm.hp !== m.hp && pm.species === m.species ? m.hp - pm.hp : 0;
+  const hit = diff < 0;
+  const used = acting ? ev.move : null;
+  const cls = ["pcard", side === 1 ? "foe" : "", m.fainted ? "fainted" : "", m.mega ? "mega" : "", acting ? "acting" : "", hit ? "hit" : ""].join(" ");
+  const pct = Math.max(m.hp > 0 ? 1 : 0, 100 * m.hp / m.max_hp);
+  const vols = Object.keys(m.volatiles).map((k) => `<span class="tag vol">${esc(k)}${m.volatiles[k] !== true && typeof m.volatiles[k] !== "object" ? " " + esc(m.volatiles[k]) : ""}</span>`).join("");
+  const itemTag = m.item ? `<span class="tag item" title="held item">${esc(m.item_name)}</span>` : (itemWas(m) ? `<span class="tag item used">${esc(itemWas(m))}</span>` : `<span class="tag">no item</span>`);
+  return `<div class="${cls}" data-ref="${m.ref}">
+    ${diff ? `<span class="dmgpop ${diff < 0 ? "dn" : "upp"}">${diff > 0 ? "+" : ""}${diff}</span>` : ""}
+    <div class="np"><div class="sprite">${icon(m.species)}</div><div class="body">
+      <div class="banner"><span class="name">${esc(title(m.species))}</span>${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}
+        <span class="tychips">${m.types.map((t) => `<span class="ty" style="background:${TYPE_COLORS[t] || "#666"}">${esc(t)}</span>`).join("")}</span></div>
+      <div class="hp"><div class="bar"><i class="${hpClass(m)}" style="width:${pct}%"></i></div><span class="lbl">${hpText(m, side)}</span></div>
+    </div></div>
+    <div class="info">${itemTag}<span class="tag" title="ability">${esc(m.ability)}</span>${m.mega ? `<span class="tag mega">Mega</span>` : ""}${vols}${otherStages(m)}</div>
+    <div class="stages">${["atk", "def", "spa", "spd", "spe"].map((k) => stat(m, k)).join("")}</div>
+    <div class="moves">${m.moves.map((mv) => `<div class="move ${used === mv.id ? "sel" : ""}"><span class="mn">${esc(mv.name)}</span>${mv.pp != null ? `<span class="pp">${mv.pp}</span>` : ""}</div>`).join("")}</div>
+  </div>`;
+}
+// the item a mon started with, so "used" items can show struck through
+const startItems = {};
+for (const s of F[0].state.sides) for (const m of s.team) startItems[m.ref] = m.item_name;
+function itemWas(m) { return startItems[m.ref]; }
+
+function miniHtml(m, side) {
+  const cls = ["pmini", side === 1 ? "foe" : "", m.slot != null ? "active" : "", m.fainted ? "fainted" : ""].join(" ");
+  const pct = Math.max(m.hp > 0 ? 1 : 0, 100 * m.hp / m.max_hp);
+  return `<div class="${cls}"><div class="spr">${icon(m.species)}</div><div class="pnl"><div class="ban"><span class="nm">${esc(title(m.species))}</span>
+    ${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}<span class="hpv">${m.fainted ? "KO" : $("exact").checked ? `${m.hp}/${m.max_hp}` : Math.round(100 * m.hp / m.max_hp) + "%"}</span></div>
+    <div class="bar"><i class="${hpClass(m)}" style="width:${pct}%"></i></div></div></div>`;
+}
+
+function fieldHtml(st) {
+  const a = st.arena, out = [];
+  const W = {sun: "Harsh sunlight", rain: "Rain", sand: "Sandstorm", snow: "Snow"}, T = {electric: "Electric Terrain", grassy: "Grassy Terrain", misty: "Misty Terrain", psychic: "Psychic Terrain"};
+  const left = (n) => (n != null ? `<small>${n} left</small>` : "");
+  if (a.weather) out.push(`<span class="chip on">${W[a.weather] || esc(a.weather)}${left(a.weather_turns)}</span>`);
+  if (a.terrain) out.push(`<span class="chip on">${T[a.terrain] || esc(a.terrain)}${left(a.terrain_turns)}</span>`);
+  if (a.trick_room) out.push(`<span class="chip on">Trick Room${left(a.trick_room)}</span>`);
+  st.sides.forEach((s, si) => { for (const [k, v] of Object.entries(s.conditions)) out.push(`<span class="chip ${si ? "foe" : "me"}">P${si + 1} · ${esc(k)}${v && v !== true && typeof v !== "object" ? `<small>${esc(v)}</small>` : ""}</span>`); if (s.mega_used) out.push(`<span class="chip ${si ? "foe" : "me"}">P${si + 1} · Mega used</span>`); });
+  const known = new Set(["weather", "weather_turns", "terrain", "terrain_turns", "trick_room"]);
+  for (const [k, v] of Object.entries(a)) if (!known.has(k)) out.push(`<span class="chip">${esc(k)}: ${esc(JSON.stringify(v))}</span>`);
+  return out.join("") || `<span class="chip">no field effects</span>`;
+}
+
+function render() {
+  const f = F[i], prev = i > 0 ? F[i - 1] : null, st = f.state;
+  for (const side of [0, 1]) {
+    const s = st.sides[side], p = `p${side + 1}`;
+    $("bench-" + p).innerHTML = s.team.map((m) => miniHtml(m, side)).join("");
+    const slots = s.active.map((idx) => (idx == null ? null : s.team[idx]));
+    $("cards-" + p).innerHTML = slots.map((m) => (m ? cardHtml(m, side, f, prev) : `<div class="pcard slot-empty ${side ? "foe" : ""}">empty slot</div>`)).join("");
+  }
+  $("field").innerHTML = fieldHtml(st);
+  const w = $("winner");
+  if (st.winner != null) { w.style.display = "block"; w.textContent = st.winner === -1 ? "Draw" : `P${st.winner + 1} wins`; } else w.style.display = "none";
+  $("seek").max = F.length - 1; $("seek").value = i;
+  $("pos").textContent = `${f.turn ? "turn " + f.turn + " · " : ""}step ${i + 1}/${F.length}`;
+  $("prev").disabled = $("first").disabled = i === 0;
+  $("next").disabled = $("last").disabled = i === F.length - 1;
+  renderLog();
+}
+
+let logBuilt = false;
+function colorize(text) { return esc(text).replace(/\((P1|P2)\)/g, (_, p) => `<span class="${p.toLowerCase()}">(${p})</span>`); }
+function renderLog() {
+  const el = $("log"), showRaw = $("raw").checked;
+  if (!logBuilt || el.dataset.raw !== String(showRaw)) {
+    let h = "", lastTurn = -1;
+    F.forEach((f, n) => {
+      if (f.turn !== lastTurn) { lastTurn = f.turn; h += `<div class="turnhead" data-seek="${n}">${f.turn ? "Turn " + f.turn : "Start"}</div>`; }
+      h += `<div class="ev k-${f.kind}" data-i="${n}">${colorize(f.text)}${showRaw && f.raw.length ? `<div class="raw">${esc(f.raw.map((r) => r.kind + " " + JSON.stringify(r.data)).join("\n"))}</div>` : ""}</div>`;
+    });
+    el.innerHTML = h; el.dataset.raw = String(showRaw); logBuilt = true;
+  }
+  el.querySelectorAll(".ev").forEach((e) => { const n = +e.dataset.i; e.classList.toggle("cur", n === i); e.classList.toggle("future", n > i); });
+  const cur = el.querySelector(".ev.cur");
+  if (cur) { const r = cur.getBoundingClientRect(), pr = el.getBoundingClientRect(); if (r.top < pr.top || r.bottom > pr.bottom) cur.scrollIntoView({block: "center", behavior: "smooth"}); }
+}
+
+function go(n) { i = Math.max(0, Math.min(F.length - 1, n)); render(); }
+function turnStartOf(t) { return F.findIndex((f) => f.turn === t); }
+function turnStart(dir) {
+  const t = F[i].turn;
+  if (dir > 0) { const n = F.findIndex((f, k) => k > i && f.turn !== t); return n < 0 ? F.length - 1 : n; }
+  const here = turnStartOf(t);
+  return here < i ? here : i > 0 ? turnStartOf(F[i - 1].turn) : 0;   // first press: top of this turn; again: the turn before
+}
+function stop() { clearTimeout(timer); timer = null; $("play").textContent = "▶ Play"; }
+function play() {
+  if (timer) return stop();
+  if (i === F.length - 1) i = 0;
+  $("play").textContent = "⏸ Pause";
+  const tick = () => { if (i >= F.length - 1) return stop(); go(i + 1); timer = setTimeout(tick, +$("speed").value); };
+  timer = setTimeout(tick, 0);
+}
+$("prev").onclick = () => { stop(); go(i - 1); }; $("next").onclick = () => { stop(); go(i + 1); };
+$("prevturn").onclick = () => { stop(); go(turnStart(-1)); }; $("nextturn").onclick = () => { stop(); go(turnStart(1)); };
+$("play").onclick = play; $("seek").oninput = (e) => { stop(); go(+e.target.value); };
+$("raw").onchange = render; $("exact").onchange = render;
+$("log").onclick = (e) => { const t = e.target.closest("[data-i],[data-seek]"); if (t) { stop(); go(+(t.dataset.i ?? t.dataset.seek)); } };
+addEventListener("keydown", (e) => {
+  if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT" && e.target.type !== "range" && e.target.type !== "checkbox") return;
+  if (e.key === "ArrowRight") { stop(); go(e.shiftKey ? turnStart(1) : i + 1); e.preventDefault(); }
+  else if (e.key === "ArrowLeft") { stop(); go(e.shiftKey ? turnStart(-1) : i - 1); e.preventDefault(); }
+  else if (e.key === " ") { play(); e.preventDefault(); }
+  else if (e.key === "Home") go(0); else if (e.key === "End") go(F.length - 1);
+});
+$("meta").textContent = `${DATA.format} · seed ${DATA.seed} · ${Math.max(...F.map((f) => f.turn))} turns`;
+render();
+</script>
+</body>
+</html>
