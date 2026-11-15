@@ -27,15 +27,15 @@ STATUS_BERRIES = {"cheriberry": ("par",), "chestoberry": ("slp",), "pechaberry":
 SEEDS = {"electricseed": ("electric", "def"), "grassyseed": ("grassy", "def"),
          "mistyseed": ("misty", "spd"), "psychicseed": ("psychic", "spd")}
 MENTAL_HERB_CURES = ("taunt", "encore", "disable")
-EXTENDERS = {"heatrock", "damprock", "smoothrock", "icyrock", "terrainextender"}
+EXTENDERS = {"heatrock", "damprock", "smoothrock", "icyrock", "terrainextender", "lightclay"}
 MODELED_ITEMS = (set(TYPE_BOOST) | set(RESIST_BERRY) | set(STATUS_BERRIES) | set(SEEDS) | EXTENDERS | {
     "muscleband", "wiseglasses", "lifeorb", "expertbelt", "lightball", "choicescarf", "leftovers", "shellbell",
     "rockyhelmet", "focussash", "focusband", "kingsrock", "scopelens", "widelens", "zoomlens", "brightpowder",
     "bigroot", "bindingband", "shedshell", "ironball", "airballoon", "ejectbutton", "redcard", "mentalherb",
     "whiteherb", "sitrusberry", "oranberry", "lumberry", "persimberry", "leppaberry"})
-# Held but with nothing to do yet: Light Clay (no screens). Mega Stones are added from the data (Mega is rejected at
-# the choice, so the stone is only carried).
-INERT_ITEMS = {"lightclay"}
+# Held but with nothing to do: Mega Stones are added from the data (Mega is rejected at the choice, so the stone is
+# only carried).
+INERT_ITEMS = set()
 # Known gaps: these raise Unsupported rather than being carried silently.
 UNMODELED_ITEMS = {"leek", "metronome", "normalgem"}
 

@@ -1,6 +1,6 @@
 """Field effects. Trick Room: lasts 5 turns counting the one it was used on; using it again ends it.
 Weather and terrain (moves and abilities that set them, healing moves that read the weather) live in arena.py."""
-from .. import arena
+from .. import arena, screens
 from ..hooks import on
 
 TRICK_ROOM_TURNS = 5
@@ -72,3 +72,11 @@ for _ab, _kind in WEATHER_SETTERS.items():
     on("on_switch_in", f"ability:{_ab}")(_weather_setter(_kind))
 for _ab, _kind in TERRAIN_SETTERS.items():
     on("on_switch_in", f"ability:{_ab}")(_terrain_setter(_kind))
+
+
+@on("on_hit", "effect:side_condition")
+def side_condition(battle, ctx):
+    name = ctx.effects["side_condition"]
+    reason = screens.set_condition(battle, ctx.user.side, name, ctx.user, cause=ctx.move_id)
+    if reason:
+        battle.log_event("fail", mon=ctx.user.ref, move=ctx.move_id, reason=reason if reason == "no_snow" else f"already_{name}")

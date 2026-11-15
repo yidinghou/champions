@@ -46,9 +46,19 @@ def berry_halves(item, move_type, eff):
     return t is not None and move_type == t and (eff > 1 or t == "Normal")
 
 
-def final_mod(attacker, defender, move, eff, berry_ok=True):
-    """Chained modifier on the final damage from Life Orb, Expert Belt and the defender's resist berry."""
-    mod = 4096
+def screen_mod(screens, move, crit, doubles):
+    """Reflect, Light Screen and Aurora Veil: x0.5 (singles) or x2732/4096 (doubles), none on a crit. Never stacks."""
+    if crit:
+        return 4096
+    cat = move["category"]
+    if "auroraveil" in screens or ("reflect" in screens and cat == "Physical") or ("lightscreen" in screens and cat == "Special"):
+        return 2732 if doubles else 2048
+    return 4096
+
+
+def final_mod(attacker, defender, move, eff, berry_ok=True, screen=4096):
+    """Chained modifier on the final damage from Life Orb, Expert Belt, the defender's resist berry and screens."""
+    mod = screen
     if attacker.item == "lifeorb":
         mod = chain(mod, LIFE_ORB_MOD)
     if attacker.item == "expertbelt" and eff > 1:

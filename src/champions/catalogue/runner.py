@@ -76,6 +76,10 @@ def evaluate(battle, chk):
         want = moves_data()[chk["pp_full"]]["pp"]
         if m.pp[chk["pp_full"]] != want:
             return f"pp of {chk['pp_full']} on {chk['mon']} == {want}  (actual: {m.pp[chk['pp_full']]})"
+    elif "condition" in chk:      # {"side": 0, "condition": "reflect", "eq": turns left or null}
+        actual = battle.sides[chk["side"]].conditions.get(chk["condition"])
+        if actual != chk["eq"]:
+            return f"side {chk['side']} {chk['condition']} == {chk['eq']}  (actual: {actual})"
     elif "holds" in chk:          # the held item right now (null = used up or none)
         actual = find_mon(battle, chk["mon"]).item
         if actual != chk["holds"]:
@@ -135,6 +139,8 @@ def run_case(owner, case):
         for ref, stages in run.get("stages", {}).items():      # start-of-case stage setup
             find_mon(battle, ref).stages.update(stages)
         battle.arena.update(run.get("arena", {}))              # e.g. {"trick_room": 4}
+        for side, conds in zip(battle.sides, run.get("sides", [])):
+            side.conditions.update(conds)                      # e.g. [{"tailwind": 2}, {}]
         for turn in run.get("turns", []):
             if isinstance(turn, dict):        # {"expect_error": "text", "choices": [...]}: the choice must be refused
                 try:

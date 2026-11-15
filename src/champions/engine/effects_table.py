@@ -4,7 +4,8 @@ moves.json has numbers (power, priority, target, flags) but no structured effect
 engine lists, per move, the effects it implements. A move missing from here raises Unsupported.
 Effect keys: first_turn_only, volatile, target_boost, trap, status, rest, cure_team, yawn, type_immunity, secondary [{chance, volatile|boost|status}], self_drop {stat: -n}, recoil [n, d],
 drain [n, d], protect, crit_stage, trick_room, weather (sun|rain|sand|snow), terrain (electric|grassy|misty|psychic),
-weather_heal, weather_ball, weather_accuracy {weather: True | percent}.
+weather_heal, weather_ball, weather_accuracy {weather: True | percent}, side_condition (reflect|lightscreen|auroraveil|tailwind),
+break_screens.
 """
 from __future__ import annotations
 
@@ -71,6 +72,12 @@ MOVES = {
     "weatherball": {"weather_ball": True},
     "thunder": {"secondary": [{"chance": 30, "status": "par"}], "weather_accuracy": {"rain": True, "sun": 50}},
     "hurricane": {"secondary": [{"chance": 30, "volatile": "confusion"}], "weather_accuracy": {"rain": True, "sun": 50}},
+    "reflect": {"side_condition": "reflect"},
+    "lightscreen": {"side_condition": "lightscreen"},
+    "auroraveil": {"side_condition": "auroraveil"},
+    "tailwind": {"side_condition": "tailwind"},
+    "brickbreak": {"break_screens": True},
+    "psychicfangs": {"break_screens": True},
     "blizzard": {"secondary": [{"chance": 10, "status": "frz"}], "weather_accuracy": {"snow": True}},
 }
 

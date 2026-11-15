@@ -10,7 +10,7 @@ from .hooks import fire
 from .pipeline import run_move
 from . import volatiles
 from .teams import build_battle, moves_data
-from .turn import order_actions, run_residuals, speed
+from .turn import order_actions, resort, run_residuals, speed
 
 MAX_TURNS = 100
 
@@ -136,7 +136,10 @@ def play_turn(battle, choices):
     battle.arena["moved"] = []
     battle.log_event("turn", number=battle.turn)
     chosen_by = {(c.side, c.slot): battle.mon(c.side, c.slot) for c in choices}
-    for act in order_actions(battle, choices):
+    queue = order_actions(battle, choices)
+    while queue:
+        queue = resort(battle, queue, chosen_by)      # Speed is re-read after every action
+        act = queue.pop(0)
         c = act.choice
         mon = battle.mon(c.side, c.slot)
         if mon is None or mon.fainted:

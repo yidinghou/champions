@@ -23,8 +23,9 @@ def _stat(value, stage):
 
 
 def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, ignore_immunity_to=(),
-           weather=None, terrain=None, berry_ok=True):
+           weather=None, terrain=None, berry_ok=True, screens=(), doubles=False):
     """attacker/defender: engine Mon-like (stats, stages, types, status). move: a moves.json entry.
+    screens: names of the defender side's screens ("reflect", "lightscreen", "auroraveil"); doubles: the format has 2 a side.
     berry_ok: False when the defender cannot eat its berry (a foe's Unnerve), so a resist berry does nothing.
     weather: "sun" | "rain" | "sand" | "snow" | None; terrain: "electric" | "grassy" | "misty" | "psychic" | None.
     Returns an int; 0 if the defender is immune."""
@@ -71,7 +72,7 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     if attacker.status == "brn" and not special and not guts:
         dmg //= 2
     if held:
-        fm = items.final_mod(attacker, defender, move, eff, berry_ok)
+        fm = items.final_mod(attacker, defender, move, eff, berry_ok, items.screen_mod(screens, move, crit, doubles))
         if fm != 4096:
             dmg = modify(dmg, fm)
     return max(1, dmg)

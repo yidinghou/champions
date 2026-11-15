@@ -33,7 +33,7 @@ def resolve(ctx):
         ctx.targets = _foes(b, user)
     elif kind == "allAdjacent":
         ctx.targets = _foes(b, user) + _ally(b, user)
-    elif kind in ("allyTeam", "all"):
+    elif kind in ("allyTeam", "all", "allySide"):
         ctx.targets = [user]               # acts on the party or the whole field, via its handler
     elif kind == "adjacentAlly":
         ctx.targets = _ally(b, user)

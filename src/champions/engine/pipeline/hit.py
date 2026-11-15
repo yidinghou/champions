@@ -1,6 +1,6 @@
 """Per-target hit loop: per hit, crit roll, damage roll, damage, then on_hit handlers."""
 from ...calc.damage import damage
-from .. import arena, items
+from .. import arena, items, screens
 from ...calc.items import berry_halves
 from ...calc.typechart import effectiveness
 from ..hooks import fire
@@ -44,7 +44,8 @@ def run(ctx):
                 ignore = ignore_for(user, ctx.move, target)
                 dmg = damage(user, target, ctx.move, crit=crit, roll=roll, spread=spread,
                              ignore_immunity_to=ignore, weather=arena.weather(b), terrain=arena.terrain(b),
-                             berry_ok=items.can_eat(b, target))
+                             berry_ok=items.can_eat(b, target), screens=screens.active_screens(b, target.side),
+                             doubles=b.format == "doubles")
                 if dmg and items.can_eat(b, target) and berry_halves(target.item, ctx.move["type"],
                                         effectiveness(ctx.move["type"], target.types, ignore)):
                     items.consume(b, target, cause="weaken", move=ctx.move_id)   # the calc already halved this hit

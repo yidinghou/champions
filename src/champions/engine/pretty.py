@@ -40,6 +40,7 @@ VOLATILE_WORDS = {"confusion": "confused", "taunt": "taunted", "encore": "encore
 HIDDEN_VOLATILES = {"protect_chain"}      # engine bookkeeping, not something a player sees
 from .arena import TERRAIN_WORDS, WEATHER_WORDS  # noqa: E402
 from .items import item_name  # noqa: E402
+from .screens import SIDE_WORDS  # noqa: E402
 
 STAT_NAMES = {"atk": "Attack", "def": "Defense", "spa": "Sp. Atk", "spd": "Sp. Def",
               "spe": "Speed", "acc": "Accuracy", "eva": "Evasion"}
@@ -131,6 +132,11 @@ def _describe(e):
                 "survive": f"{who} hung on using its {name}", "popped": f"{who}'s {name} popped",
                 "eject": f"{who} was switched out by its {name}", "red_card": f"{who} held up its {name}"
                 }.get(d.get("cause"), f"{who} used its {name}")
+    if k == "field" and d["effect"] == "side":
+        who, name = f"P{d['side'] + 1}'s side", SIDE_WORDS[d["which"]]
+        if d.get("start"):
+            return f"{name} is up on {who} ({d['turns']} turns)"
+        return f"{name} wore off on {who}" if d.get("cause") == "expired" else f"{name} was shattered on {who}"
     if k == "crit":
         return "A critical hit!"
     if k == "fail" and d.get("reason") == "already_status":

@@ -29,6 +29,7 @@ src/champions/
     pipeline/      one move as fixed stages; each logs why it stopped a target
     volatiles.py   confusion, Taunt, Encore, Disable, Leech Seed, trapping
     items.py       held items: which are modeled, consume(), Update checks, Focus Sash/Band
+    screens.py     side conditions: Reflect, Light Screen, Aurora Veil, Tailwind (state in side.conditions)
     arena.py       weather and terrain: state in battle.arena, setting, residuals, speed, blocks
     status.py      major status: apply, immunities, sleep/freeze before a move, residual damage
     handlers/      items (berries, herbs, seeds, Leftovers, Rocky Helmet, Life Orb, Eject Button, Red Card...), self_drop, secondary, recoil/drain, protect, entry (Intimidate), foe_drop, status, volatile
@@ -108,7 +109,7 @@ terrain base-power boosts, Grassy healing, Electric (no sleep, Rest, Yawn), Mist
 The numbers (5 turns, x1.3 terrain, 1/16) are Showdown's gen 9, not yet checked against Champions.
 
 Held items (91 of 103 stubs run): see `engine/items.py` and `handlers/items.py`. A team spec's `item` is checked
-at `start()`: modeled items run, Mega Stones and Light Clay are carried inert, and Leek, Metronome, Normal Gem and
+at `start()`: modeled items run, Mega Stones are carried inert, and Leek, Metronome, Normal Gem and
 anything unknown raise `Unsupported`. After every action and at the end of the turn each active mon gets an Update
 (berries, herbs, seeds), in Speed order. Modeled: Sitrus, Oran, the five status berries, Lum, Persim, Leppa, the
 17 resist berries and Chilan, White and Mental Herb, the four terrain seeds, Leftovers, Life Orb, Shell Bell, Rocky
@@ -119,11 +120,19 @@ now stops foes eating berries, and Levitate and Air Balloon now make a mon immun
 mid-turn (Eject Button, Red Card) loses its queued action. Damage numbers are checked in `tests/test_items.py`.
 The Eject Button holder's replacement is the first living bench mon (TODO: let the policy choose).
 
+Screens and Tailwind (30 of 40 stubs run; 20 + 10): see `engine/screens.py`. Reflect, Light Screen, Aurora Veil (snow only)
+and Tailwind live in `side.conditions` as turns left; 5 turns (8 with Light Clay) for screens, 4 for Tailwind, the
+turn they are used counts. A screen takes damage x0.5 in singles and x2732/4096 in doubles, not on a crit, never
+stacking, chained with Life Orb and berries. Brick Break and Psychic Fangs remove the target side's screens before the
+hit (not if the target is immune or Protected). Speed is now re-read after every action (gen 8+), so Tailwind, Trick
+Room or paralysis set mid-turn reorders the actions still to come. `side` checks: `condition`; `sides` presets
+conditions. Damage numbers are in `tests/test_screens.py`.
+
 ## Deferred
 
 Substitute, volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
 counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Solar Power, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
-Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), screens, the items in the catalogue's open lists (Metronome, Normal Gem, Leek, Light Clay), Mega Evolution (rejected with
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Wide Guard and Quick Guard, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), Mega Evolution (rejected with
 `Unsupported`), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, redirection (Follow Me, Lightning Rod), real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.

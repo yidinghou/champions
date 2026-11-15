@@ -1,12 +1,13 @@
 """Turn order and end-of-turn. Actions sort by kind (switch, Mega, move), priority, then Speed.
 
-Priority and Speed are read when the turn starts. Exact ties are broken with the seeded RNG.
+Priority is read when the turn starts; Speed is re-read after every action (`resort`). Exact ties are broken with
+the seeded RNG, once.
 """
 from __future__ import annotations
 
 from collections import namedtuple
 
-from . import arena, status, volatiles
+from . import arena, screens, status, volatiles
 from .actions import Switch
 from .hooks import fire
 from .handlers.field import tick_field
@@ -83,5 +84,18 @@ def run_residuals(battle):
         volatiles.residual(battle, m)
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)
+    screens.tick(battle)
     tick_field(battle)
     arena.terrain_tick(battle)
+
+
+def resort(battle, remaining, chosen_by):
+    """Gen 8+ ordering: Speed is re-read after every action, so Tailwind, Trick Room or paralysis set mid-turn
+    changes who moves next. Stable: actions that tie keep the order the seeded tie-break gave them."""
+    reverse = bool(battle.arena.get("trick_room"))
+    fresh = []
+    for a in remaining:
+        mon = chosen_by[(a.choice.side, a.choice.slot)]
+        fresh.append(a._replace(speed=speed(battle, mon)))
+    fresh.sort(key=lambda a: (a.kind, -a.priority, a.speed if reverse else -a.speed))
+    return fresh
