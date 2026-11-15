@@ -23,6 +23,23 @@ def snapshot(b):
             [dict(s.conditions) for s in b.sides])
 
 
+class CloneGuard(unittest.TestCase):
+    """Battle/Side/Mon.clone copy their mutable containers by hand. If this fails, a dict or list field was added to
+    the state without being copied in clone(), so a clone would silently share it with the original."""
+
+    def test_no_mutable_container_is_shared(self):
+        import dataclasses
+        a = game.start(TEAMS, seed=1)
+        c = a.clone()
+        pairs = [(a, c)] + [(x, y) for sa, sc in zip(a.sides, c.sides) for x, y in
+                            [(sa, sc)] + list(zip(sa.team, sc.team))]
+        for orig, copy_ in pairs:
+            for f in dataclasses.fields(orig):
+                v = getattr(orig, f.name)
+                if isinstance(v, (dict, list)):
+                    self.assertIsNot(v, getattr(copy_, f.name), f"{type(orig).__name__}.{f.name} is shared by clone()")
+
+
 class Clone(unittest.TestCase):
     def test_same_future_as_original(self):
         for seed in range(20):
