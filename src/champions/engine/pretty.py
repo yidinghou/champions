@@ -8,12 +8,13 @@ from pathlib import Path
 BAR_WIDTH = 20
 
 _CODES = {"bold": "1", "dim": "2", "red": "31", "green": "32", "yellow": "33", "blue": "34",
-          "magenta": "35", "cyan": "36", "orange": "38;5;208"}
+          "magenta": "35", "cyan": "36", "orange": "38;5;208",
+          "purple": "38;5;99", "crimson": "38;5;161", "sky": "38;5;75"}
 _color = False
-SIDE_COLORS = ["blue", "orange"]   # team colors; kept distinct from the red/green event colors
-KIND_COLORS = {"damage": "red", "recoil": "red", "faint": "bold red", "crit": "bold yellow",
-               "heal": "green", "field": "bold cyan", "status": "magenta", "volatile": "magenta", "switch": "cyan",
-               "mega": "bold magenta", "win": "bold green", "fail": "yellow", "immune": "dim",
+SIDE_COLORS = ["purple", "crimson"]   # team colors (as in the game's team select); orange is damage, green heal
+KIND_COLORS = {"damage": "orange", "recoil": "orange", "faint": "bold orange", "crit": "bold yellow",
+               "heal": "green", "field": "bold cyan", "status": "sky", "volatile": "sky", "switch": "cyan",
+               "mega": "bold sky", "win": "bold green", "fail": "yellow", "immune": "dim",
                "protected": "cyan", "missed": "dim", "blocked": "cyan"}
 
 
@@ -63,7 +64,7 @@ def mon_name(ref):
 def hp_bar(hp, max_hp, width=BAR_WIDTH):
     filled = 0 if hp <= 0 else max(1, round(width * hp / max_hp))
     frac = hp / max_hp if max_hp else 0
-    style = "green" if frac > 0.5 else "yellow" if frac > 0.2 else "red"
+    style = "green" if frac > 0.5 else "yellow" if frac > 0.2 else "orange"
     return "[" + paint("#" * filled, style) + paint("." * (width - filled), "dim") + "]"
 
 
@@ -160,7 +161,7 @@ def render_turn(events, show_rng=False):
             if line:
                 style = KIND_COLORS.get(e.kind)
                 if e.kind == "boost":
-                    style = "green" if d["change"] > 0 else "red" if d["change"] < 0 else "dim"
+                    style = "green" if d["change"] > 0 else "yellow" if d["change"] < 0 else "dim"
                 name = mon_name(d["mon"]) if "mon" in d else None
                 if name and line.startswith(name):     # team-colored name, event-colored rest
                     line = paint(name, side_style(d["mon"])) + paint(line[len(name):], style)
