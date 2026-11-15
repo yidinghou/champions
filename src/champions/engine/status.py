@@ -1,14 +1,21 @@
 """Major status: applying it, the numbers that drive it, and what it does at the start of a move.
 
-The numbers below are Showdown's. Champions may differ (the plan's open question 1), so each is
-named once here and flagged `verify` in the catalogue until checked.
+Where Champions is known to differ from Showdown, the Champions number is used and the source is
+noted next to it. Numbers not yet confirmed for Champions stay Showdown's and are flagged `verify`.
+Sources: Serebii and Pokemon Zone status pages, Smogon "Champions Battle Mechanics Research" thread.
 """
 from __future__ import annotations
 
 from . import arena
 
-SLEEP_TURNS = (1, 3)         # verify: Champions sleep length
-FREEZE_THAW_PCT = 20         # verify: Champions freeze thaw chance per turn
+# Sleep: always asleep on the 1st turn, 33.3% chance to wake on the 2nd, certain on the 3rd (Serebii,
+# Pokemon Zone). One Smogon post says "1-2 turns" instead, so this is not 100% settled. The wake-up
+# turn is a move attempt, so the sleeper acts on it (as in the main games, assumed).
+SLEEP_SHORT_PCT = 100 / 3    # chance the sleep ends on the 2nd attempt (else the 3rd)
+SLEEP_SHORT, SLEEP_LONG = 2, 3
+FREEZE_THAW_PCT = 25         # per move attempt (Serebii, Smogon changelog)
+FREEZE_MAX_TURNS = 3         # always thaws on the 3rd attempt (Serebii; Smogon marks the timing "to be confirmed")
+FULL_PARA_PCT = 12.5         # chance a paralyzed mon cannot move (Serebii; Smogon thread says 1/8)
 STATUS_NAMES = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
                 "slp": "asleep", "frz": "frozen"}
 # Types that cannot get a status.
@@ -51,7 +58,9 @@ def try_set_status(battle, target, status, user=None, move_id=None, announce=Tru
         if announce:
             battle.log_event("immune", mon=target.ref, move=move_id)
         return False
-    turns = battle.rng.randint(*SLEEP_TURNS, "sleep_turns") if status == "slp" else 0
+    turns = 0
+    if status == "slp":
+        turns = SLEEP_SHORT if battle.rng.chance(SLEEP_SHORT_PCT, "sleep_turns") else SLEEP_LONG
     target.set_status(status, turns)
     return True
 
@@ -65,10 +74,14 @@ def before_move(battle, mon, move):
             return None
         return "asleep"
     if mon.status == "frz":
-        if move.get("thaws") or battle.rng.chance(FREEZE_THAW_PCT, "thaw"):
+        mon.status_turns += 1                      # counts move attempts while frozen
+        if move.get("thaws") or mon.status_turns >= FREEZE_MAX_TURNS \
+                or battle.rng.chance(FREEZE_THAW_PCT, "thaw"):
             mon.cure_status()
             return None
         return "frozen"
+    if mon.status == "par" and battle.rng.chance(FULL_PARA_PCT, "fullpara"):
+        return "paralyzed"
     return None
 
 

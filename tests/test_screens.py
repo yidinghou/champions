@@ -95,7 +95,7 @@ class InBattle(unittest.TestCase):
         """Doubles: Garchomp (122) paralyzes Mawile (70 -> 35) before it moves, so Mawile now moves after Snorlax (50)."""
         teams = [[spec("garchomp", "sandveil", ["thunderwave"]), spec("clefable", "unaware", ["bodyslam"])],
                  [spec("mawile", "noability", ["bodyslam"]), spec("snorlax", "thickfat", ["bodyslam"])]]
-        b = game.start(teams, seed=1, format="doubles", rng=LabeledRng())
+        b = game.start(teams, seed=1, format="doubles", rng=LabeledRng({"fullpara": [False]}))
         game.play_turn(b, [Move(0, 0, "thunderwave", (1, 0)), Move(0, 1, "bodyslam", (1, 1)),
                            Move(1, 0, "bodyslam", (0, 0)), Move(1, 1, "bodyslam", (0, 1))])
         order = [e.data["mon"] for e in b.events("move")]

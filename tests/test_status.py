@@ -71,6 +71,33 @@ class SleepAndFreeze(unittest.TestCase):
         self.assertIsNone(b.mon(0, 0).status)
         self.assertEqual(len(b.events("move", mon="p1:snorlax")), 1)
 
+    def test_sleep_lasts_two_or_three_attempts(self):
+        """Champions: asleep on turn 1, 1/3 chance to wake on turn 2, certain on turn 3."""
+        for roll, turns in ((True, 2), (False, 3)):
+            b = game.start([[{"species": "snorlax", "ability": "thickfat", "moves": ["bodyslam"]}],
+                            [{"species": "clefable", "ability": "unaware", "moves": ["protect"]}]],
+                           seed=1, format="singles", rng=LabeledRng({"sleep_turns": [roll]}))
+            from champions.engine.status import try_set_status
+            try_set_status(b, b.mon(0, 0), "slp")
+            self.assertEqual(b.mon(0, 0).status_turns, turns)
+
+    def test_freeze_thaws_by_the_third_attempt(self):
+        b = game.start([[{"species": "snorlax", "ability": "thickfat", "moves": ["bodyslam"], "status": "frz"}],
+                        [{"species": "clefable", "ability": "unaware", "moves": ["protect"]}]],
+                       seed=1, format="singles", rng=LabeledRng({"thaw": [False, False, False]}))
+        for _ in range(2):
+            game.play_turn(b, [game.Move(0, 0, "bodyslam", (1, 0))])
+            self.assertEqual(b.mon(0, 0).status, "frz")
+        game.play_turn(b, [game.Move(0, 0, "bodyslam", (1, 0))])
+        self.assertIsNone(b.mon(0, 0).status)
+
+    def test_full_paralysis_is_one_in_eight(self):
+        from champions.engine import status
+        self.assertEqual(status.FULL_PARA_PCT, 12.5)
+        b = self.play("par", 0, {"fullpara": [True]})
+        self.assertEqual(len(b.events("move", mon="p1:snorlax")), 0)
+        self.assertEqual(len(b.events("fail", mon="p1:snorlax", reason="paralyzed")), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
