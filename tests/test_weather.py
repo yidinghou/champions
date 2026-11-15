@@ -32,7 +32,7 @@ def by_hand(bp, a, d, *steps):
 class WeatherDamage(unittest.TestCase):
     def setUp(self):
         self.fire = mon("charizard", "blaze", ["flamethrower"])       # Fire/Flying, STAB on Flamethrower
-        self.target = mon("snorlax", "thickfat")
+        self.target = mon("snorlax", "noability")                      # Thick Fat would halve Fire damage
 
     def test_sun_boosts_fire_and_rain_halves_it(self):
         a, d, bp = self.fire.stats["spa"], self.target.stats["spd"], moves_data()["flamethrower"]["base_power"]

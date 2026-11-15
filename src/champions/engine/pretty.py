@@ -164,7 +164,7 @@ def _describe(e):
     if k == "switch":
         return f"{mon_name(d['mon'])} was sent out"
     if k == "mega":
-        return f"{mon_name(d['mon'])} Mega Evolved"
+        return f"{mon_name(d['mon'])} Mega Evolved into {d['form'].replace('-', ' ').title()}! ({d['ability']}, {d['types']})"
     if k == "win":
         return "Draw" if d["side"] == -1 else f"P{d['side'] + 1} wins!"
     if k in ("hit", "rng", "start", "turn", "move"):

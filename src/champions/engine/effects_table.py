@@ -89,7 +89,7 @@ MOVES = {
 # modeled so far (checked by hand); anything else raises Unsupported when a team uses it.
 INERT_ABILITIES = {"noability", "blaze", "overgrow", "goodasgold", "justified", "levitate", "keeneye",
                    # no effect on the status cases that use them (status is applied by moves only):
-                   "thickfat", "cursedbody", "unaware", "quickfeet", "merciless", "pressure", "angerpoint"}
+                   "cursedbody", "unaware", "quickfeet", "merciless", "pressure", "angerpoint"}
 MODELED_ABILITIES = {
     "intimidate", "innerfocus", "oblivious", "owntempo", "scrappy", "guarddog",
     "clearbody", "whitesmoke", "hypercutter", "guts", "magicguard",
@@ -98,6 +98,11 @@ MODELED_ABILITIES = {
     "chlorophyll", "swiftswim", "sandrush", "slushrush", "surgesurfer", "sandforce", "sandveil", "snowcloak",
     "overcoat", "raindish", "icebody", "unnerve",
     "lightningrod", "stormdrain", "sapsipper", "motordrive", "voltabsorb", "waterabsorb",
+    # Mega Evolution abilities (see engine/mega.py)
+    "hugepower", "purepower", "toughclaws", "adaptability", "megalauncher", "strongjaw", "ironfist", "sharpness",
+    "technician", "pixilate", "aerilate", "refrigerate", "dragonize", "thickfat", "multiscale", "filter", "shellarmor",
+    "noguard", "skilllink", "speedboost", "unseenfist", "piercingdrill", "infiltrator", "stalwart", "bulletproof",
+    "eelevate", "regenerator", "contrary", "defiant", "competitive", "solarpower",
 }
 
 

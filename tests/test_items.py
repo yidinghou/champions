@@ -29,7 +29,7 @@ def base(bp, a, d):
 
 class DamageItems(unittest.TestCase):
     def setUp(self):
-        self.target = mon("snorlax", "thickfat")
+        self.target = mon("snorlax", "noability")      # Thick Fat would halve Fire damage
 
     def test_type_item_boosts_only_its_type_through_4096ths(self):
         plain = mon("clefable", "unaware", ["flamethrower"])

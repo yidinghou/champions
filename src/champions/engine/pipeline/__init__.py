@@ -46,7 +46,7 @@ STAGES = [targets.resolve, protect.check, terrain.check, screens.check, absorb.c
 
 def run_move(battle, user, move_id, chosen=None):
     effects = move_effects(move_id)
-    move = arena.adjust_move(battle, moves_data()[move_id], effects)   # Weather Ball takes the weather's type
+    move = arena.adjust_move(battle, moves_data()[move_id], effects, user)   # Weather Ball takes the weather's type
     ctx = MoveContext(battle, user, move_id, move, effects, chosen)
     if not can_move.check(ctx):
         return ctx

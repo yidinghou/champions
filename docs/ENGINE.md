@@ -14,7 +14,8 @@ All randomness goes through `engine/rng.py`; ordering never depends on dict or s
 ```
 src/champions/
   calc/        typechart.py damage.py field.py items.py   pure functions, never import engine/ (field.py: grounded, weather and terrain
-               modifiers; items.py: type boosts, Life Orb, Expert Belt, resist berries, Light Ball)
+               modifiers; items.py: type boosts, Life Orb, Expert Belt, resist berries, Light Ball;
+               abilities.py: Huge Power, Tough Claws, -ate, Thick Fat, Multiscale and the other damage abilities)
   engine/
     state.py       Mon, Side, Battle; mutators log events
     actions.py     Move, Switch (frozen, serialisable)
@@ -28,6 +29,7 @@ src/champions/
     game.py        start, play_turn, validate, run_to_end
     pipeline/      one move as fixed stages; each logs why it stopped a target
     volatiles.py   confusion, Taunt, Encore, Disable, Leech Seed, trapping
+    mega.py        Mega Evolution: stone -> form, once-per-side rule, the form change
     items.py       held items: which are modeled, consume(), Update checks, Focus Sash/Band
     redirect.py    Follow Me, Rage Powder, Lightning Rod, Storm Drain redirection; type-absorbing abilities
     screens.py     side conditions: Reflect, Light Screen, Aurora Veil, Tailwind (state in side.conditions)
@@ -136,11 +138,23 @@ the turn, the latest user wins, Rage Powder skips Grass and Overcoat), then Ligh
 (after Protect) lets Volt Absorb, Water Absorb, Lightning Rod, Storm Drain, Sap Sipper and Motor Drive eat their type
 and heal 1/4 or boost. The log has a `redirect` event. Numbers in `tests/test_redirect.py`.
 
+Mega Evolution (19 stubs, all run): see `engine/mega.py`. A Move choice with `mega=True` is legal for a mon holding
+the Mega Stone for its species, once per side per battle (`ValueError` otherwise). The `mega` action runs before any
+move, in Speed order; the mon takes the form's types, ability and stats (HP kept, the rest recomputed with its own
+nature and Stat Points, so `Mon` now stores `nature` and `sp`), the new ability starts at once, and Speed is re-read.
+`state_key` and snapshots include the changed fields. 59 of the 82 Mega forms are playable: the rest have an ability
+the engine does not model (Magic Bounce, Trace, Mold Breaker, Healer, Prankster, Thermal Exchange, Sheer Force,
+Berserk, Fairy Aura, Shadow Tag, Protean, Parental Bond, Aura Guard, Mega Sol, Fire Mane, Spicy Spray, Innards Out)
+and are rejected at `start()` when the stone is held. Abilities added with it: Huge Power, Pure Power, Tough Claws,
+Adaptability, Mega Launcher, Strong Jaw, Iron Fist, Sharpness, Technician, Pixilate, Aerilate, Refrigerate,
+Dragonize, Thick Fat (was inert), Multiscale, Filter, Shell Armor, No Guard, Skill Link, Speed Boost, Unseen Fist,
+Piercing Drill, Infiltrator, Stalwart, Bulletproof, Eelevate, Regenerator, Contrary, Defiant, Competitive, Solar
+Power. Numbers in `tests/test_mega.py`.
+
 ## Deferred
 
 Substitute, volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
 counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Solar Power, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
-Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), Mega Evolution (rejected with
-`Unsupported`), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), the 23 Mega forms with unmodeled abilities, Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.

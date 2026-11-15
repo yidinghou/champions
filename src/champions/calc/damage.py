@@ -6,7 +6,7 @@ Stubbed to 1.0 for now (TODO S1): screens, abilities (except Guts), Helping Hand
 """
 from __future__ import annotations
 
-from . import items
+from . import abilities, items
 from .field import field_bp_mod, modify, weather_damage_mod
 from .typechart import effectiveness
 
@@ -36,6 +36,7 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     chain = field_bp_mod(weather, terrain, move, attacker, defender)
     if held:
         chain = items.chain(chain, items.base_power_mod(attacker, move))
+        chain = items.chain(chain, abilities.base_power_mod(attacker, move))
     if chain != 4096:
         bp = max(1, modify(bp, chain))
     special = move["category"] == "Special"
@@ -44,6 +45,8 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     if crit:  # a crit ignores the attacker's drops and the defender's boosts
         a_stage, d_stage = max(a_stage, 0), min(d_stage, 0)
     a = _stat(attacker.stats[a_key], a_stage) * (items.attack_stat_mod(attacker) if held else 1)
+    if held:
+        a = abilities.attack_stat(a, attacker, defender, move, weather)
     d = _stat(defender.stats[d_key], d_stage)
 
     if weather == "sand" and special and "rock" in defender.types:
@@ -66,13 +69,15 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     if crit:
         dmg = dmg * 3 // 2
     dmg = dmg * roll // 100
-    if move["type"] and move["type"].lower() in attacker.types:  # STAB (TODO: Adaptability)
-        dmg = dmg * 3 // 2
+    if move["type"] and move["type"].lower() in attacker.types:  # STAB
+        n, dd = abilities.stab(attacker)
+        dmg = dmg * n // dd
     dmg = int(dmg * eff)
     if attacker.status == "brn" and not special and not guts:
         dmg //= 2
     if held:
         fm = items.final_mod(attacker, defender, move, eff, berry_ok, items.screen_mod(screens, move, crit, doubles))
+        fm = items.chain(fm, abilities.defense_mod(defender, eff))
         if fm != 4096:
             dmg = modify(dmg, fm)
     return max(1, dmg)

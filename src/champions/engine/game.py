@@ -8,7 +8,7 @@ from .items import check_item, update_all
 from .errors import Unsupported
 from .hooks import fire
 from .pipeline import run_move
-from . import volatiles
+from . import mega, volatiles
 from .teams import build_battle, moves_data
 from .turn import order_actions, resort, run_residuals, speed
 
@@ -20,6 +20,9 @@ def validate_teams(battle):
         for m in side.team:
             check_ability(m.ability)
             check_item(m.item)
+            form = mega.form_for(m)
+            if form:
+                check_ability(mega.form_ability(form))      # a Mega form with an unmodeled ability is rejected up front
             for mv in m.moves:
                 move_effects(mv)
 
@@ -36,9 +39,14 @@ def start(teams, seed=0, format="doubles", rng=None):
     return b
 
 
+def send_in_ability(battle, mon):
+    """The mon's ability starts (on entry, or when a Mega Evolution gives it a new one)."""
+    fire(battle, "on_switch_in", mon, [f"ability:{mon.ability}"])
+
+
 def send_in(battle, mon):
     mon.turns_out = 0
-    fire(battle, "on_switch_in", mon, [f"ability:{mon.ability}"])
+    send_in_ability(battle, mon)
 
 
 def legal_choices(battle, side):
@@ -52,6 +60,8 @@ def legal_choices(battle, side):
                 continue
             for fslot, _ in foes or [(0, None)]:
                 out.append(Move(side, slot, mv, (1 - side, fslot)))
+                if mega.can_evolve(battle, mon):
+                    out.append(Move(side, slot, mv, (1 - side, fslot), mega=True))
         for i, m in enumerate(s.team):
             if not m.fainted and i not in s.active and not volatiles.is_trapped(mon):
                 out.append(Switch(side, slot, i))
@@ -79,14 +89,15 @@ def validate(battle, choices):
         move_effects(c.move)  # Unsupported if not modeled
         if not volatiles.choice_allows(mon, c.move):
             raise ValueError(f"{mon.species} is locked into {mon.volatiles['choicelock']} by its Choice item")
-        if c.mega:
-            raise Unsupported("Mega Evolution is not modeled yet")
+    mega.check_choice(battle, choices)
 
 
 def run_switch(battle, act):
     s = battle.sides[act.side]
     old = s.mon_at(act.slot)
     if old is not None:
+        if old.ability == "regenerator" and not old.fainted:
+            old.heal(old.max_hp // 3)
         old.clear_on_switch()
     s.active[act.slot] = act.to
     new = s.team[act.to]
@@ -147,8 +158,9 @@ def play_turn(battle, choices):
         if mon is not chosen_by[(c.side, c.slot)]:
             continue                                  # switched out earlier this turn (Eject Button, Red Card): its choice lapses
         if act.kind == 1:
-            battle.log_event("mega", mon=mon.ref)
-            continue                                  # TODO(mega): form change
+            mega.evolve(battle, mon)
+            update_all(battle)
+            continue                                  # its move comes later in the queue
         run_action(battle, c)
         update_all(battle)
         if check_winner(battle) is not None:

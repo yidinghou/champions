@@ -80,6 +80,22 @@ def evaluate(battle, chk):
         actual = battle.sides[chk["side"]].conditions.get(chk["condition"])
         if actual != chk["eq"]:
             return f"side {chk['side']} {chk['condition']} == {chk['eq']}  (actual: {actual})"
+    elif "types_eq" in chk:       # the mon's types right now (changes with a Mega form)
+        actual = find_mon(battle, chk["mon"]).types
+        if actual != chk["types_eq"]:
+            return f"types of {chk['mon']} == {chk['types_eq']}  (actual: {actual})"
+    elif "ability_eq" in chk:
+        actual = find_mon(battle, chk["mon"]).ability
+        if actual != chk["ability_eq"]:
+            return f"ability of {chk['mon']} == {chk['ability_eq']}  (actual: {actual})"
+    elif "stat_eq" in chk:        # {"mon", "stat_eq": "atk", "eq": n}: the battle stat (hp, atk, def, spa, spd, spe)
+        actual = find_mon(battle, chk["mon"]).stats[chk["stat_eq"]]
+        if actual != chk["eq"]:
+            return f"stat {chk['stat_eq']} of {chk['mon']} == {chk['eq']}  (actual: {actual})"
+    elif "mega" in chk:           # {"mon", "mega": true/false}
+        actual = find_mon(battle, chk["mon"]).mega
+        if actual != chk["mega"]:
+            return f"{chk['mon']} mega == {chk['mega']}  (actual: {actual})"
     elif "holds" in chk:          # the held item right now (null = used up or none)
         actual = find_mon(battle, chk["mon"]).item
         if actual != chk["holds"]:

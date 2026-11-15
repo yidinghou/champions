@@ -10,6 +10,7 @@ TODO(weather): Cloud Nine and Air Lock, Hydration, Dry Skin, Solar Power, Foreca
 """
 from __future__ import annotations
 
+from ..calc.abilities import ATE_TYPE
 from ..calc.field import is_grounded, modify
 
 DEFAULT_TURNS = 5
@@ -105,11 +106,15 @@ def blocks_priority(battle, user, target, priority):
 WEATHER_BALL_TYPE = {"sun": "Fire", "rain": "Water", "sand": "Rock", "snow": "Ice"}
 
 
-def adjust_move(battle, move, effects):
-    """The move as it is used right now. Weather Ball: 100 power and a weather type while weather is on."""
+def adjust_move(battle, move, effects, user=None):
+    """The move as it is used right now. Weather Ball: 100 power and a weather type while weather is on.
+    An -ate ability (Pixilate, Aerilate, Refrigerate, Dragonize) turns a damaging Normal move into its type; the
+    calc then adds its x1.2 because of the `ate` mark."""
     kind = weather(battle)
     if effects.get("weather_ball") and kind:
         return {**move, "type": WEATHER_BALL_TYPE[kind], "base_power": move["base_power"] * 2}
+    if user is not None and user.ability in ATE_TYPE and move["type"] == "Normal" and move["base_power"]:
+        return {**move, "type": ATE_TYPE[user.ability], "ate": True}
     return move
 
 
@@ -144,7 +149,9 @@ def weather_residual(battle):
         return
     battle.arena["weather_turns"] = left
     for m in _by_speed(battle):
-        if kind == "sand" and not (any(t in SAND_SAFE_TYPES for t in m.types) or m.ability in SAND_SAFE_ABILITIES):
+        if kind == "sun" and m.ability == "solarpower":
+            m.take(max(1, m.max_hp // 8))
+        elif kind == "sand" and not (any(t in SAND_SAFE_TYPES for t in m.types) or m.ability in SAND_SAFE_ABILITIES):
             m.take(max(1, m.max_hp // 16))
         elif WEATHER_HEAL_ABILITIES.get(kind) == m.ability:
             m.heal(max(1, m.max_hp // 16))

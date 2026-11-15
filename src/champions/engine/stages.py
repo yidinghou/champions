@@ -27,9 +27,15 @@ class StatChange:
 
 def change_stat(battle, mon, stat, n, source=None, cause="self"):
     """Apply a stage change through on_try_boost. Returns the change actually applied (0 if blocked)."""
+    if mon.ability == "contrary":
+        n = -n                                     # inverted before blockers look at it
     ctx = StatChange(mon, stat, n, source, cause)
     fire(battle, "on_try_boost", ctx, [f"ability:{mon.ability}"])
     if ctx.blocked or ctx.n == 0:
         battle.log_event("blocked", mon=mon.ref, stat=stat, cause=cause, ability=mon.ability)
         return 0
-    return mon.boost(stat, ctx.n, cause=cause)
+    change = mon.boost(stat, ctx.n, cause=cause)
+    punish = {"defiant": ("atk", 2), "competitive": ("spa", 2)}.get(mon.ability)
+    if change < 0 and cause != "self" and punish:        # a foe lowered a stat
+        mon.boost(punish[0], punish[1], cause=mon.ability)
+    return change

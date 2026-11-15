@@ -57,7 +57,7 @@ def build_mon(spec, side=0, idx=0):
                item=key(spec["item"]) if spec.get("item") else None, moves=moves, stats=st, hp=hp, max_hp=st["hp"],
                volatiles=dict(spec.get("volatiles", {})), last_move=spec.get("last_move"),
                status=spec.get("status"), status_turns=spec.get("status_turns", 0),
-               side=side, idx=idx, pp=pp)
+               side=side, idx=idx, pp=pp, nature=spec.get("nature", "hardy"), sp=parse_sp(spec.get("sp")))
 
 
 def build_battle(teams, seed=0, format="doubles", rng=None):

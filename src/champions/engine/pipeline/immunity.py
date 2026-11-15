@@ -19,6 +19,9 @@ def check(ctx):
         return
     kept = []
     for t in ctx.targets:
+        if t is not ctx.user and t.ability == "bulletproof" and "bullet" in move["flags"]:
+            ctx.battle.log_event("immune", mon=t.ref, move=ctx.move_id, ability=t.ability)
+            continue
         lifted = move["type"] == "Ground" and not is_grounded(t)     # Levitate, Air Balloon, Flying
         if t is not ctx.user and (lifted and "flying" not in t.types or is_immune(move["type"], t.types, ignore_for(ctx.user, move, t))):
             ctx.battle.log_event("immune", mon=t.ref, move=ctx.move_id)

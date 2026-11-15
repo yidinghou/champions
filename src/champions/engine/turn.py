@@ -82,6 +82,8 @@ def run_residuals(battle):
         if not m.fainted:
             status.tick_yawn(battle, m)
         volatiles.residual(battle, m)
+        if m.ability == "speedboost" and m.turns_out > 0 and not m.fainted:
+            m.boost("spe", 1, cause="speedboost")
         m.volatiles.pop("flinch", None)
         m.volatiles.pop("protect", None)
         m.volatiles.pop("followme", None)

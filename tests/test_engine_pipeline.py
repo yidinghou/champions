@@ -42,7 +42,7 @@ class Crit(unittest.TestCase):
 
 class HitCount(unittest.TestCase):
     def count(self, mh, roll):
-        ctx = NS(move={"multihit": mh}, battle=NS(rng=ForcedRng([roll])))
+        ctx = NS(move={"multihit": mh}, battle=NS(rng=ForcedRng([roll])), user=NS(ability=None))
         return hit.hit_count(ctx)
 
     def test_fixed(self):
@@ -84,9 +84,9 @@ class Handlers(unittest.TestCase):
                       rng=LabeledRng({"protect": [False]}))
         self.assertEqual(b.events("fail", reason="protect_chain"), [])  # chain was reset by the Dragon Claw
 
-    def test_mega_choice_is_unsupported(self):
+    def test_mega_choice_needs_the_stone(self):
         b = game.start([[spec("garchomp", ["dragonclaw"])], [spec("incineroar", ["protect"], "blaze")]], format="singles")
-        with self.assertRaises(game.Unsupported):
+        with self.assertRaises(ValueError):
             game.play_turn(b, [Move(0, 0, "dragonclaw", (1, 0), mega=True)])
 
 

@@ -7,8 +7,8 @@ from .rng import EnumRng
 
 # Every dataclass field of Mon / Side / Battle is either part of the key or listed as fixed for a whole battle
 # (or irrelevant). tests/test_resolve.py fails if a field is added to the state without being placed in one list.
-MON_KEYED = ("item", "hp", "status", "status_turns", "stages", "volatiles", "last_move", "turns_out", "pp", "mega")
-MON_FIXED = ("species", "types", "ability", "moves", "stats", "max_hp", "side", "idx", "_log")
+MON_KEYED = ("item", "ability", "types", "stats", "hp", "status", "status_turns", "stages", "volatiles", "last_move", "turns_out", "pp", "mega")
+MON_FIXED = ("species", "moves", "max_hp", "side", "idx", "nature", "sp", "_log")
 SIDE_KEYED = ("active", "conditions", "mega_used")
 SIDE_FIXED = ("team",)
 BATTLE_KEYED = ("arena", "turn", "winner")

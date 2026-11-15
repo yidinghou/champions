@@ -21,7 +21,7 @@ def is_grounded(mon):
     """Terrain and Ground moves only touch grounded mons. Iron Ball grounds; Air Balloon lifts. TODO(gravity)."""
     if mon.item == "ironball":
         return True
-    return "flying" not in mon.types and mon.ability != "levitate" and mon.item != "airballoon"
+    return "flying" not in mon.types and mon.ability not in ("levitate", "eelevate") and mon.item != "airballoon"
 
 
 def weather_damage_mod(weather, move_type):

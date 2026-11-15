@@ -18,6 +18,8 @@ def hit_count(ctx):
         return 1
     if isinstance(mh, int):
         return mh
+    if ctx.user.ability == "skilllink":
+        return 5
     r = ctx.battle.rng.randint(1, 100, "hit_count")
     return 2 if r <= 35 else 3 if r <= 70 else 4 if r <= 85 else 5
 
@@ -37,14 +39,14 @@ def run(ctx):
             hits += 1
             b.log_event("hit", mon=target.ref, move=ctx.move_id, n=hits, spread=spread)
             if damaging:
-                crit = b.rng.chance(crit_pct(ctx), "crit")
+                crit = target.ability not in ("shellarmor", "battlearmor") and b.rng.chance(crit_pct(ctx), "crit")
                 if crit:
                     b.log_event("crit", mon=target.ref, move=ctx.move_id)
                 roll = b.rng.randint(85, 100, "damage_roll")
                 ignore = ignore_for(user, ctx.move, target)
                 dmg = damage(user, target, ctx.move, crit=crit, roll=roll, spread=spread,
                              ignore_immunity_to=ignore, weather=arena.weather(b), terrain=arena.terrain(b),
-                             berry_ok=items.can_eat(b, target), screens=screens.active_screens(b, target.side),
+                             berry_ok=items.can_eat(b, target), screens=() if user.ability == "infiltrator" else screens.active_screens(b, target.side),
                              doubles=b.format == "doubles")
                 if dmg and items.can_eat(b, target) and berry_halves(target.item, ctx.move["type"],
                                         effectiveness(ctx.move["type"], target.types, ignore)):

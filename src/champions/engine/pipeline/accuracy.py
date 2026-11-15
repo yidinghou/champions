@@ -41,7 +41,7 @@ def check(ctx):
         return
     kept = []
     for t in ctx.targets:
-        if t is ctx.user or ctx.battle.rng.chance(final_accuracy(ctx.user, t, acc, arena.weather(ctx.battle), t.ref in ctx.battle.arena.get("moved", ())), f"accuracy:{ctx.move_id}"):
+        if t is ctx.user or "noguard" in (ctx.user.ability, t.ability) or ctx.battle.rng.chance(final_accuracy(ctx.user, t, acc, arena.weather(ctx.battle), t.ref in ctx.battle.arena.get("moved", ())), f"accuracy:{ctx.move_id}"):
             kept.append(t)
         else:
             ctx.battle.log_event("missed", mon=t.ref, move=ctx.move_id)

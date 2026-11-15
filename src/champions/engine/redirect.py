@@ -31,7 +31,7 @@ def _powder_immune(user):
 
 def redirect_target(battle, user, move, move_id, target):
     """The mon a single-target move actually hits (`target` if nothing redirects it)."""
-    if battle.format != "doubles":
+    if battle.format != "doubles" or user.ability == "stalwart":
         return target
     foes = [m for _, m in battle.sides[1 - user.side].alive_active()]
     drawn = [(m.volatiles[k], k, m) for m in foes for k in REDIRECT_MOVES if k in m.volatiles]

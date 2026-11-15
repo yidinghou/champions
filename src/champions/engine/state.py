@@ -40,6 +40,8 @@ class Mon:
     turns_out: int = 0
     pp: Dict[str, int] = field(default_factory=dict)
     mega: bool = False
+    nature: str = "hardy"           # kept so a Mega form's stats can be recomputed
+    sp: Dict[str, int] = field(default_factory=dict)
     _log: Any = field(default=None, repr=False, compare=False)
 
     @property
@@ -106,6 +108,7 @@ class Mon:
         c.stages = dict(self.stages)
         c.volatiles = _cp(self.volatiles)
         c.pp = dict(self.pp)
+        c.sp = dict(self.sp)
         c._log = log
         return c
 
