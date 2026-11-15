@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Optional
 
+from ..calc.abilities import breaks
 from .hooks import fire
 
 
@@ -30,7 +31,8 @@ def change_stat(battle, mon, stat, n, source=None, cause="self"):
     if mon.ability == "contrary":
         n = -n                                     # inverted before blockers look at it
     ctx = StatChange(mon, stat, n, source, cause)
-    fire(battle, "on_try_boost", ctx, [f"ability:{mon.ability}"])
+    ignored = source is not None and breaks(source, mon)            # Mold Breaker: Clear Body and friends do nothing
+    fire(battle, "on_try_boost", ctx, [] if ignored else [f"ability:{mon.ability}"])
     if ctx.blocked or ctx.n == 0:
         battle.log_event("blocked", mon=mon.ref, stat=stat, cause=cause, ability=mon.ability)
         return 0

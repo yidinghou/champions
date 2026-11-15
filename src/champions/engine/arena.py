@@ -30,6 +30,11 @@ def weather(battle):
     return battle.arena.get("weather")
 
 
+def weather_for(battle, mon):
+    """The weather as `mon`'s moves see it: Mega Sol makes it sun for the user."""
+    return "sun" if mon is not None and mon.ability == "megasol" else weather(battle)
+
+
 def terrain(battle):
     return battle.arena.get("terrain")
 
@@ -110,7 +115,7 @@ def adjust_move(battle, move, effects, user=None):
     """The move as it is used right now. Weather Ball: 100 power and a weather type while weather is on.
     An -ate ability (Pixilate, Aerilate, Refrigerate, Dragonize) turns a damaging Normal move into its type; the
     calc then adds its x1.2 because of the `ate` mark."""
-    kind = weather(battle)
+    kind = weather_for(battle, user)
     if effects.get("weather_ball") and kind:
         return {**move, "type": WEATHER_BALL_TYPE[kind], "base_power": move["base_power"] * 2}
     if user is not None and user.ability in ATE_TYPE and move["type"] == "Normal" and move["base_power"]:
@@ -118,9 +123,9 @@ def adjust_move(battle, move, effects, user=None):
     return move
 
 
-def accuracy_override(battle, effects):
+def accuracy_override(battle, effects, user=None):
     """Thunder, Hurricane, Blizzard: True (never misses) or a percent for the current weather, else None."""
-    return effects.get("weather_accuracy", {}).get(weather(battle))
+    return effects.get("weather_accuracy", {}).get(weather_for(battle, user))
 
 
 def heal_amount(max_hp, kind):

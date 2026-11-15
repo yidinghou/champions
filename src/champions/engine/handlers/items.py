@@ -144,7 +144,7 @@ def shell_bell(battle, ctx):
 
 @on("on_after_all_hits", "item:lifeorb")
 def life_orb(battle, ctx):
-    if ctx.dealt_total() > 0 and not ctx.user.fainted and ctx.user.ability != "magicguard":
+    if ctx.dealt_total() > 0 and not ctx.user.fainted and ctx.user.ability != "magicguard" and not ctx.move.get("sheer"):
         ctx.user.take(max(1, ctx.user.max_hp // 10))
 
 

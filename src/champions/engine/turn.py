@@ -33,6 +33,12 @@ def speed(battle, mon):
     return s
 
 
+def move_priority(battle, mon, move_id):
+    """The move's priority now: Prankster adds 1 to status moves (re-read after a Mega Evolution changes the ability)."""
+    data = moves_data()[move_id]
+    return data["priority"] + (1 if mon.ability == "prankster" and data["category"] == "Status" else 0)
+
+
 def order_actions(battle, choices):
     actions = []
     for c in choices:
@@ -43,7 +49,7 @@ def order_actions(battle, choices):
             continue
         if c.mega:
             actions.append(Action(MEGA, c, 0, sp))
-        actions.append(Action(MOVE, c, moves_data()[c.move]["priority"], sp))
+        actions.append(Action(MOVE, c, move_priority(battle, mon, c.move), sp))
     reverse = bool(battle.arena.get("trick_room"))   # Trick Room reverses Speed, not priority
 
     def key(a):
@@ -82,6 +88,10 @@ def run_residuals(battle):
         if not m.fainted:
             status.tick_yawn(battle, m)
         volatiles.residual(battle, m)
+        if m.ability == "healer" and not m.fainted:
+            for _, ally in battle.sides[m.side].alive_active():
+                if ally is not m and ally.status and battle.rng.chance(30, "healer"):
+                    ally.cure_status()                                        # 30% per ailing adjacent ally
         if m.ability == "speedboost" and m.turns_out > 0 and not m.fainted:
             m.boost("spe", 1, cause="speedboost")
         m.volatiles.pop("flinch", None)
@@ -100,6 +110,7 @@ def resort(battle, remaining, chosen_by):
     fresh = []
     for a in remaining:
         mon = chosen_by[(a.choice.side, a.choice.slot)]
-        fresh.append(a._replace(speed=speed(battle, mon)))
+        prio = move_priority(battle, mon, a.choice.move) if a.kind == MOVE else a.priority
+        fresh.append(a._replace(speed=speed(battle, mon), priority=prio))
     fresh.sort(key=lambda a: (a.kind, -a.priority, a.speed if reverse else -a.speed))
     return fresh

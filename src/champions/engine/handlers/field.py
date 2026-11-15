@@ -49,7 +49,7 @@ def weather_heal(battle, ctx):
     if user.hp == user.max_hp:
         battle.log_event("fail", mon=user.ref, move=ctx.move_id, reason="full_hp")
         return
-    user.heal(arena.heal_amount(user.max_hp, arena.weather(battle)))
+    user.heal(arena.heal_amount(user.max_hp, arena.weather_for(battle, user)))
 
 
 WEATHER_SETTERS = {"drizzle": "rain", "drought": "sun", "sandstream": "sand", "snowwarning": "snow"}

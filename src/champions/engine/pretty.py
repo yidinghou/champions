@@ -140,6 +140,12 @@ def _describe(e):
     if k == "substitute":
         who = mon_name(d["mon"])
         return f"The substitute took {d['amount']} damage for {who}" + (" and faded!" if d["broke"] else f" ({d['left']} left)")
+    if k == "ability" and d.get("copied_from"):
+        return f"{mon_name(d['mon'])} traced {mon_name(d['copied_from'])}'s {d['ability']}"
+    if k == "ability":
+        return f"{mon_name(d['mon'])}'s {d['ability']} changed its type to {d['types']}"
+    if k == "bounce":
+        return f"{mon_name(d['mon'])}'s Magic Bounce sent {move_name(d['move'])} back"
     if k == "crit":
         return "A critical hit!"
     if k == "fail" and d.get("reason") == "already_status":

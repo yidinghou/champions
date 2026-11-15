@@ -116,6 +116,8 @@ class Mon:
         """Stages and volatiles reset when a mon leaves the field. A status stays; Toxic restarts at 1."""
         if self.status == "tox":
             self.status_turns = 0
+        if "protean" in self.volatiles:
+            self.types = list(self.volatiles["protean"])        # Protean's type change ends when it leaves
         self.stages = {k: 0 for k in STAT_KEYS}
         self.volatiles = {}
         self.last_move = None

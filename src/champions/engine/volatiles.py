@@ -106,8 +106,14 @@ def can_choose(mon, move_id, move):
     return not (mon.volatiles.get("taunt") and move["category"] == "Status")
 
 
-def is_trapped(mon):
-    return "trapped" in mon.volatiles and "ghost" not in mon.types and mon.item != "shedshell"
+def is_trapped(mon, battle=None):
+    """Can't switch out: trapped by a move, or a foe's Shadow Tag. Ghost types and Shed Shell holders get out."""
+    if "ghost" in mon.types or mon.item == "shedshell":
+        return False
+    if "trapped" in mon.volatiles:
+        return True
+    return bool(battle and mon.ability != "shadowtag"
+                and any(f.ability == "shadowtag" for _, f in battle.sides[1 - mon.side].alive_active()))
 
 
 def _trapper_present(battle, ref):

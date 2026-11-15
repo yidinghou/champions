@@ -66,7 +66,7 @@ def legal_choices(battle, side):
                     if mega.can_evolve(battle, mon):
                         out.append(Move(side, slot, mv, (1 - side, fslot), mega=True, pivot_to=pv))
         for i, m in enumerate(s.team):
-            if not m.fainted and i not in s.active and not volatiles.is_trapped(mon):
+            if not m.fainted and i not in s.active and not volatiles.is_trapped(mon, battle):
                 out.append(Switch(side, slot, i))
     return out
 
@@ -84,7 +84,7 @@ def validate(battle, choices):
             s = battle.sides[c.side]
             if not 0 <= c.to < len(s.team) or s.team[c.to].fainted or c.to in s.active:
                 raise ValueError(f"illegal switch to {c.to}")
-            if volatiles.is_trapped(mon):
+            if volatiles.is_trapped(mon, battle):
                 raise ValueError(f"{mon.species} is trapped and cannot switch")
             continue
         if c.move not in mon.moves:

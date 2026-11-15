@@ -3,6 +3,7 @@
 Final accuracy = move accuracy x stage multiplier, where the stage is the user's accuracy stage minus
 the target's evasion stage (clamped to -6..+6): (3+s)/3 for s >= 0, 3/(3-s) below.
 """
+from ...calc.abilities import breaks
 from ...calc.field import modify
 from ...calc.items import chain
 from .. import arena
@@ -21,7 +22,7 @@ def final_accuracy(user, target, base, weather=None, target_moved=False):
     s = max(-6, min(6, user.stages["acc"] - target.stages["eva"]))
     acc = int(base * multiplier(s))
     mod = 4096
-    if weather and EVASION_WEATHER.get(weather) == target.ability:
+    if weather and EVASION_WEATHER.get(weather) == target.ability and not breaks(user, target):
         mod = chain(mod, 3277)
     if user.item == "widelens":
         mod = chain(mod, 4505)
@@ -34,7 +35,7 @@ def final_accuracy(user, target, base, weather=None, target_moved=False):
 
 def check(ctx):
     acc = ctx.move["accuracy"]
-    override = arena.accuracy_override(ctx.battle, ctx.effects)
+    override = arena.accuracy_override(ctx.battle, ctx.effects, ctx.user)
     if override is not None:
         acc = override               # True = never misses
     if acc is True or acc is None:

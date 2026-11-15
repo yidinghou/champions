@@ -6,6 +6,8 @@ Stubbed to 1.0 for now (TODO S1): screens, abilities (except Guts), Helping Hand
 """
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 from . import abilities, items
 from .field import field_bp_mod, modify, weather_damage_mod
 from .typechart import effectiveness
@@ -23,8 +25,9 @@ def _stat(value, stage):
 
 
 def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, ignore_immunity_to=(),
-           weather=None, terrain=None, berry_ok=True, screens=(), doubles=False):
+           weather=None, terrain=None, berry_ok=True, screens=(), doubles=False, hit_mod=4096, fairy_aura=False):
     """attacker/defender: engine Mon-like (stats, stages, types, status). move: a moves.json entry.
+    hit_mod: 4096ths multiplier on this hit's power (Parental Bond's 2nd hit: 1024); fairy_aura: a Fairy Aura is on the field.
     screens: names of the defender side's screens ("reflect", "lightscreen", "auroraveil"); doubles: the format has 2 a side.
     berry_ok: False when the defender cannot eat its berry (a foe's Unnerve), so a resist berry does nothing.
     weather: "sun" | "rain" | "sand" | "snow" | None; terrain: "electric" | "grassy" | "misty" | "psychic" | None.
@@ -33,10 +36,13 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
     if not bp or move["category"] == "Status":
         return 0
     held = attacker is not defender        # confusion's self-hit ignores items, terrain and weather
+    if abilities.breaks(attacker, defender):           # Mold Breaker: the defender's ability does nothing here
+        defender = SimpleNamespace(**{**defender.__dict__, "ability": "noability"})
     chain = field_bp_mod(weather, terrain, move, attacker, defender)
     if held:
         chain = items.chain(chain, items.base_power_mod(attacker, move))
-        chain = items.chain(chain, abilities.base_power_mod(attacker, move))
+        chain = items.chain(chain, abilities.base_power_mod(attacker, move, fairy_aura))
+        chain = items.chain(chain, hit_mod)                # Parental Bond's second hit
     if chain != 4096:
         bp = max(1, modify(bp, chain))
     special = move["category"] == "Special"
@@ -77,7 +83,7 @@ def damage(attacker, defender, move, *, crit=False, roll=100, spread=False, igno
         dmg //= 2
     if held:
         fm = items.final_mod(attacker, defender, move, eff, berry_ok, items.screen_mod(screens, move, crit, doubles))
-        fm = items.chain(fm, abilities.defense_mod(defender, eff))
+        fm = items.chain(fm, abilities.defense_mod(defender, eff, move))
         if fm != 4096:
             dmg = modify(dmg, fm)
     return max(1, dmg)

@@ -115,6 +115,8 @@ MODELED_ABILITIES = {
     "technician", "pixilate", "aerilate", "refrigerate", "dragonize", "thickfat", "multiscale", "filter", "shellarmor",
     "noguard", "skilllink", "speedboost", "unseenfist", "piercingdrill", "infiltrator", "stalwart", "bulletproof",
     "eelevate", "regenerator", "contrary", "defiant", "competitive", "solarpower",
+    "magicbounce", "trace", "moldbreaker", "healer", "prankster", "thermalexchange", "sheerforce", "berserk", "fairyaura",
+    "shadowtag", "protean", "parentalbond", "auraguard", "megasol", "firemane", "spicyspray", "innardsout",
 }
 
 

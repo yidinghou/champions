@@ -15,7 +15,19 @@ FLAG_BOOST = {                      # ability -> (move flag, modifier)
 }
 
 
-def base_power_mod(attacker, move):
+MOLD_BREAKERS = ("moldbreaker", "teravolt", "turboblaze")
+BREAKABLE = frozenset({            # defender abilities a Mold Breaker user's move ignores
+    "voltabsorb", "waterabsorb", "lightningrod", "stormdrain", "sapsipper", "motordrive", "levitate", "eelevate",
+    "thickfat", "multiscale", "filter", "shellarmor", "bulletproof", "magicbounce", "clearbody", "whitesmoke",
+    "hypercutter", "guarddog", "sandveil", "snowcloak", "auraguard", "contrary", "defiant", "competitive"})
+
+
+def breaks(user, target):
+    """Does `user`'s Mold Breaker (or Teravolt, Turboblaze) switch off `target`'s ability against this move?"""
+    return user is not target and user.ability in MOLD_BREAKERS and target.ability in BREAKABLE
+
+
+def base_power_mod(attacker, move, fairy_aura=False):
     """Chained base-power modifier (4096 = none) from the attacker's ability."""
     ab, mod = attacker.ability, 4096
     boost = FLAG_BOOST.get(ab)
@@ -25,6 +37,12 @@ def base_power_mod(attacker, move):
         mod = chain(mod, 6144)
     if ab in ATE_TYPE and move.get("ate"):
         mod = chain(mod, ATE_MOD)
+    if ab == "sheerforce" and move.get("sheer"):
+        mod = chain(mod, 5325)
+    if ab == "firemane" and move["type"] == "Fire":
+        mod = chain(mod, 6144)
+    if fairy_aura and move["type"] == "Fairy":
+        mod = chain(mod, 5448)                   # x1.33 for every Fairy move on the field
     return mod
 
 
@@ -45,9 +63,12 @@ def stab(attacker):
     return (2, 1) if attacker.ability == "adaptability" else (3, 2)
 
 
-def defense_mod(defender, eff):
-    """Chained final-damage modifier from the defender's ability: Multiscale at full HP, Filter on a super effective hit."""
+def defense_mod(defender, eff, move=None):
+    """Chained final-damage modifier from the defender's ability: Multiscale at full HP, Filter on a super
+    effective hit, Aura Guard against contact moves."""
     mod = 4096
+    if defender.ability == "auraguard" and move is not None and "contact" in move["flags"]:
+        mod = chain(mod, 2048)
     if defender.ability == "multiscale" and defender.hp == defender.max_hp:
         mod = chain(mod, 2048)
     if defender.ability == "filter" and eff > 1:

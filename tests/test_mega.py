@@ -76,9 +76,13 @@ class Evolving(unittest.TestCase):
         self.assertEqual([c.mega for c in game.legal_choices(b, 0) if isinstance(c, Move)], [False])
 
     def test_a_team_with_an_unmodeled_mega_ability_is_rejected(self):
-        with self.assertRaises(Unsupported):
-            self.start([spec("gengar", "cursedbody", ["protect"], item="gengarite")])        # Shadow Tag
-        self.start([spec("gengar", "cursedbody", ["protect"])])                                 # no stone: fine
+        from unittest import mock
+        from champions.engine import effects_table
+        without = effects_table.MODELED_ABILITIES - {"shadowtag"}            # pretend Gengar's Mega ability is a gap
+        with mock.patch.object(effects_table, "MODELED_ABILITIES", without):
+            with self.assertRaises(Unsupported):
+                self.start([spec("gengar", "cursedbody", ["protect"], item="gengarite")])
+            self.start([spec("gengar", "cursedbody", ["protect"])])                             # no stone: fine
 
     def test_snapshot_keeps_the_mega_form_and_the_spread(self):
         b = self.start([spec("mawile", "intimidate", ["protect"], item="mawilite", nature="adamant", sp="0/32/0/0/0/0")])
@@ -103,8 +107,7 @@ class Evolving(unittest.TestCase):
 
     def test_report_which_mega_forms_the_engine_can_play(self):
         bad = sorted(n for n in mega._forms() if not is_supported_ability(mega.form_ability(n)))
-        ok = len(mega._forms()) - len(bad)
-        self.assertGreaterEqual(ok, 40, f"playable Mega forms: {ok} of {len(mega._forms())}; rejected: {bad}")
+        self.assertEqual(bad, [], f"Mega forms with an unmodeled ability: {bad}")
 
 
 class AbilityDamage(unittest.TestCase):

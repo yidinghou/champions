@@ -5,6 +5,7 @@ from ...calc.items import berry_halves
 from ...calc.typechart import effectiveness
 from ..hooks import fire
 from .immunity import ignore_for
+from ...calc.abilities import breaks
 from .substitute import behind
 from .targets import SPREAD
 
@@ -16,6 +17,10 @@ def hit_count(ctx):
     """Fixed count, or the 2-5 spread: 2 and 3 at 35% each, 4 and 5 at 15% each."""
     mh = ctx.move["multihit"]
     if mh is None:
+        if (ctx.user.ability == "parentalbond" and ctx.move["category"] != "Status" and ctx.move["base_power"]
+                and "noparentalbond" not in ctx.move["flags"] and "charge" not in ctx.move["flags"]
+                and not (ctx.move["target"] in SPREAD and len(ctx.targets) > 1)):
+            return 2                                   # Parental Bond: a second hit at 1/4 power
         return 1
     if isinstance(mh, int):
         return mh
@@ -36,17 +41,22 @@ def run(ctx):
     spread = ctx.move["target"] in SPREAD and len(ctx.targets) > 1   # only if 2+ are actually hit
     for target in list(ctx.targets):
         total, hits, dealt = 0, 0, 0
-        for _ in range(hit_count(ctx)):
+        count = hit_count(ctx)
+        parental = user.ability == "parentalbond" and ctx.move["multihit"] is None and count == 2
+        for _ in range(count):
             hits += 1
             b.log_event("hit", mon=target.ref, move=ctx.move_id, n=hits, spread=spread)
             if damaging:
-                crit = target.ability not in ("shellarmor", "battlearmor") and b.rng.chance(crit_pct(ctx), "crit")
+                no_crit = target.ability in ("shellarmor", "battlearmor") and not breaks(user, target)
+                crit = not no_crit and b.rng.chance(crit_pct(ctx), "crit")
                 if crit:
                     b.log_event("crit", mon=target.ref, move=ctx.move_id)
                 roll = b.rng.randint(85, 100, "damage_roll")
                 ignore = ignore_for(user, ctx.move, target)
                 dmg = damage(user, target, ctx.move, crit=crit, roll=roll, spread=spread,
-                             ignore_immunity_to=ignore, weather=arena.weather(b), terrain=arena.terrain(b),
+                             ignore_immunity_to=ignore, weather=arena.weather_for(b, user), terrain=arena.terrain(b),
+                             hit_mod=1024 if parental and hits == 2 else 4096,
+                             fairy_aura=any(m.ability == "fairyaura" for s in b.sides for _, m in s.alive_active()),
                              berry_ok=items.can_eat(b, target), screens=() if user.ability == "infiltrator" else screens.active_screens(b, target.side),
                              doubles=b.format == "doubles")
                 if dmg and items.can_eat(b, target) and berry_halves(target.item, ctx.move["type"],
@@ -65,13 +75,16 @@ def run(ctx):
                     fire(b, "on_hit", ctx, ["effect:self_drop"] if "self_drop" in ctx.effects else [])   # the user's own drop still happens
                     continue
                 dmg = items.cap_damage(b, target, dmg)
+                before = target.hp
                 dealt = target.take(dmg)
+                if target.fainted and target.ability == "innardsout" and not user.fainted:
+                    user.take(before)                    # Innards Out: the attacker takes the HP the holder had left
                 total += dealt
             ctx.current = target
             fire(b, "on_hit", ctx, ctx.sources(user, target))
-            if damaging and dealt and target.item:
-                fire(b, "on_damaging_hit", ctx, [f"item:{target.item}"])
-            if user.item:
+            if damaging and dealt:
+                fire(b, "on_damaging_hit", ctx, ([f"item:{target.item}"] if target.item else []) + [f"ability:{target.ability}"])
+            if user.item and not ctx.move.get("sheer"):
                 fire(b, "on_user_hit", ctx, [f"item:{user.item}"])
             if target.fainted:
                 break

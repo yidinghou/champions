@@ -33,6 +33,10 @@ def try_set_status(battle, target, status, user=None, move_id=None, announce=Tru
         if announce:
             battle.log_event("fail", mon=target.ref, move=move_id, reason="already_status")
         return False
+    if status == "brn" and target.ability == "thermalexchange":
+        if announce:
+            battle.log_event("immune", mon=target.ref, move=move_id, ability=target.ability)
+        return False
     reason = arena.blocks_status(battle, target, status)
     if reason:
         if announce:

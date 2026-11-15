@@ -144,14 +144,21 @@ Mega Evolution (19 stubs, all run): see `engine/mega.py`. A Move choice with `me
 the Mega Stone for its species, once per side per battle (`ValueError` otherwise). The `mega` action runs before any
 move, in Speed order; the mon takes the form's types, ability and stats (HP kept, the rest recomputed with its own
 nature and Stat Points, so `Mon` now stores `nature` and `sp`), the new ability starts at once, and Speed is re-read.
-`state_key` and snapshots include the changed fields. 59 of the 82 Mega forms are playable: the rest have an ability
-the engine does not model (Magic Bounce, Trace, Mold Breaker, Healer, Prankster, Thermal Exchange, Sheer Force,
-Berserk, Fairy Aura, Shadow Tag, Protean, Parental Bond, Aura Guard, Mega Sol, Fire Mane, Spicy Spray, Innards Out)
-and are rejected at `start()` when the stone is held. Abilities added with it: Huge Power, Pure Power, Tough Claws,
-Adaptability, Mega Launcher, Strong Jaw, Iron Fist, Sharpness, Technician, Pixilate, Aerilate, Refrigerate,
-Dragonize, Thick Fat (was inert), Multiscale, Filter, Shell Armor, No Guard, Skill Link, Speed Boost, Unseen Fist,
-Piercing Drill, Infiltrator, Stalwart, Bulletproof, Eelevate, Regenerator, Contrary, Defiant, Competitive, Solar
-Power. Numbers in `tests/test_mega.py`.
+`state_key` and snapshots include the changed fields. All 82 Mega forms are playable (a test asserts it); a team
+whose stone leads to an unmodeled ability is still rejected at `start()`. Abilities added with Mega Evolution: Huge
+Power, Pure Power, Tough Claws, Adaptability, Mega Launcher, Strong Jaw, Iron Fist, Sharpness, Technician, Pixilate,
+Aerilate, Refrigerate, Dragonize, Thick Fat (was inert), Multiscale, Filter, Shell Armor, No Guard, Skill Link, Speed
+Boost, Unseen Fist, Piercing Drill, Infiltrator, Stalwart, Bulletproof, Eelevate, Regenerator, Contrary, Defiant,
+Competitive, Solar Power. Numbers in `tests/test_mega.py`.
+
+Mega-form abilities (66 stubs, 58 run; the rest are numbers in `tests/test_abilities.py`): Prankster (+1 priority on
+status moves, re-read after a Mega Evolution; Dark foes immune), Shadow Tag (`is_trapped` now takes the battle),
+Magic Bounce (a `bounce` stage after Protect; the reflected move runs as `run_bounced`, once), Trace (copies a random
+foe's ability and starts it, also when a Mega form gets it), Mold Breaker (`calc.abilities.breaks`: ignores Levitate,
+the absorbing abilities, Clear Body and friends, Shell Armor, Thick Fat, Multiscale, Filter, Magic Bounce, Sand Veil),
+Sheer Force (secondary effects dropped, x1.3, no Life Orb recoil), Parental Bond (second hit at 1/4 power; not for
+status, spread, multi-hit, charge or `noparentalbond` moves), Healer, Thermal Exchange, Spicy Spray, Berserk, Innards
+Out, Protean (first move after entering; undone on switch-out), Aura Guard, Fire Mane, Fairy Aura, Mega Sol.
 
 Pivot moves and forced switches (36 stubs, all run): see `engine/pivot.py`. After U-turn, Volt Switch, Flip Turn, Parting
 Shot, Chilly Reception or Baton Pass has done its work (it hit, the user is alive, a bench exists) the user switches out.
@@ -174,6 +181,6 @@ New `substitute` event. Numbers in `tests/test_substitute.py`.
 
 volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
 counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
-Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Teleport, Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), the 23 Mega forms with unmodeled abilities, Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Teleport, Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.
