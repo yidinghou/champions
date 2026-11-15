@@ -59,9 +59,12 @@ def legal_choices(battle, side):
             if not volatiles.can_choose(mon, mv, moves_data()[mv]) or not volatiles.choice_allows(mon, mv):
                 continue
             for fslot, _ in foes or [(0, None)]:
-                out.append(Move(side, slot, mv, (1 - side, fslot)))
-                if mega.can_evolve(battle, mon):
-                    out.append(Move(side, slot, mv, (1 - side, fslot), mega=True))
+                bench = [i for i, m in enumerate(s.team) if not m.fainted and i not in s.active]
+                pivots = bench if move_effects(mv).get("pivot") and len(bench) > 1 else [None]    # name the replacement
+                for pv in pivots:
+                    out.append(Move(side, slot, mv, (1 - side, fslot), pivot_to=pv))
+                    if mega.can_evolve(battle, mon):
+                        out.append(Move(side, slot, mv, (1 - side, fslot), mega=True, pivot_to=pv))
         for i, m in enumerate(s.team):
             if not m.fainted and i not in s.active and not volatiles.is_trapped(mon):
                 out.append(Switch(side, slot, i))
@@ -87,12 +90,18 @@ def validate(battle, choices):
         if c.move not in mon.moves:
             raise ValueError(f"{mon.species} does not know {c.move}")
         move_effects(c.move)  # Unsupported if not modeled
+        if c.pivot_to is not None:
+            s = battle.sides[c.side]
+            if not 0 <= c.pivot_to < len(s.team) or s.team[c.pivot_to].fainted or c.pivot_to in s.active:
+                raise ValueError(f"illegal pivot target {c.pivot_to}")
         if not volatiles.choice_allows(mon, c.move):
             raise ValueError(f"{mon.species} is locked into {mon.volatiles['choicelock']} by its Choice item")
     mega.check_choice(battle, choices)
 
 
-def run_switch(battle, act):
+def run_switch(battle, act, cause=None, passing=None):
+    """Swap the mon in a slot. cause: the move that made it happen (log only). passing: Baton Pass's payload,
+    {"stages": ..., "volatiles": ...}, given to the replacement before its entry effects run."""
     s = battle.sides[act.side]
     old = s.mon_at(act.slot)
     if old is not None:
@@ -101,7 +110,11 @@ def run_switch(battle, act):
         old.clear_on_switch()
     s.active[act.slot] = act.to
     new = s.team[act.to]
-    battle.log_event("switch", mon=new.ref, slot=act.slot)
+    battle.log_event("switch", mon=new.ref, slot=act.slot, cause=cause)
+    if passing:
+        new.stages.update(passing["stages"])
+        for name, value in passing["volatiles"].items():
+            new.add_volatile(name, value)
     send_in(battle, new)
     update_all(battle)
 
@@ -112,7 +125,7 @@ def run_action(battle, act):
         return run_switch(battle, act)
     target = tuple(act.target) if act.target else None
     move_id = volatiles.forced_move(mon, act.move)
-    run_move(battle, mon, move_id, target)
+    run_move(battle, mon, move_id, target, getattr(act, "pivot_to", None))
     if "protect" not in move_effects(act.move):
         mon.volatiles.pop("protect_chain", None)      # the Protect chain breaks on any other move
     if battle.sides[mon.side].mon_at(act.slot) is mon:        # not if an Eject Button or Red Card moved it out

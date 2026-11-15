@@ -182,6 +182,9 @@ class Battle:
     def mon(self, side, slot):
         return self.sides[side].mon_at(slot)
 
+    def on_field(self, mon):
+        return mon.idx in self.sides[mon.side].active
+
     def events(self, kind=None, **match):
         """Log entries of a kind whose data contains every key=value in match."""
         return [e for e in self.log if (kind is None or e.kind == kind)

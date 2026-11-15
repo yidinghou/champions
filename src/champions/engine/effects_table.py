@@ -5,7 +5,7 @@ engine lists, per move, the effects it implements. A move missing from here rais
 Effect keys: first_turn_only, volatile, target_boost, trap, status, rest, cure_team, yawn, type_immunity, secondary [{chance, volatile|boost|status}], self_drop {stat: -n}, recoil [n, d],
 drain [n, d], protect, crit_stage, trick_room, weather (sun|rain|sand|snow), terrain (electric|grassy|misty|psychic),
 weather_heal, weather_ball, weather_accuracy {weather: True | percent}, side_condition (reflect|lightscreen|auroraveil|tailwind),
-break_screens, redirect (followme|ragepowder).
+break_screens, redirect (followme|ragepowder), pivot (True | "baton"), force_switch.
 """
 from __future__ import annotations
 
@@ -76,6 +76,16 @@ MOVES = {
     "ragepowder": {"redirect": "ragepowder"},
     "thunderbolt": {"secondary": [{"chance": 10, "status": "par"}]},
     "hydropump": {},
+    "uturn": {"pivot": True},
+    "voltswitch": {"pivot": True},
+    "flipturn": {"pivot": True},
+    "partingshot": {"target_boost": {"atk": -1, "spa": -1}, "pivot": True},
+    "batonpass": {"pivot": "baton"},
+    "chillyreception": {"weather": "snow", "pivot": True},
+    "dragontail": {"force_switch": True},
+    "circlethrow": {"force_switch": True},
+    "roar": {"force_switch": True},
+    "whirlwind": {"force_switch": True},
     "reflect": {"side_condition": "reflect"},
     "lightscreen": {"side_condition": "lightscreen"},
     "auroraveil": {"side_condition": "auroraveil"},

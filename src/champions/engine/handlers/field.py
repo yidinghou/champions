@@ -32,6 +32,7 @@ def set_weather_move(battle, ctx):
     kind = ctx.effects["weather"]
     if not arena.set_weather(battle, kind, ctx.user, cause=ctx.move_id):
         battle.log_event("fail", mon=ctx.user.ref, move=ctx.move_id, reason=f"already_{kind}")
+        ctx.failed = True
 
 
 @on("on_hit", "effect:terrain")

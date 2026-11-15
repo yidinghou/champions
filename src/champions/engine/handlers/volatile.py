@@ -8,8 +8,10 @@ from ..stages import change_stat
 def target_boost(battle, ctx):
     t = ctx.current
     if not t.fainted:
-        for stat, n in ctx.effects["target_boost"].items():
-            change_stat(battle, t, stat, n, source=ctx.user, cause="foe")
+        moved = sum(abs(change_stat(battle, t, stat, n, source=ctx.user, cause="foe"))
+                    for stat, n in ctx.effects["target_boost"].items())
+        if not moved:
+            ctx.failed = True                  # nothing changed: Parting Shot's user stays in
 
 
 @on("on_hit", "effect:volatile")

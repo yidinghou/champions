@@ -161,6 +161,8 @@ def _describe(e):
         if "cure" in d:
             return f"{mon_name(d['mon'])} is no longer {STATUS_WORDS.get(d['cure'], d['cure'])}"
         return f"{mon_name(d['mon'])} is {STATUS_WORDS.get(d['add'], d['add'])}"
+    if k == "switch" and d.get("cause"):
+        return f"{mon_name(d['mon'])} was sent out ({move_name(d['cause'])})"
     if k == "switch":
         return f"{mon_name(d['mon'])} was sent out"
     if k == "mega":

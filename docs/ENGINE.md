@@ -29,6 +29,7 @@ src/champions/
     game.py        start, play_turn, validate, run_to_end
     pipeline/      one move as fixed stages; each logs why it stopped a target
     volatiles.py   confusion, Taunt, Encore, Disable, Leech Seed, trapping
+    pivot.py       pivot moves (U-turn, Baton Pass...) and forced switches (Dragon Tail, Roar...)
     mega.py        Mega Evolution: stone -> form, once-per-side rule, the form change
     items.py       held items: which are modeled, consume(), Update checks, Focus Sash/Band
     redirect.py    Follow Me, Rage Powder, Lightning Rod, Storm Drain redirection; type-absorbing abilities
@@ -151,10 +152,18 @@ Dragonize, Thick Fat (was inert), Multiscale, Filter, Shell Armor, No Guard, Ski
 Piercing Drill, Infiltrator, Stalwart, Bulletproof, Eelevate, Regenerator, Contrary, Defiant, Competitive, Solar
 Power. Numbers in `tests/test_mega.py`.
 
+Pivot moves and forced switches (36 stubs, all run): see `engine/pivot.py`. After U-turn, Volt Switch, Flip Turn, Parting
+Shot, Chilly Reception or Baton Pass has done its work (it hit, the user is alive, a bench exists) the user switches out.
+The player names the replacement in the choice (`Move.pivot_to`, a team index; `legal_choices` lists each option),
+otherwise the first living bench mon comes in. Parting Shot switches only if a stat actually dropped, Chilly Reception
+only if snow started, Baton Pass hands over stages, confusion and Leech Seed before the entry effects. Dragon Tail,
+Circle Throw, Roar and Whirlwind swap the surviving target for a random bench mon (rng label `forceswitch`) before any
+Eject Button reacts. A mon pulled out mid-turn loses its queued action. The `switch` event now carries `cause`.
+
 ## Deferred
 
 Substitute, volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
 counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Solar Power, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
-Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), the 23 Mega forms with unmodeled abilities, Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Teleport, Shed Tail, Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), the 23 Mega forms with unmodeled abilities, Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.

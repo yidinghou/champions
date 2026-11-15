@@ -14,12 +14,15 @@ class Move:
     move: str
     target: Optional[Target] = None
     mega: bool = False
+    pivot_to: Optional[int] = None      # team index to switch to after a pivot move (U-turn...); None = first living bench mon
 
     def to_dict(self):
         d = {"side": self.side, "slot": self.slot, "move": self.move,
              "target": list(self.target) if self.target else None}
         if self.mega:
             d["mega"] = True
+        if self.pivot_to is not None:
+            d["pivot_to"] = self.pivot_to
         return d
 
 
@@ -37,4 +40,4 @@ def from_dict(d):
     if "switch" in d:
         return Switch(d["side"], d["slot"], d["switch"])
     t = d.get("target")
-    return Move(d["side"], d["slot"], d["move"], tuple(t) if t else None, bool(d.get("mega")))
+    return Move(d["side"], d["slot"], d["move"], tuple(t) if t else None, bool(d.get("mega")), d.get("pivot_to"))
