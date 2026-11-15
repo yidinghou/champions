@@ -111,3 +111,77 @@ class LabeledRng(Rng):
             return True
         ok, v = self._take(label)
         return self._note(label, bool(v) if ok else True)
+
+
+def _buckets(a, b, k):
+    """Split a..b into at most k contiguous groups of near-equal size.
+    Returns [(representative value, probability)], the representative being the group's middle."""
+    n = b - a + 1
+    k = max(1, min(k, n))
+    out, start = [], a
+    for i in range(k):
+        size = n // k + (1 if i < n % k else 0)
+        out.append((start + (size - 1) // 2, size / n))
+        start += size
+    return out
+
+
+class EnumRng(Rng):
+    """Walks a decision tree instead of sampling, so a solver can enumerate chance outcomes.
+
+    Each draw is a branch point with a list of (value, probability) outcomes. `prefix` holds the
+    outcome index to take at each branch point in order; past the prefix it takes index 0. After a run,
+    `trace` lists (n_outcomes, probabilities, chosen_index) per draw, which is what resolve() uses to
+    schedule the other branches. Draws that are certain (chance >= 100, one-value ranges) are not branch points.
+
+    buckets: {label prefix: k} - a randint under that label is split into k groups (see _buckets).
+    dists:   {label prefix: [(value, prob), ...]} - an exact distribution that replaces the uniform one.
+    """
+    DEFAULT_BUCKETS = {"damage_roll": 4}
+    DEFAULT_DISTS = {"hit_count": [(1, 0.35), (36, 0.35), (71, 0.15), (86, 0.15)]}  # 2/3/4/5 hits
+
+    def __init__(self, prefix=(), buckets=None, dists=None):
+        super().__init__(0)
+        self.prefix = list(prefix)
+        self.buckets = dict(self.DEFAULT_BUCKETS if buckets is None else buckets)
+        self.dists = dict(self.DEFAULT_DISTS if dists is None else dists)
+        self.trace = []
+
+    def clone(self):
+        c = super().clone()
+        c.prefix, c.trace = list(self.prefix), list(self.trace)
+        return c
+
+    @property
+    def probability(self):
+        """Probability of the path taken so far."""
+        p = 1.0
+        for _, probs, idx in self.trace:
+            p *= probs[idx]
+        return p
+
+    def _draw(self, label, outcomes):
+        if len(outcomes) == 1:
+            return outcomes[0][0]
+        i = len(self.trace)
+        idx = self.prefix[i] if i < len(self.prefix) else 0
+        self.trace.append((len(outcomes), [p for _, p in outcomes], idx))
+        return outcomes[idx][0]
+
+    def randint(self, a, b, label="randint"):
+        outcomes = None
+        for prefix, d in self.dists.items():
+            if label.startswith(prefix):
+                outcomes = d
+        if outcomes is None:
+            k = next((k for p, k in self.buckets.items() if label.startswith(p)), b - a + 1)
+            outcomes = _buckets(a, b, k)
+        return self._note(label, max(a, min(b, self._draw(label, outcomes))))
+
+    def chance(self, pct, label="chance"):
+        if pct >= 100:
+            return True
+        if pct <= 0:
+            return self._note(label, False)
+        p = pct / 100
+        return self._note(label, self._draw(label, [(True, p), (False, 1 - p)]))
