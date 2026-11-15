@@ -3,7 +3,7 @@ from ..hooks import on
 
 
 def _dealt(ctx):
-    return sum(ctx.damage.values())
+    return ctx.dealt_total()          # damage taken by a Substitute counts too
 
 
 @on("on_after_all_hits", "effect:recoil")

@@ -5,6 +5,7 @@ from ...calc.items import berry_halves
 from ...calc.typechart import effectiveness
 from ..hooks import fire
 from .immunity import ignore_for
+from .substitute import behind
 from .targets import SPREAD
 
 # chance of a crit per crit stage, in percent (1/24, 1/8, 1/2, always)
@@ -51,6 +52,18 @@ def run(ctx):
                 if dmg and items.can_eat(b, target) and berry_halves(target.item, ctx.move["type"],
                                         effectiveness(ctx.move["type"], target.types, ignore)):
                     items.consume(b, target, cause="weaken", move=ctx.move_id)   # the calc already halved this hit
+                if behind(ctx, target):                  # the Substitute takes the hit; nothing reaches the mon
+                    sub_state = target.volatiles["substitute"]
+                    taken = min(dmg, sub_state["hp"])
+                    sub_state["hp"] -= taken
+                    ctx.sub_damage[target.ref] = ctx.sub_damage.get(target.ref, 0) + taken
+                    broke = sub_state["hp"] <= 0
+                    b.log_event("substitute", mon=target.ref, move=ctx.move_id, amount=taken, left=max(0, sub_state["hp"]), broke=broke)
+                    if broke:
+                        target.remove_volatile("substitute")
+                    ctx.current = target
+                    fire(b, "on_hit", ctx, ["effect:self_drop"] if "self_drop" in ctx.effects else [])   # the user's own drop still happens
+                    continue
                 dmg = items.cap_damage(b, target, dmg)
                 dealt = target.take(dmg)
                 total += dealt

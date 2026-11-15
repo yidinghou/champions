@@ -137,14 +137,14 @@ def kings_rock(battle, ctx):
 
 @on("on_after_all_hits", "item:shellbell")
 def shell_bell(battle, ctx):
-    total = sum(ctx.damage.values())
+    total = ctx.dealt_total()
     if total > 0 and not ctx.user.fainted:
         ctx.user.heal(max(1, total // 8))
 
 
 @on("on_after_all_hits", "item:lifeorb")
 def life_orb(battle, ctx):
-    if sum(ctx.damage.values()) > 0 and not ctx.user.fainted and ctx.user.ability != "magicguard":
+    if ctx.dealt_total() > 0 and not ctx.user.fainted and ctx.user.ability != "magicguard":
         ctx.user.take(max(1, ctx.user.max_hp // 10))
 
 

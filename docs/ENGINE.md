@@ -29,6 +29,7 @@ src/champions/
     game.py        start, play_turn, validate, run_to_end
     pipeline/      one move as fixed stages; each logs why it stopped a target
     volatiles.py   confusion, Taunt, Encore, Disable, Leech Seed, trapping
+    handlers/substitute.py + pipeline/substitute.py   Substitute and Shed Tail (the decoy is mon.volatiles["substitute"] = {hp})
     pivot.py       pivot moves (U-turn, Baton Pass...) and forced switches (Dragon Tail, Roar...)
     mega.py        Mega Evolution: stone -> form, once-per-side rule, the form change
     items.py       held items: which are modeled, consume(), Update checks, Focus Sash/Band
@@ -160,10 +161,19 @@ only if snow started, Baton Pass hands over stages, confusion and Leech Seed bef
 Circle Throw, Roar and Whirlwind swap the surviving target for a random bench mon (rng label `forceswitch`) before any
 Eject Button reacts. A mon pulled out mid-turn loses its queued action. The `switch` event now carries `cause`.
 
+Substitute and Shed Tail (39 stubs, all run): the decoy is the volatile `substitute` = `{hp}`. Using it costs max HP // 4
+(fails at or below that, or if one is up). A damaging hit goes to the decoy (damage worked out as usual, capped at its
+HP, no overflow, later hits of a multi-hit move reach the mon) and then nothing else reaches the target: no secondary,
+flinch, stat drop, Rocky Helmet or Eject Button. `ctx.dealt_total()` counts decoy damage, so recoil, drain, Shell Bell
+and Life Orb still work, and the user's self-drop and pivot still happen. Status moves fail with reason `substitute`
+(a stage after accuracy) unless the move has the `bypasssub` flag or the user has Infiltrator. Intimidate skips the
+holder. Baton Pass keeps the decoy (copied); Shed Tail costs half max HP rounded up and gives the replacement half of that.
+New `substitute` event. Numbers in `tests/test_substitute.py`.
+
 ## Deferred
 
-Substitute, volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
-counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Solar Power, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
-Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Teleport, Shed Tail, Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), the 23 Mega forms with unmodeled abilities, Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
+volatile-status leftovers (Torment, U-turn pivot, the 14 `verify` stubs), major-status leftovers (the 8 `verify` stubs: full paralysis, freeze applies/thaw, sleep wake,
+counters on switch, Corrosion, Substitute interaction), Cloud Nine and Air Lock, Hydration, Dry Skin, Forecast, Solar Beam and the other terrain moves (Terrain Pulse,
+Rising Voltage, Expanding Force, Grassy Glide, Steel Roller), Teleport, Wide Guard and Quick Guard, Spotlight, Stalwart, Flash Fire, Dry Skin, Earth Eater, Safeguard, Mist, hazards, the items in the catalogue's open lists (Metronome, Normal Gem, Leek), the 23 Mega forms with unmodeled abilities, Tera (out of scope), Defiant/Competitive/Contrary/Mirror Armor, Triple Axel per-hit
 accuracy, real residual effects, `verify` stubs that need a
 source check. Each `TODO(...)` comment in `src/` names the mechanic it belongs to.

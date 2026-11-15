@@ -1,6 +1,6 @@
 """One move, as fixed stages. Each stage removes targets from ctx.targets or stops the move, and logs why.
 
-can_move -> targets -> protect -> terrain -> screens -> absorb -> immunity -> accuracy -> per hit: damage, on_hit -> on_after_all_hits.
+can_move -> targets -> protect -> terrain -> screens -> absorb -> immunity -> accuracy -> substitute -> per hit: damage, on_hit -> on_after_all_hits.
 A target removed by a stage gets no later stage: no damage, no effects, no self-drop.
 """
 from __future__ import annotations
@@ -13,7 +13,7 @@ from ..effects_table import move_effects
 from ..hooks import fire
 from ..teams import moves_data
 from .. import arena
-from . import absorb, accuracy, can_move, hit, immunity, protect, screens, targets, terrain
+from . import absorb, accuracy, substitute, can_move, hit, immunity, protect, screens, targets, terrain
 
 
 @dataclass
@@ -29,9 +29,15 @@ class MoveContext:
     targets: List[Any] = field(default_factory=list)
     spread: bool = False   # unused: hit.run decides spread from the targets that are actually hit
     damage: Dict[str, int] = field(default_factory=dict)   # target ref -> total damage dealt
+    sub_damage: Dict[str, int] = field(default_factory=dict)  # target ref -> damage a Substitute took
+    shed_hp: int = 0                                          # Shed Tail: HP of the substitute the replacement gets
     hit_count: Dict[str, int] = field(default_factory=dict)
     stopped: bool = False
     current: Any = None
+
+    def dealt_total(self):
+        """Damage dealt to targets and to their Substitutes: what recoil, drain, Shell Bell and Life Orb go by."""
+        return sum(self.damage.values()) + sum(self.sub_damage.values())
 
     def stop(self):
         self.stopped = True
@@ -44,7 +50,7 @@ class MoveContext:
         return out
 
 
-STAGES = [targets.resolve, protect.check, terrain.check, screens.check, absorb.check, immunity.check, accuracy.check]
+STAGES = [targets.resolve, protect.check, terrain.check, screens.check, absorb.check, immunity.check, accuracy.check, substitute.check]
 
 
 def run_move(battle, user, move_id, chosen=None, pivot_to=None):

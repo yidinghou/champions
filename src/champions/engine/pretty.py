@@ -36,7 +36,7 @@ def side_style(ref):
 STATUS_WORDS = {"brn": "burned", "psn": "poisoned", "tox": "badly poisoned", "par": "paralyzed",
                 "slp": "asleep", "frz": "frozen"}
 VOLATILE_WORDS = {"confusion": "confused", "taunt": "taunted", "encore": "encored", "disable": "disabled",
-                  "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy", "followme": "the center of attention", "ragepowder": "the center of attention", "choicelock": "locked into a move"}
+                  "leechseed": "seeded", "trapped": "trapped", "yawn": "drowsy", "substitute": "behind a substitute", "followme": "the center of attention", "ragepowder": "the center of attention", "choicelock": "locked into a move"}
 HIDDEN_VOLATILES = {"protect_chain"}      # engine bookkeeping, not something a player sees
 from .arena import TERRAIN_WORDS, WEATHER_WORDS  # noqa: E402
 from .items import item_name  # noqa: E402
@@ -137,6 +137,9 @@ def _describe(e):
         if d.get("start"):
             return f"{name} is up on {who} ({d['turns']} turns)"
         return f"{name} wore off on {who}" if d.get("cause") == "expired" else f"{name} was shattered on {who}"
+    if k == "substitute":
+        who = mon_name(d["mon"])
+        return f"The substitute took {d['amount']} damage for {who}" + (" and faded!" if d["broke"] else f" ({d['left']} left)")
     if k == "crit":
         return "A critical hit!"
     if k == "fail" and d.get("reason") == "already_status":

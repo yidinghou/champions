@@ -15,7 +15,7 @@ from __future__ import annotations
 from .actions import Switch
 from .items import switch_candidates
 
-BATON_VOLATILES = ("confusion", "leechseed")
+BATON_VOLATILES = ("confusion", "leechseed", "substitute")
 
 
 def on_field(battle, mon):
@@ -39,7 +39,10 @@ def pivot(ctx):
     passing = None
     if ctx.effects["pivot"] == "baton":
         passing = {"stages": dict(user.stages),
-                   "volatiles": {k: v for k, v in user.volatiles.items() if k in BATON_VOLATILES}}
+                   "volatiles": {k: (dict(v) if isinstance(v, dict) else v)
+                                 for k, v in user.volatiles.items() if k in BATON_VOLATILES}}
+    elif ctx.effects["pivot"] == "shed":                 # Shed Tail: the replacement gets a substitute, nothing else
+        passing = {"stages": {}, "volatiles": {"substitute": {"hp": ctx.shed_hp}}}
     run_switch(b, Switch(user.side, _slot(b, user), to), cause=ctx.move_id, passing=passing)
 
 

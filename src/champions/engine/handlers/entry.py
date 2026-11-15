@@ -7,8 +7,10 @@ INTIMIDATE_IMMUNE = ("innerfocus", "oblivious", "owntempo", "scrappy")
 
 @on("on_switch_in", "ability:intimidate")
 def intimidate(battle, mon):
-    """Each living adjacent foe's Attack drops by 1. TODO: Substitute skips it."""
+    """Each living adjacent foe's Attack drops by 1, except one behind a Substitute."""
     for _, foe in battle.sides[1 - mon.side].alive_active():
+        if "substitute" in foe.volatiles:
+            continue
         change_stat(battle, foe, "atk", -1, source=mon, cause="intimidate")
 
 
