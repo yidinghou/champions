@@ -1,7 +1,7 @@
 # Replay viewer: requirements
 
 `champions sim view FILE` writes one self-contained HTML page that steps through a replay. Its job is to let a
-person **check the engine by eye**. Look and process are borrowed from the scout UI requirements of a sibling project.
+person **check the engine by eye**. Look and process are borrowed from [reference-card-solver-ui.md](reference-card-solver-ui.md), the requirements of a sibling project's live card-solver UI (reference only; not part of this repo's build).
 
 ## Principles
 

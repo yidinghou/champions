@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>trick_room · replay</title>
+<style>
+:root {
+  --bg: radial-gradient(circle at 30% 20%, #3a2f5c, #1d1830 70%);
+  --panel-bg: rgba(20,18,42,.85); --panel: #14122a; --band: #1b1a3d;
+  --ink: #fff; --mute: #b8b4e0; --edge: #c9c4ff;
+  --me: #9ed0ff; --foe: #ffb3bd;
+  --lime: #c8ec3a; --lime-pale: #f1ff9e;
+  --up: #5fe08a; --down: #ff7a6b;
+  --hp-ok: #3fd47a; --hp-mid: #e0bc2d; --hp-lo: #ff5d5d;
+  --mega-a: #ff6ad5; --mega-b: #7af0ff;
+  font: 600 14px system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 14px; min-height: 100vh; background: #1d1830; background-image: var(--bg); background-attachment: fixed; color: var(--ink); }
+header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+header h1 { margin: 0; font-size: 18px; font-style: italic; }
+header .meta { color: var(--mute); font-weight: 500; font-size: 12px; }
+.grow { flex: 1; }
+button { font: inherit; background: #4a3fd6; color: #fff; border: 1px solid var(--edge); border-radius: 6px; padding: 5px 12px; cursor: pointer; }
+button:hover:not(:disabled) { background: #5b50e8; }
+button:disabled { opacity: .4; cursor: default; }
+button.go { background: var(--lime); color: var(--band); border-color: var(--lime-pale); }
+select { font: inherit; background: var(--panel); color: #fff; border: 1px solid var(--edge); border-radius: 6px; padding: 4px 6px; }
+label.chk { color: var(--mute); font-weight: 500; font-size: 12px; display: inline-flex; gap: 4px; align-items: center; }
+
+.transport { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.transport input[type=range] { flex: 1; min-width: 200px; accent-color: var(--lime); }
+.transport .pos { color: var(--mute); font-weight: 500; font-size: 12px; min-width: 130px; text-align: right; }
+
+.field { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; min-height: 28px; }
+.chip { background: rgba(74,63,214,.25); color: var(--mute); border: 1px solid rgba(201,196,255,.35); border-radius: 999px; padding: 3px 12px; font-size: 12px; }
+.chip.on { background: var(--lime); border-color: var(--lime-pale); color: var(--band); }
+.chip.me { border-color: rgba(158,208,255,.7); color: var(--me); } .chip.foe { border-color: rgba(255,179,189,.7); color: var(--foe); }
+.chip small { font-weight: 500; opacity: .8; margin-left: 4px; }
+
+#board { display: grid; grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr); gap: 14px; align-items: start; }
+.sides { display: flex; flex-direction: column; gap: 14px; }
+.row-panel { display: flex; gap: 14px; padding: 12px; border-radius: 16px; align-items: flex-start; }
+.row-panel.foe { background: rgba(184,40,63,.16); border: 2px solid rgba(255,179,189,.5); }
+.row-panel.mine { background: rgba(74,63,214,.16); border: 2px solid rgba(201,196,255,.5); }
+.row-panel .side { background: rgba(255,255,255,.05); border-radius: 10px; padding: 8px; width: 210px; flex-shrink: 0; }
+.row-panel h3 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); }
+.cards { display: flex; gap: 12px; flex: 1; min-width: 0; padding-top: 4px; }
+.cards > * { flex: 1; min-width: 0; }
+
+/* mini */
+.pmini { position: relative; display: flex; align-items: center; margin-bottom: 6px; font-size: 12px; transition: filter .6s, opacity .6s; }
+.pmini .spr { flex-shrink: 0; width: 34px; height: 34px; margin-right: -14px; z-index: 1; border-radius: 50%; overflow: hidden; background: var(--panel); border: 2px solid var(--edge); }
+.pmini .spr img { width: 130%; height: 130%; margin: -15%; object-fit: contain; }
+.pmini .pnl { flex: 1; min-width: 0; overflow: hidden; background: var(--panel); border: 2px solid var(--edge); border-radius: 0 10px 10px 0; }
+.pmini .ban { display: flex; align-items: center; gap: 4px; padding: 2px 8px 2px 20px; background: linear-gradient(90deg, #4a3fd6, #6a5cf0); }
+.pmini.foe .ban { background: linear-gradient(90deg, #b8283f, #e2566a); }
+.pmini.foe .spr, .pmini.foe .pnl { border-color: var(--foe); }
+.pmini .nm { font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pmini .hpv { margin-left: auto; font-style: italic; font-weight: 800; font-size: 11px; white-space: nowrap; }
+.pmini .bar { height: 5px; background: #2a2850; margin-left: 14px; }
+.pmini .bar i { display: block; height: 100%; background: var(--hp-ok); transition: width .6s ease, background .4s; }
+.pmini .bar i.mid { background: var(--hp-mid); } .pmini .bar i.lo { background: var(--hp-lo); }
+.pmini.active .spr, .pmini.active .pnl { border-color: var(--lime); box-shadow: 0 0 8px rgba(200,236,58,.45); }
+.pmini.fainted { filter: grayscale(1) brightness(.65); opacity: .6; }
+
+/* card */
+.pcard { position: relative; padding: 8px 10px; border-radius: 14px; background: rgba(20,18,42,.55); border: 2px solid rgba(201,196,255,.25); transition: filter .6s, opacity .6s, transform .6s, border-color .3s, box-shadow .3s; }
+.pcard.foe { border-color: rgba(255,140,155,.3); }
+.pcard.slot-empty { display: flex; align-items: center; justify-content: center; border-style: dashed; color: var(--mute); }
+.pcard.acting { border-color: var(--lime); box-shadow: 0 0 14px rgba(200,236,58,.45); }
+.pcard.fainted { filter: grayscale(1) brightness(.6); opacity: .6; transform: translateY(8px); }
+.pcard.mega .np { border-color: var(--mega-a); box-shadow: 0 0 10px rgba(255,106,213,.55); }
+.pcard .np { display: flex; overflow: hidden; background: var(--panel); border: 2px solid var(--edge); border-radius: 14px; height: 76px; }
+.pcard.foe .np { border-color: var(--foe); }
+.pcard .sprite { width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.pcard .sprite img { width: 120%; height: 120%; object-fit: contain; }
+.pcard.hit .sprite img { animation: hit .45s; }
+@keyframes hit { 0%,100% { transform: translateX(0) } 20% { transform: translateX(-6px) } 40% { transform: translateX(6px) } 60% { transform: translateX(-4px) } 80% { transform: translateX(4px) } }
+.pcard .body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pcard .banner { height: 46%; display: flex; align-items: center; gap: 6px; padding: 0 10px 0 22px; margin-left: -8px; background: linear-gradient(90deg, #4a3fd6, #6a5cf0); clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%); }
+.pcard.foe .banner { background: linear-gradient(90deg, #b8283f, #e2566a); }
+.pcard .name { font-style: italic; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcard .hp { flex: 1; display: flex; align-items: center; gap: 8px; padding: 0 10px 0 28px; background: linear-gradient(90deg, rgba(106,92,240,.35), rgba(106,92,240,.12)); clip-path: polygon(22px 0, 100% 0, 100% 100%, 10px 100%); }
+.pcard.foe .hp { background: linear-gradient(90deg, rgba(226,86,106,.35), rgba(226,86,106,.12)); }
+.pcard .bar { position: relative; flex: 1; height: 11px; background: #2a2850; clip-path: polygon(7px 0, 100% 0, 100% 100%, 0 100%); }
+.pcard .bar i { display: block; height: 100%; background: linear-gradient(90deg, #e9e23a, #8ae03a); transition: width .6s ease, background .4s; }
+.pcard .bar i.mid { background: linear-gradient(90deg, #e0bc2d, #e9e23a); } .pcard .bar i.lo { background: linear-gradient(90deg, #ff5d5d, #ff8a5d); }
+.pcard .lbl { font-style: italic; font-weight: 800; font-size: 20px; line-height: 1; white-space: nowrap; }
+.pcard .lbl small { font-size: 12px; opacity: .85; }
+.pcard .dmgpop { position: absolute; right: 8px; top: -6px; font-style: italic; font-weight: 800; font-size: 20px; pointer-events: none; animation: pop 1.1s ease forwards; z-index: 4; text-shadow: 0 1px 2px #000; }
+.pcard .dmgpop.dn { color: var(--down); } .pcard .dmgpop.upp { color: var(--up); }
+@keyframes pop { 0% { opacity: 1; transform: translateY(0) } 100% { opacity: 0; transform: translateY(-26px) } }
+.tychips { display: inline-flex; gap: 3px; margin-left: auto; }
+.ty { font-size: 10px; font-weight: 800; letter-spacing: .03em; padding: 1px 6px; border-radius: 4px; color: #fff; text-transform: uppercase; text-shadow: 0 1px 1px rgba(0,0,0,.4); }
+.status { font-size: 10px; font-weight: 800; letter-spacing: .05em; padding: 1px 5px; border-radius: 4px; animation: spop .35s; }
+@keyframes spop { 0% { transform: scale(0) } 70% { transform: scale(1.2) } 100% { transform: scale(1) } }
+.status.brn { background: #e4613e; } .status.par { background: #e0bc2d; color: var(--band); } .status.psn, .status.tox { background: #9454cc; }
+.status.slp { background: #8a8aa0; } .status.frz { background: #49c8c9; color: var(--band); }
+.pcard .info { display: flex; flex-wrap: wrap; gap: 4px; margin: 7px 0 0; font-size: 11px; font-weight: 500; }
+.tag { padding: 1px 8px; border-radius: 6px; background: #24214a; border: 1px solid rgba(201,196,255,.45); color: var(--mute); }
+.pcard.foe .tag.item { background: #3a1a2c; border-color: rgba(255,179,189,.5); }
+.tag.item { color: #fff; } .tag.used { text-decoration: line-through; opacity: .6; }
+.tag.vol { background: rgba(224,188,45,.15); border-color: rgba(224,188,45,.6); color: #f5dd7a; }
+.tag.mega { border-color: var(--mega-a); color: #ffd6f3; }
+.stages { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-top: 7px; }
+.stat { text-align: center; background: var(--band); border-radius: 5px; padding: 2px 0; color: var(--mute); }
+.stat .nm { display: block; font-size: 10px; font-weight: 800; letter-spacing: .03em; }
+.stat .val { font-style: italic; color: #fff; font-size: 15px; }
+.stat .stg { display: block; font-size: 10px; min-height: 12px; }
+.stat.up .stg, .stat.up .val { color: var(--up); } .stat.down .stg, .stat.down .val { color: var(--down); }
+.stat.pulse .val { animation: pulse .5s; } @keyframes pulse { 0% { transform: scale(1.5) } 100% { transform: scale(1) } }
+.moves { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+.move { display: flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 13px; border: 2px solid var(--edge); background: linear-gradient(90deg, #4a3fd6, #6a5cf0); font-size: 12px; transition: background .2s; }
+.move .mn { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.move .pp { font-style: italic; font-weight: 800; font-size: 12px; margin-left: 6px; opacity: .85; }
+.move.sel { background: linear-gradient(90deg, var(--lime), #a3d41b); border-color: var(--lime-pale); color: var(--band); box-shadow: 0 0 8px rgba(200,236,58,.5); }
+.move.sel .pp { opacity: 1; }
+
+.fxbig.fresh { animation: fxin .35s backwards; } @keyframes fxin { from { opacity: 0; transform: scale(.4); } }
+.fxbig { position: absolute; inset: 0; z-index: 6; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: rgba(13,12,28,.62);
+  font-size: 30px; font-weight: 900; font-style: italic; color: #f1e08a; text-shadow: 0 2px 6px #000; }
+.fxbig.protected { color: #7af0ff; } .fxbig.immune { color: var(--mute); }
+#fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+#fx .beam { position: absolute; height: 5px; border-radius: 3px; transform-origin: 0 50%; opacity: 0; }
+#fx .orb { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; opacity: 0; }
+#fx .ring { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 4px solid; opacity: 0; }
+#fx .tag-fx { position: absolute; transform: translate(-50%, -50%); font-weight: 800; font-style: italic; font-size: 16px; text-shadow: 0 1px 3px #000; opacity: 0; white-space: nowrap; }
+.pcard.targeted { outline: 3px dashed var(--lime); outline-offset: 4px; }
+.pcard.targeted.foe { outline-color: #ffb3bd; }
+.panel { background: var(--panel-bg); border: 1px solid rgba(201,196,255,.25); border-radius: 10px; padding: 10px 12px; }
+.panel h2 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); display: flex; align-items: center; gap: 8px; }
+aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: flex; flex-direction: column; min-width: 0; }
+#log { overflow-y: auto; flex: 1; min-height: 200px; }
+.turnhead { margin: 10px 0 4px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); cursor: pointer; }
+.turnhead:first-child { margin-top: 0; }
+.ev { display: block; padding: 3px 8px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border-left: 3px solid transparent; }
+.ev:hover { background: rgba(201,196,255,.1); }
+.ev.cur { background: rgba(200,236,58,.18); border-left-color: var(--lime); font-weight: 700; }
+.ev.future { opacity: .35; }
+.ev.k-move { font-weight: 700; margin-top: 4px; }
+.ev.k-damage, .ev.k-recoil { color: #ffb27a; } .ev.k-heal { color: var(--up); } .ev.k-faint { color: #ff8a7a; font-weight: 800; }
+.ev.k-win { color: var(--up); font-weight: 800; } .ev.k-fail, .ev.k-missed, .ev.k-immune, .ev.k-blocked, .ev.k-protected { color: #f1e08a; }
+.ev.k-turn_end, .ev.k-start { color: var(--mute); font-style: italic; }
+.ev .p1 { color: var(--me); } .ev .p2 { color: var(--foe); }
+.raw { margin: 2px 0 0; padding: 4px 6px; border-radius: 5px; background: #0d0c1c; color: var(--mute); font: 11px/1.4 ui-monospace, monospace; white-space: pre-wrap; word-break: break-all; font-weight: 400; }
+.hint { color: var(--mute); font-weight: 500; font-size: 11px; margin-top: 8px; }
+.banner-win { margin-bottom: 10px; padding: 8px 12px; border-radius: 10px; background: rgba(95,224,138,.18); border: 1px solid var(--up); color: var(--up); font-weight: 800; display: none; }
+@media (max-width: 1000px) { #board { grid-template-columns: 1fr; } aside { position: static; max-height: none; } .row-panel { flex-direction: column; } .row-panel .side { width: 100%; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>trick_room</h1><span class="meta" id="meta"></span><span class="grow"></span>
+  <label class="chk"><input type="checkbox" id="raw"> raw events &amp; rolls</label>
+  <label class="chk"><input type="checkbox" id="anim" checked> attack animation</label>
+  <label class="chk"><input type="checkbox" id="exact" checked> exact HP</label>
+</header>
+<div class="transport">
+  <button id="first" title="Home">⏮</button><button id="prevturn" title="Shift+←">◀ turn</button><button id="prev" title="←">◀</button>
+  <button id="play" class="go" title="Space">▶ Play</button>
+  <button id="next" title="→">▶</button><button id="nextturn" title="Shift+→">turn ▶</button><button id="last" title="End">⏭</button>
+  <input type="range" id="seek" min="0" value="0">
+  <select id="speed"><option value="1600">slow</option><option value="900" selected>normal</option><option value="400">fast</option><option value="150">very fast</option></select>
+  <span class="pos" id="pos"></span>
+</div>
+<div class="banner-win" id="winner"></div>
+<div id="fx"></div>
+<div class="field" id="field"></div>
+<div id="board">
+  <div class="sides">
+    <div class="row-panel foe"><div class="side"><h3>P2 team</h3><div id="bench-p2"></div></div><div class="cards" id="cards-p2"></div></div>
+    <div class="row-panel mine"><div class="side"><h3>P1 team</h3><div id="bench-p1"></div></div><div class="cards" id="cards-p1"></div></div>
+  </div>
+  <aside><div class="panel" style="display:flex;flex-direction:column;min-height:0;flex:1"><h2>Log</h2><div id="log"></div>
+    <div class="hint">← → step · Shift+← → turn · Space play · click a line to jump</div></div></aside>
+</div>
+<script>
+const DATA = {"format":"singles","seed":4,"frames":[{"turn":0,"kind":"start","text":"Battle start","data":{"format":"singles","seed":4},"raw":[{"turn":0,"kind":"start","data":{"format":"singles","seed":4}}],"state":{"turn":0,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":8},{"id":"surf","name":"Surf","pp":16}],"hp":170,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":16}],"hp":183,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{},"winner":null}},{"turn":1,"kind":"move","text":"Garchomp (P2) used Dragon Claw!","data":{"mon":"p2:garchomp","move":"dragonclaw"},"raw":[{"turn":1,"kind":"turn","data":{"number":1}},{"turn":1,"kind":"move","data":{"mon":"p2:garchomp","move":"dragonclaw"}}],"state":{"turn":1,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":8},{"id":"surf","name":"Surf","pp":16}],"hp":170,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":16}],"hp":183,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{},"winner":null},"targets":[{"mon":"p1:slowbro","outcome":"hit"}],"mtype":"dragon","category":"physical","spread":false},{"turn":1,"kind":"damage","text":"Slowbro (P1) takes 54 damage (116/170)","data":{"mon":"p1:slowbro","amount":54,"hp":"116/170"},"raw":[{"turn":1,"kind":"hit","data":{"mon":"p1:slowbro","move":"dragonclaw","n":1,"spread":false}},{"turn":1,"kind":"rng","data":{"label":"crit","value":false}},{"turn":1,"kind":"rng","data":{"label":"damage_roll","value":88}},{"turn":1,"kind":"damage","data":{"mon":"p1:slowbro","amount":54,"hp":"116/170"}}],"state":{"turn":1,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":8},{"id":"surf","name":"Surf","pp":16}],"hp":116,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":15}],"hp":183,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{},"winner":null}},{"turn":1,"kind":"move","text":"Slowbro (P1) used Trick Room!","data":{"mon":"p1:slowbro","move":"trickroom"},"raw":[{"turn":1,"kind":"move","data":{"mon":"p1:slowbro","move":"trickroom"}}],"state":{"turn":1,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":8},{"id":"surf","name":"Surf","pp":16}],"hp":116,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":15}],"hp":183,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{},"winner":null},"targets":[{"mon":"p1:slowbro","outcome":"hit"}],"mtype":"psychic","category":"status","spread":false},{"turn":1,"kind":"field","text":"Slowbro (P1) twisted the dimensions! (Trick Room, 5 turns)","data":{"effect":"trick_room","start":true,"turns":5,"mon":"p1:slowbro"},"raw":[{"turn":1,"kind":"hit","data":{"mon":"p1:slowbro","move":"trickroom","n":1,"spread":false}},{"turn":1,"kind":"field","data":{"effect":"trick_room","start":true,"turns":5,"mon":"p1:slowbro"}}],"state":{"turn":1,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":16}],"hp":116,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":15}],"hp":183,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":5},"winner":null}},{"turn":1,"kind":"turn_end","text":"End of turn 1","data":{},"raw":[],"state":{"turn":1,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":16}],"hp":116,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":15}],"hp":183,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":4},"winner":null}},{"turn":2,"kind":"move","text":"Slowbro (P1) used Surf!","data":{"mon":"p1:slowbro","move":"surf"},"raw":[{"turn":2,"kind":"turn","data":{"number":2}},{"turn":2,"kind":"move","data":{"mon":"p1:slowbro","move":"surf"}}],"state":{"turn":2,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":16}],"hp":116,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":15}],"hp":183,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":4},"winner":null},"targets":[{"mon":"p2:garchomp","outcome":"hit"}],"mtype":"water","category":"special","spread":true},{"turn":2,"kind":"damage","text":"Garchomp (P2) takes 70 damage (113/183)","data":{"mon":"p2:garchomp","amount":70,"hp":"113/183"},"raw":[{"turn":2,"kind":"hit","data":{"mon":"p2:garchomp","move":"surf","n":1,"spread":false}},{"turn":2,"kind":"rng","data":{"label":"crit","value":false}},{"turn":2,"kind":"rng","data":{"label":"damage_roll","value":100}},{"turn":2,"kind":"damage","data":{"mon":"p2:garchomp","amount":70,"hp":"113/183"}}],"state":{"turn":2,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":15}],"hp":116,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":15}],"hp":113,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":4},"winner":null}},{"turn":2,"kind":"move","text":"Garchomp (P2) used Dragon Claw!","data":{"mon":"p2:garchomp","move":"dragonclaw"},"raw":[{"turn":2,"kind":"move","data":{"mon":"p2:garchomp","move":"dragonclaw"}}],"state":{"turn":2,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":15}],"hp":116,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":15}],"hp":113,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":4},"winner":null},"targets":[{"mon":"p1:slowbro","outcome":"hit"}],"mtype":"dragon","category":"physical","spread":false},{"turn":2,"kind":"damage","text":"Slowbro (P1) takes 54 damage (62/170)","data":{"mon":"p1:slowbro","amount":54,"hp":"62/170"},"raw":[{"turn":2,"kind":"hit","data":{"mon":"p1:slowbro","move":"dragonclaw","n":1,"spread":false}},{"turn":2,"kind":"rng","data":{"label":"crit","value":false}},{"turn":2,"kind":"rng","data":{"label":"damage_roll","value":87}},{"turn":2,"kind":"damage","data":{"mon":"p1:slowbro","amount":54,"hp":"62/170"}}],"state":{"turn":2,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":15}],"hp":62,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":14}],"hp":113,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":4},"winner":null}},{"turn":2,"kind":"turn_end","text":"End of turn 2","data":{},"raw":[],"state":{"turn":2,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":15}],"hp":62,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":14}],"hp":113,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":3},"winner":null}}],"final":{"turn":2,"sides":[{"active":[0],"team":[{"ref":"p1:slowbro","species":"slowbro","types":["water","psychic"],"ability":"owntempo","item":null,"item_name":null,"moves":[{"id":"trickroom","name":"Trick Room","pp":7},{"id":"surf","name":"Surf","pp":15}],"hp":62,"max_hp":170,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":95,"def":130,"spa":120,"spd":100,"spe":50}}],"conditions":{},"mega_used":false},{"active":[0],"team":[{"ref":"p2:garchomp","species":"garchomp","types":["dragon","ground"],"ability":"sandveil","item":null,"item_name":null,"moves":[{"id":"dragonclaw","name":"Dragon Claw","pp":14}],"hp":113,"max_hp":183,"status":null,"stages":{},"volatiles":{},"mega":false,"fainted":false,"slot":0,"stats":{"atk":150,"def":115,"spa":100,"spd":105,"spe":122}}],"conditions":{},"mega_used":false}],"arena":{"trick_room":3},"winner":null},"icons":{"garchomp":"data:image/png;base64,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","slowbro":"data:image/png;base64,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"}};
+const F = DATA.frames;
+const TYPE_COLORS = {normal:"#9a9a7a",fire:"#e8602c",water:"#4d82e8",electric:"#d9b414",grass:"#5cae3c",ice:"#6cc6c6",fighting:"#b02820",poison:"#8f3a8f",ground:"#c9a54a",flying:"#8a72d6",psychic:"#e84a7e",bug:"#8fa012",rock:"#a58c28",ghost:"#614a86",dragon:"#5a22e8",dark:"#5a4538",steel:"#9a9ab8",fairy:"#e888a8"};
+const STAT_NAMES = {atk:"Atk",def:"Def",spa:"SpA",spd:"SpD",spe:"Spe"};
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const title = (s) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const $ = (id) => document.getElementById(id);
+let i = 0, timer = null;
+// Outcomes: misses are announced first and the label is held until the next move (docs/viewer-ui.md, V-06)
+const NONHIT = new Set(["missed", "immune", "protected", "blocked"]);
+const LABEL = {protected: "Protected", immune: "No effect", missed: "Missed", blocked: "Blocked"};
+function results(n) {                       // what happened to each mon so far this turn, up to frame n
+  const t = F[n].turn, out = {}; let last = -1;
+  for (let j = 0; j <= n; j++) {
+    const f = F[j]; if (f.turn !== t) continue;
+    if (f.kind === "move") { last = j; for (const tg of f.targets || []) if (tg.mon !== f.data.mon) (out[tg.mon] ||= []).push({outcome: tg.outcome, move: j}); }
+    else if (f.kind === "damage") (out[f.data.mon] ||= []).push({outcome: "damage", amount: f.data.amount, move: last});
+  }
+  return {out, last};
+}
+// when each target of a move frame resolves (ms after the move starts): misses are announced before the hits
+function plan(f) {
+  const ts = (f.targets || []).filter((t) => t.mon !== f.data.mon), d = {};
+  const miss = ts.filter((t) => NONHIT.has(t.outcome)), hit = ts.filter((t) => !NONHIT.has(t.outcome));
+  miss.forEach((t) => { d[t.mon + t.outcome] = 150; }); hit.forEach((t) => { d[t.mon + t.outcome] = miss.length ? 800 : 250; });
+  return d;
+}
+function fxHtml(m, f) {
+  const {out, last} = results(i), fresh = f.kind === "move", pl = fresh ? plan(f) : {};
+  const e = (out[m.ref] || []).filter((x) => x.move === last && NONHIT.has(x.outcome)).pop();
+  if (!e) return "";
+  return `<div class="fxbig ${e.outcome}${fresh && e.move === i ? ` fresh" style="animation-delay:${pl[m.ref + e.outcome] ?? 0}ms` : ""}">${LABEL[e.outcome]}</div>`;
+}
+
+function find(state, ref) { for (const s of state.sides) for (const m of s.team) if (m.ref === ref) return m; return null; }
+function hpClass(m) { const f = m.hp / m.max_hp; return f <= .2 ? "lo" : f <= .5 ? "mid" : ""; }
+function icon(sp) { const u = DATA.icons[sp]; return u ? `<img src="${u}" alt="">` : `<span style="font-size:11px;color:var(--mute)">${esc(sp.slice(0,2))}</span>`; }
+function hpText(m, side) { return $("exact").checked ? `<b>${m.hp}</b><small>/${m.max_hp}</small>` : `<b>${Math.round(100 * m.hp / m.max_hp)}</b><small>%</small>`; }
+
+function stat(m, k) {
+  const s = m.stages[k] || 0, base = m.stats[k];
+  const val = Math.floor(base * (s >= 0 ? (2 + s) / 2 : 2 / (2 - s)));
+  return `<div class="stat ${s > 0 ? "up" : s < 0 ? "down" : ""}" data-k="${k}"><span class="nm">${STAT_NAMES[k]}</span><span class="val">${val}</span><span class="stg">${s ? (s > 0 ? "+" : "") + s : ""}</span></div>`;
+}
+function otherStages(m) { return ["acc", "eva"].filter((k) => m.stages[k]).map((k) => `<span class="tag vol">${k === "acc" ? "Accuracy" : "Evasion"} ${m.stages[k] > 0 ? "+" : ""}${m.stages[k]}</span>`).join(""); }
+
+function cardHtml(m, side, f, prev) {
+  const ev = f.data || {};
+  const acting = f.kind === "move" && ev.mon === m.ref;
+  const pm = prev && find(prev.state, m.ref);
+  const diff = pm && pm.hp !== m.hp && pm.species === m.species ? m.hp - pm.hp : 0;
+  const hit = diff < 0;
+  const used = acting ? ev.move : null;
+  const cls = ["pcard", side === 1 ? "foe" : "", m.fainted ? "fainted" : "", m.mega ? "mega" : "", acting ? "acting" : "", hit ? "hit" : ""].join(" ");
+  const pct = Math.max(m.hp > 0 ? 1 : 0, 100 * m.hp / m.max_hp);
+  const vols = Object.keys(m.volatiles).map((k) => `<span class="tag vol">${esc(k)}${m.volatiles[k] !== true && typeof m.volatiles[k] !== "object" ? " " + esc(m.volatiles[k]) : ""}</span>`).join("");
+  const itemTag = m.item ? `<span class="tag item" title="held item">${esc(m.item_name)}</span>` : (itemWas(m) ? `<span class="tag item used">${esc(itemWas(m))}</span>` : `<span class="tag">no item</span>`);
+  return `<div class="${cls}" data-ref="${m.ref}">
+    ${fxHtml(m, f)}
+    ${diff ? `<span class="dmgpop ${diff < 0 ? "dn" : "upp"}">${diff > 0 ? "+" : ""}${diff}</span>` : ""}
+    <div class="np"><div class="sprite">${icon(m.species)}</div><div class="body">
+      <div class="banner"><span class="name">${esc(title(m.species))}</span>${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}
+        <span class="tychips">${m.types.map((t) => `<span class="ty" style="background:${TYPE_COLORS[t] || "#666"}">${esc(t)}</span>`).join("")}</span></div>
+      <div class="hp"><div class="bar"><i class="${hpClass(m)}" style="width:${pct}%"></i></div><span class="lbl">${hpText(m, side)}</span></div>
+    </div></div>
+    <div class="info">${itemTag}<span class="tag" title="ability">${esc(m.ability)}</span>${m.mega ? `<span class="tag mega">Mega</span>` : ""}${vols}${otherStages(m)}</div>
+    <div class="stages">${["atk", "def", "spa", "spd", "spe"].map((k) => stat(m, k)).join("")}</div>
+    <div class="moves">${m.moves.map((mv) => `<div class="move ${used === mv.id ? "sel" : ""}"><span class="mn">${esc(mv.name)}</span>${mv.pp != null ? `<span class="pp">${mv.pp}</span>` : ""}</div>`).join("")}</div>
+  </div>`;
+}
+// the item a mon started with, so "used" items can show struck through
+const startItems = {};
+for (const s of F[0].state.sides) for (const m of s.team) startItems[m.ref] = m.item_name;
+function itemWas(m) { return startItems[m.ref]; }
+
+function miniHtml(m, side) {
+  const cls = ["pmini", side === 1 ? "foe" : "", m.slot != null ? "active" : "", m.fainted ? "fainted" : ""].join(" ");
+  const pct = Math.max(m.hp > 0 ? 1 : 0, 100 * m.hp / m.max_hp);
+  return `<div class="${cls}"><div class="spr">${icon(m.species)}</div><div class="pnl"><div class="ban"><span class="nm">${esc(title(m.species))}</span>
+    ${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}<span class="hpv">${m.fainted ? "KO" : $("exact").checked ? `${m.hp}/${m.max_hp}` : Math.round(100 * m.hp / m.max_hp) + "%"}</span></div>
+    <div class="bar"><i class="${hpClass(m)}" style="width:${pct}%"></i></div></div></div>`;
+}
+
+function fieldHtml(st) {
+  const a = st.arena, out = [];
+  const W = {sun: "Harsh sunlight", rain: "Rain", sand: "Sandstorm", snow: "Snow"}, T = {electric: "Electric Terrain", grassy: "Grassy Terrain", misty: "Misty Terrain", psychic: "Psychic Terrain"};
+  const left = (n) => (n != null ? `<small>${n} left</small>` : "");
+  if (a.weather) out.push(`<span class="chip on">${W[a.weather] || esc(a.weather)}${left(a.weather_turns)}</span>`);
+  if (a.terrain) out.push(`<span class="chip on">${T[a.terrain] || esc(a.terrain)}${left(a.terrain_turns)}</span>`);
+  if (a.trick_room) out.push(`<span class="chip on">Trick Room${left(a.trick_room)}</span>`);
+  st.sides.forEach((s, si) => { for (const [k, v] of Object.entries(s.conditions)) out.push(`<span class="chip ${si ? "foe" : "me"}">P${si + 1} · ${esc(k)}${v && v !== true && typeof v !== "object" ? `<small>${esc(v)}</small>` : ""}</span>`); if (s.mega_used) out.push(`<span class="chip ${si ? "foe" : "me"}">P${si + 1} · Mega used</span>`); });
+  const known = new Set(["weather", "weather_turns", "terrain", "terrain_turns", "trick_room"]);
+  for (const [k, v] of Object.entries(a)) if (!known.has(k)) out.push(`<span class="chip">${esc(k)}: ${esc(JSON.stringify(v))}</span>`);
+  return out.join("") || `<span class="chip">no field effects</span>`;
+}
+
+function render() {
+  const f = F[i], prev = i > 0 ? F[i - 1] : null, st = f.state;
+  for (const side of [0, 1]) {
+    const s = st.sides[side], p = `p${side + 1}`;
+    $("bench-" + p).innerHTML = s.team.map((m) => miniHtml(m, side)).join("");
+    const slots = s.active.map((idx) => (idx == null ? null : s.team[idx]));
+    $("cards-" + p).innerHTML = slots.map((m) => (m ? cardHtml(m, side, f, prev) : `<div class="pcard slot-empty ${side ? "foe" : ""}">empty slot</div>`)).join("");
+  }
+  $("field").innerHTML = fieldHtml(st);
+  const w = $("winner");
+  if (st.winner != null) { w.style.display = "block"; w.textContent = st.winner === -1 ? "Draw" : `P${st.winner + 1} wins`; } else w.style.display = "none";
+  $("seek").max = F.length - 1; $("seek").value = i;
+  $("pos").textContent = `${f.turn ? "turn " + f.turn + " · " : ""}step ${i + 1}/${F.length}`;
+  $("prev").disabled = $("first").disabled = i === 0;
+  $("next").disabled = $("last").disabled = i === F.length - 1;
+  renderLog();
+}
+
+let logBuilt = false;
+function colorize(text) { return esc(text).replace(/\((P1|P2)\)/g, (_, p) => `<span class="${p.toLowerCase()}">(${p})</span>`); }
+function renderLog() {
+  const el = $("log"), showRaw = $("raw").checked;
+  if (!logBuilt || el.dataset.raw !== String(showRaw)) {
+    let h = "", lastTurn = -1;
+    F.forEach((f, n) => {
+      if (f.turn !== lastTurn) { lastTurn = f.turn; h += `<div class="turnhead" data-seek="${n}">${f.turn ? "Turn " + f.turn : "Start"}</div>`; }
+      h += `<div class="ev k-${f.kind}" data-i="${n}">${colorize(f.text)}${showRaw && f.raw.length ? `<div class="raw">${esc(f.raw.map((r) => r.kind + " " + JSON.stringify(r.data)).join("\n"))}</div>` : ""}</div>`;
+    });
+    el.innerHTML = h; el.dataset.raw = String(showRaw); logBuilt = true;
+  }
+  el.querySelectorAll(".ev").forEach((e) => { const n = +e.dataset.i; e.classList.toggle("cur", n === i); e.classList.toggle("future", n > i); });
+  const cur = el.querySelector(".ev.cur");
+  if (cur) { const r = cur.getBoundingClientRect(), pr = el.getBoundingClientRect(); if (r.top < pr.top || r.bottom > pr.bottom) cur.scrollIntoView({block: "center", behavior: "smooth"}); }
+}
+
+const center = (el) => { const r = el.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; };
+const cardOf = (ref) => document.querySelector(`.pcard[data-ref="${ref}"]`);
+function attackFx(f) {
+  if (!$("anim").checked || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const fx = $("fx"), user = cardOf(f.data.mon);
+  if (!user) return;
+  const color = TYPE_COLORS[f.mtype] || "#fff", u = center(user);
+  const targets = (f.targets || []).filter((t) => t.mon !== f.data.mon).map((t) => ({...t, el: cardOf(t.mon)})).filter((t) => t.el);
+  const add = (cls, css, text) => { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css); if (text) d.textContent = text; fx.appendChild(d); return d; };
+  const clean = (ms) => setTimeout(() => { fx.innerHTML = ""; }, ms);
+  if (!targets.length) {                         // self / field moves: the user glows
+    user.animate([{boxShadow: "0 0 0 0 " + color}, {boxShadow: `0 0 28px 6px ${color}`}, {boxShadow: "0 0 0 0 " + color}], {duration: 700});
+    return;
+  }
+  const c = targets.map((t) => center(t.el)), mx = c.reduce((a, p) => a + p.x, 0) / c.length, my = c.reduce((a, p) => a + p.y, 0) / c.length;
+  const physical = f.category !== "special";
+  const dx = (mx - u.x) * (physical ? .55 : .12), dy = (my - u.y) * (physical ? .55 : .12);     // contact moves close in, others rear back
+  user.style.zIndex = 5;
+  user.animate([{transform: "none"}, {transform: `translate(${-dx * .15}px,${-dy * .15}px) scale(1.02)`, offset: .25}, {transform: `translate(${dx}px,${dy}px) scale(1.05)`, offset: .5}, {transform: "none"}],
+               {duration: 750, easing: "ease-in-out"}).onfinish = () => { user.style.zIndex = ""; };
+  const pl = plan(f);
+  targets.forEach((t, k) => {
+    const delay = pl[t.mon + t.outcome] ?? 250, miss = NONHIT.has(t.outcome);
+    setTimeout(() => t.el.classList.add("targeted"), delay); setTimeout(() => t.el.classList.remove("targeted"), delay + 900);
+    const p = c[k], len = Math.hypot(p.x - u.x, p.y - u.y), ang = Math.atan2(p.y - u.y, p.x - u.x), reach = miss ? .55 : 1;   // a blocked shot fizzles short
+    if (!physical || f.spread) {                // ranged / spread: a beam from the user to each target
+      const beam = add("beam", {left: u.x + "px", top: u.y + "px", width: len + "px", background: `linear-gradient(90deg, transparent, ${miss ? "#8a8aa0" : color})`, transform: `rotate(${ang}rad) scaleX(0)`});
+      beam.animate([{opacity: 0, transform: `rotate(${ang}rad) scaleX(0)`}, {opacity: .95, transform: `rotate(${ang}rad) scaleX(${reach})`, offset: .45}, {opacity: 0, transform: `rotate(${ang}rad) scaleX(${reach})`}], {duration: 650, delay, fill: "backwards"}).onfinish = () => beam.remove();
+    }
+    const orb = add("orb", {left: u.x + "px", top: u.y + "px", background: miss ? "#8a8aa0" : color, boxShadow: `0 0 14px 4px ${miss ? "#8a8aa0" : color}`});
+    const ox = (p.x - u.x) * reach, oy = (p.y - u.y) * reach;
+    orb.animate([{opacity: 1, transform: "translate(0,0)"}, {opacity: 1, transform: `translate(${ox}px,${oy}px)`, offset: .8}, {opacity: 0, transform: `translate(${ox}px,${oy}px) scale(${miss ? .4 : 2.2})`}], {duration: 500, delay, easing: "ease-in", fill: "backwards"}).onfinish = () => orb.remove();
+    const ring = add("ring", {left: p.x + "px", top: p.y + "px", borderColor: miss ? "rgba(120,230,255,.9)" : color});
+    ring.animate([{opacity: 1, transform: "scale(.4)"}, {opacity: 0, transform: "scale(3.2)"}], {duration: 600, delay: delay + 450, fill: "backwards", easing: "ease-out"}).onfinish = () => ring.remove();
+  });
+}
+function go(n, anim = true) {
+  const from = i; i = Math.max(0, Math.min(F.length - 1, n)); render();
+  if (anim && i !== from && F[i].kind === "move") attackFx(F[i]);   // jumps, turn buttons and log clicks play it too
+}
+function turnStartOf(t) { return F.findIndex((f) => f.turn === t); }
+function turnStart(dir) {
+  const t = F[i].turn;
+  if (dir > 0) { const n = F.findIndex((f, k) => k > i && f.turn !== t); return n < 0 ? F.length - 1 : n; }
+  const here = turnStartOf(t);
+  return here < i ? here : i > 0 ? turnStartOf(F[i - 1].turn) : 0;   // first press: top of this turn; again: the turn before
+}
+function dwell(f) {                          // extra time on a move step so its outcomes can be read while playing
+  if (f.kind !== "move") return 0;
+  return (f.targets || []).some((t) => t.mon !== f.data.mon && NONHIT.has(t.outcome)) ? 1200 : 0;
+}
+function stop() { clearTimeout(timer); timer = null; $("play").textContent = "▶ Play"; }
+function play() {
+  if (timer) return stop();
+  if (i === F.length - 1) i = 0;
+  $("play").textContent = "⏸ Pause";
+  const tick = () => { if (i >= F.length - 1) return stop(); go(i + 1); timer = setTimeout(tick, +$("speed").value + dwell(F[i])); };
+  timer = setTimeout(tick, 0);
+}
+$("prev").onclick = () => { stop(); go(i - 1); }; $("next").onclick = () => { stop(); go(i + 1); };
+$("prevturn").onclick = () => { stop(); go(turnStart(-1)); }; $("nextturn").onclick = () => { stop(); go(turnStart(1)); };
+$("play").onclick = play; $("seek").oninput = (e) => { stop(); go(+e.target.value, false); };   // scrubbing stays quiet
+$("raw").onchange = render; $("exact").onchange = render;
+$("log").onclick = (e) => { const t = e.target.closest("[data-i],[data-seek]"); if (t) { stop(); go(+(t.dataset.i ?? t.dataset.seek)); } };
+addEventListener("keydown", (e) => {
+  if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT" && e.target.type !== "range" && e.target.type !== "checkbox") return;
+  if (e.key === "ArrowRight") { stop(); go(e.shiftKey ? turnStart(1) : i + 1); e.preventDefault(); }
+  else if (e.key === "ArrowLeft") { stop(); go(e.shiftKey ? turnStart(-1) : i - 1); e.preventDefault(); }
+  else if (e.key === " ") { play(); e.preventDefault(); }
+  else if (e.key === "Home") go(0); else if (e.key === "End") go(F.length - 1);
+});
+$("meta").textContent = `${DATA.format} · seed ${DATA.seed} · ${Math.max(...F.map((f) => f.turn))} turns`;
+render();
+</script>
+</body>
+</html>
