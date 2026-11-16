@@ -7,6 +7,7 @@ MunchStats snapshot unless the page says otherwise.
 from __future__ import annotations
 
 import json
+import re
 from functools import lru_cache
 from itertools import product
 
@@ -51,6 +52,18 @@ def usage():
     return snap["pokemon"] if snap else {}
 
 
+def usage_entry(name):
+    """The MunchStats entry for a species or form: 'basculegion-male' is 'basculegion', '-female' is '...f', 'aegislash-shield' is 'aegislash'."""
+    u, sp = usage(), species_data().get(name, {})
+    base = name.split("-")[0]
+    for k in (name, sp.get("species", name), re.sub(r"-male$", "", name), re.sub(r"-female$", "f", name), base,
+              base + ("f" if name.endswith("-female") else "")):
+        e = u.get(common.key(k))
+        if e:
+            return e
+    return {}
+
+
 def _top(pcts, ok=lambda _: True):
     return [(n, p) for n, p in sorted(pcts.items(), key=lambda kv: -kv[1]) if ok(n)]
 
@@ -60,7 +73,7 @@ def foe_spec(name):
     if name not in species_data():
         raise BadBoard(f"unknown Pokémon: {name}")
     sp = species_data()[name]
-    e = usage().get(common.key(name), {})
+    e = usage_entry(name)
     moves_ok = set(learnsets().get(sp["species"], learnsets().get(name, [])))
     abil = {teams.key(a) for a in sp["abilities"] + [sp.get("hidden_ability") or ""]}
     spec = {"species": name, "ability": sp["abilities"][0]}
@@ -84,7 +97,7 @@ def foe_spec(name):
 def usage_moves(name, limit=8):
     """[{id, pct}] for a species, commonest first (only moves the game data knows)."""
     mv = teams.moves_data()
-    e = usage().get(common.key(name), {})
+    e = usage_entry(name)
     return [{"id": teams.key(n), "pct": p} for n, p in _top(e.get("moves", {})) if teams.key(n) in mv][:limit]
 
 

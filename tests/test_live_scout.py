@@ -99,3 +99,14 @@ class MoveFlow(unittest.TestCase):
         from champions.live.moveflow import flow
         for mid in teams.moves_data():
             self.assertIn(flow(mid)["target"], ("one", "foes", "all", "none"))
+
+
+class Forms(unittest.TestCase):
+    def test_gendered_and_form_names_find_their_usage(self):
+        for name in ("basculegion-male", "basculegion-female", "aegislash-shield", "meowstic-male"):
+            self.assertTrue(scout.usage_moves(name), name)
+        self.assertIn("wavecrash", [m["id"] for m in scout.usage_moves("basculegion-male")])
+
+    def test_the_dex_learnset_follows_the_form_name(self):
+        from champions.live.server import dex
+        self.assertIn("wavecrash", dex()["species"]["basculegion-male"]["learnset"])
