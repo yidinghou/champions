@@ -121,7 +121,7 @@ label.chk { color: var(--mute); font-weight: 500; font-size: 12px; display: inli
 .fxbig.fresh { animation: fxin .35s backwards; } @keyframes fxin { from { opacity: 0; transform: scale(.4); } }
 .fxbig { position: absolute; inset: 0; z-index: 6; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: rgba(13,12,28,.62);
   font-size: 30px; font-weight: 900; font-style: italic; color: #f1e08a; text-shadow: 0 2px 6px #000; }
-.fxbig.protected { color: #7af0ff; } .fxbig.immune { color: var(--mute); }
+.fxbig.protected { color: #7af0ff; } .fxbig.crit { color: #ffb44d; } .fxbig.immune { color: var(--mute); }
 #fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
 #fx .beam { position: absolute; height: 5px; border-radius: 3px; transform-origin: 0 50%; opacity: 0; }
 #fx .orb { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; opacity: 0; }
@@ -137,6 +137,7 @@ aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: fl
 .turnhead:first-child { margin-top: 0; }
 .ev { display: block; padding: 3px 8px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border-left: 3px solid transparent; }
 .ev:hover { background: rgba(201,196,255,.1); }
+.ev.grp { background: rgba(200,236,58,.07); }
 .ev.cur { background: rgba(200,236,58,.18); border-left-color: var(--lime); font-weight: 700; }
 .ev.future { opacity: .35; }
 .ev.k-move { font-weight: 700; margin-top: 4px; }
@@ -162,7 +163,7 @@ aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: fl
   <button id="play" class="go" title="Space">▶ Play</button>
   <button id="next" title="→">▶</button><button id="nextturn" title="Shift+→">turn ▶</button><button id="last" title="End">⏭</button>
   <input type="range" id="seek" min="0" value="0">
-  <select id="speed"><option value="1600">slow</option><option value="900" selected>normal</option><option value="400">fast</option><option value="150">very fast</option></select>
+  <select id="speed"><option value="1200">slow</option><option value="500" selected>normal</option><option value="150">fast</option><option value="0">very fast</option></select>
   <span class="pos" id="pos"></span>
 </div>
 <div class="banner-win" id="winner"></div>
@@ -174,7 +175,7 @@ aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: fl
     <div class="row-panel mine"><div class="side"><h3>P1 team</h3><div id="bench-p1"></div></div><div class="cards" id="cards-p1"></div></div>
   </div>
   <aside><div class="panel" style="display:flex;flex-direction:column;min-height:0;flex:1"><h2>Log</h2><div id="log"></div>
-    <div class="hint">← → step · Shift+← → turn · Space play · click a line to jump</div></div></aside>
+    <div class="hint">← → action · Shift+← → turn · Space play · click a line to replay its action</div></div></aside>
 </div>
 <script>
 const DATA = __DATA__;
@@ -185,15 +186,16 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",
 const title = (s) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 const $ = (id) => document.getElementById(id);
 let i = 0, timer = null;
-// Outcomes: misses are announced first and the label is held until the next move (docs/viewer-ui.md, V-06)
+// Notifications: a label over the target card, held until the next move (docs/viewer-ui.md, V-06). Misses and "No effect" are announced
+// before the hits; a critical hit is announced when its hit lands.
 const NONHIT = new Set(["missed", "immune", "protected", "blocked"]);
-const LABEL = {protected: "Protected", immune: "No effect", missed: "Missed", blocked: "Blocked"};
+const LABEL = {protected: "Protected", immune: "No effect", missed: "Missed", blocked: "Blocked", crit: "Critical hit!"};
 function results(n) {                       // what happened to each mon so far this turn, up to frame n
   const t = F[n].turn, out = {}; let last = -1;
   for (let j = 0; j <= n; j++) {
     const f = F[j]; if (f.turn !== t) continue;
-    if (f.kind === "move") { last = j; for (const tg of f.targets || []) if (tg.mon !== f.data.mon) (out[tg.mon] ||= []).push({outcome: tg.outcome, move: j}); }
-    else if (f.kind === "damage") (out[f.data.mon] ||= []).push({outcome: "damage", amount: f.data.amount, move: last});
+    if (f.kind === "move") { last = j; for (const tg of f.targets || []) if (tg.mon !== f.data.mon) (out[tg.mon] ||= []).push({outcome: tg.outcome, move: j, at: j}); }
+    else if (f.kind === "crit") (out[f.data.mon] ||= []).push({outcome: "crit", move: last, at: j});
   }
   return {out, last};
 }
@@ -205,10 +207,18 @@ function plan(f) {
   return d;
 }
 function fxHtml(m, f) {
-  const {out, last} = results(i), fresh = f.kind === "move", pl = fresh ? plan(f) : {};
-  const e = (out[m.ref] || []).filter((x) => x.move === last && NONHIT.has(x.outcome)).pop();
+  const {out, last} = results(i);
+  const e = (out[m.ref] || []).filter((x) => x.move === last && LABEL[x.outcome]).pop();
   if (!e) return "";
-  return `<div class="fxbig ${e.outcome}${fresh && e.move === i ? ` fresh" style="animation-delay:${pl[m.ref + e.outcome] ?? 0}ms` : ""}">${LABEL[e.outcome]}</div>`;
+  const fresh = e.at === i, delay = fresh && f.kind === "move" ? plan(f)[m.ref + e.outcome] ?? 0 : 0;
+  return `<div class="fxbig ${e.outcome}${fresh ? ` fresh" style="animation-delay:${delay}ms` : ""}">${LABEL[e.outcome]}</div>`;
+}
+// HP bars glide from where they were: a bar is drawn at its old width, then set to its new one
+const lastPct = {};
+function barW(key, pct) { return `data-k="${key}" data-w="${pct}" style="width:${lastPct[key] ?? pct}%"`; }
+function glideBars() {
+  const els = [...document.querySelectorAll("[data-w]")];
+  requestAnimationFrame(() => requestAnimationFrame(() => els.forEach((el) => { el.style.width = el.dataset.w + "%"; lastPct[el.dataset.k] = +el.dataset.w; })));
 }
 
 function find(state, ref) { for (const s of state.sides) for (const m of s.team) if (m.ref === ref) return m; return null; }
@@ -240,7 +250,7 @@ function cardHtml(m, side, f, prev) {
     <div class="np"><div class="sprite">${icon(m.species)}</div><div class="body">
       <div class="banner"><span class="name">${esc(title(m.species))}</span>${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}
         <span class="tychips">${m.types.map((t) => `<span class="ty" style="background:${TYPE_COLORS[t] || "#666"}">${esc(t)}</span>`).join("")}</span></div>
-      <div class="hp"><div class="bar"><i class="${hpClass(m)}" style="width:${pct}%"></i></div><span class="lbl">${hpText(m, side)}</span></div>
+      <div class="hp"><div class="bar"><i class="${hpClass(m)}" ${barW("c" + m.ref, pct)}></i></div><span class="lbl">${hpText(m, side)}</span></div>
     </div></div>
     <div class="info">${itemTag}<span class="tag" title="ability">${esc(m.ability)}</span>${m.mega ? `<span class="tag mega">Mega</span>` : ""}${vols}${otherStages(m)}</div>
     <div class="stages">${["atk", "def", "spa", "spd", "spe"].map((k) => stat(m, k)).join("")}</div>
@@ -257,7 +267,7 @@ function miniHtml(m, side) {
   const pct = Math.max(m.hp > 0 ? 1 : 0, 100 * m.hp / m.max_hp);
   return `<div class="${cls}"><div class="spr">${icon(m.species)}</div><div class="pnl"><div class="ban"><span class="nm">${esc(title(m.species))}</span>
     ${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}<span class="hpv">${m.fainted ? "KO" : $("exact").checked ? `${m.hp}/${m.max_hp}` : Math.round(100 * m.hp / m.max_hp) + "%"}</span></div>
-    <div class="bar"><i class="${hpClass(m)}" style="width:${pct}%"></i></div></div></div>`;
+    <div class="bar"><i class="${hpClass(m)}" ${barW("m" + m.ref, pct)}></i></div></div></div>`;
 }
 
 function fieldHtml(st) {
@@ -284,10 +294,11 @@ function render() {
   $("field").innerHTML = fieldHtml(st);
   const w = $("winner");
   if (st.winner != null) { w.style.display = "block"; w.textContent = st.winner === -1 ? "Draw" : `P${st.winner + 1} wins`; } else w.style.display = "none";
-  $("seek").max = F.length - 1; $("seek").value = i;
-  $("pos").textContent = `${f.turn ? "turn " + f.turn + " · " : ""}step ${i + 1}/${F.length}`;
-  $("prev").disabled = $("first").disabled = i === 0;
-  $("next").disabled = $("last").disabled = i === F.length - 1;
+  glideBars();
+  $("seek").max = G.length - 1; $("seek").value = cur;
+  $("pos").textContent = `${f.turn ? "turn " + f.turn + " · " : ""}action ${cur + 1}/${G.length}`;
+  $("prev").disabled = $("first").disabled = cur === 0 && !running;
+  $("next").disabled = $("last").disabled = cur === G.length - 1 && !running;
   renderLog();
 }
 
@@ -303,9 +314,9 @@ function renderLog() {
     });
     el.innerHTML = h; el.dataset.raw = String(showRaw); logBuilt = true;
   }
-  el.querySelectorAll(".ev").forEach((e) => { const n = +e.dataset.i; e.classList.toggle("cur", n === i); e.classList.toggle("future", n > i); });
-  const cur = el.querySelector(".ev.cur");
-  if (cur) { const r = cur.getBoundingClientRect(), pr = el.getBoundingClientRect(); if (r.top < pr.top || r.bottom > pr.bottom) cur.scrollIntoView({block: "center", behavior: "smooth"}); }
+  el.querySelectorAll(".ev").forEach((e) => { const n = +e.dataset.i; e.classList.toggle("cur", n === i); e.classList.toggle("grp", gOf[n] === cur); e.classList.toggle("future", gOf[n] > cur || (gOf[n] === cur && n > i)); });
+  const line = el.querySelector(".ev.cur");
+  if (line) { const r = line.getBoundingClientRect(), pr = el.getBoundingClientRect(); if (r.top < pr.top || r.bottom > pr.bottom) line.scrollIntoView({block: "center", behavior: "smooth"}); }
 }
 
 const center = (el) => { const r = el.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; };
@@ -344,43 +355,60 @@ function attackFx(f) {
     ring.animate([{opacity: 1, transform: "scale(.4)"}, {opacity: 0, transform: "scale(3.2)"}], {duration: 600, delay: delay + 450, fill: "backwards", easing: "ease-out"}).onfinish = () => ring.remove();
   });
 }
-function go(n, anim = true) {
-  const from = i; i = Math.max(0, Math.min(F.length - 1, n)); render();
-  if (anim && i !== from && F[i].kind === "move") attackFx(F[i]);   // jumps, turn buttons and log clicks play it too
+// ---- Playback. One step = one action: a move and everything it causes (damage, boosts, status, faints...).
+// Landing on an action shows the board as the move starts, plays the attack, then plays each effect in turn at its impact time,
+// so the after-effects animate as part of the move. Back goes to the move and replays it.
+const G = [];
+F.forEach((f, n) => { const g = G[G.length - 1]; if (g && f.group === F[g.start].group) g.end = n; else G.push({start: n, end: n}); });
+G.forEach((g) => { g.turn = F[g.start].turn; g.isMove = F[g.start].kind === "move"; });
+const gOf = F.map(() => 0); G.forEach((g, k) => { for (let n = g.start; n <= g.end; n++) gOf[n] = k; });
+let cur = 0, running = false, seq = [];
+const QUIET_KINDS = new Set(["immune", "missed", "protected", "blocked"]);      // already shown by the move's labels
+const animOn = () => $("anim").checked && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+function seqPlan(g) {                       // [{n, t}]: which frame to show, ms after landing
+  const base = g.isMove ? ((F[g.start].targets || []).some((t) => t.mon !== F[g.start].data.mon && NONHIT.has(t.outcome)) ? 1300 : 900) : 450;
+  const ns = []; for (let n = g.start + 1; n < g.end; n++) if (!(g.isMove && QUIET_KINDS.has(F[n].kind))) ns.push(n);
+  if (g.end > g.start) ns.push(g.end);
+  return ns.map((n, k) => ({n, t: base + k * 450}));
 }
-function turnStartOf(t) { return F.findIndex((f) => f.turn === t); }
-function turnStart(dir) {
-  const t = F[i].turn;
-  if (dir > 0) { const n = F.findIndex((f, k) => k > i && f.turn !== t); return n < 0 ? F.length - 1 : n; }
-  const here = turnStartOf(t);
-  return here < i ? here : i > 0 ? turnStartOf(F[i - 1].turn) : 0;   // first press: top of this turn; again: the turn before
+const duration = (g) => (animOn() ? Math.max(0, ...seqPlan(g).map((p) => p.t)) + (g.isMove ? 350 : 0) + (g.isMove && g.end === g.start ? 700 : 0) : 0);
+function cancelSeq() { seq.forEach(clearTimeout); seq = []; running = false; }
+function land(k, animate = true) {
+  cancelSeq(); cur = Math.max(0, Math.min(G.length - 1, k)); const g = G[cur];
+  if (!animate || !animOn()) { i = g.end; render(); return; }
+  i = g.start; running = g.end > g.start; render();
+  if (g.isMove) attackFx(F[g.start]);
+  seqPlan(g).forEach((p, idx, all) => seq.push(setTimeout(() => { i = p.n; if (idx === all.length - 1) running = false; render(); }, p.t)));
 }
-function dwell(f) {                          // extra time on a move step so its outcomes can be read while playing
-  if (f.kind !== "move") return 0;
-  return (f.targets || []).some((t) => t.mon !== f.data.mon && NONHIT.has(t.outcome)) ? 1200 : 0;
-}
+function finish() { cancelSeq(); i = G[cur].end; render(); }
+function nextAction() { if (running) return finish(); land(cur + 1); }
+function prevAction() { if (running) return land(cur); land(cur - 1); }           // mid-action: back to the move; otherwise the move before
+function turnGroup(t) { return G.findIndex((g) => g.turn === t); }
+function nextTurn() { const k = G.findIndex((g, n) => n > cur && g.turn !== G[cur].turn); land(k < 0 ? G.length - 1 : k); }
+function prevTurn() { const here = turnGroup(G[cur].turn); land(here < cur || running ? here : cur > 0 ? turnGroup(G[cur - 1].turn) : 0); }
 function stop() { clearTimeout(timer); timer = null; $("play").textContent = "▶ Play"; }
 function play() {
   if (timer) return stop();
-  if (i === F.length - 1) i = 0;
+  if (cur === G.length - 1 && !running) land(0, false);
   $("play").textContent = "⏸ Pause";
-  const tick = () => { if (i >= F.length - 1) return stop(); go(i + 1); timer = setTimeout(tick, +$("speed").value + dwell(F[i])); };
-  timer = setTimeout(tick, 0);
+  const tick = () => { if (cur >= G.length - 1) return stop(); land(cur + 1); timer = setTimeout(tick, duration(G[cur]) + +$("speed").value); };
+  timer = setTimeout(tick, running ? duration(G[cur]) : 0);
 }
-$("prev").onclick = () => { stop(); go(i - 1); }; $("next").onclick = () => { stop(); go(i + 1); };
-$("prevturn").onclick = () => { stop(); go(turnStart(-1)); }; $("nextturn").onclick = () => { stop(); go(turnStart(1)); };
-$("play").onclick = play; $("seek").oninput = (e) => { stop(); go(+e.target.value, false); };   // scrubbing stays quiet
+$("first").onclick = () => { stop(); land(0, false); }; $("last").onclick = () => { stop(); land(G.length - 1, false); };
+$("prev").onclick = () => { stop(); prevAction(); }; $("next").onclick = () => { stop(); nextAction(); };
+$("prevturn").onclick = () => { stop(); prevTurn(); }; $("nextturn").onclick = () => { stop(); nextTurn(); };
+$("play").onclick = play; $("seek").oninput = (e) => { stop(); land(+e.target.value, false); };   // scrubbing stays quiet
 $("raw").onchange = render; $("exact").onchange = render;
-$("log").onclick = (e) => { const t = e.target.closest("[data-i],[data-seek]"); if (t) { stop(); go(+(t.dataset.i ?? t.dataset.seek)); } };
+$("log").onclick = (e) => { const t = e.target.closest("[data-i],[data-seek]"); if (t) { stop(); land(gOf[+(t.dataset.i ?? t.dataset.seek)]); } };
 addEventListener("keydown", (e) => {
   if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT" && e.target.type !== "range" && e.target.type !== "checkbox") return;
-  if (e.key === "ArrowRight") { stop(); go(e.shiftKey ? turnStart(1) : i + 1); e.preventDefault(); }
-  else if (e.key === "ArrowLeft") { stop(); go(e.shiftKey ? turnStart(-1) : i - 1); e.preventDefault(); }
+  if (e.key === "ArrowRight") { stop(); e.shiftKey ? nextTurn() : nextAction(); e.preventDefault(); }
+  else if (e.key === "ArrowLeft") { stop(); e.shiftKey ? prevTurn() : prevAction(); e.preventDefault(); }
   else if (e.key === " ") { play(); e.preventDefault(); }
-  else if (e.key === "Home") go(0); else if (e.key === "End") go(F.length - 1);
+  else if (e.key === "Home") land(0, false); else if (e.key === "End") land(G.length - 1, false);
 });
 $("meta").textContent = `${DATA.format} · seed ${DATA.seed} · ${Math.max(...F.map((f) => f.turn))} turns`;
-render();
+land(0, false);
 </script>
 </body>
 </html>

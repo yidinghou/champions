@@ -25,6 +25,23 @@ class ViewerTests(unittest.TestCase):
         self.assertEqual({(t["mon"], t["outcome"]) for t in eq["targets"]},
                          {("p2:charizard", "immune"), ("p2:garchomp", "missed"), ("p1:tyranitar", "hit")})
 
+    def test_frames_are_grouped_into_actions_that_start_on_their_move(self):
+        for p in REPLAYS:
+            with self.subTest(p.name):
+                fr = build_frames(load_replay(p))["frames"]
+                groups = [f["group"] for f in fr]
+                self.assertEqual(groups, sorted(groups))                      # never goes back to an earlier action
+                for n, f in enumerate(fr):
+                    if f["kind"] == "move":
+                        self.assertTrue(n == 0 or fr[n - 1]["group"] != f["group"] or fr[n - 1]["kind"] == "mega")
+
+    def test_a_crit_and_its_damage_share_the_moves_action(self):
+        fr = build_frames(load_replay(Path(__file__).parent / "replays" / "trick_room.json"))["frames"]
+        crit = next(f for f in fr if f["kind"] == "crit")
+        move = [f for f in fr if f["kind"] == "move" and f["group"] == crit["group"]]
+        self.assertEqual(len(move), 1)
+        self.assertEqual(move[0]["data"]["move"], "surf")
+
     def test_writes_self_contained_html(self):
         with tempfile.TemporaryDirectory() as t:
             html = write_html(REPLAYS[0], Path(t) / "x.html").read_text()

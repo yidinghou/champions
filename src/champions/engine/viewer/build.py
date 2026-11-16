@@ -58,6 +58,7 @@ def build_frames(replay):
     from ..state import Battle
     frames, pending_raw, holder = [], [], {}
     moves = moves_data()
+    gs = {"g": 0, "kind": {0: "start"}, "mega_wait": False}   # action groups: a move and everything it causes
     cur = {}      # the latest move frame; later events for the same move name its targets and outcomes
     original = Battle.log_event
 
@@ -82,7 +83,7 @@ def build_frames(replay):
         if text is None:
             pending_raw.append(raw)
             return
-        frame = {"turn": e.turn, "kind": kind, "text": text, "data": data,
+        frame = {"turn": e.turn, "kind": kind, "text": text, "data": data, "group": gs["g"],
                  "raw": pending_raw[:] + [raw], "state": snapshot(self)}
         if kind == "move":
             mv = moves.get(data["move"], {})
@@ -93,6 +94,36 @@ def build_frames(replay):
         frames.append(frame)
         pending_raw.clear()
 
+    from .. import game as game_mod, mega as mega_mod
+    originals = {"run_action": game_mod.run_action, "run_residuals": game_mod.run_residuals,
+                 "request_replacements": game_mod.request_replacements, "evolve": mega_mod.evolve}
+
+    def new_group(kind):
+        gs["g"] += 1
+        gs["kind"][gs["g"]] = kind
+
+    def run_action(*a, **k):
+        if gs["mega_wait"]:
+            gs["mega_wait"] = False            # a Mega Evolution and the move after it are one action
+        else:
+            new_group("action")
+        return originals["run_action"](*a, **k)
+
+    def evolve(*a, **k):
+        new_group("action")
+        gs["mega_wait"] = True
+        return originals["evolve"](*a, **k)
+
+    def run_residuals(*a, **k):
+        new_group("residual")
+        return originals["run_residuals"](*a, **k)
+
+    def request_replacements(*a, **k):
+        new_group("replace")
+        return originals["request_replacements"](*a, **k)
+
+    game_mod.run_action, game_mod.run_residuals = run_action, run_residuals
+    game_mod.request_replacements, mega_mod.evolve = request_replacements, evolve
     Battle.log_event = tap
     try:
         b = start(replay["teams"], replay["seed"], replay["format"])
@@ -100,12 +131,15 @@ def build_frames(replay):
             play_turn(b, [from_dict(c) for c in choices])
             end = snapshot(b)
             if not frames or {**frames[-1]["state"], "turn": 0} != {**end, "turn": 0}:   # silent end-of-turn changes
-                frames.append({"turn": n, "kind": "turn_end", "text": f"End of turn {n}", "data": {},
+                frames.append({"turn": n, "kind": "turn_end", "text": f"End of turn {n}", "data": {}, "group": gs["g"],
                                "raw": pending_raw[:], "state": end})
                 pending_raw.clear()
     finally:
         Battle.log_event = original
-    return {"format": replay["format"], "seed": replay["seed"], "frames": frames, "final": snapshot(b)}
+        game_mod.run_action, game_mod.run_residuals = originals["run_action"], originals["run_residuals"]
+        game_mod.request_replacements, mega_mod.evolve = originals["request_replacements"], originals["evolve"]
+    return {"format": replay["format"], "seed": replay["seed"], "frames": frames, "final": snapshot(b),
+            "group_kinds": {str(k): v for k, v in gs["kind"].items()}}
 
 
 def _icon(species):
