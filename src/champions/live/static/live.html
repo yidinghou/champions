@@ -43,13 +43,14 @@ body:not(.step-team) #team-step, body:not(.step-board) #board-step { display: no
 #board-step { display: flex; flex-direction: column; }
 
 /* ---- step 1 ---- */
-.team-panels { display: flex; flex-direction: column; gap: 14px; max-width: 900px; }
+.team-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 1000px; align-items: start; }
+.team-panels .go-row { grid-column: 1 / -1; }
 .tpanel { padding: 14px; border-radius: 16px; }
 .tpanel.foe { background: rgba(184,40,63,.16); border: 2px solid rgba(255,179,189,.5); }
 .tpanel.mine { background: rgba(74,63,214,.16); border: 2px solid rgba(201,196,255,.5); }
 .tpanel h3 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); }
 .tpanel h3 small { text-transform: none; letter-spacing: 0; font-weight: 500; margin-left: 8px; }
-.list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+.list { display: grid; grid-template-columns: 1fr; gap: 8px; max-width: 420px; }
 .pick-row { display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .slotnum { width: 24px; height: 24px; border-radius: 50%; border: 2px dashed var(--mute); display: flex; align-items: center; justify-content: center; color: var(--band); font-weight: 800; flex: none; }
 .slotnum.lead { background: var(--lime); border: 0; } .slotnum.back { background: var(--me); border: 0; }
