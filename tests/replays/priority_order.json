@@ -1,6 +1,6 @@
 {
  "version": 1,
- "format": "singles",
+ "format": "doubles",
  "seed": 5,
  "teams": [
   [
@@ -10,6 +10,14 @@
     "moves": [
      "extremespeed"
     ]
+   },
+   {
+    "species": "umbreon",
+    "ability": "innerfocus",
+    "moves": [
+     "moonlight"
+    ],
+    "hp": 20
    }
   ],
   [
@@ -19,6 +27,14 @@
     "moves": [
      "earthquake"
     ]
+   },
+   {
+    "species": "corviknight",
+    "ability": "pressure",
+    "moves": [
+     "moonlight"
+    ],
+    "hp": 20
    }
   ]
  ],
@@ -38,6 +54,24 @@
     "slot": 0,
     "move": "earthquake",
     "target": null
+   },
+   {
+    "side": 0,
+    "slot": 1,
+    "move": "moonlight",
+    "target": [
+     0,
+     1
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 1,
+    "move": "moonlight",
+    "target": [
+     1,
+     1
+    ]
    }
   ]
  ]

@@ -120,7 +120,8 @@ class SampleReplays(unittest.TestCase):
         out = self.text("trick_room.json")
         self.assertIn("twisted the dimensions", out)
         b = replay.replay(REPLAYS / "trick_room.json")
-        turn2 = [e.data["mon"] for e in b.events("move") if e.turn == 2]
+        pair = ("p1:slowbro", "p2:garchomp")          # the partners only heal; they aren't part of the order check
+        turn2 = [e.data["mon"] for e in b.events("move") if e.turn == 2 and e.data["mon"] in pair]
         self.assertEqual(turn2, ["p1:slowbro", "p2:garchomp"])   # slower mon first
 
 

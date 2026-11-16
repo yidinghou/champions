@@ -1,6 +1,6 @@
 {
  "version": 1,
- "format": "singles",
+ "format": "doubles",
  "seed": 2,
  "teams": [
   [
@@ -12,6 +12,14 @@
      "bodyslam",
      "flamethrower"
     ]
+   },
+   {
+    "species": "umbreon",
+    "ability": "innerfocus",
+    "moves": [
+     "moonlight"
+    ],
+    "hp": 20
    },
    {
     "species": "garchomp",
@@ -30,6 +38,14 @@
      "bodyslam"
     ],
     "hp": 150
+   },
+   {
+    "species": "corviknight",
+    "ability": "pressure",
+    "moves": [
+     "moonlight"
+    ],
+    "hp": 20
    },
    {
     "species": "rillaboom",
@@ -60,6 +76,24 @@
     "target": [
      0,
      0
+    ]
+   },
+   {
+    "side": 0,
+    "slot": 1,
+    "move": "moonlight",
+    "target": [
+     0,
+     1
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 1,
+    "move": "moonlight",
+    "target": [
+     1,
+     1
     ]
    }
   ]
