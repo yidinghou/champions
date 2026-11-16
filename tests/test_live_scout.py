@@ -76,3 +76,26 @@ class Errors(unittest.TestCase):
         r = run(foes=[{"name": "pelipper", "seen": ["tailwind"]}])
         card = next(c for c in r["board"] if c["name"] == "pelipper")
         self.assertEqual(card["moves"][0]["id"], "tailwind")
+
+
+class MoveFlow(unittest.TestCase):
+    def test_certain_effects_are_auto_and_chances_are_asked(self):
+        from champions.live.moveflow import flow
+        self.assertEqual(flow("sleeppowder")["auto"], [{"kind": "status", "status": "slp"}])
+        self.assertEqual(flow("sleeppowder")["acc"], 75)
+        self.assertEqual(flow("fakeout")["auto"], [{"kind": "flinch"}])
+        self.assertEqual(flow("icebeam")["ask"], [{"chance": 10, "kind": "status", "status": "frz"}])
+        self.assertEqual(flow("rockslide")["ask"], [{"chance": 30, "kind": "flinch"}])
+        self.assertEqual(flow("swordsdance")["auto"], [{"kind": "stat", "who": "user", "stats": {"atk": 2}}])
+        self.assertEqual(flow("closecombat")["auto"], [{"kind": "stat", "who": "user", "stats": {"def": -1, "spd": -1}}])
+        self.assertTrue(flow("uturn")["pivot"] and flow("partingshot")["pivot"])
+        self.assertEqual(flow("woodhammer")["recoil"], [33, 100])
+        self.assertEqual(flow("trickroom")["auto"], [{"kind": "field", "what": "trick_room"}])
+        self.assertEqual((flow("earthquake")["target"], flow("rockslide")["target"], flow("protect")["target"]),
+                         ("all", "foes", "none"))
+
+    def test_every_move_parses(self):
+        from champions.engine import teams
+        from champions.live.moveflow import flow
+        for mid in teams.moves_data():
+            self.assertIn(flow(mid)["target"], ("one", "foes", "all", "none"))

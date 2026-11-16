@@ -151,6 +151,28 @@ aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; max-heig
 .pcard .dmgpop { position: absolute; right: calc(44% + var(--u)*1.4); top: calc(var(--u)*-.5); font-style: italic; font-weight: 800; font-size: calc(var(--u)*2); pointer-events: none; animation: pop 1s ease forwards; }
 @keyframes pop { 0% { opacity: 1; transform: translateY(0) } 100% { opacity: 0; transform: translateY(calc(var(--u)*-3)) } }
 
+/* click-through flow */
+.pcard.t-acting { outline: 3px solid var(--lime); outline-offset: 3px; }
+.pcard.t-target { outline: 3px dashed var(--lime-pale); outline-offset: 3px; cursor: crosshair; }
+.pcard.t-hit { outline: 3px solid var(--lime-pale); outline-offset: 3px; }
+.pcard .move.locked { opacity: .4; pointer-events: none; }
+.pcard .turntag { position: absolute; z-index: 3; top: calc(var(--u)*-1.3); right: calc(var(--u)*1.6); padding: calc(var(--u)*.15) calc(var(--u)*.8); border-radius: 999px; background: var(--panel); border: 1px solid var(--lime); font-size: calc(var(--u)*1.25); font-weight: 700; white-space: nowrap; }
+.pcard .turntag.warn { border-color: var(--down); color: var(--down); cursor: pointer; }
+.fpop { position: fixed; z-index: 40; min-width: 360px; max-width: 520px; padding: 10px 12px; border-radius: 10px; background: #1d1830; border: 2px solid var(--lime-pale); box-shadow: 0 10px 30px rgba(0,0,0,.6); font: 600 13px system-ui; }
+.fpop .pt { margin-bottom: 6px; font-size: 14px; } .fpop .pt small { font-weight: 500; color: var(--mute); margin-left: 6px; }
+.fpop .trow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 6px 0; border-top: 1px solid rgba(201,196,255,.15); }
+.fpop .trow:first-of-type { border-top: 0; }
+.fpop .who { min-width: 90px; font-weight: 800; font-style: italic; }
+.fpop .seg button { padding: 3px 10px; font-size: 12px; }
+.fpop .hpline { display: flex; align-items: center; gap: 6px; flex-basis: 100%; } .fpop .hpline.off { opacity: .35; }
+.fpop input[type=number] { width: 70px; font: inherit; font-style: italic; font-weight: 800; background: #2a2850; color: #fff; border: 1px solid var(--edge); border-radius: 6px; padding: 3px 6px; }
+.fpop .calc { margin-left: auto; } .fpop .chips { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.fpop .sep { width: 1px; height: 18px; background: rgba(201,196,255,.3); margin: 0 4px; }
+.fpop .btns { display: flex; align-items: center; gap: 8px; margin-top: 8px; } .fpop .btns .grow { flex: 1; }
+.fpop .chip { padding: 2px 10px; font-size: 12px; }
+#turn .ask { margin: 2px 0 8px; color: var(--lime-pale); font-size: 14px; min-height: 2.4em; }
+#turn .act { margin: 4px 0; font-size: 13px; } #turn .act b { color: var(--mute); }
+#turn .muted { font-weight: 500; }
 /* right column */
 .stepper { display: flex; gap: 4px; margin-bottom: 8px; }
 .speed ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 3px; }
@@ -217,8 +239,9 @@ const sideOf = (slot) => (slot[1] === "1" ? "me" : "foe");
 let dex = null, team = [], scoutReply = null, reqId = 0, timer = null, S = null;
 
 const blank = () => ({step: "team", foeTeam: ["", "", "", "", "", ""], bring: [], ...fresh()});
+const freshTurn = () => ({acted: {}, flinched: {}, protected: {}, acts: []});
 const fresh = () => ({slots: {p1a: null, p1b: null, p2a: null, p2b: null}, stages: {}, mons: {me: {}, foe: {}}, weather: "auto",
-  tailwind: [], trickRoom: false, turn: 1, log: [], picks: {}, replace: []});
+  tailwind: [], trickRoom: false, turn: 1, log: [], ts: freshTurn(), undo: [], replace: []});
 
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 function load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } }
@@ -239,6 +262,7 @@ async function boot() {
     dex = await d.json(); team = (await t.json()).team;
   } catch (e) { caption("Can't reach the live server (" + e.message + "). Is `champions live` still running?"); return; }
   S = load() || blank();
+  S.ts ??= freshTurn(); S.undo ??= [];
   // drop anything that no longer exists
   S.foeTeam = (S.foeTeam || []).map((n) => (dex.species[n] ? n : ""));
   S.bring = (S.bring || []).filter((n) => teamMon(n));
@@ -314,7 +338,16 @@ function renderBoard() {
     $("roster-" + side).innerHTML = names.map((n) => miniHtml(side, n, mon(side, n))).join("") || '<div class="muted">click an empty slot to add who they led</div>';
     $("cards-" + side).innerHTML = SLOTS[side].map((sl) => cardHtml(sl)).join("");
   }
-  renderConditions(); renderTurn(); renderPanels();
+  renderConditions(); renderTurn(); renderPanels(); decorate();
+}
+function decorate() {
+  document.querySelectorAll(".pcard[data-slot]").forEach((c) => {
+    const sl = c.dataset.slot;
+    c.classList.toggle("t-acting", !!flow && flow.slot === sl);
+    c.classList.toggle("t-target", !!flow && flow.step === "target" && flow.elig.includes(sl));
+    c.classList.toggle("t-hit", !!flow && flow.step !== "target" && flow.targets.includes(sl));
+  });
+  positionPop();
 }
 
 function boardCard(side, name) { return scoutReply && scoutReply.board.find((c) => c.side === side && c.name === name); }
@@ -334,7 +367,9 @@ function cardHtml(slot) {
   const itemName = side === "me" ? (t && t.item ? dex.items[t.item] || t.item : "no item") : (st.item ? dex.items[st.item] || st.item : "item?");
   const used = st.itemUsed && itemName !== "no item";
   const itab = `<div class="itab ${side === "foe" && !st.item ? "guess" : ""} ${used ? "used" : ""}" data-act="item" data-slot="${slot}">${esc(itemName)}</div>`;
-  return `<div class="pcard ${side} ${st.hp <= 0 ? "fainted" : ""}" data-slot="${slot}">${itab}
+  const tag = S.ts.flinched[slot] ? `<div class="turntag warn" data-act="unflinch" data-slot="${slot}" title="click if it didn't flinch">flinched</div>`
+    : S.ts.acted[slot] ? `<div class="turntag">✓ ${esc((dex.moves[S.ts.acted[slot]] || {name: S.ts.acted[slot]}).name)}</div>` : "";
+  return `<div class="pcard ${side} ${st.hp <= 0 ? "fainted" : ""}" data-slot="${slot}">${itab}${tag}
     <div class="top"><div class="np"><div class="sprite" data-act="pick-slot" data-slot="${slot}" title="switch">${icon(name)}</div>
       <div class="body"><div class="banner" data-act="status" data-slot="${slot}"><span class="name">${esc(label(name))}</span>
         ${st.status ? `<span class="status ${st.status}">${st.status.toUpperCase()}</span>` : ""}${typeChips(types)}</div>
@@ -346,8 +381,8 @@ function cardHtml(slot) {
 const badge = (type) => `<div class="badge"><i style="background:${TYPE_COLORS[(type || "").toLowerCase()] || "#888"}"></i></div>`;
 function myMoves(slot, name, st, t) {
   return ((t && t.moves) || []).map((m) => {
-    const d = dex.moves[m.id] || {}, max = d.pp || 0, left = st.pp[m.id] ?? max, sel = S.picks[slot] === m.id;
-    return `<div class="move ${sel ? "sel" : ""} ${left <= 0 ? "empty" : ""}" data-act="my-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(m.name)}</div><div class="pp"><b>${left}</b><small>/${max}</small></div></div></div>`;
+    const d = dex.moves[m.id] || {}, max = d.pp || 0, left = st.pp[m.id] ?? max, sel = moveSel(slot, m.id);
+    return `<div class="move ${sel ? "sel" : ""} ${left <= 0 ? "empty" : ""} ${locked(slot) ? "locked" : ""}" data-act="my-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(m.name)}</div><div class="pp"><b>${left}</b><small>/${max}</small></div></div></div>`;
   }).join("");
 }
 function foeMoves(slot, name, st, bc) {
@@ -355,13 +390,16 @@ function foeMoves(slot, name, st, bc) {
   const seen = st.seen.map((id) => ({id, seen: true}));
   const usage = ((bc && bc.usage) || []).filter((u) => !st.seen.includes(u.id)).map((u) => ({id: u.id, pct: u.pct}));
   const cells = [...seen, ...usage].slice(0, 7).map((m) => {
-    const d = dex.moves[m.id] || {name: m.id}, used = S.picks[slot] === m.id;
-    return `<div class="move ${m.seen ? "" : "ghost"} ${used ? "sel" : ""}" data-act="foe-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(d.name)}</div><div class="pp"><b>${m.seen ? "" : Math.round(m.pct)}</b><small>${m.seen ? "seen" : "%"}</small></div></div></div>`;
+    const d = dex.moves[m.id] || {name: m.id}, used = moveSel(slot, m.id);
+    return `<div class="move ${m.seen ? "" : "ghost"} ${used ? "sel" : ""} ${locked(slot) ? "locked" : ""}" data-act="foe-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(d.name)}</div><div class="pp"><b>${m.seen ? "" : Math.round(m.pct)}</b><small>${m.seen ? "seen" : "%"}</small></div></div></div>`;
   });
   const learn = ((dex.species[name] || {}).learnset || []).filter((m) => dex.moves[m] && !st.seen.includes(m));
   cells.push(`<div class="move"><div class="other"><input list="dl-${slot}" data-other="${slot}" placeholder="+ other move…" autocomplete="off"><datalist id="dl-${slot}">${learn.map((m) => `<option value="${esc(dex.moves[m].name)}">`).join("")}</datalist></div></div>`);
   return cells.join("");
 }
+
+const moveSel = (slot, id) => (flow && flow.slot === slot && flow.move === id) || S.ts.acted[slot] === id;
+const locked = (slot) => S.ts.acted[slot] || S.ts.flinched[slot] || (flow && flow.slot !== slot);
 
 function renderConditions() {
   const w = scoutReply ? scoutReply.weather : null, src = scoutReply ? scoutReply.weather_source : null;
@@ -376,22 +414,29 @@ function renderConditions() {
 
 function renderTurn() {
   const el = $("turn");
-  const fainted = S.replace.length;
   let h = `<h2>Log <small>turn ${S.turn} now</small></h2>`;
-  if (fainted) {
+  if (S.replace.length) {
     h += S.replace.map((sl) => {
       const side = sideOf(sl), bench = (side === "me" ? S.bring : S.foeTeam.filter(Boolean)).filter((n) => mon(side, n).hp > 0 && !Object.values(S.slots).includes(n));
       return `<div class="muted">Who comes in for ${esc(label(S.slots[sl] || ""))}?</div><div class="turnrow">${bench.map((n) => `<button class="chip" data-act="replace" data-slot="${sl}" data-name="${esc(n)}">${esc(label(n))}</button>`).join("")}<button class="chip" data-act="replace" data-slot="${sl}" data-name="">leave empty</button></div>`;
     }).join("");
   } else {
-    h += `<div class="muted">Mark moves used (click a move), set HP, stages and status as the turn plays out, then end the turn.</div>
-          <div class="turnrow"><button class="go" data-act="end-turn">End turn →</button></div>`;
+    h += `<div class="ask">${esc(flowPrompt())}</div>`;
+    h += S.ts.acts.map((a, i) => `<div class="act"><b>${i + 1}.</b> <span class="${a.side}">${esc(a.who)}</span> ${esc(a.move)}${a.lines.map((l) => `<div class="muted">${esc(l)}</div>`).join("")}</div>`).join("");
+    h += `<div class="turnrow">${S.undo.length && !flow ? '<button data-act="undo">↶ Undo last</button>' : ""}${flow ? '<button data-act="flow-cancel">Cancel</button>' : '<button class="go" data-act="end-turn">End turn →</button>'}</div>`;
   }
   if (S.log.length) {
     h += S.log.slice().reverse().map((e) => `<details><summary>Turn ${e.turn}${e.conds.length ? " · " + esc(e.conds.join(", ")) : ""}</summary>
-      ${e.end.map((m) => `<div class="tl"><span class="${m.side}">${esc(label(m.name))}</span> ${m.side === "me" ? m.hpText : Math.round(m.hp * 100) + "%"}${m.status ? " " + m.status.toUpperCase() : ""}${m.moves ? " · " + esc(m.moves) : ""}</div>`).join("")}</details>`).join("");
+      ${(e.acts || []).map((a) => `<div class="tl"><span class="${a.side}">${esc(a.who)}</span> ${esc(a.move)}${a.lines.map((l) => `<div class="muted">· ${esc(l)}</div>`).join("")}</div>`).join("")}
+      ${e.end.map((m) => `<div class="tl muted"><span class="${m.side}">${esc(label(m.name))}</span> ${m.side === "me" ? m.hpText : Math.round(m.hp * 100) + "%"}${m.status ? " " + m.status.toUpperCase() : ""}</div>`).join("")}</details>`).join("");
   }
   el.innerHTML = h;
+}
+function flowPrompt() {
+  if (!flow) return S.ts.acts.length ? "Click the next move that happened." : "Click a move on a card, in the order they happened.";
+  const mv = (dex.moves[flow.move] || {name: flow.move}).name, who = label(S.slots[flow.slot]);
+  return { target: `${who}'s ${mv}: click the target.`, resolve: `${who}'s ${mv}: what happened?`, after: `${who}'s ${mv}: anything else?`,
+           pivot: `${who} switched out: who came in?` }[flow.step] || "";
 }
 
 function renderPanels() {
@@ -457,7 +502,6 @@ function place(slot, name) {
   const other = SLOTS[side].find((s) => s !== slot);
   if (name && S.slots[other] === name) { [S.slots[slot], S.slots[other]] = [S.slots[other], S.slots[slot]]; [S.stages[slot], S.stages[other]] = [S.stages[other] || {}, S.stages[slot] || {}]; }
   else { S.slots[slot] = name || null; S.stages[slot] = {}; }
-  delete S.picks[slot];
   S.replace = S.replace.filter((s) => s !== slot);
   changed();
 }
@@ -510,18 +554,233 @@ function endTurn() {
   S.replace = [];
   for (const sl of [...SLOTS.foe, ...SLOTS.me]) {
     const name = S.slots[sl]; if (!name) continue;
-    const side = sideOf(sl), st = mon(side, name), t = teamMon(name), mv = S.picks[sl];
-    end.push({side, name, hp: st.hp, status: st.status, hpText: t ? `${Math.round(st.hp * t.max_hp)}/${t.max_hp}` : "", moves: mv ? (dex.moves[mv] || {name: mv}).name : ""});
-    if (side === "me" && mv) st.pp[mv] = Math.max(0, (st.pp[mv] ?? (dex.moves[mv] || {}).pp) - 1);
-    if (side === "foe" && mv && !st.seen.includes(mv) && st.seen.length < 4) st.seen.push(mv);
+    const side = sideOf(sl), st = mon(side, name), t = teamMon(name);
+    end.push({side, name, hp: st.hp, status: st.status, hpText: t ? `${Math.round(st.hp * t.max_hp)}/${t.max_hp}` : ""});
     if (st.hp <= 0) S.replace.push(sl);
   }
-  S.log.push({turn: S.turn, conds, end}); S.turn++; S.picks = {};
+  S.log.push({turn: S.turn, conds, end, acts: S.ts.acts}); S.turn++; S.ts = freshTurn(); S.undo = []; flow = null; closePop();
   changed();
 }
 
+// ---- the click-through flow: move -> target -> what happened -> after-effects ----
+let flow = null;
+const fxOf = (id) => (dex.moves[id] || {}).fx || {auto: [], ask: [], target: "one", acc: 100, category: "Physical"};
+const mname = (id) => (dex.moves[id] || {name: id}).name;
+const alive = (slot) => S.slots[slot] && mon(sideOf(slot), S.slots[slot]).hp > 0;
+const maxHp = (side, name) => { const t = side === "me" ? teamMon(name) : null; if (t) return t.max_hp; const c = boardCard(side, name); return c ? c.max_hp : 200; };
+const other = (slot) => SLOTS[sideOf(slot)].find((x) => x !== slot);
+function snapshot() { S.undo.push(JSON.stringify({slots: S.slots, stages: S.stages, mons: S.mons, weather: S.weather, tailwind: S.tailwind, trickRoom: S.trickRoom, ts: S.ts, replace: S.replace})); S.undo = S.undo.slice(-15); }
+function undo() { if (!S.undo.length) return; Object.assign(S, JSON.parse(S.undo.pop())); flow = null; closePop(); changed(); }
+
+function startFlow(slot, id) {
+  if (flow) { caption("Finish or cancel the open action first."); return; }
+  if (!alive(slot)) { caption("That Pokémon has fainted."); return; }
+  if (S.ts.acted[slot]) { caption(`${label(S.slots[slot])} already moved this turn: Undo last to redo it.`); return; }
+  if (S.ts.flinched[slot]) { caption(`${label(S.slots[slot])} flinched. Click the "flinched" tag if it didn't.`); return; }
+  caption("");
+  const fx = fxOf(id), opp = SLOTS[sideOf(slot) === "me" ? "foe" : "me"].filter(alive), mates = [other(slot)].filter((x) => x && alive(x));
+  flow = {slot, move: id, fx, targets: [], rows: {}, asks: {}, step: "resolve"};
+  if (fx.target === "foes") flow.targets = opp;
+  else if (fx.target === "all") flow.targets = [...opp, ...mates];
+  else if (fx.target === "one") {
+    const elig = fx.ally_only ? mates : [...opp, ...mates];
+    if (elig.length === 1) flow.targets = elig; else { flow.elig = elig; flow.step = "target"; }
+  }
+  if (!flow.elig && fx.target !== "none" && !flow.targets.length) { caption("No target for that move."); flow = null; return; }
+  enterStep();
+}
+function enterStep() {
+  if (flow.step === "resolve") {
+    for (const t of flow.targets) flow.rows[t] = {out: S.ts.protected[t] ? "prot" : "hit", hp: defaultHp(t)};
+    if (!flow.targets.length) { commit(); return; }
+  }
+  renderBoard(); openPop();
+}
+function defaultHp(t) {                                     // the calc's middle, so a typed number replaces a sensible guess
+  const side = sideOf(t), name = S.slots[t], st = mon(side, name);
+  if (fxOf(flow.move).category === "Status") return st.hp;
+  const a = S.slots[flow.slot], c = scoutReply && scoutReply.calc.find((x) => x.mon.name === a && x.move === flow.move && x.target.name === name);
+  return c ? Math.max(0, st.hp - (c.lo + c.hi) / 2) : st.hp;
+}
+function calcText(t) {
+  const a = S.slots[flow.slot], name = S.slots[t], c = scoutReply && scoutReply.calc.find((x) => x.mon.name === a && x.move === flow.move && x.target.name === name);
+  return c ? (c.immune ? "no effect (immune)" : `calc ${Math.round(c.lo * 100)}–${Math.round(c.hi * 100)}%`) : "";
+}
+const hpShown = (t, f) => { const side = sideOf(t), n = S.slots[t]; return side === "me" ? Math.round(f * maxHp(side, n)) : Math.round(f * 100); };
+const hpParse = (t, v) => { const side = sideOf(t), n = S.slots[t]; return Math.min(1, Math.max(0, side === "me" ? v / maxHp(side, n) : v / 100)); };
+
+// the pop-out box over the first target (or the actor) card
+function closePop() { const p = $("flow-pop"); if (p) p.remove(); }
+function openPop() {
+  closePop();
+  const p = document.createElement("div"); p.id = "flow-pop"; p.className = "fpop";
+  document.body.append(p); drawPop(); positionPop();
+  const f = p.querySelector("input[type=number]"); if (f) { f.focus(); f.select(); }
+}
+function positionPop() {
+  const p = $("flow-pop"); if (!p || !flow) return;
+  const slot = flow.step === "target" ? flow.slot : (flow.targets[0] || flow.slot), c = document.querySelector(`.pcard[data-slot="${slot}"]`);
+  if (!c) return;
+  const r = c.getBoundingClientRect(), pw = p.offsetWidth, ph = p.offsetHeight;
+  p.style.left = Math.max(8, Math.min(innerWidth - pw - 8, r.left + r.width / 2 - pw / 2)) + "px";
+  p.style.top = Math.max(8, Math.min(innerHeight - ph - 8, r.top + r.height * 0.28)) + "px";
+}
+function drawPop() {
+  const p = $("flow-pop"); if (!p || !flow) return;
+  const mv = mname(flow.move), fx = flow.fx, who = label(S.slots[flow.slot]);
+  let h = "";
+  if (flow.step === "target") {
+    h = `<div class="pt"><b>${esc(mv)}</b> › click the target card</div><div class="muted">${esc(who)} used it${fx.acc ? ` · ${fx.acc}% accuracy` : ""}</div>`;
+  } else if (flow.step === "resolve") {
+    const status = fx.category === "Status", single = status && flow.targets.length === 1;
+    h = `<div class="pt"><b>${esc(mv)}</b>${fx.acc && fx.acc < 100 ? ` <small>${fx.acc}% accuracy</small>` : ""}</div>`;
+    h += flow.targets.map((t) => {
+      const r = flow.rows[t], side = sideOf(t), n = S.slots[t], st = mon(side, n), unit = side === "me" ? "HP" : "%";
+      const seg = `<span class="seg">${[["hit", status ? "Hit" : "Hit"], ["miss", "Missed"], ["prot", "Protected"]].map(([k, l]) => `<button class="${r.out === k ? "on" : ""}" data-fp="out" data-t="${t}" data-v="${k}">${l}</button>`).join("")}</span>`;
+      const hp = status ? "" : `<div class="hpline ${r.out === "hit" ? "" : "off"}"><span class="muted">${esc(label(n))} ${hpShown(t, st.hp)}${unit === "%" ? "%" : ""} →</span>
+        <input type="number" min="0" max="${side === "me" ? maxHp(side, n) : 100}" value="${hpShown(t, r.hp)}" data-fp="hp" data-t="${t}"><span class="muted">${unit}</span>
+        <button class="chip" data-fp="ko" data-t="${t}">KO</button><span class="muted calc">${calcText(t)}</span></div>`;
+      return `<div class="trow"><div class="who ${side}">${esc(label(n))}</div>${seg}${hp}</div>`;
+    }).join("");
+    h += `<div class="btns">${single ? '<span class="muted">Hit applies the effects automatically.</span>' : ""}<span class="grow"></span><button data-act="flow-cancel">Cancel</button><button class="go" data-fp="done">✓ Done</button></div>`;
+  } else if (flow.step === "after") {
+    h = `<div class="pt"><b>${esc(mv)}</b> · anything else?</div>`;
+    h += flow.askTargets.map((t) => {
+      const n = S.slots[t], side = sideOf(t), key = (a) => t + ":" + a.kind + (a.status || "");
+      const chips = flow.askFor(t).map((a) => `<button class="chip ${flow.asks[key(a)] ? "on" : ""}" data-fp="ask" data-t="${t}" data-i="${flow.askFor(t).indexOf(a)}">${askLabel(a)}${a.chance < 100 ? `<small>${a.chance}%</small>` : ""}</button>`).join("");
+      const more = ["brn", "par", "psn", "slp", "frz"].map((c) => `<button class="chip ${flow.asks[t + ":st" + c] ? "on" : ""}" data-fp="status" data-t="${t}" data-v="${c}">${c.toUpperCase()}</button>`).join("");
+      return `<div class="trow"><div class="who ${side}">${esc(label(n))}</div><div class="chips">${chips}<span class="sep"></span>${more}</div></div>`;
+    }).join("");
+    h += `<div class="btns"><span class="grow"></span><button class="go" data-fp="finish">Continue ›</button></div>`;
+  } else if (flow.step === "pivot") {
+    const side = sideOf(flow.slot), bench = (side === "me" ? S.bring : S.foeTeam.filter(Boolean)).filter((n) => mon(side, n).hp > 0 && !Object.values(S.slots).includes(n));
+    h = `<div class="pt"><b>${esc(mv)}</b> · who came in?</div><div class="chips">${bench.map((n) => `<button class="chip" data-fp="pivot" data-v="${esc(n)}">${esc(label(n))}</button>`).join("")}<button class="chip" data-fp="pivot" data-v="">didn't switch</button></div>`;
+  }
+  $("flow-pop").innerHTML = h;
+}
+const askLabel = (a) => ({flinch: "Flinched", confusion: "Confused"}[a.kind] || (a.kind === "status" ? {brn: "Burned", par: "Paralyzed", psn: "Poisoned", tox: "Badly poisoned", frz: "Frozen", slp: "Asleep"}[a.status] : statTxt(a)));
+const statTxt = (a) => `${a.who === "user" ? "its " : ""}${Object.entries(a.stats).map(([k, v]) => STAT_NAMES[k] + (v > 0 ? " +" : " ") + v).join(" ")}`;
+
+// apply the certain effects, then ask about the chancy ones
+const lines = () => flow.lines;
+function bump(slot, stats, lines, label_) {
+  const s = (S.stages[slot] ??= {}), n = label(S.slots[slot]);
+  for (const [k, v] of Object.entries(stats)) {
+    if (!STAT_KEYS.includes(k)) continue;
+    const before = s[k] || 0; s[k] = Math.max(-6, Math.min(6, before + v));
+    lines.push(`${n} ${STAT_NAMES[k]} ${s[k] - before >= 0 ? "+" : ""}${s[k] - before}${s[k] === before ? " (no change)" : ""}`);
+  }
+}
+function giveStatus(t, code, lines) {
+  const side = sideOf(t), n = S.slots[t], st = mon(side, n), types = (dex.species[n] || {}).types || [];
+  const blocker = (dex.status_immune[code] || []).find((x) => types.includes(x)) || (flow.fx.powder && types.includes("grass") ? "grass" : null);
+  if (st.status) lines.push(`${label(n)} already has ${st.status.toUpperCase()}`);
+  else if (blocker) lines.push(`${label(n)} can't be ${code.toUpperCase()} (${blocker}-type)`);
+  else { st.status = code; lines.push(`${label(n)} ${code.toUpperCase()}`); }
+}
+function applyEffects(a, t, lines) {            // one effect of the move on one target
+  if (a.kind === "stat") { if (a.who === "target") bump(t, a.stats, lines); }
+  else if (a.kind === "status") giveStatus(t, a.status, lines);
+  else if (a.kind === "flinch") { if (!S.ts.acted[t]) { S.ts.flinched[t] = true; lines.push(`${label(S.slots[t])} flinched`); } }
+  else if (a.kind === "confusion") lines.push(`${label(S.slots[t])} confused`);
+}
+function commit() {                              // the target step is done: HP, certain effects, then the questions
+  snapshot();
+  const fx = flow.fx, a = flow.slot, side = sideOf(a), an = S.slots[a], ast = mon(side, an), ls = flow.lines = [];
+  let dealt = 0; flow.hitTargets = [];
+  for (const t of flow.targets) {
+    const r = flow.rows[t], tn = S.slots[t], st = mon(sideOf(t), tn);
+    if (r.out !== "hit") { ls.push(`${label(tn)}: ${r.out === "miss" ? "missed" : "protected itself"}`); continue; }
+    if (fx.category !== "Status") {
+      const before = st.hp; st.hp = r.hp; dealt += Math.max(0, before - r.hp) * maxHp(sideOf(t), tn);
+      ls.push(`${label(tn)} ${hpShown(t, before)}${sideOf(t) === "foe" ? "%" : ""} → ${hpShown(t, st.hp)}${sideOf(t) === "foe" ? "%" : ""}${st.hp <= 0 ? " fainted" : ""}`);
+      if (st.hp <= 0) { st.status = null; continue; }
+    }
+    flow.hitTargets.push(t);
+    for (const e of fx.auto) applyEffects(e, t, ls);
+  }
+  if (flow.hitTargets.length || fx.target === "none") {
+    for (const e of fx.auto) {                  // effects on the user and the field
+      if (e.kind === "stat" && e.who === "user") bump(a, e.stats, ls);
+      else if (e.kind === "field") fieldEffect(e, a, ls);
+      else if (e.kind === "protect") { S.ts.protected[a] = true; ls.push(`${label(an)} protected`); }
+    }
+    const frac = (pair, dir) => { const hp = dealt * pair[0] / pair[1] / maxHp(side, an); ast.hp = Math.max(0, Math.min(1, ast.hp + dir * hp)); return Math.round(hp * maxHp(side, an)); };
+    if (fx.recoil && dealt) ls.push(`${label(an)} took ${frac(fx.recoil, -1)} recoil`);
+    if (fx.drain && dealt) ls.push(`${label(an)} drained ${frac(fx.drain, 1)}`);
+    if (fx.heal) { ast.hp = Math.min(1, ast.hp + fx.heal[0] / fx.heal[1]); ls.push(`${label(an)} healed ${fx.heal[0] / fx.heal[1] * 100}%`); }
+  }
+  S.ts.acted[a] = flow.move;
+  if (side === "foe" && !ast.seen.includes(flow.move) && ast.seen.length < 4) ast.seen.push(flow.move);
+  if (side === "me") ast.pp[flow.move] = Math.max(0, (ast.pp[flow.move] ?? (dex.moves[flow.move] || {}).pp) - 1);
+  if (ast.hp <= 0) { ast.status = null; }
+  // questions: chancy effects on whoever was hit and survived; a flinch only matters if they haven't moved yet
+  flow.askFor = (t) => fx.ask.filter((e) => e.kind !== "flinch" || !S.ts.acted[t]);
+  flow.askTargets = flow.hitTargets.filter((t) => alive(t) && flow.askFor(t).length);     // only moves with a chance effect ask
+  if (flow.askTargets.length) { flow.step = "after"; renderBoard(); openPop(); changed(); }
+  else afterAsks();
+}
+function fieldEffect(e, a, ls) {
+  if (e.what === "trick_room") { S.trickRoom = !S.trickRoom; ls.push(`Trick Room ${S.trickRoom ? "on" : "off"}`); }
+  else if (e.what === "tailwind") { const w = sideOf(a); if (!S.tailwind.includes(w)) S.tailwind.push(w); ls.push(`Tailwind on (${w === "me" ? "yours" : "theirs"})`); }
+  else if (e.what === "weather") { S.weather = e.value; ls.push(`weather: ${e.value}`); }
+}
+function afterAsks() {                           // chosen chips already applied; now a pivot, or finish
+  if (flow.fx.pivot && flow.hitTargets.length && alive(flow.slot)) { flow.step = "pivot"; renderBoard(); openPop(); return; }
+  finishFlow();
+}
+function finishFlow() {
+  const a = flow.slot, side = sideOf(a);
+  S.ts.acts.push({side, who: label(S.slots[a]), move: mname(flow.move), lines: flow.lines});
+  flow = null; closePop(); changed();
+}
+
+// pop-out clicks and typing
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-fp]"); if (!b || !flow) return;
+  const t = b.dataset.t, v = b.dataset.v;
+  switch (b.dataset.fp) {
+    case "out": {
+      flow.rows[t].out = v; flow.fx.category === "Status" && flow.targets.length === 1 ? commit() : drawPop(); break;
+    }
+    case "ko": flow.rows[t].hp = 0; flow.rows[t].out = "hit"; drawPop(); break;
+    case "done": commit(); break;
+    case "ask": {
+      const a = flow.askFor(t)[+b.dataset.i], key = t + ":" + a.kind + (a.status || "");
+      if (flow.asks[key]) { delete flow.asks[key]; undoAsk(t, a); } else { flow.asks[key] = true; applyEffects(a, t, flow.lines); }
+      drawPop(); changed(); break;
+    }
+    case "status": {
+      const key = t + ":st" + v, st = mon(sideOf(t), S.slots[t]);
+      if (flow.asks[key]) { delete flow.asks[key]; st.status = null; } else { for (const k of Object.keys(flow.asks)) if (k.startsWith(t + ":st")) delete flow.asks[k]; flow.asks[key] = true; st.status = v; flow.lines.push(`${label(S.slots[t])} ${v.toUpperCase()}`); }
+      drawPop(); changed(); break;
+    }
+    case "finish": afterAsks(); break;
+    case "pivot": { if (v) place(flow.slot, v); finishFlow(); break; }
+  }
+}, true);
+function undoAsk(t, a) {
+  const st = mon(sideOf(t), S.slots[t]);
+  if (a.kind === "flinch") delete S.ts.flinched[t]; else if (a.kind === "status") st.status = null;
+  else if (a.kind === "stat") bump(t, Object.fromEntries(Object.entries(a.stats).map(([k, v]) => [k, -v])), []);
+}
+document.addEventListener("input", (e) => {
+  const i = e.target.closest('[data-fp="hp"]'); if (!i || !flow) return;
+  const t = i.dataset.t; flow.rows[t].hp = hpParse(t, +i.value); flow.rows[t].out = "hit";
+  const seg = i.closest(".trow").querySelector(".seg .on"); if (seg && seg.dataset.v !== "hit") drawPop();
+});
+document.addEventListener("keydown", (e) => {
+  if (!flow) return;
+  if (e.key === "Escape") { flow = null; closePop(); changed(); }
+  else if (e.key === "Enter" && e.target.matches('[data-fp="hp"]')) { e.preventDefault(); commit(); }
+});
+addEventListener("resize", positionPop);
+
 // ---- events ----
 document.addEventListener("click", (e) => {
+  const tc = e.target.closest(".pcard.t-target");
+  if (tc && flow && flow.step === "target") { flow.targets = [tc.dataset.slot]; flow.step = "resolve"; enterStep(); return; }
+  if (e.target.closest("#flow-pop")) return;
   const a = e.target.closest("[data-act]");
   if (!e.target.closest(".picker") && !(a && ["pick-slot", "item"].includes(a.dataset.act))) closePicker();
   if (!a) return;
@@ -538,14 +797,10 @@ document.addEventListener("click", (e) => {
     case "item": pickItem(slot, a); break;
     case "status": { const st = mon(side, S.slots[slot]); st.status = STATUSES[(STATUSES.indexOf(st.status) + 1) % STATUSES.length]; changed(); break; }
     case "stat": { const s = (S.stages[slot] ??= {}); s[a.dataset.stat] = Math.min(6, (s[a.dataset.stat] || 0) + 1); changed(); break; }
-    case "my-move": case "foe-move": {
-      const m = a.dataset.move, st = mon(side, S.slots[slot]);
-      if (a.dataset.act === "foe-move" && a.classList.contains("ghost") && st.seen.length < 4 && !st.seen.includes(m)) { st.seen.push(m); S.picks[slot] = m; }
-      else if (a.dataset.act === "foe-move" && !a.classList.contains("ghost") && S.picks[slot] === m) { st.seen = st.seen.filter((x) => x !== m); delete S.picks[slot]; }
-      else if (a.dataset.act === "foe-move" && a.classList.contains("ghost")) { caption("Four moves are already seen."); return; }
-      else if (S.picks[slot] === m) delete S.picks[slot]; else S.picks[slot] = m;
-      changed(); break;
-    }
+    case "my-move": case "foe-move": startFlow(slot, a.dataset.move); break;
+    case "unflinch": delete S.ts.flinched[slot]; changed(); break;
+    case "undo": undo(); break;
+    case "flow-cancel": flow = null; closePop(); changed(); break;
     case "cond": {
       const c = a.dataset.c;
       if (c === "tr") S.trickRoom = !S.trickRoom;
@@ -570,8 +825,8 @@ document.addEventListener("change", (e) => {
   const slot = inp.dataset.other, st = mon("foe", S.slots[slot]);
   const id = Object.keys(dex.moves).find((k) => dex.moves[k].name.toLowerCase() === inp.value.trim().toLowerCase());
   if (!id || !dex.species[S.slots[slot]].learnset.includes(id)) { caption(`${label(S.slots[slot])} can't learn "${inp.value}".`); return; }
-  if (st.seen.length >= 4) { caption("Four moves are already seen."); return; }
-  if (!st.seen.includes(id)) st.seen.push(id); S.picks[slot] = id; caption(""); changed();
+  if (st.seen.length >= 4 && !st.seen.includes(id)) { caption("Four moves are already seen."); return; }
+  inp.value = ""; startFlow(slot, id);
 });
 
 // HP: press and drag on the HP area

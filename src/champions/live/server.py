@@ -9,7 +9,7 @@ from pathlib import Path
 from ..engine import teams
 from ..engine.items import item_name
 from ..engine.pretty import move_name
-from . import scout
+from . import moveflow, scout
 
 HERE = Path(__file__).resolve().parent
 ICONS = Path(__file__).resolve().parents[3] / "sources" / "icons"
@@ -34,9 +34,9 @@ def dex():
                             "mega": s["is_mega"], "learnset": scout.learnsets().get(s["species"], [])}
                         for n, s in sp.items()},
             "moves": {i: {"name": m["name"], "type": m["type"], "category": m["category"], "bp": m["base_power"],
-                          "pp": m["pp"], "priority": m["priority"], "target": m["target"]}
+                          "pp": m["pp"], "priority": m["priority"], "target": m["target"], "fx": moveflow.flow(i)}
                       for i, m in teams.moves_data().items()},
-            "items": {i: v["name"] for i, v in items.items()}}
+            "items": {i: v["name"] for i, v in items.items()}, "status_immune": moveflow.STATUS_IMMUNE}
 
 
 def make_handler(team_path):
