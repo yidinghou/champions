@@ -6,3 +6,5 @@ Game reference data (roster, moves, learnsets, items, abilities, type chart) is 
 `src/champions/fetch/` into `src/champions/data/`.
 
 See `docs/DATA.md` for the data dictionary: where each file comes from and what every field means.
+
+Live-game tracker: `champions live --team teams/sample.json` (see `docs/live-ui.md`).

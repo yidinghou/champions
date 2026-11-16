@@ -55,6 +55,7 @@ scripts/gate.sh                                   full test suite (python3 -m un
 python3 -m champions catalogue status [--verify]  coverage per mechanic; exit 1 if a case fails
 python3 -m champions sim replay <file>            play a replay and print the event log
 python3 -m champions sim view <file> [-o out.html]  step through a replay in the browser, one action at a time (self-contained page)
+python3 -m champions live --team FILE            serve the live-game tracker page (docs/live-ui.md)
 CHAMPIONS_CASE=self-drop python3 -m unittest tests.test_catalogue_cases -v     one mechanic
 CHAMPIONS_CASE=self-drop::immune-no-drop python3 -m unittest tests.test_catalogue_cases    one case
 CHAMPIONS_INCLUDE_VERIFY=1 ...                    also run `status: verify` stubs
