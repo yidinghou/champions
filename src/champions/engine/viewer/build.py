@@ -116,8 +116,10 @@ def _icon(species):
     return None
 
 
-def render_html(replay, title="Replay"):
+def render_html(replay, title="Replay", fx=None):
     data = build_frames(replay)
+    if fx:
+        data["fx"] = fx
     species = {m["species"] for f in data["frames"][:1] for s in f["state"]["sides"] for m in s["team"]}
     species |= {m["species"] for f in data["frames"] for s in f["state"]["sides"] for m in s["team"]}
     data["icons"] = {sp: _icon(sp) for sp in sorted(species)}
@@ -125,8 +127,8 @@ def render_html(replay, title="Replay"):
     return html.replace("__TITLE__", title).replace("__DATA__", json.dumps(data, separators=(",", ":")).replace("</", "<\\/"))
 
 
-def write_html(replay_path, out=None):
+def write_html(replay_path, out=None, fx=None):
     replay = load_replay(replay_path)
     out = Path(out) if out else Path(replay_path).with_suffix(".html")
-    out.write_text(render_html(replay, Path(replay_path).stem))
+    out.write_text(render_html(replay, Path(replay_path).stem, fx))
     return out
