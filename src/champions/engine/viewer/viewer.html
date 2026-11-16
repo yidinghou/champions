@@ -121,6 +121,10 @@ label.chk { color: var(--mute); font-weight: 500; font-size: 12px; display: inli
 .fxbig.fresh { animation: fxin .35s backwards; } @keyframes fxin { from { opacity: 0; transform: scale(.4); } }
 .fxbig { position: absolute; inset: 0; z-index: 6; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: rgba(13,12,28,.62);
   font-size: 30px; font-weight: 900; font-style: italic; color: #f1e08a; text-shadow: 0 2px 6px #000; }
+.hpdiff { position: absolute; right: 10px; top: -13px; z-index: 6; font-size: 12px; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: #14122a; border: 1px solid; white-space: nowrap; }
+.hpdiff small { font-weight: 500; opacity: .85; margin-right: 6px; }
+.hpdiff.dn, .hpd.dn { color: var(--down); border-color: var(--down); } .hpdiff.upp, .hpd.upp { color: var(--up); border-color: var(--up); }
+.hpd { font-size: 10px; font-weight: 800; }
 .fxbig.protected { color: #7af0ff; } .fxbig.crit { color: #ffb44d; } .fxbig.immune { color: var(--mute); }
 #fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
 #fx .beam { position: absolute; height: 5px; border-radius: 3px; transform-origin: 0 50%; opacity: 0; }
@@ -221,6 +225,18 @@ function glideBars() {
   requestAnimationFrame(() => requestAnimationFrame(() => els.forEach((el) => { el.style.width = el.dataset.w + "%"; lastPct[el.dataset.k] = +el.dataset.w; })));
 }
 
+// HP change of a mon over the current action (and the end-of-turn or replacement step it is in), held until the next move starts
+function hpChange(m) {
+  const g = G[cur], before = g && g.start > 0 ? find(F[g.start - 1].state, m.ref) : null;
+  if (!before || before.species !== m.species || before.hp === m.hp) return null;
+  return {from: before.hp, to: m.hp, d: m.hp - before.hp, max: m.max_hp};
+}
+function hpDiffHtml(m) {
+  const c = hpChange(m); if (!c) return "";
+  const pct = (v) => Math.round(100 * v / c.max), exact = $("exact").checked;
+  const d = exact ? c.d : pct(c.to) - pct(c.from), sign = d > 0 ? "+" : "−";
+  return `<div class="hpdiff ${d < 0 ? "dn" : "upp"}"><small>${exact ? `${c.from} → ${c.to}` : `${pct(c.from)}% → ${pct(c.to)}%`}</small>${sign}${Math.abs(d)}${exact ? "" : "%"}</div>`;
+}
 function find(state, ref) { for (const s of state.sides) for (const m of s.team) if (m.ref === ref) return m; return null; }
 function hpClass(m) { const f = m.hp / m.max_hp; return f <= .2 ? "lo" : f <= .5 ? "mid" : ""; }
 function icon(sp) { const u = DATA.icons[sp]; return u ? `<img src="${u}" alt="">` : `<span style="font-size:11px;color:var(--mute)">${esc(sp.slice(0,2))}</span>`; }
@@ -245,7 +261,7 @@ function cardHtml(m, side, f, prev) {
   const vols = Object.keys(m.volatiles).map((k) => `<span class="tag vol">${esc(k)}${m.volatiles[k] !== true && typeof m.volatiles[k] !== "object" ? " " + esc(m.volatiles[k]) : ""}</span>`).join("");
   const itemTag = m.item ? `<span class="tag item" title="held item">${esc(m.item_name)}</span>` : (itemWas(m) ? `<span class="tag item used">${esc(itemWas(m))}</span>` : `<span class="tag">no item</span>`);
   return `<div class="${cls}" data-ref="${m.ref}">
-    ${fxHtml(m, f)}
+    ${fxHtml(m, f)}${hpDiffHtml(m)}
     ${diff ? `<span class="dmgpop ${diff < 0 ? "dn" : "upp"}">${diff > 0 ? "+" : ""}${diff}</span>` : ""}
     <div class="np"><div class="sprite">${icon(m.species)}</div><div class="body">
       <div class="banner"><span class="name">${esc(title(m.species))}</span>${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}
@@ -266,7 +282,7 @@ function miniHtml(m, side) {
   const cls = ["pmini", side === 1 ? "foe" : "", m.slot != null ? "active" : "", m.fainted ? "fainted" : ""].join(" ");
   const pct = Math.max(m.hp > 0 ? 1 : 0, 100 * m.hp / m.max_hp);
   return `<div class="${cls}"><div class="spr">${icon(m.species)}</div><div class="pnl"><div class="ban"><span class="nm">${esc(title(m.species))}</span>
-    ${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}<span class="hpv">${m.fainted ? "KO" : $("exact").checked ? `${m.hp}/${m.max_hp}` : Math.round(100 * m.hp / m.max_hp) + "%"}</span></div>
+    ${m.status ? `<span class="status ${m.status}">${m.status.toUpperCase()}</span>` : ""}${(() => { const c = hpChange(m); return c ? `<span class="hpd ${c.d < 0 ? "dn" : "upp"}">${c.d < 0 ? "−" : "+"}${Math.abs($("exact").checked ? c.d : Math.round(100 * c.to / c.max) - Math.round(100 * c.from / c.max))}</span>` : ""; })()}<span class="hpv">${m.fainted ? "KO" : $("exact").checked ? `${m.hp}/${m.max_hp}` : Math.round(100 * m.hp / m.max_hp) + "%"}</span></div>
     <div class="bar"><i class="${hpClass(m)}" ${barW("m" + m.ref, pct)}></i></div></div></div>`;
 }
 
