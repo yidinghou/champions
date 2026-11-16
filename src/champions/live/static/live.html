@@ -174,7 +174,29 @@ aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; max-heig
 
 /* click-through flow */
 .pcard.t-acting { outline: 3px solid var(--lime); outline-offset: 3px; }
-.pcard.t-target { outline: 3px dashed var(--lime-pale); outline-offset: 3px; cursor: crosshair; }
+/* choosing a target: only the name + HP block of an eligible card is the button. Three looks to compare (header: Target A / B / C) */
+body.targeting .pcard:not(.t-target):not(.t-acting) { opacity: .3; filter: saturate(.4); transition: opacity .2s; }
+.pcard.t-target .np { cursor: crosshair; }
+.pcard.t-target .np:hover { filter: brightness(1.25); }
+@keyframes tpulse { 50% { box-shadow: 0 0 0 5px rgba(200,236,58,.95), 0 0 30px rgba(200,236,58,.9); } }
+@keyframes tbob { 50% { transform: translateX(calc(var(--u)*-.8)); } }
+@keyframes tdash { 50% { outline-color: #fff; } }
+/* A: spotlight: others fade, the name/HP block glows and is tagged TARGET, the rest of its card dims */
+body.tp-a .pcard.t-target .np { border-color: var(--lime); box-shadow: 0 0 0 3px var(--lime), 0 0 22px rgba(200,236,58,.7); animation: tpulse 1s ease-in-out infinite; }
+body.tp-a .pcard.t-target .top::before { content: "▼ TARGET"; position: absolute; z-index: 5; top: calc(var(--u)*-1.9); left: calc(var(--u)*2); padding: 0 calc(var(--u)*1); border-radius: 999px; background: var(--lime); color: #1c1c1a; font-weight: 800; font-size: calc(var(--u)*1.3); }
+body.tp-a .pcard.t-target .stages, body.tp-a .pcard.t-target .moves, body.tp-a .pcard.t-target .tabs { opacity: .3; }
+/* B: header only: everything else on the card hides, a big arrow points at the name/HP block */
+body.tp-b .pcard.t-target .np { outline: 4px dashed var(--lime); outline-offset: 4px; animation: tdash .7s linear infinite; background: rgba(200,236,58,.16); }
+body.tp-b .pcard.t-target .stages, body.tp-b .pcard.t-target .moves, body.tp-b .pcard.t-target .tabs, body.tp-b .pcard.t-target .turntag { visibility: hidden; }
+body.tp-b .pcard.t-target .top::after { content: "◀ hit this one"; position: absolute; right: 0; top: 0; bottom: 0; width: 40%; display: flex; align-items: center; justify-content: center; font-size: calc(var(--u)*2.4); font-style: italic; font-weight: 800; color: var(--lime); animation: tbob 1s ease-in-out infinite; pointer-events: none; }
+/* C: reticle: corner brackets round the name/HP block and a bobbing target badge; the card stays as it is */
+body.tp-c .pcard.t-target .top::before { content: ""; position: absolute; z-index: 5; left: calc(var(--u)*-.8); top: calc(var(--u)*-.8); bottom: calc(var(--u)*-.8); width: calc(56% + var(--u)*1.6); pointer-events: none;
+  --b: calc(var(--u)*.35); --l: calc(var(--u)*2.2); background:
+  linear-gradient(var(--lime), var(--lime)) top left / var(--l) var(--b) no-repeat, linear-gradient(var(--lime), var(--lime)) top left / var(--b) var(--l) no-repeat,
+  linear-gradient(var(--lime), var(--lime)) top right / var(--l) var(--b) no-repeat, linear-gradient(var(--lime), var(--lime)) top right / var(--b) var(--l) no-repeat,
+  linear-gradient(var(--lime), var(--lime)) bottom left / var(--l) var(--b) no-repeat, linear-gradient(var(--lime), var(--lime)) bottom left / var(--b) var(--l) no-repeat,
+  linear-gradient(var(--lime), var(--lime)) bottom right / var(--l) var(--b) no-repeat, linear-gradient(var(--lime), var(--lime)) bottom right / var(--b) var(--l) no-repeat; }
+body.tp-c .pcard.t-target .top::after { content: "🎯"; position: absolute; z-index: 6; left: calc(56% - var(--u)*2.2); top: calc(var(--u)*-2.2); width: calc(var(--u)*3.4); height: calc(var(--u)*3.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--lime); font-size: calc(var(--u)*2); animation: tbob 1s ease-in-out infinite; pointer-events: none; box-shadow: 0 0 12px rgba(200,236,58,.8); }
 .pcard.t-hit { outline: 3px solid var(--lime-pale); outline-offset: 3px; }
 .pcard .move.locked { opacity: .4; pointer-events: none; }
 .pcard .turntag { position: absolute; z-index: 3; top: calc(var(--u)*-1.3); right: calc(var(--u)*1.6); padding: calc(var(--u)*.15) calc(var(--u)*.8); border-radius: 999px; background: var(--panel); border: 1px solid var(--lime); font-size: calc(var(--u)*1.25); font-weight: 700; white-space: nowrap; }
@@ -217,6 +239,7 @@ details { margin-top: 6px; } summary { cursor: pointer; font-size: 12px; color: 
   <span class="seg"><button id="to-team">1 · Teams</button><button id="to-board">2 · Board</button></span>
   <button id="newgame">New game</button>
   <span class="grow"></span>
+  <span class="seg" id="tp-sw" title="how a target is offered (trying three looks)"><button data-tp="a">Target A</button><button data-tp="b">B</button><button data-tp="c">C</button></span>
 </header>
 <div id="caption"></div>
 
@@ -257,6 +280,8 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
 const sideOf = (slot) => (slot[1] === "1" ? "me" : "foe");
 
+let TP = (new URLSearchParams(location.search).get("tp") || (() => { try { return localStorage.getItem("champions-live-tp"); } catch (e) { return null; } })() || "a");
+function setTP(v) { TP = v; try { localStorage.setItem("champions-live-tp", v); } catch (e) {} document.body.classList.remove("tp-a", "tp-b", "tp-c"); document.body.classList.add("tp-" + v); document.querySelectorAll("#tp-sw button").forEach((b) => b.classList.toggle("on", b.dataset.tp === v)); }
 let dex = null, team = [], custom = false, scoutReply = null, reqId = 0, timer = null, S = null;
 
 const blank = () => ({step: "team", foeTeam: ["", "", "", "", "", ""], bring: [], ...fresh()});
@@ -311,7 +336,7 @@ function startBoard() {
 
 // ---- rendering ----
 function render() {
-  document.body.className = "step-" + S.step;
+  document.body.className = "step-" + S.step + " tp-" + TP + (flow && flow.step === "target" ? " targeting" : "");
   $("to-team").className = S.step === "team" ? "on" : ""; $("to-board").className = S.step === "board" ? "on" : "";
   $("to-board").disabled = !canStart();
   if (S.step === "team") renderTeamStep(); else { renderBoard(); fitBoard(); }
@@ -430,6 +455,7 @@ function decorate() {
     c.classList.toggle("t-target", !!flow && flow.step === "target" && flow.elig.includes(sl));
     c.classList.toggle("t-hit", !!flow && flow.step !== "target" && flow.targets.includes(sl));
   });
+  document.body.classList.toggle("targeting", !!flow && flow.step === "target");
   positionPop();
 }
 
@@ -987,8 +1013,8 @@ addEventListener("resize", positionPop);
 
 // ---- events ----
 document.addEventListener("click", (e) => {
-  const tc = e.target.closest(".pcard.t-target");
-  if (tc && flow && flow.step === "target") { flow.targets = [tc.dataset.slot]; flow.step = "resolve"; enterStep(); return; }
+  const tc = e.target.closest(".pcard.t-target .np");
+  if (tc && flow && flow.step === "target") { flow.targets = [tc.closest(".pcard").dataset.slot]; flow.step = "resolve"; enterStep(); return; }
   if (e.target.closest("#flow-pop")) return;
   const a = e.target.closest("[data-act]");
   if (!e.target.closest(".picker") && !(a && ["pick-slot", "item", "ability", "switch-out", "mega"].includes(a.dataset.act))) closePicker();
@@ -1114,6 +1140,8 @@ document.addEventListener("focusout", (e) => {
 
 $("clear-foes").onclick = () => { S.foeTeam = ["", "", "", "", "", ""]; S.slots.p2a = S.slots.p2b = null; S.mons.foe = {}; save(); renderTeamStep(); $("foe-inputs").querySelector("input").focus(); };
 $("start").onclick = startBoard;
+document.querySelectorAll("#tp-sw button").forEach((b) => (b.onclick = () => setTP(b.dataset.tp)));
+setTP(TP);
 $("to-team").onclick = () => { S.step = "team"; save(); render(); };
 $("to-board").onclick = startBoard;
 $("newgame").onclick = () => { if (S) newGame(); };
