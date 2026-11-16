@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 from ..engine.resolve import resolve, state_key
 from .actions import describe, joint_actions
@@ -40,6 +40,9 @@ class Result:
     row_mix: List[float]
     col_mix: List[float]
     stats: Stats = field(default_factory=Stats)
+    row_actions: Optional[list] = None   # the engine choices behind each row / column label
+    col_actions: Optional[list] = None
+    label: str = ""                      # which setting produced this (see solve_budget)
 
 
 class _Ctx:
@@ -192,7 +195,7 @@ def solve(battle, depth=2, buckets=None, min_prob=0.01, keep=None, dominance=Fal
     v, rows, cols, matrix, x, y = _node(battle, depth, ctx, root=True)
     ctx.stats.seconds = time.perf_counter() - t0
     return Result(v, [describe(battle, r) for r in rows], [describe(battle, c) for c in cols],
-                  matrix, x, y, ctx.stats)
+                  matrix, x, y, ctx.stats, rows, cols)
 
 
 _POOL = None
@@ -201,7 +204,10 @@ _POOL = None
 def get_pool(workers):
     """A process pool kept alive between solves (starting workers costs about 0.3s each, once)."""
     global _POOL
-    if _POOL is None or _POOL._max_workers != workers:
+    if _POOL is not None and (_POOL._max_workers != workers or getattr(_POOL, "_broken", False)):
+        _POOL.shutdown(wait=False, cancel_futures=True)       # a worker died: start a fresh pool
+        _POOL = None
+    if _POOL is None:
         from concurrent.futures import ProcessPoolExecutor
         _POOL = ProcessPoolExecutor(max_workers=workers)
         list(_POOL.map(abs, range(workers * 2)))      # start them now
