@@ -689,6 +689,8 @@ function intimidate(slot, push = pushAuto) {
     const ts = sideOf(t), tn = S.slots[t], ab = abilityId(ts, tn);
     if (NO_INTIMIDATE.has(ab)) { push(side, who, `Intimidate: ${label(tn)}'s ${abLabel(ab)} blocks it`); continue; }
     const l = []; bump(t, {atk: -1}, l); push(side, who, `Intimidate: ${l[0]}`);
+    const react = {defiant: ["Defiant", {atk: 2}], competitive: ["Competitive", {spa: 2}]}[ab];     // a drop caused by the other side
+    if (react) { const r = []; bump(t, react[1], r); push(ts, label(tn), `${react[0]}: ${r[0]}`); }
   }
 }
 function onEnter(slot) { const n = S.slots[slot]; if (n && abilityId(sideOf(slot), n) === "intimidate") intimidate(slot); }
