@@ -27,7 +27,7 @@ SPREAD = {"allAdjacent", "allAdjacentFoes"}
 STATUSES = ("par", "brn", "psn", "tox", "slp", "frz")
 WATCH_OHKO, WATCH_2HKO = 0.1, 0.4        # what "Watch out" lists: at least this share of rolls
 MAX_SEEN = 4
-OVERRIDES = {"me": ("item",), "foe": ("item", "ability", "nature", "sp")}   # what a board entry may change
+OVERRIDES = {"me": ("item", "ability"), "foe": ("item", "ability", "nature", "sp")}   # what a board entry may change
 
 
 class BadBoard(ValueError):
@@ -134,6 +134,12 @@ def _entry_spec(side, entry, team):
         if bad:
             raise BadBoard(f"unknown move: {bad[0]}")
         spec["moves"] = seen + [m for m in spec.get("moves", []) if m not in seen][:MAX_SEEN - len(seen)]
+    mega = entry.get("mega")
+    if mega:                                      # Mega Evolved: its stats, types and (unless told) ability; the build stays
+        sp = species_data().get(mega)
+        if not sp or not sp["is_mega"] or not mega.startswith(name.split("-")[0] + "-mega"):
+            raise BadBoard(f"{mega} is not a Mega form of {name}")
+        spec["species"], spec["ability"] = mega, sp["abilities"][0]
     for k in OVERRIDES[side]:
         if entry.get(k) is not None:
             spec[k] = entry[k]
@@ -171,6 +177,7 @@ def build_board(mine, foes, team):
     for si, (word, entries) in enumerate(zip(SIDES, (mine, foes))):
         for slot, entry in enumerate(entries):
             mon = b.sides[si].team[slot]
+            mon._entry_name = entry["name"]       # the page knows a Mega by its base name
             _apply_state(mon, entry)
             placed.append((word, slot, mon))
     return b, placed
@@ -221,8 +228,12 @@ def _ko(h):
     return None, None
 
 
+def _name(mon):
+    return getattr(mon, "_entry_name", mon.species)
+
+
 def _ref(word, mon):
-    return {"side": word, "name": mon.species}
+    return {"side": word, "name": _name(mon)}
 
 
 def scout(req, team):
@@ -253,7 +264,7 @@ def scout(req, team):
                     lo = speed(b, c)
                 else:
                     hi = speed(b, c)
-        order.append({"side": word, "slot": slot, "name": m.species, "lo": lo, "hi": hi, "now": speed(b, m)})
+        order.append({"side": word, "slot": slot, "name": _name(m), "lo": lo, "hi": hi, "now": speed(b, m)})
     order.sort(key=lambda o: o["now"], reverse=not b.arena["trick_room"])
 
     calc, threats = [], []
@@ -286,12 +297,12 @@ def scout(req, team):
 def board_card(word, slot, m, entry):
     """What the card needs from the engine: label, max HP, the stats (before stages) and the moves it may show."""
     mvs = teams.moves_data()
-    card = {"side": word, "slot": slot, "name": m.species, "hp": entry.get("hp", 1), "max_hp": m.max_hp,
+    card = {"side": word, "slot": slot, "name": _name(m), "form": m.species, "hp": entry.get("hp", 1), "max_hp": m.max_hp,
             "stats": {k: v for k, v in m.stats.items() if k != "hp"}, "types": m.types, "ability": m.ability,
             "item": m.item, "item_name": item_name(m.item) if m.item else None,
             "moves": [{"id": i, "name": move_name(i), "type": mvs[i]["type"], "category": mvs[i]["category"],
                        "pp": mvs[i]["pp"]} for i in m.moves if i in mvs]}
-    card["usage"] = usage_moves(m.species)       # their side always; yours when you gave only names
+    card["usage"] = usage_moves(_name(m))       # their side always; yours when you gave only names
     return card
 
 

@@ -139,8 +139,19 @@ aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; max-heig
 .pcard .stat .nm { font-size: calc(var(--u)*.95); font-weight: 800; }
 .pcard .stat .val { font-size: calc(var(--u)*1.9); font-style: italic; color: #fff; }
 .pcard .stat.up .val, .pcard .stat.up .tag { color: var(--up); } .pcard .stat.down .val, .pcard .stat.down .tag { color: var(--down); }
-.pcard .itab { position: absolute; right: calc(var(--u)*2); bottom: 100%; max-width: 50%; display: flex; align-items: center; height: calc(var(--u)*2.7); padding: 0 calc(var(--u)*1.1); border: 2px solid rgba(201,196,255,.55); border-bottom: 0; border-radius: calc(var(--u)*.9) calc(var(--u)*.9) 0 0; background: #24214a; font-size: calc(var(--u)*1.35); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pcard.foe .itab { border-color: rgba(255,179,189,.6); background: #3a1a2c; }
+.pcard .tabs { position: absolute; right: calc(var(--u)*2); bottom: 100%; max-width: 86%; display: flex; gap: calc(var(--u)*.6); }
+.pcard .itab, .pcard .atab { min-width: 0; display: flex; align-items: center; height: calc(var(--u)*2.7); padding: 0 calc(var(--u)*1.1); border: 2px solid rgba(201,196,255,.55); border-bottom: 0; border-radius: calc(var(--u)*.9) calc(var(--u)*.9) 0 0; background: #24214a; font-size: calc(var(--u)*1.35); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcard.foe .itab, .pcard.foe .atab { border-color: rgba(255,179,189,.6); background: #3a1a2c; }
+.atab { color: #c9c4ff; } .atab.guess { border-style: dashed; opacity: .7; font-style: italic; }
+.pcard .acts { grid-column: 1 / -1; display: flex; gap: calc(var(--u)*.8); }
+.pcard .acts.locked { opacity: .4; pointer-events: none; }
+.pcard .abtn { flex: 1; height: calc(var(--u)*3.6); display: flex; align-items: center; justify-content: center; border-radius: calc(var(--u)*1.8); background: rgba(74,63,214,.35); border: 2px dashed rgba(201,196,255,.55); font-size: calc(var(--u)*1.5); font-style: italic; cursor: pointer; white-space: nowrap; }
+.pcard.foe .abtn { background: rgba(184,40,63,.3); border-color: rgba(255,179,189,.6); }
+.pcard .abtn.mega { border-color: #e8c13a; color: #f4d35e; }
+.ac2 { max-height: 220px; overflow: auto; margin-top: 2px; padding: 3px; border-radius: 7px; background: #15162e; border: 1px solid #44446b; }
+.ac2 .opt2 { padding: 3px 8px; border-radius: 5px; white-space: nowrap; font-size: 13px; cursor: pointer; }
+.ac2 .opt2.on, .ac2 .opt2:hover { background: #c6f03a; color: #1c1c1a; }
+.picker { max-height: 80vh; overflow: auto; }
 .itab.guess { border-style: dashed; opacity: .7; font-style: italic; } .itab.used { text-decoration: line-through; opacity: .55; }
 .pcard .moves { margin-top: calc(var(--u)*.8); display: flex; flex-direction: column; gap: calc(var(--u)*.8); }
 .pcard.foe .moves, .pcard.guess .moves { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--u)*.8) calc(var(--u)*.9); }
@@ -251,13 +262,13 @@ let dex = null, team = [], custom = false, scoutReply = null, reqId = 0, timer =
 const blank = () => ({step: "team", foeTeam: ["", "", "", "", "", ""], bring: [], ...fresh()});
 const freshTurn = () => ({acted: {}, flinched: {}, protected: {}, acts: []});
 const fresh = () => ({slots: {p1a: null, p1b: null, p2a: null, p2b: null}, stages: {}, mons: {me: {}, foe: {}}, weather: "auto",
-  tailwind: [], trickRoom: false, turn: 1, log: [], ts: freshTurn(), undo: [], replace: []});
+  tailwind: [], trickRoom: false, turn: 1, log: [], ts: freshTurn(), undo: [], replace: [], megaUsed: {me: false, foe: false}});
 
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 function load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } }
 function caption(msg) { $("caption").textContent = msg || ""; }
 const label = (n) => (dex.species[n] ? dex.species[n].label : n);
-const mon = (side, name) => (S.mons[side][name] ??= {hp: 1, status: null, seen: [], item: null, itemUsed: false, pp: {}});
+const mon = (side, name) => (S.mons[side][name] ??= {hp: 1, status: null, seen: [], item: null, itemUsed: false, pp: {}, ability: null, mega: null});
 const teamMon = (name) => team.find((t) => t.name === name);
 const icon = (n) => `<img src="/sprites/${esc(n)}.png" alt="" onerror="this.style.visibility='hidden'">`;
 const stageMult = (s) => (s >= 0 ? (2 + s) / 2 : 2 / (2 - s));
@@ -274,7 +285,8 @@ async function boot() {
     custom = !team.length;                                   // no team file: you pick yours here
   } catch (e) { caption("Can't reach the live server (" + e.message + "). Is `champions live` still running?"); return; }
   S = load() || blank();
-  S.ts ??= freshTurn(); S.undo ??= [];
+  S.ts ??= freshTurn(); S.undo ??= []; S.megaUsed ??= {me: false, foe: false};
+  abByKey = {}; for (const [id, n] of Object.entries(dex.abilities || {})) abByKey[nk(id)] = n;
   if (custom) { S.myTeam = (S.myTeam || []).filter((x) => dex.species[x.species]); while (S.myTeam.length < 6) S.myTeam.push({species: ""}); await buildTeam(); }
   // drop anything that no longer exists
   S.foeTeam = (S.foeTeam || []).map((n) => (dex.species[n] ? n : ""));
@@ -306,7 +318,7 @@ function render() {
 }
 
 // ---- step 1, your side when there is no team file: pick by name, edit if you like ----
-let editing = -1;
+let editing = -1, abByKey = {};
 const nk = (v) => (v || "").toLowerCase().replace(/[^a-z]/g, "");
 const SPK = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"];
 const baseMoves = (x, t) => x.moves ?? (t ? t.moves.map((m) => m.id) : []);
@@ -427,7 +439,8 @@ function cardHtml(slot) {
   const side = sideOf(slot), name = S.slots[slot];
   if (!name) return `<div class="pcard slot-empty ${side === "foe" ? "foe" : ""}" data-slot="${slot}" data-act="pick-slot">${side === "foe" ? "+ who did they lead?" : "+ pick a Pokémon"}</div>`;
   const st = mon(side, name), bc = boardCard(side, name), t = side === "me" ? teamMon(name) : null;
-  const types = bc ? bc.types : (dex.species[name] || {}).types;
+  const dn = st.mega || name;                                  // a Mega shows as itself
+  const types = bc ? bc.types : (dex.species[dn] || {}).types;
   const stages = S.stages[slot] || {};
   const stats = bc ? bc.stats : (t ? t.stats : null);
   const hpTxt = side === "me" ? `<b>${Math.round(st.hp * (t ? t.max_hp : 0))}</b><small>/${t ? t.max_hp : "?"}</small>` : `<b>${Math.round(st.hp * 100)}%</b>`;
@@ -435,18 +448,20 @@ function cardHtml(slot) {
     const s = stages[k] || 0, v = stats ? Math.floor(stats[k] * stageMult(s)) : "–";
     return `<div class="stat ${s > 0 ? "up" : s < 0 ? "down" : ""}" data-act="stat" data-stat="${k}" data-slot="${slot}"><span class="nm">${STAT_NAMES[k]}${s ? `<span class="tag"> ${s > 0 ? "+" : ""}${s}</span>` : ""}</span><b class="val">${v}</b></div>`;
   }).join("");
-  const itemName = side === "me" ? (t && t.item ? dex.items[t.item] || t.item : "no item") : (st.item ? dex.items[st.item] || st.item : "item?");
-  const used = st.itemUsed && itemName !== "no item";
-  const itab = `<div class="itab ${side === "foe" && !st.item ? "guess" : ""} ${used ? "used" : ""}" data-act="item" data-slot="${slot}">${esc(itemName)}</div>`;
+  const fileMe = side === "me" && !custom, itId = itemId(side, name);
+  const itemName = itId ? dex.items[itId] || itId : fileMe ? "no item" : "item?";
+  const used = st.itemUsed && !!itId;
+  const abId = abilityId(side, name), abTxt = abId ? abLabel(abId) : bc && bc.ability ? abLabel(bc.ability) : "ability?";
+  const itab = `<div class="tabs"><div class="atab ${abId ? "" : "guess"}" data-act="ability" data-slot="${slot}" title="ability">${esc(abTxt)}</div><div class="itab ${!itId && !fileMe ? "guess" : ""} ${used ? "used" : ""}" data-act="item" data-slot="${slot}">${esc(itemName)}</div></div>`;
   const tag = S.ts.flinched[slot] ? `<div class="turntag warn" data-act="unflinch" data-slot="${slot}" title="click if it didn't flinch">flinched</div>`
-    : S.ts.acted[slot] ? `<div class="turntag">✓ ${esc((dex.moves[S.ts.acted[slot]] || {name: S.ts.acted[slot]}).name)}</div>` : "";
+    : S.ts.acted[slot] ? `<div class="turntag">✓ ${esc(S.ts.acted[slot] === "__switch" ? "switched in" : (dex.moves[S.ts.acted[slot]] || {name: S.ts.acted[slot]}).name)}</div>` : "";
   return `<div class="pcard ${side} ${side === "me" && custom ? "guess" : ""} ${st.hp <= 0 ? "fainted" : ""}" data-slot="${slot}">${itab}${tag}
-    <div class="top"><div class="np"><div class="sprite" data-act="pick-slot" data-slot="${slot}" title="switch">${icon(name)}</div>
-      <div class="body"><div class="banner" data-act="status" data-slot="${slot}"><span class="name">${esc(label(name))}</span>
+    <div class="top"><div class="np"><div class="sprite" data-act="pick-slot" data-slot="${slot}" title="switch">${icon(dn)}</div>
+      <div class="body"><div class="banner" data-act="status" data-slot="${slot}"><span class="name">${esc(label(dn))}</span>
         ${st.status ? `<span class="status ${st.status}">${st.status.toUpperCase()}</span>` : ""}${typeChips(types)}</div>
         <div class="hp" data-hp="${slot}"><div class="bar"><i class="${hpClass(st.hp)}" style="width:${Math.max(0, st.hp) * 100}%"></i></div><span class="lbl">${hpTxt}</span></div></div></div>
       <div class="stages">${stageCells}</div></div>
-    <div class="moves">${side === "me" && !custom ? myMoves(slot, name, st, t) : foeMoves(slot, name, st, bc)}</div></div>`;
+    <div class="moves">${side === "me" && !custom ? myMoves(slot, name, st, t) : foeMoves(slot, name, st, bc)}${actsHtml(slot, name, side, st)}</div></div>`;
 }
 
 const badge = (type) => `<div class="badge"><i style="background:${TYPE_COLORS[(type || "").toLowerCase()] || "#888"}">${tyIcon((type || "").toLowerCase())}</i></div>`;
@@ -469,6 +484,11 @@ function foeMoves(slot, name, st, bc) {
   return cells.join("");
 }
 
+const megaForms = (n) => Object.keys(dex.species).filter((k) => dex.species[k].mega && k.startsWith(n.split("-")[0] + "-mega"));
+function actsHtml(slot, name, side, st) {              // not moves, but things that happen in a turn
+  const mega = !st.mega && !S.megaUsed[side] && megaForms(name).length;
+  return `<div class="acts ${locked(slot) ? "locked" : ""}"><div class="abtn" data-act="switch-out" data-slot="${slot}">⇄ Switch out</div>${mega ? `<div class="abtn mega" data-act="mega" data-slot="${slot}">✦ Mega evolve</div>` : ""}</div>`;
+}
 const moveSel = (slot, id) => (flow && flow.slot === slot && flow.move === id) || S.ts.acted[slot] === id;
 const locked = (slot) => S.ts.acted[slot] || S.ts.flinched[slot] || (flow && flow.slot !== slot);
 
@@ -543,8 +563,10 @@ addEventListener("resize", () => { if (S && S.step === "board") fitBoard(); });
 function entry(side, slot) {
   const name = S.slots[slot]; if (!name) return null;
   const st = mon(side, name), e = {name, hp: st.hp, status: st.status, boosts: S.stages[slot] || {}};
+  if (st.mega) e.mega = st.mega;
+  if (st.ability) e.ability = st.ability;
   if (side === "foe") { if (st.seen.length) e.seen = st.seen; if (st.item) e.item = st.itemUsed ? "" : st.item; }
-  else { if (custom && st.seen.length) e.seen = st.seen; if (st.itemUsed) e.item = ""; }    // no team file: yours work like theirs, the moves you mark come first
+  else { if (custom && st.seen.length) e.seen = st.seen; if (custom && st.item) e.item = st.itemUsed ? "" : st.item; else if (st.itemUsed && !custom) e.item = ""; }    // no team file: yours work like theirs, the moves you mark come first
   return e;
 }
 function recompute() {
@@ -573,9 +595,9 @@ function place(slot, name) {
   if (name && mon(side, name).hp <= 0) { caption(`${label(name)} has fainted.`); return; }
   const other = SLOTS[side].find((s) => s !== slot);
   if (name && S.slots[other] === name) { [S.slots[slot], S.slots[other]] = [S.slots[other], S.slots[slot]]; [S.stages[slot], S.stages[other]] = [S.stages[other] || {}, S.stages[slot] || {}]; }
-  else { S.slots[slot] = name || null; S.stages[slot] = {}; }
+  else { S.slots[slot] = name || null; S.stages[slot] = {}; onEnter(slot); }
   S.replace = S.replace.filter((s) => s !== slot);
-  changed();
+  autoNow(); changed();
 }
 
 // ---- pickers ----
@@ -614,17 +636,127 @@ function pickSlot(slot, anchor) {
 }
 function pickItem(slot, anchor) {
   const side = sideOf(slot), name = S.slots[slot], st = mon(side, name);
-  if (side === "me") { st.itemUsed = !st.itemUsed; changed(); return; }
+  if (side === "me" && !custom) { snapshot(); st.itemUsed = !st.itemUsed; autoNow(); changed(); return; }     // from the team file: only used / not used
+  const itId = itemId(side, name);
   const p = openPicker(anchor, `${label(name)} @ …`, [
-    {label: st.itemUsed ? "Not used up after all" : "Used up / knocked off", disabled: !st.item, run: () => { st.itemUsed = !st.itemUsed; changed(); }},
-    {label: "Not seen yet", run: () => { st.item = null; st.itemUsed = false; changed(); }}],
-    `<input list="dl-items" placeholder="item seen…"><datalist id="dl-items">${Object.values(dex.items).map((n) => `<option value="${esc(n)}">`).join("")}</datalist>`);
-  const inp = p.querySelector("input"); inp.focus();
-  inp.addEventListener("change", () => { const id = Object.keys(dex.items).find((k) => dex.items[k].toLowerCase() === inp.value.trim().toLowerCase()); if (!id) { caption("Unknown item: " + inp.value); return; } st.item = id; st.itemUsed = false; closePicker(); changed(); });
+    {label: st.itemUsed ? "Not used up after all" : "Used up / knocked off", disabled: !itId, run: () => { snapshot(); st.itemUsed = !st.itemUsed; changed(); }},
+    {label: "Not known", disabled: !st.item, run: () => { snapshot(); st.item = null; st.itemUsed = false; changed(); }}],
+    `<div class="acwrap2"><input placeholder="search items…" autocomplete="off"></div>`);
+  const inp = p.querySelector("input");
+  makeAc(inp, Object.entries(dex.items).map(([id, n]) => ({id, label: n})), (id) => { closePicker(); snapshot(); st.item = id; st.itemUsed = false; autoNow(); changed(); });
+  inp.focus();
+}
+
+// ---- items and abilities that act by themselves ----
+const abLabel = (v) => abByKey[nk(v)] || v;
+function itemId(side, name) {                           // the item we know of (not a guess)
+  const st = mon(side, name); if (st.item) return st.item;
+  if (side === "me" && !custom) { const t = teamMon(name); return t && t.item ? t.item : null; }
+  return null;
+}
+const heldItem = (side, name) => { const id = itemId(side, name); return id && !mon(side, name).itemUsed ? id : null; };
+function abilityId(side, name) {                        // the ability we know of: set by hand, a Mega's only one, from the team file, or the species' only one
+  const st = mon(side, name); if (st.ability) return nk(st.ability);
+  const d = dex.species[st.mega || name] || {abilities: []};
+  const all = [...new Set([...d.abilities, d.hidden].filter(Boolean).map(nk))];
+  if (st.mega) return all.length === 1 ? all[0] : null;
+  if (side === "me" && !custom) { const t = teamMon(name); return t ? nk(t.ability) : null; }
+  return all.length === 1 ? all[0] : null;
+}
+const outPush = (side, who, text) => S.ts.acts.push({side, who, move: text, lines: []});
+const pushAuto = (side, who, text) => (flow && flow.lines ? flow.lines.push(`${who} ${text}`) : outPush(side, who, text));
+const BERRY_CURES = {cheriberry: "par", chestoberry: "slp", pechaberry: "psn", rawstberry: "brn", aspearberry: "frz"};
+const NO_INTIMIDATE = new Set(["innerfocus", "oblivious", "owntempo", "scrappy", "clearbody", "whitesmoke", "hypercutter", "fullmetalbody", "mirrorarmor"]);
+const itemLabel = (id) => dex.items[id] || id;
+function runAuto(push = pushAuto) {                     // an item whose moment has come is used, and logged
+  for (const slot of [...SLOTS.me, ...SLOTS.foe]) {
+    const name = S.slots[slot]; if (!name || !alive(slot)) continue;
+    const side = sideOf(slot), st = mon(side, name), it = heldItem(side, name), stg = S.stages[slot] || {};
+    if (!it) continue;
+    const use = (text) => { st.itemUsed = true; push(side, label(name), text); };
+    if (it === "whiteherb") { const low = STAT_KEYS.filter((k) => stg[k] < 0); if (low.length) { low.forEach((k) => (stg[k] = 0)); use(`used its White Herb (restored ${low.map((k) => STAT_NAMES[k]).join(", ")})`); } }
+    else if (it === "sitrusberry" && st.hp <= 0.5) { st.hp = Math.min(1, st.hp + 0.25); use("ate its Sitrus Berry (+25%)"); }
+    else if (it === "oranberry" && st.hp <= 0.5) { st.hp = Math.min(1, st.hp + 10 / maxHp(side, name)); use("ate its Oran Berry (+10 HP)"); }
+    else if (it === "lumberry" && st.status) { const c = st.status; st.status = null; use(`ate its Lum Berry (cured ${c.toUpperCase()})`); }
+    else if (BERRY_CURES[it] && st.status === BERRY_CURES[it]) { const c = st.status; st.status = null; use(`ate its ${itemLabel(it)} (cured ${c.toUpperCase()})`); }
+  }
+}
+const autoNow = () => runAuto(pushAuto);
+function intimidate(slot, push = pushAuto) {
+  const side = sideOf(slot), who = label(S.slots[slot]);
+  for (const t of SLOTS[side === "me" ? "foe" : "me"]) {
+    if (!alive(t)) continue;
+    const ts = sideOf(t), tn = S.slots[t], ab = abilityId(ts, tn);
+    if (NO_INTIMIDATE.has(ab)) { push(side, who, `Intimidate: ${label(tn)}'s ${abLabel(ab)} blocks it`); continue; }
+    const l = []; bump(t, {atk: -1}, l); push(side, who, `Intimidate: ${l[0]}`);
+  }
+}
+function onEnter(slot) { const n = S.slots[slot]; if (n && abilityId(sideOf(slot), n) === "intimidate") intimidate(slot); }
+
+// a small search-as-you-type list, like the Pokémon one (options: [{id, label}])
+function makeAc(input, options, onPick) {
+  const opts = options.map((o) => ({...o, l: o.label.toLowerCase()})), box = document.createElement("div");
+  box.className = "ac2"; box.hidden = true; input.after(box);
+  const words = (l) => l.split(/[\s-]+/);
+  const show = () => {
+    const q = input.value.trim().toLowerCase();
+    const ranked = !q ? opts : [...opts.filter((o) => o.l.startsWith(q)), ...opts.filter((o) => !o.l.startsWith(q) && words(o.l).some((w) => w.startsWith(q))), ...opts.filter((o) => !words(o.l).some((w) => w.startsWith(q)) && o.l.includes(q))];
+    box.innerHTML = ranked.slice(0, 80).map((o, k) => `<div class="opt2 ${k ? "" : "on"}" data-id="${esc(o.id)}">${esc(o.label)}</div>`).join(""); box.hidden = !box.children.length;
+  };
+  input.addEventListener("input", show); input.addEventListener("focus", show);
+  input.addEventListener("keydown", (e) => {
+    const list = [...box.children], cur = list.findIndex((o) => o.classList.contains("on"));
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (!list.length) return; list[cur]?.classList.remove("on"); const n = list[(cur + (e.key === "ArrowDown" ? 1 : list.length - 1)) % list.length]; n.classList.add("on"); n.scrollIntoView({block: "nearest"}); }
+    else if ((e.key === "Enter" || e.key === "Tab") && !box.hidden && list[cur]) { e.preventDefault(); onPick(list[cur].dataset.id); }
+  });
+  box.addEventListener("mousedown", (e) => { const o = e.target.closest(".opt2"); if (o) { e.preventDefault(); onPick(o.dataset.id); } });
+  show();
+}
+function pickAbility(slot, anchor) {
+  const side = sideOf(slot), name = S.slots[slot], st = mon(side, name), d = dex.species[st.mega || name] || {abilities: []};
+  const ids = [...new Map([...d.abilities, d.hidden].filter(Boolean).map((a) => [nk(a), a])).values()];
+  const p = openPicker(anchor, `${label(st.mega || name)}'s ability`, [
+    {label: "Not known", disabled: !st.ability, run: () => { snapshot(); st.ability = null; changed(); }}], `<div class="acwrap2"><input placeholder="search abilities…" autocomplete="off"></div>`);
+  const inp = p.querySelector("input");
+  makeAc(inp, ids.map((a) => ({id: a, label: abLabel(a)})), (id) => {
+    closePicker(); snapshot(); const prev = abilityId(side, name); st.ability = id;
+    if (nk(id) === "intimidate" && prev !== "intimidate") intimidate(slot);     // it's what just happened: lower their Attack
+    autoNow(); changed();
+  });
+  inp.focus();
+}
+function switchOut(slot, anchor) {
+  const side = sideOf(slot), name = S.slots[slot];
+  if (flow) { caption("Finish or cancel the open action first."); return; }
+  if (S.ts.acted[slot]) { caption(`${label(name)} already acted this turn: Undo last to redo it.`); return; }
+  const bench = (side === "me" ? S.bring : S.foeTeam.filter(Boolean)).filter((n) => mon(side, n).hp > 0 && !Object.values(S.slots).includes(n));
+  const go = (n) => { snapshot(); S.ts.acts.push({side, who: label(name), move: `switched out for ${label(n)}`, lines: []}); S.ts.acted[slot] = "__switch"; place(slot, n); };
+  if (side === "me" && !custom && !bench.length) { caption("No one left to switch to."); return; }
+  const p = openPicker(anchor, `${label(name)} switches out: who comes in?`, bench.map((n) => ({label: label(n), run: () => go(n)})),
+    side === "foe" || custom ? `<div class="acwrap2"><input placeholder="someone else…" autocomplete="off"></div>` : "");
+  const inp = p.querySelector("input");
+  if (inp) makeAc(inp, Object.entries(dex.species).filter(([, v]) => !v.mega).map(([id, v]) => ({id, label: v.label})), (id) => {
+    if (side === "foe") { if (!S.foeTeam.includes(id)) { const i = S.foeTeam.indexOf(""); if (i < 0) { caption("Their 6 are all listed: pick one of them."); return; } S.foeTeam[i] = id; } closePicker(); go(id); }
+    else { if (!S.myTeam.some((x) => x.species === id)) { const i = S.myTeam.findIndex((x) => !x.species); if (i < 0) { caption("Your 6 are all listed: pick one of them."); return; } S.myTeam[i] = {species: id}; }
+           closePicker(); buildTeam().then(() => { save(); go(id); }); }
+  });
+}
+function doMega(slot, anchor) {
+  const side = sideOf(slot), name = S.slots[slot], st = mon(side, name), forms = megaForms(name);
+  if (S.megaUsed[side]) { caption(`${side === "me" ? "You have" : "They have"} already Mega Evolved this game.`); return; }
+  if (S.ts.acted[slot]) { caption(`${label(name)} already acted this turn.`); return; }
+  const go = (id) => { snapshot(); st.mega = id; st.ability = null; S.megaUsed[side] = true; S.ts.acts.push({side, who: label(name), move: `Mega Evolved into ${label(id)}`, lines: []}); changed(); };
+  if (forms.length === 1) go(forms[0]); else openPicker(anchor, `${label(name)} Mega Evolves into…`, forms.map((f) => ({label: label(f), run: () => go(f)})));
 }
 
 // ---- end of turn ----
 function endTurn() {
+  for (const sl of [...SLOTS.foe, ...SLOTS.me]) {                 // Leftovers
+    const n = S.slots[sl]; if (!n || !alive(sl)) continue;
+    const sd = sideOf(sl), st = mon(sd, n);
+    if (heldItem(sd, n) === "leftovers" && st.hp < 1) { st.hp = Math.min(1, st.hp + 1 / 16); outPush(sd, label(n), "recovered 1/16 HP with its Leftovers"); }
+  }
+  autoNow();
   const end = [], conds = [];
   if (S.trickRoom) conds.push("Trick Room"); if (S.tailwind.includes("me")) conds.push("Tailwind (you)"); if (S.tailwind.includes("foe")) conds.push("Tailwind (them)");
   S.replace = [];
@@ -645,7 +777,7 @@ const mname = (id) => (dex.moves[id] || {name: id}).name;
 const alive = (slot) => S.slots[slot] && mon(sideOf(slot), S.slots[slot]).hp > 0;
 const maxHp = (side, name) => { const t = side === "me" ? teamMon(name) : null; if (t) return t.max_hp; const c = boardCard(side, name); return c ? c.max_hp : 200; };
 const other = (slot) => SLOTS[sideOf(slot)].find((x) => x !== slot);
-function snapshot() { S.undo.push(JSON.stringify({slots: S.slots, stages: S.stages, mons: S.mons, weather: S.weather, tailwind: S.tailwind, trickRoom: S.trickRoom, ts: S.ts, replace: S.replace})); S.undo = S.undo.slice(-15); }
+function snapshot() { S.undo.push(JSON.stringify({megaUsed: S.megaUsed, slots: S.slots, stages: S.stages, mons: S.mons, weather: S.weather, tailwind: S.tailwind, trickRoom: S.trickRoom, ts: S.ts, replace: S.replace})); S.undo = S.undo.slice(-15); }
 function undo() { if (!S.undo.length) return; Object.assign(S, JSON.parse(S.undo.pop())); flow = null; closePop(); changed(); }
 
 function startFlow(slot, id) {
@@ -784,6 +916,11 @@ function commit() {                              // the target step is done: HP,
     const frac = (pair, dir) => { const hp = dealt * pair[0] / pair[1] / maxHp(side, an); ast.hp = Math.max(0, Math.min(1, ast.hp + dir * hp)); return Math.round(hp * maxHp(side, an)); };
     if (fx.recoil && dealt) ls.push(`${label(an)} took ${frac(fx.recoil, -1)} recoil`);
     if (fx.drain && dealt) ls.push(`${label(an)} drained ${frac(fx.drain, 1)}`);
+    if (dealt && fx.category !== "Status") {
+      const it = heldItem(side, an);
+      if (it === "shellbell") ls.push(`${label(an)}'s Shell Bell restored ${frac([1, 8], 1)}`);
+      else if (it === "lifeorb") { ast.hp = Math.max(0, ast.hp - 0.1); ls.push(`${label(an)}'s Life Orb boosted its attack (−10% HP)`); }
+    }
     if (fx.heal) { ast.hp = Math.min(1, ast.hp + fx.heal[0] / fx.heal[1]); ls.push(`${label(an)} healed ${fx.heal[0] / fx.heal[1] * 100}%`); }
   }
   S.ts.acted[a] = flow.move;
@@ -807,6 +944,7 @@ function afterAsks() {                           // chosen chips already applied
 }
 function finishFlow() {
   const a = flow.slot, side = sideOf(a);
+  runAuto();
   S.ts.acts.push({side, who: label(S.slots[a]), move: mname(flow.move), lines: flow.lines});
   flow = null; closePop(); changed();
 }
@@ -858,7 +996,7 @@ document.addEventListener("click", (e) => {
   if (tc && flow && flow.step === "target") { flow.targets = [tc.dataset.slot]; flow.step = "resolve"; enterStep(); return; }
   if (e.target.closest("#flow-pop")) return;
   const a = e.target.closest("[data-act]");
-  if (!e.target.closest(".picker") && !(a && ["pick-slot", "item"].includes(a.dataset.act))) closePicker();
+  if (!e.target.closest(".picker") && !(a && ["pick-slot", "item", "ability", "switch-out", "mega"].includes(a.dataset.act))) closePicker();
   if (!a) return;
   const slot = a.dataset.slot, side = slot ? sideOf(slot) : null;
   switch (a.dataset.act) {
@@ -871,8 +1009,11 @@ document.addEventListener("click", (e) => {
     }
     case "pick-slot": pickSlot(slot, a); break;
     case "item": pickItem(slot, a); break;
-    case "status": { snapshot(); const st = mon(side, S.slots[slot]); st.status = STATUSES[(STATUSES.indexOf(st.status) + 1) % STATUSES.length]; changed(); break; }
-    case "stat": { snapshot(); const s = (S.stages[slot] ??= {}); s[a.dataset.stat] = Math.min(6, (s[a.dataset.stat] || 0) + 1); changed(); break; }
+    case "ability": pickAbility(slot, a); break;
+    case "switch-out": switchOut(slot, a); break;
+    case "mega": doMega(slot, a); break;
+    case "status": { snapshot(); const st = mon(side, S.slots[slot]); st.status = STATUSES[(STATUSES.indexOf(st.status) + 1) % STATUSES.length]; autoNow(); changed(); break; }
+    case "stat": { snapshot(); const s = (S.stages[slot] ??= {}); s[a.dataset.stat] = Math.min(6, (s[a.dataset.stat] || 0) + 1); autoNow(); changed(); break; }
     case "my-move": case "foe-move": startFlow(slot, a.dataset.move); break;
     case "unflinch": delete S.ts.flinched[slot]; changed(); break;
     case "undo": undo(); break;
@@ -891,7 +1032,7 @@ document.addEventListener("click", (e) => {
 document.addEventListener("contextmenu", (e) => {
   const a = e.target.closest('[data-act="stat"]'); if (!a) return;
   e.preventDefault(); snapshot();
-  const s = (S.stages[a.dataset.slot] ??= {}); s[a.dataset.stat] = Math.max(-6, (s[a.dataset.stat] || 0) - 1); changed();
+  const s = (S.stages[a.dataset.slot] ??= {}); s[a.dataset.stat] = Math.max(-6, (s[a.dataset.stat] || 0) - 1); autoNow(); changed();
 });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closePicker(); document.querySelectorAll(".ac").forEach((a) => (a.hidden = true)); } });
 
@@ -909,10 +1050,10 @@ document.addEventListener("change", (e) => {
 let drag = null;
 document.addEventListener("pointerdown", (e) => {
   const hp = e.target.closest("[data-hp]"); if (!hp) return;
-  drag = {slot: hp.dataset.hp, bar: hp.querySelector(".bar"), card: hp.closest(".pcard")}; try { hp.setPointerCapture(e.pointerId); } catch (err) {} dragTo(e);
+  snapshot(); drag = {slot: hp.dataset.hp, bar: hp.querySelector(".bar"), card: hp.closest(".pcard")}; try { hp.setPointerCapture(e.pointerId); } catch (err) {} dragTo(e);
 });
 document.addEventListener("pointermove", (e) => { if (drag) dragTo(e); });
-document.addEventListener("pointerup", () => { if (drag) { drag = null; changed(); } });
+document.addEventListener("pointerup", () => { if (drag) { drag = null; autoNow(); changed(); } });
 function dragTo(e) {
   const r = drag.bar.getBoundingClientRect(), side = sideOf(drag.slot), name = S.slots[drag.slot], t = teamMon(name);
   let f = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));

@@ -110,3 +110,20 @@ class Forms(unittest.TestCase):
     def test_the_dex_learnset_follows_the_form_name(self):
         from champions.live.server import dex
         self.assertIn("wavecrash", dex()["species"]["basculegion-male"]["learnset"])
+
+
+class MegaAndAbility(unittest.TestCase):
+    def test_mega_keeps_its_base_name_and_takes_mega_stats(self):
+        base = run(mine=[{"name": "charizard"}], foes=[])
+        mega = run(mine=[{"name": "charizard", "mega": "charizard-mega-y"}], foes=[])
+        a, b = base["board"][0], mega["board"][0]
+        self.assertEqual((a["name"], b["name"], b["form"]), ("charizard", "charizard", "charizard-mega-y"))
+        self.assertGreater(b["stats"]["spa"], a["stats"]["spa"])
+
+    def test_not_a_mega_of_that_species_is_an_error(self):
+        with self.assertRaises(scout.BadBoard):
+            run(mine=[{"name": "charizard", "mega": "venusaur-mega"}], foes=[])
+
+    def test_you_can_name_their_ability_and_yours(self):
+        r = run(mine=[{"name": "garchomp", "ability": "sand-veil"}], foes=[{"name": "incineroar", "ability": "blaze"}])
+        self.assertEqual([c["ability"] for c in r["board"]], ["sandveil", "blaze"])

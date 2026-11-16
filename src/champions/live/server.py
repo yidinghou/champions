@@ -60,16 +60,20 @@ def load_team(path):
     return check_specs(team, strict=False)
 
 
+def abilities():
+    return json.loads((Path(teams.DATA) / "abilities.json").read_text())["abilities"]
+
+
 def dex():
     sp = scout.species_data()
     items = json.loads((Path(teams.DATA) / "items.json").read_text())["items"]
     return {"species": {n: {"label": move_name(n), "types": s["types"], "abilities": s["abilities"],
-                            "mega": s["is_mega"], "learnset": scout.learnsets().get(n) or scout.learnsets().get(s["species"], [])}
+                            "mega": s["is_mega"], "hidden": s.get("hidden_ability"), "learnset": scout.learnsets().get(n) or scout.learnsets().get(s["species"], [])}
                         for n, s in sp.items()},
             "moves": {i: {"name": m["name"], "type": m["type"], "category": m["category"], "bp": m["base_power"],
                           "pp": m["pp"], "priority": m["priority"], "target": m["target"], "fx": moveflow.flow(i)}
                       for i, m in teams.moves_data().items()},
-            "items": {i: v["name"] for i, v in items.items()}, "natures": sorted(stats_mod._UP_DOWN.keys() | stats_mod.NEUTRAL),
+            "items": {i: v["name"] for i, v in items.items()}, "abilities": {i: v["name"] for i, v in abilities().items()}, "natures": sorted(stats_mod._UP_DOWN.keys() | stats_mod.NEUTRAL),
             "status_immune": moveflow.STATUS_IMMUNE}
 
 
