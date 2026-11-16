@@ -733,15 +733,8 @@ function switchOut(slot, anchor) {
   if (S.ts.acted[slot]) { caption(`${label(name)} already acted this turn: Undo last to redo it.`); return; }
   const bench = (side === "me" ? S.bring : S.foeTeam.filter(Boolean)).filter((n) => mon(side, n).hp > 0 && !Object.values(S.slots).includes(n));
   const go = (n) => { snapshot(); S.ts.acts.push({side, who: label(name), move: `switched out for ${label(n)}`, lines: []}); S.ts.acted[slot] = "__switch"; place(slot, n); };
-  if (side === "me" && !custom && !bench.length) { caption("No one left to switch to."); return; }
-  const p = openPicker(anchor, `${label(name)} switches out: who comes in?`, bench.map((n) => ({label: label(n), run: () => go(n)})),
-    side === "foe" || custom ? `<div class="acwrap2"><input placeholder="someone else…" autocomplete="off"></div>` : "");
-  const inp = p.querySelector("input");
-  if (inp) makeAc(inp, Object.entries(dex.species).filter(([, v]) => !v.mega).map(([id, v]) => ({id, label: v.label})), (id) => {
-    if (side === "foe") { if (!S.foeTeam.includes(id)) { const i = S.foeTeam.indexOf(""); if (i < 0) { caption("Their 6 are all listed: pick one of them."); return; } S.foeTeam[i] = id; } closePicker(); go(id); }
-    else { if (!S.myTeam.some((x) => x.species === id)) { const i = S.myTeam.findIndex((x) => !x.species); if (i < 0) { caption("Your 6 are all listed: pick one of them."); return; } S.myTeam[i] = {species: id}; }
-           closePicker(); buildTeam().then(() => { save(); go(id); }); }
-  });
+  if (!bench.length) { caption(`No one left to switch to: ${side === "me" ? "your" : "their"} 6 are listed on step 1.`); return; }
+  openPicker(anchor, `${label(name)} switches out: who comes in?`, bench.map((n) => ({label: label(n), run: () => go(n)})));
 }
 function doMega(slot, anchor) {
   const side = sideOf(slot), name = S.slots[slot], st = mon(side, name), forms = megaForms(name);
