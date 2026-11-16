@@ -6,6 +6,7 @@ COMMANDS = {
     "sources": ("champions.sources.cli", "usage-stat sources: sources {munchstats|pikalytics|championslab|opgg|icons}"),
     "catalogue": ("champions.catalogue.cli", "mechanic catalogue coverage: catalogue status"),
     "sim": ("champions.engine.cli", "battle engine: sim replay <file>"),
+    "live": ("champions.live.cli", "live-game tracker page: live --team FILE"),
     "check-roster": ("champions.fetch.roster_check", "verify new_in_mc tags against Showdown (network)"),
 }
 FETCHERS = {

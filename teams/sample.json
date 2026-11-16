@@ -1,0 +1,10 @@
+[
+ {"species": "incineroar", "ability": "intimidate", "item": "sitrusberry", "nature": "careful", "sp": "32/16/0/0/18/0",
+  "moves": ["fakeout", "flareblitz", "knockoff", "partingshot"]},
+ {"species": "rillaboom", "ability": "grassysurge", "item": "assaultvest", "nature": "adamant", "sp": "32/32/0/0/2/0",
+  "moves": ["grassyglide", "woodhammer", "highhorsepower", "uturn"]},
+ {"species": "garchomp", "ability": "roughskin", "item": "lifeorb", "nature": "jolly", "sp": "2/32/0/0/0/32",
+  "moves": ["earthquake", "dragonclaw", "rockslide", "protect"]},
+ {"species": "charizard", "ability": "blaze", "item": "choicespecs", "nature": "timid", "sp": "2/0/0/32/0/32",
+  "moves": ["heatwave", "airslash", "solarbeam", "protect"]}
+]
