@@ -17,7 +17,7 @@ board fits the window with no scrollbar. L4 errors always show in the caption li
 | LIVE-02 | `POST /api/scout` takes `{mine, foes, weather, tailwind, trick_room}` and returns `order` (foes as min-max ranges), `calc`, `threats` (Watch out: >=10% OHKO or >=40% 2HKO), `board`. | `test_live_scout.py::Speed`, `::Calc`, `test_live_server.py::test_scout_a_board` |
 | LIVE-03 | Bad input is a 400 with `{"error": text}`. | `test_live_scout.py::Errors`, `test_live_server.py::test_errors_are_400_with_a_message` |
 | LIVE-04 | Foe builds are the commonest MunchStats set; seen moves are pinned first. | `test_live_scout.py::Errors::test_seen_moves_are_pinned` |
-| LIVE-05 | Step 1: type their 6 (autocomplete from the 2nd letter, duplicates refused); click your 4 (1-2 lead, 3-4 back). | manual M1 |
+| LIVE-05 | Step 1 is two panels like the board (theirs red, yours blue). Their side is optional: type any of their 6 (autocomplete, duplicates refused) or add who they led from an empty slot on the board. Your team comes from the team file (6 in `teams/sample.json`); click the 4 you bring (1-2 lead, 3-4 back). | manual M1 |
 | LIVE-06 | Board gestures: drag HP, click/right-click a stat (+1/-1), click a name to cycle status, click a move to mark it used (yours: PP drops at End turn; theirs: marked seen), item tab, switch via sprite click, picker or dragging a roster mini onto a card. | manual M2 |
 | LIVE-07 | Conditions chips (Trick Room, Tailwind either side, Weather auto/sun/rain/sand/snow/none) re-scout within ~120 ms; a late reply never overwrites a newer one. | manual M3 |
 | LIVE-08 | End turn logs the turn, drops PP, asks who comes in for each fainted slot. State survives reload; New game resets all but their 6 and your 4. | manual M4 |

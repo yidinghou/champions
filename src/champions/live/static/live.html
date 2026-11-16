@@ -43,9 +43,12 @@ body:not(.step-team) #team-step, body:not(.step-board) #board-step { display: no
 #board-step { display: flex; flex-direction: column; }
 
 /* ---- step 1 ---- */
-.rosters { display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
-.rosters h3 { margin: 6px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); }
-.rosters h3 small { text-transform: none; letter-spacing: 0; font-weight: 500; margin-left: 8px; }
+.team-panels { display: flex; flex-direction: column; gap: 14px; max-width: 900px; }
+.tpanel { padding: 14px; border-radius: 16px; }
+.tpanel.foe { background: rgba(184,40,63,.16); border: 2px solid rgba(255,179,189,.5); }
+.tpanel.mine { background: rgba(74,63,214,.16); border: 2px solid rgba(201,196,255,.5); }
+.tpanel h3 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); }
+.tpanel h3 small { text-transform: none; letter-spacing: 0; font-weight: 500; margin-left: 8px; }
 .list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
 .pick-row { display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .slotnum { width: 24px; height: 24px; border-radius: 50%; border: 2px dashed var(--mute); display: flex; align-items: center; justify-content: center; color: var(--band); font-weight: 800; flex: none; }
@@ -174,11 +177,11 @@ details { margin-top: 6px; } summary { cursor: pointer; font-size: 12px; color: 
 <div id="caption"></div>
 
 <section id="team-step">
-  <div class="rosters">
-    <h3>Their team <small>from team preview · Tab or Enter for the next</small> <button class="linkish" id="clear-foes">Clear all</button></h3>
-    <div class="list" id="foe-inputs"></div>
-    <h3>Your team <small>click the 4 you bring, in order: 1–2 lead, 3–4 back</small></h3>
-    <div class="list" id="mine-list"></div>
+  <div class="team-panels">
+    <div class="tpanel foe"><h3>Their team <small>optional: add any you saw at team preview; you can also add them from the board · Tab or Enter for the next</small> <button class="linkish" id="clear-foes">Clear all</button></h3>
+      <div class="list" id="foe-inputs"></div></div>
+    <div class="tpanel mine"><h3>Your team <small>from the team file · click the 4 you bring, in order: 1–2 lead, 3–4 back</small></h3>
+      <div class="list" id="mine-list"></div></div>
     <div class="go-row"><button class="go" id="start">Board →</button><span id="bring-sum"></span></div>
   </div>
 </section>
@@ -244,7 +247,7 @@ async function boot() {
 }
 
 const need = () => Math.min(4, team.length);
-const canStart = () => S.bring.length === need() && S.foeTeam.some(Boolean);
+const canStart = () => S.bring.length === need();      // their side is optional: add them here or from the board
 function newGame() {
   Object.assign(S, fresh());
   [S.slots.p1a, S.slots.p1b] = [S.bring[0] || null, S.bring[1] || null];
@@ -307,7 +310,7 @@ function miniHtml(side, name, st, o = {}) {
 function renderBoard() {
   for (const side of ["foe", "me"]) {
     const names = side === "me" ? S.bring : S.foeTeam.filter(Boolean);
-    $("roster-" + side).innerHTML = names.map((n) => miniHtml(side, n, mon(side, n))).join("") || '<div class="muted">their 6 go here</div>';
+    $("roster-" + side).innerHTML = names.map((n) => miniHtml(side, n, mon(side, n))).join("") || '<div class="muted">click an empty slot to add who they led</div>';
     $("cards-" + side).innerHTML = SLOTS[side].map((sl) => cardHtml(sl)).join("");
   }
   renderConditions(); renderTurn(); renderPanels();
@@ -478,7 +481,15 @@ function pickSlot(slot, anchor) {
     return {label: label(n) + (dead ? " (fainted)" : here ? (here[0] === slot ? " (here)" : " (in)") : ""), disabled: dead || here?.[0] === slot, run: () => place(slot, n)};
   });
   if (S.slots[slot] && SLOTS[side].every((s) => S.slots[s])) b.push({label: "Empty slot", run: () => place(slot, null)});
-  openPicker(anchor, side === "me" ? "Your team" : "Their team", b);
+  const extra = side === "foe" ? `<input list="dl-sp" placeholder="someone else…"><datalist id="dl-sp">${Object.values(dex.species).map((x) => `<option value="${esc(x.label)}">`).join("")}</datalist>` : "";
+  const p = openPicker(anchor, side === "me" ? "Your team" : "Their team", b, extra);
+  const inp = p.querySelector("input");
+  if (inp) inp.addEventListener("change", () => {
+    const v = inp.value.trim().toLowerCase(), id = Object.keys(dex.species).find((k) => dex.species[k].label.toLowerCase() === v || k === v);
+    if (!id) { caption("Unknown Pokémon: " + inp.value); return; }
+    if (!S.foeTeam.includes(id)) { const i = S.foeTeam.indexOf(""); if (i < 0) { caption("Their 6 are all listed: pick one of them."); return; } S.foeTeam[i] = id; }
+    closePicker(); place(slot, id);
+  });
 }
 function pickItem(slot, anchor) {
   const side = sideOf(slot), name = S.slots[slot], st = mon(side, name);
