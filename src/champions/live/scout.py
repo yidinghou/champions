@@ -114,12 +114,13 @@ def _entry_spec(side, entry, team):
         spec = dict(base)
     else:
         spec = foe_spec(name)
-        if entry.get("seen"):
-            seen = [teams.key(m) for m in entry["seen"][:MAX_SEEN]]
-            bad = [m for m in seen if m not in teams.moves_data()]
-            if bad:
-                raise BadBoard(f"unknown move: {bad[0]}")
-            spec["moves"] = seen + [m for m in spec.get("moves", []) if m not in seen][:MAX_SEEN - len(seen)]
+    if entry.get("seen"):     # (yours too, when the page sends them: a team of names)
+        # moves you've marked go first; the usual set fills the rest
+        seen = [teams.key(m) for m in entry["seen"][:MAX_SEEN]]
+        bad = [m for m in seen if m not in teams.moves_data()]
+        if bad:
+            raise BadBoard(f"unknown move: {bad[0]}")
+        spec["moves"] = seen + [m for m in spec.get("moves", []) if m not in seen][:MAX_SEEN - len(seen)]
     for k in OVERRIDES[side]:
         if entry.get(k) is not None:
             spec[k] = entry[k]
@@ -277,8 +278,7 @@ def board_card(word, slot, m, entry):
             "item": m.item, "item_name": item_name(m.item) if m.item else None,
             "moves": [{"id": i, "name": move_name(i), "type": mvs[i]["type"], "category": mvs[i]["category"],
                        "pp": mvs[i]["pp"]} for i in m.moves if i in mvs]}
-    if word == "foe":
-        card["usage"] = usage_moves(m.species)
+    card["usage"] = usage_moves(m.species)       # their side always; yours when you gave only names
     return card
 
 

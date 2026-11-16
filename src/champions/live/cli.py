@@ -1,4 +1,4 @@
-"""champions live --team FILE [--port 8001] [--no-open]   serve the live-game tracker on 127.0.0.1."""
+"""champions live [--team FILE] [--port 8001] [--no-open]   serve the live-game tracker on 127.0.0.1."""
 import argparse
 import sys
 import webbrowser
@@ -8,7 +8,7 @@ from .server import serve
 
 def main():
     p = argparse.ArgumentParser(prog="champions live")
-    p.add_argument("--team", required=True, help="your team: a JSON list of specs (see teams/sample.json)")
+    p.add_argument("--team", help="your team: a JSON list of specs (see teams/sample.json); without it you pick yours in the page")
     p.add_argument("--port", type=int, default=8001)
     p.add_argument("--no-open", action="store_true")
     a = p.parse_args()

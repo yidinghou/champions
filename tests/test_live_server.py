@@ -64,3 +64,55 @@ class LiveServer(unittest.TestCase):
 
     def test_empty_foes_is_fine(self):
         self.assertEqual(self.post({"mine": [{"name": "garchomp"}], "foes": []})[0], 200)
+
+
+class NoTeamFile(unittest.TestCase):
+    """`champions live` without --team: the page builds the team and sends the specs along."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.srv = serve(None, 0)
+        cls.base = f"http://127.0.0.1:{cls.srv.server_address[1]}"
+        threading.Thread(target=cls.srv.serve_forever, daemon=True).start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.srv.shutdown()
+        cls.srv.server_close()
+
+    def post(self, path, body):
+        req = urllib.request.Request(self.base + path, data=json.dumps(body).encode(), method="POST")
+        try:
+            with urllib.request.urlopen(req) as r:
+                return r.status, json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            return e.code, json.loads(e.read())
+
+    def test_empty_team_then_build_and_scout(self):
+        with urllib.request.urlopen(self.base + "/api/team") as r:
+            self.assertEqual(json.loads(r.read()), {"team": []})
+        code, j = self.post("/api/team/build", {"specs": [{"species": "garchomp", "nature": "jolly", "moves": ["earthquake"]}]})
+        self.assertEqual((code, j["team"][0]["name"], j["team"][0]["nature"]), (200, "garchomp", "jolly"))
+        self.assertEqual(self.post("/api/scout", {"mine": [], "foes": []})[0], 400)       # no team anywhere
+        code, j = self.post("/api/scout", {"mine": [{"slot": "p1a", "name": "garchomp", "hp": 1}], "foes": [],
+                                           "team": [{"species": "garchomp", "moves": ["earthquake"]}]})
+        self.assertEqual(code, 200)
+
+    def test_names_alone_get_the_usual_build(self):
+        code, j = self.post("/api/team/build", {"specs": [{"species": "garchomp"}, {"species": "incineroar", "nature": "careful"}]})
+        self.assertEqual(code, 200)
+        g, i = j["team"]
+        self.assertTrue(g["moves"] and g["ability"] and g["sp"])
+        self.assertEqual(i["nature"], "careful")                  # what you set wins; the rest is filled in
+
+    def test_marked_moves_lead_on_a_names_only_team(self):
+        code, j = self.post("/api/scout", {"mine": [{"slot": "p1a", "name": "garchomp", "hp": 1, "seen": ["surf"]}], "foes": [],
+                                           "team": [{"species": "garchomp"}]})
+        self.assertEqual(code, 200)
+        card = next(c for c in j["board"] if c["side"] == "me")
+        self.assertEqual(card["moves"][0]["id"], "surf")
+        self.assertTrue(card["usage"])
+
+    def test_bad_specs_are_400(self):
+        for specs in ([], [{"species": "nope"}], [{"species": "garchomp", "moves": ["nosuchmove"]}], "x"):
+            self.assertEqual(self.post("/api/team/build", {"specs": specs})[0], 400, specs)
