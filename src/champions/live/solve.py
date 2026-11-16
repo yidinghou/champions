@@ -143,4 +143,7 @@ def solve_live(req, team, budget=BUDGET):
             "lines": [{"p": round(r.row_mix[i], 3), "value": round(vs_foe[i], 3), "actions": _view(b, 0, r.row_actions[i])}
                       for i in order],
             "foe_replies": [{"p": round(r.col_mix[j], 3), "actions": _view(b, 1, r.col_actions[j])} for j in replies if r.col_mix[j] > 0.005],
+            "rows": [_view(b, 0, a) for a in r.row_actions], "cols": [_view(b, 1, a) for a in r.col_actions],
+            "matrix": [[None if v is None else round(v, 3) for v in row] for row in r.matrix],
+            "row_mix": [round(x, 3) for x in r.row_mix], "col_mix": [round(y, 3) for y in r.col_mix],
             "unmodeled": dropped}
