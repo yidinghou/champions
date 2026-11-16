@@ -38,8 +38,8 @@ button.linkish { background: none; border: 0; padding: 0; color: var(--edge); fo
 .ctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; flex: none; }
 .ctl .lbl { color: var(--mute); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
 .me { color: var(--me); } .foe { color: var(--foe); }
-body:not(.step-team) #team-step, body:not(.step-board) #board-step { display: none; }
-#team-step, #board-step { flex: 1; min-height: 0; }
+body:not(.step-team) #team-step, body:not(.step-board) #board-step, body:not(.step-plans) #plans-step { display: none; }
+#team-step, #board-step, #plans-step { flex: 1; min-height: 0; }
 #board-step { display: flex; flex-direction: column; }
 
 /* ---- step 1 ---- */
@@ -89,6 +89,51 @@ aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; max-heig
 .panel { background: var(--panel-bg); border: 1px solid rgba(201,196,255,.25); border-radius: 10px; padding: 10px 12px; }
 .panel h2 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); display: flex; gap: 8px; align-items: baseline; }
 .panel h2 small { text-transform: none; letter-spacing: 0; font-weight: 500; }
+#plans-step { flex-direction: column; gap: 8px; }
+body.step-plans #plans-step { display: flex; }
+#plans-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+#plans-body { flex: 1; min-height: 0; overflow: auto; border: 1px solid rgba(201,196,255,.25); border-radius: 10px; background: var(--panel-bg); }
+table.plans { border-collapse: separate; border-spacing: 0; }
+table.plans th, table.plans td { padding: 8px 10px; vertical-align: middle; text-align: left; border-bottom: 1px solid rgba(201,196,255,.12); }
+table.plans thead th { position: sticky; top: 0; z-index: 2; background: var(--panel-bg); font-weight: 600; vertical-align: bottom; }
+table.plans tbody th { position: sticky; left: 0; z-index: 1; background: var(--panel-bg); min-width: 210px; font-weight: 600; }
+table.plans th.corner { left: 0; z-index: 3; color: var(--mute); font-size: 13px; }
+table.plans tr.best th { box-shadow: inset 3px 0 0 var(--lime); }
+table.plans td.last { border-left: 2px solid rgba(201,196,255,.3); min-width: 190px; font-size: 12px; }
+table.plans td.last .big { font-weight: 800; font-style: italic; font-size: 13px; }
+table.plans td.last .m { color: var(--mute); }
+table.plans th.col { min-width: 190px; border-left: 1px solid rgba(201,196,255,.08); }
+.mixl { color: var(--mute); font-size: 12px; margin-top: 3px; }
+.pl-act { display: flex; align-items: center; gap: 4px; white-space: nowrap; font-size: 12px; margin: 3px 0; }
+.pl-act .mv { font-weight: 800; }
+.pl-act .to { color: var(--edge); font-weight: 800; font-size: 13px; }
+.pl-c { --s: 26px; width: var(--s); height: var(--s); flex-shrink: 0; border-radius: 50%; background: var(--panel); border: 2px solid var(--edge); position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.pl-c.foe-c { border-color: var(--foe); }
+.pl-c.sm { --s: 21px; }
+.pl-c.down { filter: grayscale(1) brightness(.5); }
+.pl-c.maybe { border-style: dashed; }
+.pl-c img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+.pl-c .badge { position: absolute; right: -8px; bottom: -5px; width: 16px; height: 16px; border-radius: 50%; background: var(--panel); border: 1.5px solid var(--edge); display: flex; align-items: center; justify-content: center; }
+.pl-c .badge img { width: 11px; height: 11px; border-radius: 0; }
+.pl-st { display: grid; grid-template-columns: auto auto; gap: 3px 8px; align-items: center; padding: 4px 8px; border-radius: 8px; width: max-content; background: rgba(20,18,42,.75); border: 1px solid rgba(201,196,255,.25); }
+.pl-st .cell { display: flex; align-items: center; gap: 6px; min-height: 28px; }
+.pl-st .cell:nth-child(n+3) { padding-top: 3px; border-top: 1px solid rgba(201,196,255,.2); }
+.pl-st .cell span.t { font-style: italic; font-weight: 800; font-size: 11px; min-width: 46px; }
+.pl-st .cell i.stat { font-size: 9px; font-style: normal; font-weight: 800; padding: 0 4px; border-radius: 4px; background: #6a5cf0; }
+.pl-verdict { font-size: 12px; margin-top: 4px; color: var(--mute); max-width: 230px; }
+.pl-verdict .f { color: var(--foe); } .pl-verdict .m { color: var(--me); }
+.pl-pick { display: inline-block; font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: var(--lime); color: var(--band); margin: 2px 4px 0 0; }
+.pl-pick.safe { background: var(--me); }
+.pl-sw { display: inline-block; font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 999px; border: 1px dashed var(--me); color: var(--me); margin-top: 3px; }
+.pl-sw.foe { border-color: var(--foe); color: var(--foe); }
+#plans-more { color: var(--edge); cursor: pointer; text-decoration: underline; font-size: 12px; }
+#plans-body.busy { opacity: .45; }
+#plans-read { min-height: 1.3em; font-weight: 500; font-size: 12px; }
+#solve-out .line { padding: 6px 0; border-top: 1px solid rgba(201,196,255,.18); font-size: 13px; }
+#solve-out .line:first-child { border-top: 0; }
+#solve-out .pct { font-weight: 700; color: var(--lime); }
+#solve-out .val.pos { color: var(--lime); } #solve-out .val.neg { color: #ff8a8a; }
+#solve-out .act { display: block; } #solve-out small, #solve-out .note { color: var(--mute); font-size: 12px; }
 
 /* mini */
 .pmini { --u: calc(var(--U) * 1.3); position: relative; display: flex; align-items: center; width: calc(var(--u)*26); margin-bottom: calc(var(--u)*.35); font: 600 calc(var(--u)*1.35)/1.2 system-ui, sans-serif; cursor: grab; transition: filter .6s, opacity .6s; }
@@ -222,7 +267,7 @@ details { margin-top: 6px; } summary { cursor: pointer; font-size: 12px; color: 
 <body class="step-team">
 <header>
   <h1>Live game</h1>
-  <span class="seg"><button id="to-team">1 · Teams</button><button id="to-board">2 · Board</button></span>
+  <span class="seg"><button id="to-team">1 · Teams</button><button id="to-board">2 · Board</button><button id="to-plans">3 · Plans</button></span>
   <button id="newgame">New game</button>
   <span class="grow"></span>
 </header>
@@ -249,8 +294,16 @@ details { margin-top: 6px; } summary { cursor: pointer; font-size: 12px; color: 
       <div class="panel" id="turn"></div>
       <div class="panel speed"><h2>Speed <small id="speed-sub"></small></h2><ol id="speed"></ol><div class="after" id="after"></div></div>
       <div class="panel"><h2>Watch out</h2><div id="threats"></div></div>
+      <div class="panel" id="solve"><h2>Best play <small id="solve-sub">next 2 turns</small></h2>
+        <button id="solve-go">Solve</button><div id="solve-out"></div></div>
     </aside>
   </div>
+</section>
+
+<section id="plans-step">
+  <div id="plans-head"><button id="plans-go">Solve</button><span id="plans-sub" class="note"></span></div>
+  <div id="plans-body"></div>
+  <div id="plans-read" class="note"></div>
 </section>
 
 <script>
@@ -300,7 +353,7 @@ async function boot() {
   S.foeTeam = (S.foeTeam || []).map((n) => (dex.species[n] ? n : ""));
   S.bring = (S.bring || []).filter((n) => teamMon(n));
   for (const sl of Object.keys(S.slots)) { const n = S.slots[sl]; if (n && !(sideOf(sl) === "me" ? S.bring : S.foeTeam).includes(n)) S.slots[sl] = null; }
-  if (S.step === "board" && !canStart()) S.step = "team";
+  if ((S.step === "board" || S.step === "plans") && !canStart()) S.step = "team";
   render(); recompute();
 }
 
@@ -320,9 +373,9 @@ function startBoard() {
 // ---- rendering ----
 function render() {
   document.body.className = "step-" + S.step + (flow && flow.step === "target" ? " targeting" : "");
-  $("to-team").className = S.step === "team" ? "on" : ""; $("to-board").className = S.step === "board" ? "on" : "";
-  $("to-board").disabled = !canStart();
-  if (S.step === "team") renderTeamStep(); else { renderBoard(); fitBoard(); }
+  $("to-team").className = S.step === "team" ? "on" : ""; $("to-board").className = S.step === "board" ? "on" : ""; $("to-plans").className = S.step === "plans" ? "on" : "";
+  $("to-board").disabled = !canStart(); $("to-plans").disabled = !canStart();
+  if (S.step === "team") renderTeamStep(); else if (S.step === "plans") renderPlans(); else { renderBoard(); fitBoard(); }
 }
 
 // ---- step 1, your side when there is no team file: pick by name, edit if you like ----
@@ -572,17 +625,18 @@ function fitBoard() {
 addEventListener("resize", () => { if (S && S.step === "board") fitBoard(); });
 
 // ---- scouting ----
-function entry(side, slot) {
-  const name = S.slots[slot]; if (!name) return null;
-  const st = mon(side, name), e = {name, hp: st.hp, status: st.status, boosts: S.stages[slot] || {}};
+function entryFor(side, name, boosts) {
+  const st = mon(side, name), e = {name, hp: st.hp, status: st.status, boosts: boosts || {}};
   if (st.mega) e.mega = st.mega;
   if (st.ability) e.ability = st.ability;
   if (side === "foe") { if (st.seen.length) e.seen = st.seen; if (st.item) e.item = st.itemUsed ? "" : st.item; }
   else { if (custom && st.seen.length) e.seen = st.seen; if (custom && st.item) e.item = st.itemUsed ? "" : st.item; else if (st.itemUsed && !custom) e.item = ""; }    // no team file: yours work like theirs, the moves you mark come first
   return e;
 }
+function entry(side, slot) { const name = S.slots[slot]; return name ? entryFor(side, name, S.stages[slot]) : null; }
 function recompute() {
   clearTimeout(timer);
+  if (solveReply) { solveReply = null; $("solve-out").innerHTML = ""; if (S.step === "plans") renderPlans(); }   // the board changed: the old answer is about another position
   if (S.step !== "board") return;
   timer = setTimeout(async () => {
     const id = ++reqId;
@@ -600,6 +654,103 @@ function recompute() {
   }, 120);
 }
 function changed() { save(); renderBoard(); recompute(); }
+
+// ---- solving ----
+let solveId = 0, solveReply = null;
+function solveBody() {
+  const onField = Object.values(S.slots).filter(Boolean);
+  const body = {mine: SLOTS.me.map((s) => entry("me", s)).filter(Boolean), foes: SLOTS.foe.map((s) => entry("foe", s)).filter(Boolean),
+    mine_bench: S.bring.filter((n) => !onField.includes(n)).map((n) => entryFor("me", n)),
+    foe_bench: S.foeTeam.filter((n) => n && !onField.includes(n)).map((n) => entryFor("foe", n)),
+    weather: S.weather, tailwind: S.tailwind, trick_room: S.trickRoom};
+  if (custom) body.team = specsOf();
+  return body;
+}
+const mvName = (id) => (dex.moves[id] || {name: id}).name;
+const sgn = (v) => (v >= 0 ? "+" : "") + Math.round(v * 100);
+function actText(a) {
+  if (a.kind === "switch") return `${esc(label(a.mon))} switches to ${esc(label(a.to))}`;
+  return `${esc(label(a.mon))}: ${esc(mvName(a.move))}${a.mega ? " + Mega" : ""}${a.target ? ` → ${esc(label(a.target))}` : ""}`;
+}
+function solveMsg(html) { $("solve-out").innerHTML = html; if (S.step === "plans") $("plans-body").innerHTML = html; }
+async function solveNow() {
+  const id = ++solveId, btns = [$("solve-go"), $("plans-go")];
+  const body = solveBody();
+  if (!body.mine.length || !body.foes.length) { solveMsg('<div class="muted" style="padding:8px">Put someone on each side first (Board tab).</div>'); return; }
+  btns.forEach((b) => { b.disabled = true; b.textContent = "Solving…"; }); $("solve-out").innerHTML = ""; $("plans-body").classList.add("busy");   // the old grid stays, dimmed
+  try {
+    const r = await fetch("/api/solve", {method: "POST", body: JSON.stringify(body)});
+    const j = await r.json();
+    if (id !== solveId) return;
+    if (!r.ok) { solveMsg(`<div class="muted" style="padding:8px">${esc(j.error || "the solver failed")}</div>`); return; }
+    solveReply = j;
+    $("solve-out").innerHTML = j.lines.map((l) => `<div class="line"><span class="pct">${Math.round(l.p * 100)}%</span> <span class="val ${l.value >= 0 ? "pos" : "neg"}">${sgn(l.value)}</span>`
+        + l.actions.map((a) => `<span class="act">${actText(a)}</span>`).join("") + `</div>`).join("")
+      + (j.foe_replies.length ? `<div class="note">They most likely: ${j.foe_replies.map((f) => f.actions.map((a) => actText(a)).join(" + ") + ` (${Math.round(f.p * 100)}%)`).join(" or ")}</div>` : "")
+      + `<div class="note">${j.label} · ${j.seconds}s · position ${sgn(j.value)} (−100 lost, +100 won)</div>`
+      + (j.unmodeled.length ? `<div class="note">The engine can't play: ${[...new Set(j.unmodeled.map((u) => `${label(u.mon)} ${u.kind === "move" ? mvName(u.id) : u.id}`))].join(", ")} (left out)</div>` : "");
+    if (S.step === "plans") renderPlans();
+  } catch (e) { if (id === solveId) solveMsg('<div class="muted" style="padding:8px">Can\'t reach the live server.</div>'); }
+  finally { if (id === solveId) { btns.forEach((b) => { b.disabled = false; b.textContent = "Solve"; }); $("plans-body").classList.remove("busy"); } }
+}
+// the first turn of the solve, as the matrix it is: our plans down, theirs across, each cell the board after the turn
+let plansAll = false;
+const circ = (name, side, o = {}) => `<span class="pl-c ${side === "foe" ? "foe-c" : ""} ${o.sm ? "sm" : ""} ${o.down ? "down" : ""} ${o.maybe ? "maybe" : ""}" title="${esc(label(name))}">${icon(name)}${o.type && TYPE_COLORS[o.type] ? `<span class="badge">${tyIcon(o.type)}</span>` : ""}</span>`;
+function actLine(a, side) {
+  const other = side === "me" ? "foe" : "me";
+  if (a.kind === "switch") return `<div class="pl-act">${circ(a.mon, side, {sm: true})}<span class="to">↔</span>${circ(a.to, side)}<b class="mv">${esc(label(a.to))} in</b></div>`;
+  return `<div class="pl-act">${circ(a.mon, side, {type: a.type})}<b class="mv">${esc(mvName(a.move))}${a.mega ? " + Mega" : ""}</b>`
+    + (a.targets && a.targets.length ? `<span class="to">›</span>${a.targets.map((t) => circ(t, other, {sm: true})).join("")}` : "") + `</div>`;
+}
+const planHtml = (acts, side) => acts.map((a) => actLine(a, side)).join("");
+const hasSwitch = (acts) => acts.some((a) => a.kind === "switch");
+const pct = (x) => Math.round(x * 100) + "%";
+function slotHtml(s) {
+  const down = s.ko >= 0.995, maybe = s.ko > 0.05 && !down;
+  const txt = down ? "KO" : maybe ? `KO ${pct(s.ko)}` : (Math.round(s.lo * 100) === Math.round(s.hi * 100) ? pct(s.lo) : `${Math.round(s.lo * 100)}–${pct(s.hi)}`);
+  const title = down ? "" : ` title="${esc(label(s.name))}: ${pct(s.lo)}${s.hi > s.lo ? "–" + pct(s.hi) : ""} HP left${maybe ? ", " + pct(s.ko) + " chance it goes down" : ""}"`;
+  return `<div class="cell"${title}>${circ(s.name, s.side, {down, maybe})}<span class="t">${txt}</span>${s.status && !down ? `<i class="stat">${esc(s.status)}</i>` : ""}</div>`;
+}
+function verdict(slots) {
+  const dn = slots.filter((s) => s.ko > 0.05).map((s) => `<span class="${s.side === "foe" ? "f" : "m"}">${esc(label(s.name))} down ${pct(s.ko)}</span>`);
+  return dn.length ? dn.join(" · ") : "nobody goes down";
+}
+function plansCell(j, i, c) {
+  const cell = j.cells[i][c], v = j.matrix[i][c];
+  const tint = v === null ? "" : ` style="border-color:${v >= 0 ? "rgba(120,200,60," : "rgba(240,90,90,"}${(0.3 + 0.6 * Math.min(1, Math.abs(v))).toFixed(2)})"`;
+  const foe = cell.slots.filter((s) => s.side === "foe"), me = cell.slots.filter((s) => s.side === "me");
+  return `<td><div class="pl-st"${tint}>${foe.map(slotHtml).join("")}${foe.length < 2 ? '<div class="cell"></div>' : ""}${me.map(slotHtml).join("")}</div><div class="pl-verdict">${verdict(cell.slots)}</div></td>`;
+}
+function renderPlans() {
+  const j = solveReply, box = $("plans-body");
+  $("plans-read").innerHTML = "";
+  if (!j) { $("plans-sub").textContent = ""; box.innerHTML = '<div class="muted" style="padding:12px">Press Solve to see this turn as a grid: each of your plans against each of theirs, and where everyone ends up.</div>'; return; }
+  const n = j.rows.length, m = j.cols.length;
+  const flagged = new Set([j.best, j.safe]);
+  const byMix = [...Array(n).keys()].filter((i) => !flagged.has(i)).sort((a, b) => j.row_mix[b] - j.row_mix[a] || j.row_vs[b] - j.row_vs[a]);
+  const rowsAll = [...new Set([j.best, j.safe])].concat(byMix);
+  const rows = plansAll ? rowsAll : rowsAll.slice(0, 5);
+  const colsAll = [...Array(m).keys()].sort((a, b) => j.col_mix[b] - j.col_mix[a]);
+  const cols = plansAll ? colsAll : colsAll.slice(0, 6);
+  const hidden = (n - rows.length) + (m - cols.length);
+  $("plans-sub").textContent = `${j.label} · ${j.seconds}s`;
+  const head = cols.map((c) => `<th class="col">${planHtml(j.cols[c], "foe")}<div class="mixl">${pct(j.col_mix[c])} of their mix</div>${hasSwitch(j.cols[c]) ? '<span class="pl-sw foe">↔ they switch</span>' : ""}</th>`).join("");
+  const body = rows.map((i) => {
+    const exp = (k) => j.cols.reduce((t, _, c) => t + j.col_mix[c] * j.cells[i][c][k], 0);
+    const wc = j.row_worst_col[i];
+    return `<tr class="${i === j.best ? "best" : ""}"><th>${planHtml(j.rows[i], "me")}${hasSwitch(j.rows[i]) ? '<span class="pl-sw">↔ switch</span>' : ""}</th>`
+      + cols.map((c) => plansCell(j, i, c)).join("")
+      + `<td class="last"><div class="big">you KO ${exp("you_ko").toFixed(1)} · they KO ${exp("they_ko").toFixed(1)}</div>`
+      + `<div class="m">score ${sgn(j.row_vs[i])} · worst ${sgn(j.row_worst[i])}</div><div class="m">worst: vs</div>${planHtml(j.cols[wc], "foe")}`
+      + `${i === j.best ? '<span class="pl-pick">Best vs their mix</span>' : ""}${i === j.safe ? '<span class="pl-pick safe">Safe pick</span>' : ""}</td></tr>`;
+  }).join("");
+  box.innerHTML = `<table class="plans"><thead><tr><th class="corner">You ↓ &nbsp;They →</th>${head}<th>Vs their mix · worst case</th></tr></thead><tbody>${body}</tbody></table>`;
+  $("plans-read").innerHTML = `Each cell is the board after the turn (their two on top, yours below; KO or HP left, a dashed ring means it might go down). Plans and replies are the likeliest ones (top moves and the best switch per Pokémon), not every legal one; “% of their mix” is how often they play it in their best mix. Score runs −100 (lost) to +100 (won) after the next turn too.`
+    + (hidden > 0 || plansAll ? ` <span id="plans-more">${plansAll ? "Show fewer" : `Show ${hidden} more`}</span>` : "");
+}
+$("plans-read").addEventListener("click", (e) => { if (e.target.id === "plans-more") { plansAll = !plansAll; renderPlans(); } });
+$("plans-go").addEventListener("click", solveNow);
+$("solve-go").addEventListener("click", solveNow);
 
 // ---- placing, switching ----
 function place(slot, name) {
@@ -1139,6 +1290,7 @@ $("clear-foes").onclick = () => { S.foeTeam = ["", "", "", "", "", ""]; S.slots.
 $("start").onclick = startBoard;
 $("to-team").onclick = () => { S.step = "team"; save(); render(); };
 $("to-board").onclick = startBoard;
+$("to-plans").onclick = () => { if (!canStart()) return; S.step = "plans"; save(); render(); };
 $("newgame").onclick = () => { if (S) newGame(); };
 boot();
 </script>

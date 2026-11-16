@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -10,7 +11,7 @@ from .. import stats as stats_mod
 from ..engine import teams
 from ..engine.items import item_name
 from ..engine.pretty import move_name
-from . import moveflow, scout
+from . import moveflow, scout, solve
 
 HERE = Path(__file__).resolve().parent
 ICONS = Path(__file__).resolve().parents[3] / "sources" / "icons"
@@ -121,7 +122,7 @@ def make_handler(team_path):
                 self._error(500, type(e).__name__)
 
         def do_POST(self):
-            if self.path not in ("/api/scout", "/api/team/build"):
+            if self.path not in ("/api/scout", "/api/team/build", "/api/solve"):
                 return self._error(404, "not found")
             try:
                 n = int(self.headers.get("Content-Length") or 0)
@@ -136,6 +137,8 @@ def make_handler(team_path):
                 team = fill_specs(req["team"]) if isinstance(req, dict) and req.get("team") else load_team(team_path)
                 if not team:
                     raise scout.BadBoard("no team: pick yours on step 1")
+                if self.path == "/api/solve":                 # the 2-turn recommendation (takes up to a few seconds)
+                    return self._json(200, solve.solve_live(req, team))
                 self._json(200, scout.scout(req, team))
             except scout.BadBoard as e:
                 self._error(400, str(e))
@@ -149,4 +152,5 @@ def make_handler(team_path):
 
 def serve(team_path, port=8001):
     load_team(team_path)                 # fail before binding if the team file is bad (None: build the team in the page)
+    threading.Thread(target=solve.warm, daemon=True).start()   # start the solver's worker processes in the background
     return ThreadingHTTPServer(("127.0.0.1", port), make_handler(team_path))
