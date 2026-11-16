@@ -43,6 +43,33 @@ class SolveLive(unittest.TestCase):
                 for i in range(n) for j in range(m) if out["matrix"][i][j] is not None)
         self.assertAlmostEqual(v, out["value"], places=1)
 
+    def test_cells_show_the_end_state_of_each_plan_pair(self):
+        out = solve.solve_live(board(), TEAM, budget=20)
+        n, m = len(out["rows"]), len(out["cols"])
+        self.assertEqual((len(out["cells"]), len(out["cells"][0])), (n, m))
+        for row in out["cells"]:
+            for cell in row:
+                self.assertEqual([s["side"] for s in cell["slots"]], ["foe"] * 2 + ["me"] * 2)
+                for sl in cell["slots"]:
+                    self.assertTrue(0 <= sl["ko"] <= 1 and 0 <= sl["lo"] <= sl["hi"] <= 1)
+                self.assertAlmostEqual(cell["you_ko"], sum(s["ko"] for s in cell["slots"] if s["side"] == "foe"), places=2)
+        for key in ("row_vs", "row_worst", "row_worst_col"):
+            self.assertEqual(len(out[key]), n)
+        self.assertIn(out["best"], range(n))
+        self.assertIn(out["safe"], range(n))
+        self.assertTrue(all("type" in a for r in out["rows"] for a in r if a["kind"] == "move"))
+
+    def test_a_switch_shows_the_pokemon_coming_in(self):
+        out = solve.solve_live(board(), TEAM, budget=20)
+        for i, row in enumerate(out["rows"]):
+            for k, act in enumerate(row):
+                if act["kind"] == "switch":
+                    slots = [s for s in out["cells"][i][0]["slots"] if s["side"] == "me"]
+                    self.assertTrue(slots[k]["incoming"])
+                    self.assertEqual(slots[k]["name"], act["to"])
+                    return
+        self.skipTest("no switch among the candidate rows")
+
     def test_bench_lets_a_switch_be_a_line(self):
         out = solve.solve_live(board(), TEAM, budget=20)
         kinds = {a["kind"] for l in out["lines"] for a in l["actions"]}

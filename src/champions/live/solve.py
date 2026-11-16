@@ -16,6 +16,7 @@ from ..engine.actions import Move, Switch
 from ..engine.effects_table import is_supported_ability, is_supported_move
 from ..engine.handlers.field import TRICK_ROOM_TURNS
 from ..engine.items import is_supported_item
+from ..engine.resolve import resolve
 from ..engine.state import STAT_KEYS
 from ..solver import search
 from . import scout
@@ -106,6 +107,21 @@ def _field(b, placed, req):
         b.arena["weather"], b.arena["weather_turns"] = weather, 5
 
 
+def _targets(b, side, c, data):
+    """Names of the Pokémon a move hits: its chosen target, or every foe (and ally) a spread move reaches."""
+    kind = data["target"]
+    foes = [m for _, m in b.sides[1 - side].alive_active()]
+    ally = [m for _, m in b.sides[side].alive_active() if m is not b.sides[side].mon_at(c.slot)]
+    if kind in ("normal", "any"):
+        t = b.mon(*c.target) if getattr(c, "target", None) else None
+        return [t] if t is not None else []
+    if kind == "allAdjacentFoes":
+        return foes
+    if kind == "allAdjacent":
+        return foes + ally
+    return []
+
+
 def _action(b, side, c):
     """One slot's choice as the page can show it."""
     mon = b.sides[side].mon_at(c.slot)
@@ -113,13 +129,48 @@ def _action(b, side, c):
     if isinstance(c, Switch):
         out.update(kind="switch", to=scout._name(b.sides[side].team[c.to]))
     else:
+        data = teams.moves_data()[c.move]
+        targets = _targets(b, side, c, data)
         foe = b.mon(*c.target) if getattr(c, "target", None) else None
-        out.update(kind="move", move=c.move, mega=bool(c.mega), target=scout._name(foe) if foe else None)
+        out.update(kind="move", move=c.move, mega=bool(c.mega), target=scout._name(foe) if foe else None,
+                   type=str(data["type"]).lower(), targets=[scout._name(t) for t in targets])
     return out
 
 
 def _view(b, side, combo):
     return [_action(b, side, c) for c in combo]
+
+
+CELL_BUCKETS = {"damage_roll": 1}
+
+
+def _cell(b, row, col):
+    """The board after one turn of row (ours) against col (theirs): per Pokémon shown, how likely it is down and its HP range.
+    A slot that switches shows the Pokémon coming in. Their two come first, then ours."""
+    outs = resolve(b, list(row) + list(col), buckets=CELL_BUCKETS, min_prob=0.02)
+    total = sum(p for p, _ in outs) or 1.0
+    slots, kos = [], {"foe": 0.0, "me": 0.0}
+    for side, word, combo in ((1, "foe", col), (0, "me", row)):
+        for c in sorted(combo, key=lambda c: c.slot):
+            idx = c.to if isinstance(c, Switch) else b.sides[side].active[c.slot]
+            shown = b.sides[side].team[idx]
+            ko, lo, hi, status = 0.0, 1.0, 0.0, {}
+            for p, o in outs:
+                m = o.sides[side].team[idx]
+                if m.hp <= 0:
+                    ko += p / total
+                else:
+                    f = m.hp / m.max_hp
+                    lo, hi = min(lo, f), max(hi, f)
+                    status[m.status] = status.get(m.status, 0.0) + p / total
+            if ko >= 0.999:
+                lo = hi = 0.0
+            top = max(status.items(), key=lambda kv: kv[1], default=(None, 0))
+            slots.append({"side": word, "name": scout._name(shown), "incoming": isinstance(c, Switch),
+                          "ko": round(ko, 3), "lo": round(lo, 3), "hi": round(hi, 3),
+                          "status": top[0] if top[0] and top[1] >= 0.5 else None})
+            kos[word] += ko
+    return {"slots": slots, "you_ko": round(kos["foe"], 3), "they_ko": round(kos["me"], 3)}
 
 
 def solve_live(req, team, budget=BUDGET):
@@ -137,12 +188,17 @@ def solve_live(req, team, budget=BUDGET):
             raise BadBoard("the solver ran out of time on that board") from e
     n, m = len(r.rows), len(r.cols)
     vs_foe = [sum(r.col_mix[j] * r.matrix[i][j] for j in range(m) if r.matrix[i][j] is not None) for i in range(n)]
+    worst = [min(((v, j) for j, v in enumerate(r.matrix[i]) if v is not None), default=(0.0, 0)) for i in range(n)]
     order = sorted(range(n), key=lambda i: (-r.row_mix[i], -vs_foe[i]))[:MAX_LINES]
     replies = sorted(range(m), key=lambda j: -r.col_mix[j])[:3]
     return {"value": r.value, "label": r.label, "seconds": round(r.stats.seconds, 2),
             "lines": [{"p": round(r.row_mix[i], 3), "value": round(vs_foe[i], 3), "actions": _view(b, 0, r.row_actions[i])}
                       for i in order],
             "foe_replies": [{"p": round(r.col_mix[j], 3), "actions": _view(b, 1, r.col_actions[j])} for j in replies if r.col_mix[j] > 0.005],
+            "cells": [[_cell(b, ra, ca) for ca in r.col_actions] for ra in r.row_actions],
+            "row_vs": [round(v, 3) for v in vs_foe], "row_worst": [round(w, 3) for w, _ in worst],
+            "row_worst_col": [j for _, j in worst],
+            "best": max(range(n), key=lambda i: vs_foe[i]), "safe": max(range(n), key=lambda i: worst[i][0]),
             "rows": [_view(b, 0, a) for a in r.row_actions], "cols": [_view(b, 1, a) for a in r.col_actions],
             "matrix": [[None if v is None else round(v, 3) for v in row] for row in r.matrix],
             "row_mix": [round(x, 3) for x in r.row_mix], "col_mix": [round(y, 3) for y in r.col_mix],
