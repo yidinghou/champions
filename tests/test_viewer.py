@@ -17,6 +17,14 @@ class ViewerTests(unittest.TestCase):
                 last = {**d["frames"][-1]["state"], "turn": 0}
                 self.assertEqual(last, {**d["final"], "turn": 0})
 
+    def test_move_frames_name_their_targets_and_outcomes(self):
+        d = build_frames(load_replay(Path(__file__).parent / "replays" / "spread_doubles.json"))
+        eq = next(f for f in d["frames"] if f["kind"] == "move" and f["data"]["move"] == "earthquake")
+        self.assertTrue(eq["spread"])
+        self.assertEqual(eq["mtype"], "ground")
+        self.assertEqual({(t["mon"], t["outcome"]) for t in eq["targets"]},
+                         {("p2:charizard", "immune"), ("p2:garchomp", "missed"), ("p1:tyranitar", "hit")})
+
     def test_writes_self_contained_html(self):
         with tempfile.TemporaryDirectory() as t:
             html = write_html(REPLAYS[0], Path(t) / "x.html").read_text()

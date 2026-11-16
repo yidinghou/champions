@@ -16,6 +16,8 @@ HERE = Path(__file__).resolve().parent
 ICONS = Path(__file__).resolve().parents[4] / "sources" / "icons"
 # Events shown as steps. rng rolls and per-hit bookkeeping are kept only as raw detail on the step before.
 QUIET = {"hit", "rng", "turn", "start"}
+OUTCOME_KINDS = {"hit", "protected", "immune", "missed", "blocked"}
+SPREAD_TARGETS = {"allAdjacent", "allAdjacentFoes"}
 
 
 def _mon(m, on_field, slot):
@@ -42,6 +44,11 @@ def snapshot(b):
     return {"turn": b.turn, "sides": sides, "arena": arena, "winner": b.winner}
 
 
+def moves_data():
+    d = json.loads((Path(__file__).resolve().parents[2] / "data" / "moves.json").read_text())
+    return d["moves"]
+
+
 def build_frames(replay):
     """Return {frames, final, ...}. A frame = {turn, kind, text, data, raw, state}; the first is the starting board.
 
@@ -50,6 +57,8 @@ def build_frames(replay):
     """
     from ..state import Battle
     frames, pending_raw, holder = [], [], {}
+    moves = moves_data()
+    cur = {}      # the latest move frame; later events for the same move name its targets and outcomes
     original = Battle.log_event
 
     def tap(self, kind, **data):
@@ -58,6 +67,10 @@ def build_frames(replay):
             return
         e = self.log[-1]
         raw = {"turn": e.turn, "kind": e.kind, "data": e.data}
+        if kind in OUTCOME_KINDS and cur and data.get("move") == cur["data"]["move"] and data.get("mon"):
+            t = cur["targets"]
+            if not any(x["mon"] == data["mon"] and x["outcome"] == kind for x in t):
+                t.append({"mon": data["mon"], "outcome": kind})
         if kind == "start":
             text = "Battle start"
         elif kind == "move":
@@ -69,8 +82,15 @@ def build_frames(replay):
         if text is None:
             pending_raw.append(raw)
             return
-        frames.append({"turn": e.turn, "kind": kind, "text": text, "data": data,
-                       "raw": pending_raw[:] + [raw], "state": snapshot(self)})
+        frame = {"turn": e.turn, "kind": kind, "text": text, "data": data,
+                 "raw": pending_raw[:] + [raw], "state": snapshot(self)}
+        if kind == "move":
+            mv = moves.get(data["move"], {})
+            frame.update(targets=[], mtype=(mv.get("type") or "").lower(), category=(mv.get("category") or "").lower(),
+                         spread=mv.get("target") in SPREAD_TARGETS)
+            cur.clear()
+            cur.update(frame)          # shares the same data/targets objects
+        frames.append(frame)
         pending_raw.clear()
 
     Battle.log_event = tap

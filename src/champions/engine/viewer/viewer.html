@@ -118,6 +118,13 @@ label.chk { color: var(--mute); font-weight: 500; font-size: 12px; display: inli
 .move.sel { background: linear-gradient(90deg, var(--lime), #a3d41b); border-color: var(--lime-pale); color: var(--band); box-shadow: 0 0 8px rgba(200,236,58,.5); }
 .move.sel .pp { opacity: 1; }
 
+#fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+#fx .beam { position: absolute; height: 5px; border-radius: 3px; transform-origin: 0 50%; opacity: 0; }
+#fx .orb { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; opacity: 0; }
+#fx .ring { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 4px solid; opacity: 0; }
+#fx .tag-fx { position: absolute; transform: translate(-50%, -50%); font-weight: 800; font-style: italic; font-size: 16px; text-shadow: 0 1px 3px #000; opacity: 0; white-space: nowrap; }
+.pcard.targeted { outline: 3px dashed var(--lime); outline-offset: 4px; }
+.pcard.targeted.foe { outline-color: #ffb3bd; }
 .panel { background: var(--panel-bg); border: 1px solid rgba(201,196,255,.25); border-radius: 10px; padding: 10px 12px; }
 .panel h2 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); display: flex; align-items: center; gap: 8px; }
 aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: flex; flex-direction: column; min-width: 0; }
@@ -143,6 +150,7 @@ aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: fl
 <header>
   <h1>__TITLE__</h1><span class="meta" id="meta"></span><span class="grow"></span>
   <label class="chk"><input type="checkbox" id="raw"> raw events &amp; rolls</label>
+  <label class="chk"><input type="checkbox" id="anim" checked> attack animation</label>
   <label class="chk"><input type="checkbox" id="exact" checked> exact HP</label>
 </header>
 <div class="transport">
@@ -154,6 +162,7 @@ aside { position: sticky; top: 10px; max-height: calc(100vh - 20px); display: fl
   <span class="pos" id="pos"></span>
 </div>
 <div class="banner-win" id="winner"></div>
+<div id="fx"></div>
 <div class="field" id="field"></div>
 <div id="board">
   <div class="sides">
@@ -269,7 +278,46 @@ function renderLog() {
   if (cur) { const r = cur.getBoundingClientRect(), pr = el.getBoundingClientRect(); if (r.top < pr.top || r.bottom > pr.bottom) cur.scrollIntoView({block: "center", behavior: "smooth"}); }
 }
 
-function go(n) { i = Math.max(0, Math.min(F.length - 1, n)); render(); }
+const center = (el) => { const r = el.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; };
+const cardOf = (ref) => document.querySelector(`.pcard[data-ref="${ref}"]`);
+function attackFx(f) {
+  if (!$("anim").checked || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const fx = $("fx"), user = cardOf(f.data.mon);
+  if (!user) return;
+  const color = TYPE_COLORS[f.mtype] || "#fff", u = center(user);
+  const targets = (f.targets || []).filter((t) => t.mon !== f.data.mon).map((t) => ({...t, el: cardOf(t.mon)})).filter((t) => t.el);
+  const add = (cls, css, text) => { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css); if (text) d.textContent = text; fx.appendChild(d); return d; };
+  const clean = (ms) => setTimeout(() => { fx.innerHTML = ""; }, ms);
+  if (!targets.length) {                         // self / field moves: the user glows
+    user.animate([{boxShadow: "0 0 0 0 " + color}, {boxShadow: `0 0 28px 6px ${color}`}, {boxShadow: "0 0 0 0 " + color}], {duration: 700});
+    return;
+  }
+  const c = targets.map((t) => center(t.el)), mx = c.reduce((a, p) => a + p.x, 0) / c.length, my = c.reduce((a, p) => a + p.y, 0) / c.length;
+  const physical = f.category !== "special";
+  const dx = (mx - u.x) * (physical ? .55 : .12), dy = (my - u.y) * (physical ? .55 : .12);     // contact moves close in, others rear back
+  user.style.zIndex = 5;
+  user.animate([{transform: "none"}, {transform: `translate(${-dx * .15}px,${-dy * .15}px) scale(1.02)`, offset: .25}, {transform: `translate(${dx}px,${dy}px) scale(1.05)`, offset: .5}, {transform: "none"}],
+               {duration: 750, easing: "ease-in-out"}).onfinish = () => { user.style.zIndex = ""; };
+  targets.forEach((t, k) => {
+    t.el.classList.add("targeted"); setTimeout(() => t.el.classList.remove("targeted"), 1100);
+    const p = c[k], len = Math.hypot(p.x - u.x, p.y - u.y), ang = Math.atan2(p.y - u.y, p.x - u.x);
+    const blocked = t.outcome !== "hit";
+    if (!physical || f.spread) {                // ranged / spread: a beam from the user to each target
+      const beam = add("beam", {left: u.x + "px", top: u.y + "px", width: len + "px", background: `linear-gradient(90deg, transparent, ${color})`, transform: `rotate(${ang}rad) scaleX(0)`});
+      beam.animate([{opacity: 0, transform: `rotate(${ang}rad) scaleX(0)`}, {opacity: .95, transform: `rotate(${ang}rad) scaleX(1)`, offset: .45}, {opacity: 0, transform: `rotate(${ang}rad) scaleX(1)`}], {duration: 650, delay: 200, fill: "backwards"}).onfinish = () => beam.remove();
+    }
+    const orb = add("orb", {left: u.x + "px", top: u.y + "px", background: color, boxShadow: `0 0 14px 4px ${color}`});
+    orb.animate([{opacity: 1, transform: "translate(0,0)"}, {opacity: 1, transform: `translate(${p.x - u.x}px,${p.y - u.y}px)`, offset: .8}, {opacity: 0, transform: `translate(${p.x - u.x}px,${p.y - u.y}px) scale(2.2)`}], {duration: 500, delay: 250, easing: "ease-in", fill: "backwards"}).onfinish = () => orb.remove();
+    const ring = add("ring", {left: p.x + "px", top: p.y + "px", borderColor: blocked ? "rgba(120,230,255,.9)" : color});
+    ring.animate([{opacity: 1, transform: "scale(.4)"}, {opacity: 0, transform: "scale(3.2)"}], {duration: 600, delay: 700, fill: "backwards", easing: "ease-out"}).onfinish = () => ring.remove();
+    const label = {protected: "Protected", immune: "No effect", missed: "Missed", blocked: "Blocked"}[t.outcome];
+    if (label) { const tg = add("tag-fx", {left: p.x + "px", top: (p.y - 20) + "px", color: "#f1e08a"}, label); tg.animate([{opacity: 0, transform: "translate(-50%,-30%)"}, {opacity: 1, transform: "translate(-50%,-80%)", offset: .2}, {opacity: 0, transform: "translate(-50%,-160%)"}], {duration: 1000, delay: 750, fill: "backwards"}).onfinish = () => tg.remove(); }
+  });
+}
+function go(n) {
+  const from = i; i = Math.max(0, Math.min(F.length - 1, n)); render();
+  if (i === from + 1 && F[i].kind === "move") attackFx(F[i]);
+}
 function turnStartOf(t) { return F.findIndex((f) => f.turn === t); }
 function turnStart(dir) {
   const t = F[i].turn;

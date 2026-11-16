@@ -1,0 +1,110 @@
+{
+ "version": 1,
+ "format": "doubles",
+ "seed": 5,
+ "teams": [
+  [
+   {
+    "species": "garchomp",
+    "ability": "sandveil",
+    "moves": [
+     "earthquake",
+     "dragonclaw"
+    ]
+   },
+   {
+    "species": "tyranitar",
+    "ability": "sandstream",
+    "moves": [
+     "rockslide",
+     "nightslash"
+    ]
+   },
+   {
+    "species": "incineroar",
+    "ability": "blaze",
+    "moves": [
+     "nightslash"
+    ]
+   },
+   {
+    "species": "rillaboom",
+    "ability": "overgrow",
+    "moves": [
+     "woodhammer"
+    ]
+   }
+  ],
+  [
+   {
+    "species": "charizard",
+    "ability": "blaze",
+    "moves": [
+     "surf",
+     "flamethrower"
+    ]
+   },
+   {
+    "species": "garchomp",
+    "ability": "sandveil",
+    "moves": [
+     "dragonclaw"
+    ]
+   },
+   {
+    "species": "rillaboom",
+    "ability": "overgrow",
+    "moves": [
+     "woodhammer"
+    ]
+   },
+   {
+    "species": "incineroar",
+    "ability": "blaze",
+    "moves": [
+     "nightslash"
+    ]
+   }
+  ]
+ ],
+ "turns": [
+  [
+   {
+    "side": 0,
+    "slot": 0,
+    "move": "earthquake",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 0,
+    "slot": 1,
+    "move": "rockslide",
+    "target": [
+     1,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 0,
+    "move": "surf",
+    "target": [
+     0,
+     0
+    ]
+   },
+   {
+    "side": 1,
+    "slot": 1,
+    "move": "dragonclaw",
+    "target": [
+     0,
+     1
+    ]
+   }
+  ]
+ ]
+}
