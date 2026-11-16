@@ -1,0 +1,9 @@
+{
+ "_about": "Your team for `champions recommend --mine`. A list of engine specs under 'team'; the first two are your leads. Moves/abilities must be ones the engine models.",
+ "team": [
+  {"species": "incineroar", "ability": "intimidate", "moves": ["fakeout", "flamethrower", "closecombat", "nightslash"], "nature": "careful", "sp": "32/0/14/0/20/0"},
+  {"species": "garchomp", "ability": "sandveil", "moves": ["earthquake", "dragonclaw", "rockslide", "stoneedge"], "nature": "jolly", "sp": "2/32/0/0/0/32"},
+  {"species": "venusaur", "ability": "overgrow", "moves": ["gigadrain", "sludgebomb", "sleeppowder", "earthquake"]},
+  {"species": "rotom", "ability": "levitate", "moves": ["thunderwave", "surf", "shadowball", "willowisp"]}
+ ]
+}
