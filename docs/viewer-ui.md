@@ -21,18 +21,13 @@ person **check the engine by eye**. Look and process are borrowed from the scout
 | V-02 | One step per visible event, plus an "End of turn N" step where the engine changes state without logging (counters ticking down, volatiles expiring). The last step equals the engine's final state. | `test_viewer.py::test_every_replay_ends_on_the_engines_final_state` |
 | V-03 | A move step names its targets and each target's outcome (`hit`, `missed`, `immune`, `protected`, `blocked`), plus the move's type, category and whether it spreads. | `test_viewer.py::test_move_frames_name_their_targets_and_outcomes` |
 | V-04 | Controls: ← → step, Shift+← → turn, Space play, slider, click a log line to jump, raw-event toggle, exact-HP toggle, attack-animation toggle. | manual |
-| V-05 | Attack animation on a forward step: the attacker lunges (contact moves close in, others rear back); a beam and orb go to **every** target, including an ally hit by a spread move. | manual, `tests/replays/spread_doubles.json` |
-| V-06 | **Outcomes persist and come first.** A miss, "No effect" or protect is announced before the hit animations of the other targets, and its result stays on screen until the turn ends (see "Outcome style" below). A blocked shot fizzles short and grey instead of reaching its target. | manual |
+| V-05 | Attack animation whenever you land on a move step (stepping, play, a turn jump or a log click; not while dragging the slider): the attacker lunges (contact moves close in, others rear back); a beam and orb go to **every** target, including an ally hit by a spread move. | manual, `tests/replays/spread_doubles.json` |
+| V-06 | **Outcomes persist and come first.** A miss, "No effect" or protect is announced before the hit animations of the other targets, and its result stays on screen until the next move (see "Outcome style" below). A blocked shot fizzles short and grey instead of reaching its target. | manual |
 | V-07 | While playing, a step that has outcomes to read adds dwell time. | manual |
 
-## Outcome style (V-06): open choice
+## Outcome style (V-06): decided
 
-Three proofs of concept (`--fx a|b|c`, `tools/viewer_poc/`, untracked) differ only in how the result is held:
-
-| | Announced | Held until | Card |
-|---|---|---|---|
-| a | pill badge on the card's top edge | **end of turn**; damage taken also stacks as "−52" pills | unchanged |
-| b | one target at a time (misses first, 650 ms apart) with a floating label | **end of turn**, as a tint/outline on the card | dashed yellow = missed, dotted grey = no effect, solid cyan = protected, red glow = hit |
-| c | big label over the card, misses first then hits | **the next move**, then clears | card dimmed behind the label |
-
-Once one is picked, delete the other two, drop `--fx`, record the choice here, and delete `tools/viewer_poc/`.
+Chosen after comparing three proofs of concept (sticky badges, one-target-at-a-time with card tints, and this one):
+a big label over the target card, misses and "No effect" first, then the hits. The label **stays until the next move**
+(it clears when another move starts or the turn changes), and playback adds 1.2 s of dwell on a move that has one.
+The losers are removed; their ideas (damage pills held to end of turn, per-target sequencing) are not planned.

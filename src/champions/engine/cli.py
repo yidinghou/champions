@@ -21,13 +21,12 @@ def main():
     v = sub.add_parser("view", help="write a replay as a self-contained HTML page and open it in a browser")
     v.add_argument("file")
     v.add_argument("-o", "--out", help="output path (default: next to the replay, .html)")
-    v.add_argument("--fx", choices=["a", "b", "c"], help="outcome-label style (proof of concept; see docs/viewer-ui.md)")
     v.add_argument("--no-open", action="store_true", help="write the page but don't open it")
     args = p.parse_args()
     if args.cmd == "view":
         from .viewer import write_html
         try:
-            out = write_html(args.file, args.out, args.fx)
+            out = write_html(args.file, args.out)
         except (ReplayError, OSError, ValueError) as e:
             sys.exit(f"error: {e}")
         print(out)
