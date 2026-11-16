@@ -143,6 +143,7 @@ aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; max-heig
 .pcard .itab, .pcard .atab { min-width: 0; display: flex; align-items: center; height: calc(var(--u)*2.7); padding: 0 calc(var(--u)*1.1); border: 2px solid rgba(201,196,255,.55); border-bottom: 0; border-radius: calc(var(--u)*.9) calc(var(--u)*.9) 0 0; background: #24214a; font-size: calc(var(--u)*1.35); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pcard.foe .itab, .pcard.foe .atab { border-color: rgba(255,179,189,.6); background: #3a1a2c; }
 .atab { color: #c9c4ff; } .atab.guess { border-style: dashed; opacity: .7; font-style: italic; }
+.pcard .pchance { margin-left: .6em; font-style: normal; font-weight: 800; color: #ffb347; }
 .pcard .acts { grid-column: 1 / -1; display: flex; gap: calc(var(--u)*.8); }
 .pcard .acts.locked { opacity: .4; pointer-events: none; }
 .pcard .abtn { flex: 1; height: calc(var(--u)*3.6); display: flex; align-items: center; justify-content: center; border-radius: calc(var(--u)*1.8); background: rgba(74,63,214,.35); border: 2px dashed rgba(201,196,255,.55); font-size: calc(var(--u)*1.5); font-style: italic; cursor: pointer; white-space: nowrap; }
@@ -476,7 +477,7 @@ const badge = (type) => `<div class="badge"><i style="background:${TYPE_COLORS[(
 function myMoves(slot, name, st, t) {
   return ((t && t.moves) || []).map((m) => {
     const d = dex.moves[m.id] || {}, max = d.pp || 0, left = st.pp[m.id] ?? max, sel = moveSel(slot, m.id);
-    return `<div class="move ${sel ? "sel" : ""} ${left <= 0 ? "empty" : ""} ${locked(slot) ? "locked" : ""}" data-act="my-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(m.name)}</div><div class="pp"><b>${left}</b><small>/${max}</small></div></div></div>`;
+    return `<div class="move ${sel ? "sel" : ""} ${left <= 0 ? "empty" : ""} ${locked(slot) ? "locked" : ""}" data-act="my-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(m.name)}${chanceTag("me", name, m.id)}</div><div class="pp"><b>${left}</b><small>/${max}</small></div></div></div>`;
   }).join("");
 }
 function foeMoves(slot, name, st, bc) {
@@ -485,7 +486,7 @@ function foeMoves(slot, name, st, bc) {
   const usage = ((bc && bc.usage) || []).filter((u) => !st.seen.includes(u.id)).map((u) => ({id: u.id, pct: u.pct}));
   const cells = [...seen, ...usage].slice(0, 7).map((m) => {
     const d = dex.moves[m.id] || {name: m.id}, used = moveSel(slot, m.id);
-    return `<div class="move ${m.seen ? "" : "ghost"} ${used ? "sel" : ""} ${locked(slot) ? "locked" : ""}" data-act="foe-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(d.name)}</div><div class="pp"><b>${m.seen ? "" : Math.round(m.pct)}</b><small>${m.seen ? "seen" : "%"}</small></div></div></div>`;
+    return `<div class="move ${m.seen ? "" : "ghost"} ${used ? "sel" : ""} ${locked(slot) ? "locked" : ""}" data-act="foe-move" data-slot="${slot}" data-move="${m.id}"><div class="pill">${badge(d.type)}<div class="band">${esc(d.name)}${chanceTag(sideOf(slot), name, m.id)}</div><div class="pp"><b>${m.seen ? "" : Math.round(m.pct)}</b><small>${m.seen ? "seen" : "%"}</small></div></div></div>`;
   });
   const learn = ((dex.species[name] || {}).learnset || []).filter((m) => dex.moves[m] && !st.seen.includes(m));
   cells.push(`<div class="move"><div class="other"><input list="dl-${slot}" data-other="${slot}" placeholder="+ other move…" autocomplete="off"><datalist id="dl-${slot}">${learn.map((m) => `<option value="${esc(dex.moves[m].name)}">`).join("")}</datalist></div></div>`);
@@ -497,6 +498,9 @@ function actsHtml(slot, name, side, st) {              // not moves, but things 
   const mega = !st.mega && !S.megaUsed[side] && megaForms(name).length;
   return `<div class="acts ${locked(slot) ? "locked" : ""}"><div class="abtn" data-act="switch-out" data-slot="${slot}">⇄ Switch out</div>${mega ? `<div class="abtn mega" data-act="mega" data-slot="${slot}">✦ Mega evolve</div>` : ""}</div>`;
 }
+const isProtect = (id) => fxOf(id).auto.some((e) => e.kind === "protect");
+const pchance = (streak) => "1/" + 3 ** streak;                         // Protect again in a row: 1/3, then 1/9, ...
+function chanceTag(side, name, id) { const n = (mon(side, name).pstreak || 0); return n > 0 && isProtect(id) ? ` <small class="pchance" title="chance Protect works after ${n} in a row">${pchance(n)}</small>` : ""; }
 const moveSel = (slot, id) => (flow && flow.slot === slot && flow.move === id) || S.ts.acted[slot] === id;
 const locked = (slot) => S.ts.acted[slot] || S.ts.flinched[slot] || (flow && flow.slot !== slot);
 
@@ -603,7 +607,7 @@ function place(slot, name) {
   if (name && mon(side, name).hp <= 0) { caption(`${label(name)} has fainted.`); return; }
   const other = SLOTS[side].find((s) => s !== slot);
   if (name && S.slots[other] === name) { [S.slots[slot], S.slots[other]] = [S.slots[other], S.slots[slot]]; [S.stages[slot], S.stages[other]] = [S.stages[other] || {}, S.stages[slot] || {}]; }
-  else { S.slots[slot] = name || null; S.stages[slot] = {}; onEnter(slot); }
+  else { if (S.slots[slot]) mon(side, S.slots[slot]).pstreak = 0; S.slots[slot] = name || null; S.stages[slot] = {}; if (name) mon(side, name).pstreak = 0; onEnter(slot); }
   S.replace = S.replace.filter((s) => s !== slot);
   autoNow(); changed();
 }
@@ -757,6 +761,7 @@ function endTurn() {
   for (const sl of [...SLOTS.foe, ...SLOTS.me]) {                 // Leftovers
     const n = S.slots[sl]; if (!n || !alive(sl)) continue;
     const sd = sideOf(sl), st = mon(sd, n);
+    if (!S.ts.acted[sl]) st.pstreak = 0;                           // no Protect this turn: the chain is broken
     if (heldItem(sd, n) === "leftovers" && st.hp < 1) { st.hp = Math.min(1, st.hp + 1 / 16); outPush(sd, label(n), "recovered 1/16 HP with its Leftovers"); }
   }
   autoNow();
@@ -798,6 +803,7 @@ function startFlow(slot, id) {
     if (elig.length === 1) flow.targets = elig; else { flow.elig = elig; flow.step = "target"; }
   }
   if (!flow.elig && fx.target !== "none" && !flow.targets.length) { caption("No target for that move."); flow = null; return; }
+  if (isProtect(id) && (mon(sideOf(slot), S.slots[slot]).pstreak || 0) > 0) flow.step = "pcheck";      // Protect again: it can fail
   enterStep();
 }
 function enterStep() {
@@ -854,6 +860,10 @@ function drawPop() {
       return `<div class="trow"><div class="who ${side}">${esc(label(n))}</div>${seg}${hp}</div>`;
     }).join("");
     h += `<div class="btns">${single ? '<span class="muted">Hit applies the effects automatically.</span>' : ""}<span class="grow"></span><button data-act="flow-cancel">Cancel</button><button class="go" data-fp="done">✓ Done</button></div>`;
+  } else if (flow.step === "pcheck") {
+    const n = mon(sideOf(flow.slot), S.slots[flow.slot]).pstreak;
+    h = `<div class="pt"><b>${esc(mv)}</b> again · ${pchance(n)} chance</div><div class="muted">${esc(who)} used a Protect move last turn, so this one usually fails.</div>
+      <div class="btns"><span class="grow"></span><button data-fp="pfail">It failed</button><button class="go" data-fp="pwork">It worked</button></div>`;
   } else if (flow.step === "after") {
     h = `<div class="pt"><b>${esc(mv)}</b> · anything else?</div>`;
     h += flow.askTargets.map((t) => {
@@ -914,7 +924,10 @@ function commit() {                              // the target step is done: HP,
     for (const e of fx.auto) {                  // effects on the user and the field
       if (e.kind === "stat" && e.who === "user") bump(a, e.stats, ls);
       else if (e.kind === "field") fieldEffect(e, a, ls);
-      else if (e.kind === "protect") { S.ts.protected[a] = true; ls.push(`${label(an)} protected`); }
+      else if (e.kind === "protect") {
+        if (flow.pfail) { ls.push(`${label(an)}'s Protect failed (${pchance(ast.pstreak || 1)} chance)`); ast.pstreak = 0; }
+        else { S.ts.protected[a] = true; ast.pstreak = (ast.pstreak || 0) + 1; ls.push(`${label(an)} protected`); }
+      }
     }
     const frac = (pair, dir) => { const hp = dealt * pair[0] / pair[1] / maxHp(side, an); ast.hp = Math.max(0, Math.min(1, ast.hp + dir * hp)); return Math.round(hp * maxHp(side, an)); };
     if (fx.recoil && dealt) ls.push(`${label(an)} took ${frac(fx.recoil, -1)} recoil`);
@@ -927,6 +940,7 @@ function commit() {                              // the target step is done: HP,
     if (fx.heal) { ast.hp = Math.min(1, ast.hp + fx.heal[0] / fx.heal[1]); ls.push(`${label(an)} healed ${fx.heal[0] / fx.heal[1] * 100}%`); }
   }
   S.ts.acted[a] = flow.move;
+  if (!isProtect(flow.move)) ast.pstreak = 0;
   if ((side === "foe" || custom) && !ast.seen.includes(flow.move) && ast.seen.length < 4) ast.seen.push(flow.move);
   if (side === "me") ast.pp[flow.move] = Math.max(0, (ast.pp[flow.move] ?? (dex.moves[flow.move] || {}).pp) - 1);
   if (ast.hp <= 0) { ast.status = null; }
@@ -973,6 +987,7 @@ document.addEventListener("click", (e) => {
       drawPop(); changed(); break;
     }
     case "finish": afterAsks(); break;
+    case "pwork": case "pfail": flow.pfail = b.dataset.fp === "pfail"; flow.step = "resolve"; enterStep(); break;
     case "pivot": { if (v) place(flow.slot, v); finishFlow(); break; }
   }
 }, true);
