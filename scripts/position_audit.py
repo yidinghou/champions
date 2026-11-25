@@ -19,14 +19,18 @@ POOL = [("incineroar", ["fakeout", "flamethrower", "closecombat", "nightslash"],
         ("gyarados", ["surf", "icebeam", "stoneedge", "earthquake"], "intimidate"),
         ("salamence", ["dragonclaw", "flamethrower", "earthquake", "rockslide"], "intimidate")]
 
-def position(rnd):
+def with_protect(m): return m[:3] + ["protect"]
+
+def position(rnd, protect=False):
+    """A random doubles board. protect=True swaps each mon's last move for Protect; the random draws are the same
+    either way, so the board is the same one with or without it."""
     mons = rnd.sample(POOL, 8)
     teams = []
     for half in (mons[:4], mons[4:]):
         t = []
         for s, m, a in half:
             kw = {"hp": rnd.choice([100, 100, 100, 70, 40])} if rnd.random() < 0.5 else {}
-            t.append(sp(s, m, a, **kw))
+            t.append(sp(s, with_protect(m) if protect else m, a, **kw))
         teams.append(t)
     return game.start(teams, seed=1, format="doubles")
 

@@ -9,7 +9,8 @@ Match: bots play whole games against each other.
 
     python scripts/compare_solvers.py --match N --bots mcts,live [--budget S] [--workers W] [--shard I/N] [--json FILE]
 
-Bots: live (solve_budget), fallback (the 1-turn solve), rollout, mcts, mcts-greedy, random.
+Bots: live (solve_budget), fallback (the 1-turn solve), rollout, mcts, mcts-greedy, random, and rollout-old / mcts-old
+(the same with the old root options, no Protect and one switch). --protect gives every mon Protect in place of its last move.
 """
 import argparse, json, random, sys, time
 from pathlib import Path
@@ -17,19 +18,25 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from champions.engine import game
 from champions.solver import mcts, rollout, search
-from position_audit import POOL, B, position, sp
+from position_audit import POOL, B, position, sp, with_protect
 
 MAX_TURNS = 40
+OLD_ROOT = dict(moves=2, status=0, switches=1)          # the root options before Protect and every switch were added
 METHODS = {"rollout": lambda b, a: rollout.solve_rollout(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random"),
            "mcts": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random"),
            "mcts-greedy": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="greedy")}
+OLD = {"rollout-old": lambda b, a: rollout.solve_rollout(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random", root=OLD_ROOT),
+       "mcts-old": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random", root=OLD_ROOT)}
+BOTS = {**METHODS, **OLD}
 
 
 # ---------------------------------------------------------------- audit
 
 def live(b, workers):
+    """The live 2-turn solve with the game-playing methods' root options, so every method's rows still line up.
+    It still can't Protect on turn 2."""
     return search.solve(b, depth=2, buckets=B, min_prob=0.05, deep_min_prob=0.05, time_limit=300, workers=workers,
-                        **search.LIVE)
+                        **{**search.LIVE, "root_filter": rollout.ROOT})
 
 
 def top(r):
@@ -52,7 +59,7 @@ def audit(n, seed, args):
     rnd = random.Random(seed)
     tot = {k: [0, 0, 0.0, 0.0, 0.0, 0] for k in METHODS}      # same top vs live, same top vs rerun, gaps, positions
     for k in range(n):
-        b = position(rnd)
+        b = position(rnd, args.protect)
         ref = live(b, args.workers)
         print(f"pos {k}: live {ref.value:+.3f} top {top(ref)}", flush=True)
         for name, run in METHODS.items():
@@ -96,8 +103,8 @@ def decide(bot, b, side, args, rnd):
         r = search.solve_budget(b, args.budget, workers=args.workers)
     elif bot == "fallback":
         r = search.solve(b, depth=1, buckets=B, min_prob=0.05, **search.FALLBACK)
-    elif bot in METHODS:
-        r = METHODS[bot](b, args)
+    elif bot in BOTS:
+        r = BOTS[bot](b, args)
     else:
         raise SystemExit(f"unknown bot {bot}")
     mix, actions = (r.row_mix, r.row_actions) if side == 0 else (r.col_mix, r.col_actions)
@@ -106,15 +113,15 @@ def decide(bot, b, side, args, rnd):
     return list(actions[sample(mix, rnd)])
 
 
-def teams(rnd):
+def teams(rnd, protect=False):
     mons = rnd.sample(POOL, 8)
-    return [[sp(s, m, a) for s, m, a in half] for half in (mons[:4], mons[4:])]
+    return [[sp(s, with_protect(m) if protect else m, a) for s, m, a in half] for half in (mons[:4], mons[4:])]
 
 
 def play(bots, g, args):
     """Game g between bots[0] and bots[1]: team pair g // 2, sides swap every other game."""
     rnd = random.Random(args.seed0 * 100_003 + g)
-    pair = teams(random.Random(args.seed0 * 1000 + g // 2))
+    pair = teams(random.Random(args.seed0 * 1000 + g // 2), args.protect)
     swap = g % 2
     order = [bots[1], bots[0]] if swap else list(bots)           # order[side] = the bot playing that side
     b = game.start(pair, seed=g + 1, format="doubles")
@@ -160,6 +167,7 @@ def main():
     p.add_argument("--workers", type=int, default=1)
     p.add_argument("--shard", default="0/1")
     p.add_argument("--json")
+    p.add_argument("--protect", action="store_true", help="every mon gets Protect in place of its last move")
     args = p.parse_args()
     args.seed0 = args.seed
     if args.workers > 1:
