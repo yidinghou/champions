@@ -49,8 +49,12 @@
   .chip .cat { font-size: 10px; font-weight: 500; opacity: .85; }
   .chip.switch { background: var(--track); color: var(--ink); }
   .arrow { color: var(--muted); margin: 0 2px; }
-  .pair { display: flex; gap: 6px 10px; flex-wrap: wrap; align-items: center; }
-  .slot { display: inline-flex; gap: 4px; align-items: center; }
+  .pair { display: flex; flex-direction: column; gap: 3px; justify-content: center; }
+  .slot { display: flex; gap: 4px; align-items: center; height: 30px; white-space: nowrap; overflow: hidden; }
+  .opt { min-height: 74px; display: flex; flex-direction: column; justify-content: center; }
+  .chip.switch { padding: 2px 9px 2px 3px; }
+  .chip.switch img { width: 28px; height: 28px; image-rendering: pixelated; }
+  .swap { display: inline-flex; flex-direction: column; font-size: 10px; line-height: 9px; color: var(--muted); margin: 0 2px; }
 
   /* boards */
   .boards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -132,8 +136,8 @@ const moveChip = m => `<span class="chip" style="background:${TYPE[m.type] || '#
   <span class="cat">${CAT[m.cat] || ''}${m.bp ? ' ' + m.bp : ''}</span></span>`;
 
 function slotHtml(c, side) {
-  if (c.switch) return `<span class="slot">${monChip(c.mon, c.species, side)}<span class="arrow">&rarr;</span>
-    <span class="chip switch">&#8631; ${sprite(c.to)}${esc(c.switch)}</span></span>`;
+  if (c.switch) return `<span class="slot">${monChip(c.mon, c.species, side)}<span class="swap"><span>&rarr;</span><span>&larr;</span></span>
+    <span class="chip switch">${sprite(c.to)}${esc(c.switch)}</span></span>`;
   return `<span class="slot">${monChip(c.mon, c.species, side)}${moveChip(c)}${c.mega ? '<span class="badge crit">MEGA</span>' : ''}
     ${c.target ? `<span class="arrow">&rarr;</span><span class="tag">${esc(c.target)}</span>` : ''}</span>`;
 }
