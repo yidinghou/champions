@@ -4,7 +4,7 @@
     open scripts/replay_demo.html
 
 Each turn the page shows the board before and after, what MCTS chose (and its mix over the other options),
-what the opponent did, and the battle log. MCTS plays side 0 by sampling its mix; the opponent plays its policy.
+what the opponent did, and the battle log. MCTS plays side 0 by taking its top option (--pick sample draws from its mix instead); the opponent plays its policy.
 """
 import argparse
 import json
@@ -19,7 +19,7 @@ import base64                                                   # noqa: E402
 
 from champions.engine import game                               # noqa: E402
 from champions.engine.actions import Move, Switch               # noqa: E402
-from champions.solver.actions import describe, moves_data       # noqa: E402
+from champions.solver.actions import CHOOSES_TARGET, describe, moves_data       # noqa: E402
 from champions.solver.mcts import solve_mcts                    # noqa: E402
 from champions.solver.rollout import POLICIES, result           # noqa: E402
 
@@ -74,10 +74,16 @@ def choice_view(b, c):
         to = b.sides[c.side].team[c.to]
         return {**base, "switch": to.species.title(), "to": sprite(to.species)}
     out = {**base, **_mv(c.move), "mega": bool(c.mega)}
+    kind = moves_data()[c.move]["target"]
     tgt = getattr(c, "target", None)
     foe = b.mon(*tgt) if tgt else None
-    if foe is not None and len(b.sides[tgt[0]].alive_active()) > 1:
-        out["target"] = foe.species.title()
+    if kind in CHOOSES_TARGET:
+        if foe is not None and len(b.sides[tgt[0]].alive_active()) > 1:
+            out["target"] = foe.species.title()
+    elif kind == "allAdjacentFoes":
+        out["target"] = "both foes"
+    elif kind == "allAdjacent":
+        out["target"] = "everyone else"
     return out
 
 
@@ -157,7 +163,10 @@ def play(args):
         res = solve_mcts(b, budget=args.budget, workers=args.workers, seed=args.seed * 1000 + b.turn)
         if not res.row_actions:
             break
-        i = rnd.choices(range(len(res.rows)), weights=res.row_mix)[0]
+        if args.pick == "best":
+            i = max(range(len(res.rows)), key=lambda k: res.row_mix[k])
+        else:
+            i = rnd.choices(range(len(res.rows)), weights=res.row_mix)[0]
         mine = res.row_actions[i]
         theirs = opp(b, 1, rnd)
         their_label = describe(b, theirs)
@@ -179,6 +188,8 @@ def play(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--opponent", choices=sorted(POLICIES), default="greedy")
+    p.add_argument("--pick", choices=["best", "sample"], default="best",
+                   help="best: play MCTS's top option (default); sample: draw from its mix")
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--budget", type=float, default=2.0, help="seconds of MCTS per turn")
     p.add_argument("--workers", type=int, default=1)

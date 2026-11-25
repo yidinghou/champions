@@ -158,7 +158,7 @@ function stepHtml(s) {
   if (s.kind === 'faint') return `<div class="step faint">${monChip(s.mon, s.species, s.side)} <span class="badge ko">fainted</span></div>`;
   if (s.kind === 'note') return `<div class="step note">${esc(s.text)}</div>`;
   const tg = s.targets.map(x => {
-    if (x.out !== 'hit') return `<span class="target">${monChip(x.mon, x.species, x.side)}<span class="badge ${x.out}">${x.out === 'missed' ? 'missed' : x.out}</span></span>`;
+    if (x.out !== 'hit') return `<span class="target">${monChip(x.mon, x.species, x.side)}<span class="badge ${x.out}">${x.out === 'immune' ? 'avoided (immune)' : x.out}</span></span>`;
     const left = x.hp / x.max;
     return `<span class="target">${monChip(x.mon, x.species, x.side)}
       <span class="dmg">&minus;${x.dmg} <small>${pct(x.pct)}</small></span>
