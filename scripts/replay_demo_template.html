@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCTS Replay</title>
+<style>
+  :root {
+    --bg: #f6f6f3; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e3e2dc; --track: #ecebe5;
+    --me: #5b43c7; --foe: #c2335a; --good: #2f9e5b; --warn: #d9a21b; --bad: #d4571b;
+    --me-soft: rgba(91,67,199,.10); --foe-soft: rgba(194,51,90,.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151514; --panel: #1f1f1d; --ink: #ecebe6; --muted: #9a9993; --line: #34332f; --track: #2c2b28;
+      --me: #9b8cf5; --foe: #f0698f; --good: #54c283; --warn: #e0b84a; --bad: #f0a05a;
+      --me-soft: rgba(155,140,245,.16); --foe-soft: rgba(240,105,143,.16);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 20px 16px 64px; }
+  h1 { font-size: 22px; margin: 0; }
+  h2 { font-size: 12px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+  .head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .sub { color: var(--muted); font-size: 13px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+  .tag { font-size: 12px; color: var(--muted); }
+
+  /* turn strip */
+  .strip { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+  .strip button { width: 34px; height: 34px; padding: 0; border-radius: 8px; font-size: 12px; font-weight: 600;
+                  border: 2px solid transparent; color: #fff; cursor: pointer; }
+  .strip button.cur { border-color: var(--ink); }
+  .strip .lbl { font-size: 12px; color: var(--muted); margin-right: 4px; }
+  .nav button { font: inherit; padding: 6px 14px; border-radius: 8px; border: 1px solid var(--line);
+                background: var(--panel); color: var(--ink); cursor: pointer; }
+  .nav button:disabled { opacity: .4; cursor: default; }
+  .nav { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+
+  /* chips */
+  .chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; font-size: 13px;
+          font-weight: 600; color: #fff; white-space: nowrap; vertical-align: middle; line-height: 1.5; }
+  .chip.mon { background: var(--track); color: var(--ink); padding: 2px 9px 2px 3px; }
+  .chip.mon.me { box-shadow: inset 0 0 0 2px var(--me); } .chip.mon.foe { box-shadow: inset 0 0 0 2px var(--foe); }
+  .chip.mon img, .mon-card img { width: 28px; height: 28px; image-rendering: pixelated; }
+  .chip.type { font-size: 11px; padding: 0 7px; text-transform: uppercase; letter-spacing: .04em; }
+  .chip .cat { font-size: 10px; font-weight: 500; opacity: .85; }
+  .chip.switch { background: var(--track); color: var(--ink); }
+  .arrow { color: var(--muted); margin: 0 2px; }
+  .pair { display: flex; gap: 6px 10px; flex-wrap: wrap; align-items: center; }
+  .slot { display: inline-flex; gap: 4px; align-items: center; }
+
+  /* boards */
+  .boards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .boards { grid-template-columns: 1fr; } }
+  .side-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .side-title.me { color: var(--me); } .side-title.foe { color: var(--foe); }
+  .mon-card { display: grid; grid-template-columns: 34px 1fr; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px;
+              margin-bottom: 6px; border: 1px solid var(--line); }
+  .mon-card.active.me { background: var(--me-soft); border-color: var(--me); }
+  .mon-card.active.foe { background: var(--foe-soft); border-color: var(--foe); }
+  .mon-card.bench { opacity: .6; }
+  .mon-card.fainted { opacity: .35; filter: grayscale(1); }
+  .mon-card img { width: 34px; height: 34px; }
+  .mon-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 13px; }
+  .mon-top b { font-weight: 650; }
+  .bar { height: 9px; border-radius: 5px; background: var(--track); overflow: hidden; position: relative; margin-top: 3px; }
+  .bar i { display: block; height: 100%; }
+  .bar i.ghost { position: absolute; left: 0; top: 0; background: var(--bad); opacity: .45; }
+  .bar.mini { height: 6px; width: 70px; display: inline-block; margin: 0 0 1px 6px; vertical-align: middle; }
+  .hp { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .status { font-size: 10px; padding: 0 6px; border-radius: 4px; background: var(--warn); color: #fff; font-weight: 700; }
+
+  /* picks */
+  .picks { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+  @media (max-width: 720px) { .picks { grid-template-columns: 1fr; } }
+  .opt { padding: 5px 0; border-top: 1px solid var(--line); }
+  .opt:first-of-type { border-top: 0; }
+  .opt.chosen { background: var(--me-soft); margin: 0 -8px; padding: 5px 8px; border-radius: 8px; }
+  .meter { height: 5px; background: var(--track); border-radius: 3px; margin-top: 4px; }
+  .meter i { display: block; height: 100%; background: var(--me); border-radius: 3px; }
+  .optrow { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .pct { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 13px; }
+  .val { display: inline-block; padding: 1px 8px; border-radius: 6px; font-weight: 700; font-size: 13px; color: #fff; }
+
+  /* what happened */
+  .step { display: flex; gap: 8px 10px; flex-wrap: wrap; align-items: center; padding: 7px 10px; border-radius: 10px;
+          margin-bottom: 6px; border-left: 4px solid var(--line); background: var(--track); }
+  .step.me { border-left-color: var(--me); } .step.foe { border-left-color: var(--foe); }
+  .step.faint { background: transparent; border-left-style: dashed; color: var(--muted); }
+  .step.note { background: transparent; padding: 2px 10px; font-size: 12px; color: var(--muted); }
+  .dmg { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--bad); }
+  .dmg small { font-weight: 600; color: var(--muted); }
+  .badge { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 5px; color: #fff; }
+  .badge.ko { background: #b22; } .badge.immune, .badge.protected, .badge.missed, .badge.blocked { background: #7a7a75; }
+  .badge.crit { background: var(--warn); }
+  .target { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  details { margin-top: 8px; } summary { cursor: pointer; font-size: 12px; color: var(--muted); }
+  pre.log { margin: 6px 0 0; white-space: pre-wrap; font: 12px/1.5 ui-monospace, Menlo, monospace; color: var(--muted); }
+  .verdict { font-weight: 700; } .win { color: var(--good); } .loss { color: var(--bad); }
+</style>
+</head>
+<body>
+<main>
+  <div class="head"><h1>MCTS replay</h1><span class="sub" id="lead"></span></div>
+  <div class="strip" id="strip"></div>
+  <div class="nav"><button id="prev">&larr; Prev</button><button id="next">Next &rarr;</button>
+    <span class="tag">arrow keys work &middot; turn colour = MCTS's expected score (green good, red bad)</span></div>
+  <div id="view"></div>
+</main>
+<script>
+const D = __DATA__;
+const TYPE = {normal:'#8a8a78',fire:'#e8602a',water:'#3b82e8',electric:'#e8b81a',grass:'#4aa83c',ice:'#4cb8c8',
+  fighting:'#b8312b',poison:'#9a3fa8',ground:'#c9a24a',flying:'#7b8fe0',psychic:'#e8457a',bug:'#8aa31a',
+  rock:'#a89438',ghost:'#6a4a8a',dragon:'#5b3fd8',dark:'#5a4a40',steel:'#8a8aa0',fairy:'#e883b4'};
+const CAT = {physical:'PHY', special:'SPE', status:'STA'};
+let t = 0;                       // index of the turn shown (0-based); D.turns.length = final screen
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const pct = x => (x * 100).toFixed(x < .1 ? 1 : 0) + '%';
+const sc = (v) => `hsl(${Math.round(((v + 1) / 2) * 120)} 55% 42%)`;      // -1 red .. +1 green
+const SIDE = ['me', 'foe'];
+
+const sprite = sp => (D.sprites[sp] ? `<img src="${D.sprites[sp]}" alt="">` : '');
+const monChip = (name, sp, side) => `<span class="chip mon ${SIDE[side]}">${sprite(sp)}${esc(name)}</span>`;
+const typeChip = ty => `<span class="chip type" style="background:${TYPE[ty] || '#888'}">${esc(ty)}</span>`;
+const moveChip = m => `<span class="chip" style="background:${TYPE[m.type] || '#888'}">${esc(m.move)}
+  <span class="cat">${CAT[m.cat] || ''}${m.bp ? ' ' + m.bp : ''}</span></span>`;
+
+function slotHtml(c, side) {
+  if (c.switch) return `<span class="slot">${monChip(c.mon, c.species, side)}<span class="arrow">&rarr;</span>
+    <span class="chip switch">&#8631; ${sprite(c.to)}${esc(c.switch)}</span></span>`;
+  return `<span class="slot">${monChip(c.mon, c.species, side)}${moveChip(c)}${c.mega ? '<span class="badge crit">MEGA</span>' : ''}
+    ${c.target ? `<span class="arrow">&rarr;</span><span class="tag">${esc(c.target)}</span>` : ''}</span>`;
+}
+const comboHtml = (combo, side) => `<div class="pair">${combo.map(c => slotHtml(c, side)).join('')}</div>`;
+
+function monCard(m, side, ghost) {
+  const f = m.hp / m.max, g = ghost ? ghost.hp / ghost.max : 0;
+  const col = f > .5 ? 'var(--good)' : f > .2 ? 'var(--warn)' : 'var(--bad)';
+  const lost = g > f ? `<i class="ghost" style="width:${g * 100}%"></i>` : '';
+  const lostTxt = ghost && ghost.hp > m.hp ? ` <span style="color:var(--bad)">&minus;${ghost.hp - m.hp}</span>` : '';
+  return `<div class="mon-card ${SIDE[side]} ${m.active ? 'active' : 'bench'} ${m.hp <= 0 ? 'fainted' : ''}">
+    ${sprite(m.species)}
+    <div><div class="mon-top"><span><b>${esc(m.name)}</b> ${m.types.map(typeChip).join(' ')}${m.status ? ` <span class="status">${esc(m.status)}</span>` : ''}</span>
+      <span class="hp">${m.hp}/${m.max}${lostTxt}</span></div>
+    <div class="bar">${lost}<i style="width:${f * 100}%;background:${col}"></i></div></div></div>`;
+}
+function boardHtml(teams, ghosts) {
+  return `<div class="boards">${[0, 1].map(s => `<div><div class="side-title ${SIDE[s]}">${s ? 'Opponent (' + esc(D.opponent) + ')' : 'MCTS'}</div>
+    ${teams[s].map((m, i) => monCard(m, s, ghosts ? ghosts[s][i] : null)).join('')}</div>`).join('')}</div>`;
+}
+
+function stepHtml(s) {
+  if (s.kind === 'switch') return `<div class="step ${SIDE[s.side]}">${monChip(s.mon, s.species, s.side)} <span class="tag">sent in</span></div>`;
+  if (s.kind === 'faint') return `<div class="step faint">${monChip(s.mon, s.species, s.side)} <span class="badge ko">fainted</span></div>`;
+  if (s.kind === 'note') return `<div class="step note">${esc(s.text)}</div>`;
+  const tg = s.targets.map(x => {
+    if (x.out !== 'hit') return `<span class="target">${monChip(x.mon, x.species, x.side)}<span class="badge ${x.out}">${x.out === 'missed' ? 'missed' : x.out}</span></span>`;
+    const left = x.hp / x.max;
+    return `<span class="target">${monChip(x.mon, x.species, x.side)}
+      <span class="dmg">&minus;${x.dmg} <small>${pct(x.pct)}</small></span>
+      <span class="bar mini"><i style="width:${left * 100}%;background:${left > .5 ? 'var(--good)' : left > .2 ? 'var(--warn)' : 'var(--bad)'}"></i></span>
+      ${x.ko ? '<span class="badge ko">KO</span>' : ''}</span>`;
+  }).join('');
+  return `<div class="step ${SIDE[s.side]}">${monChip(s.mon, s.species, s.side)}${moveChip(s)}
+    ${s.targets.length ? '<span class="arrow">&rarr;</span>' + tg : ''}
+    ${s.notes.map(n => `<span class="badge crit">${esc(n)}</span>`).join('')}</div>`;
+}
+
+function render() {
+  const n = D.turns.length;
+  $('#strip').innerHTML = '<span class="lbl">Turns</span>' + D.turns.map((T, i) =>
+    `<button class="${i === t ? 'cur' : ''}" style="background:${sc(T.value)}" data-i="${i}" title="MCTS value ${T.value.toFixed(2)}">${T.turn}</button>`).join('') +
+    `<button class="${t === n ? 'cur' : ''}" style="background:${D.winner === 0 ? 'var(--good)' : D.winner === 1 ? 'var(--bad)' : '#888'}" data-i="${n}">&#9873;</button>`;
+  document.querySelectorAll('#strip button').forEach(b => b.onclick = () => { t = +b.dataset.i; render(); });
+  let h = '';
+  if (t < n) {
+    const T = D.turns[t];
+    h += `<div class="card"><h2>Turn ${T.turn} &middot; state A (before)</h2>${boardHtml(T.before)}</div>`;
+    h += `<div class="card"><h2>Choices</h2><div class="picks">
+      <div><div class="side-title me">MCTS considered <span class="val" style="background:${sc(T.value)}">${T.value >= 0 ? '+' : ''}${T.value.toFixed(2)}</span>
+        <span class="tag">expected score, ${T.iterations.toLocaleString()} iterations</span></div>
+        ${T.options.map(o => {
+          const chosen = JSON.stringify(o.combo) === JSON.stringify(T.chosen);
+          return `<div class="opt ${chosen ? 'chosen' : ''}"><div class="optrow">${comboHtml(o.combo, 0)}<span class="pct">${pct(o.p)}</span></div>
+            <div class="meter"><i style="width:${o.p * 100}%"></i></div></div>`;
+        }).join('')}
+        <div class="tag" style="margin-top:6px">Highlighted = the option it sampled and played.</div></div>
+      <div><div class="side-title foe">Opponent played</div>${comboHtml(T.theirs, 1)}
+        <div class="side-title foe" style="margin-top:14px;font-weight:600"><span class="tag">MCTS expected</span></div>${comboHtml(T.their_best_reply, 1)}</div>
+    </div></div>`;
+    h += `<div class="card"><h2>What happened</h2>${T.steps.map(stepHtml).join('')}
+      <details><summary>raw battle log</summary><pre class="log">${esc(T.log.join('\n'))}</pre></details></div>`;
+    h += `<div class="card"><h2>State B (after) &middot; faded red = HP lost this turn</h2>${boardHtml(T.after, T.before)}</div>`;
+  } else {
+    const last = n ? D.turns[n - 1].after : D.start;
+    const w = D.winner === 0 ? '<span class="verdict win">MCTS won.</span>' : D.winner === 1
+      ? '<span class="verdict loss">The opponent won.</span>' : '<span class="verdict">No winner (turn limit).</span>';
+    h += `<div class="card"><h2>Final position</h2><p>${w}</p>${boardHtml(last)}</div>`;
+  }
+  $('#view').innerHTML = h;
+  $('#prev').disabled = t === 0; $('#next').disabled = t >= n;
+}
+
+$('#lead').textContent = `${D.turns.length} turns · MCTS ${D.budget}s/turn vs ${D.opponent} · seed ${D.seed} · ` +
+  (D.winner === 0 ? 'MCTS won' : D.winner === 1 ? 'opponent won' : 'no winner');
+$('#prev').onclick = () => { if (t > 0) { t--; render(); } };
+$('#next').onclick = () => { if (t < D.turns.length) { t++; render(); } };
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') $('#prev').click(); else if (e.key === 'ArrowRight') $('#next').click();
+});
+render();
+</script>
+</body>
+</html>
