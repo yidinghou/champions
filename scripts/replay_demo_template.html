@@ -74,10 +74,12 @@
   .status { font-size: 10px; padding: 0 6px; border-radius: 4px; background: var(--warn); color: #fff; font-weight: 700; }
 
   /* picks */
-  .picks { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+  .picks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 720px) { .picks { grid-template-columns: 1fr; } }
   .opt { padding: 5px 0; border-top: 1px solid var(--line); }
   .opt:first-of-type { border-top: 0; }
+  .opt.chosen.foe { background: var(--foe-soft); }
+  .opt.foe .meter i { background: var(--foe); }
   .opt.chosen { background: var(--me-soft); margin: 0 -8px; padding: 5px 8px; border-radius: 8px; }
   .meter { height: 5px; background: var(--track); border-radius: 3px; margin-top: 4px; }
   .meter i { display: block; height: 100%; background: var(--me); border-radius: 3px; }
@@ -180,18 +182,22 @@ function render() {
   if (t < n) {
     const T = D.turns[t];
     h += `<div class="card"><h2>Turn ${T.turn} &middot; state A (before)</h2>${boardHtml(T.before)}</div>`;
+    const optList = (opts, side, who) => opts.map(o => {
+      const chosen = JSON.stringify(o.combo) === JSON.stringify(who);
+      return `<div class="opt ${chosen ? 'chosen' : ''} ${SIDE[side]}"><div class="optrow">${comboHtml(o.combo, side)}<span class="pct">${pct(o.p)}</span></div>
+        <div class="meter"><i style="width:${o.p * 100}%"></i></div></div>`;
+    }).join('');
+    const val = v => `<span class="val" style="background:${sc(v)}">${v >= 0 ? '+' : ''}${v.toFixed(2)}</span>`;
     h += `<div class="card"><h2>Choices</h2><div class="picks">
-      <div><div class="side-title me">MCTS considered <span class="val" style="background:${sc(T.value)}">${T.value >= 0 ? '+' : ''}${T.value.toFixed(2)}</span>
-        <span class="tag">expected score, ${T.iterations.toLocaleString()} iterations</span></div>
-        ${T.options.map(o => {
-          const chosen = JSON.stringify(o.combo) === JSON.stringify(T.chosen);
-          return `<div class="opt ${chosen ? 'chosen' : ''}"><div class="optrow">${comboHtml(o.combo, 0)}<span class="pct">${pct(o.p)}</span></div>
-            <div class="meter"><i style="width:${o.p * 100}%"></i></div></div>`;
-        }).join('')}
-        <div class="tag" style="margin-top:6px">Highlighted = the option it sampled and played.</div></div>
-      <div><div class="side-title foe">Opponent played</div>${comboHtml(T.theirs, 1)}
-        <div class="side-title foe" style="margin-top:14px;font-weight:600"><span class="tag">MCTS expected</span></div>${comboHtml(T.their_best_reply, 1)}</div>
+      <div><div class="side-title me">MCTS ${val(T.value)} <span class="tag">expected score &middot; ${T.iterations.toLocaleString()} iterations</span></div>
+        ${optList(T.options, 0, T.chosen)}</div>
+      <div><div class="side-title foe">Opponent (${esc(D.opponent)}) ${T.opp_options ? val(-T.value) + ' <span class="tag">expected score</span>' : ''}</div>
+        ${T.opp_options ? optList(T.opp_options, 1, T.theirs) : comboHtml(T.theirs, 1)}</div>
     </div></div>`;
+    h += `<div class="card"><h2>Expectations &middot; what each side predicted the other would play</h2><div class="picks">
+      <div><div class="side-title me">MCTS expected the opponent to play</div>${comboHtml(T.their_best_reply, 1)}</div>
+      <div><div class="side-title foe">Opponent expected MCTS to play</div>${T.opp_options ? comboHtml(T.opp_expected, 0)
+        : '<div class="tag">This policy does not predict MCTS.</div>'}</div></div></div>`;
     h += `<div class="card"><h2>What happened</h2>${T.steps.map(stepHtml).join('')}
       <details><summary>raw battle log</summary><pre class="log">${esc(T.log.join('\n'))}</pre></details></div>`;
     h += `<div class="card"><h2>State B (after) &middot; faded red = HP lost this turn</h2>${boardHtml(T.after, T.before)}</div>`;

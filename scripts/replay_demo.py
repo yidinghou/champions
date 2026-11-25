@@ -1,6 +1,6 @@
 """Build scripts/replay_demo.html: one game, MCTS (side 0) vs a simple opponent (side 1), stepped turn by turn.
 
-    python scripts/replay_demo.py [--opponent greedy|random] [--seed 1] [--budget 2] [--workers 4]
+    python scripts/replay_demo.py [--opponent mcts|greedy|random] [--seed 1] [--budget 2] [--workers 4]
     open scripts/replay_demo.html
 
 Each turn the page shows the board before and after, what MCTS chose (and its mix over the other options),
@@ -147,16 +147,23 @@ def actions(b, turn):
     return steps
 
 
-def top_options(b, res, n=6):
-    order = sorted(range(len(res.rows)), key=lambda i: -res.row_mix[i])[:n]
-    return [{"combo": joint_view(b, res.row_actions[i]), "p": res.row_mix[i],
-             "vs_their_mix": sum(res.matrix[i][j] * res.col_mix[j] for j in range(len(res.cols)))} for i in order]
+def top_options(b, res, side=0, n=6):
+    """The side's likeliest joint actions from the search: share of its mix, and its expected score
+    (from that side's point of view) if it plays that row/column against the other side's mix."""
+    if side == 0:
+        mix, acts = res.row_mix, res.row_actions
+        score = lambda i: sum(res.matrix[i][j] * res.col_mix[j] for j in range(len(res.cols)))
+    else:
+        mix, acts = res.col_mix, res.col_actions
+        score = lambda j: -sum(res.matrix[i][j] * res.row_mix[i] for i in range(len(res.rows)))
+    order = sorted(range(len(mix)), key=lambda k: -mix[k])[:n]
+    return [{"combo": joint_view(b, acts[k]), "p": mix[k], "score": score(k)} for k in order]
 
 
 def play(args):
     b = game.start([[dict(s) for s in t] for t in TEAMS], seed=args.seed, format="doubles")
     rnd = random.Random(args.seed)
-    opp = POLICIES[args.opponent]
+    opp = None if args.opponent == "mcts" else POLICIES[args.opponent]
     turns = []
     while b.winner is None and b.turn < args.max_turns:
         before = board(b)
@@ -168,16 +175,24 @@ def play(args):
         else:
             i = rnd.choices(range(len(res.rows)), weights=res.row_mix)[0]
         mine = res.row_actions[i]
-        theirs = opp(b, 1, rnd)
+        if opp is None:     # the same search gives the opponent's mix (its columns): it plays its top (or sampled) one
+            j = (max(range(len(res.cols)), key=lambda k: res.col_mix[k]) if args.pick == "best"
+                 else rnd.choices(range(len(res.cols)), weights=res.col_mix)[0])
+            theirs = res.col_actions[j]
+        else:
+            theirs = opp(b, 1, rnd)
         their_label = describe(b, theirs)
         chosen_view, their_view = joint_view(b, mine), joint_view(b, theirs)
         j = max(range(len(res.cols)), key=lambda j: res.col_mix[j])
         expected_reply = joint_view(b, res.col_actions[j])
-        options = top_options(b, res)
+        options = top_options(b, res, 0)
+        opp_options = top_options(b, res, 1) if opp is None else None
+        i_best = max(range(len(res.rows)), key=lambda k: res.row_mix[k])
+        opp_expected = joint_view(b, res.row_actions[i_best])      # what the opponent side expects MCTS to play
         game.play_turn(b, list(mine) + list(theirs))
         turns.append({"turn": b.turn, "before": before, "after": board(b), "chosen": chosen_view,
                       "chosen_p": res.row_mix[i], "value": res.value, "options": options,
-                      "their_best_reply": expected_reply, "theirs": their_view, "steps": actions(b, b.turn),
+                      "their_best_reply": expected_reply, "opp_options": opp_options, "opp_expected": opp_expected, "theirs": their_view, "steps": actions(b, b.turn),
                       "log": events(b, b.turn), "iterations": getattr(res.stats, "iterations", 0)})
         print(f"turn {b.turn}: {res.rows[i]}  |  {their_label}  (value {res.value:+.2f})", file=sys.stderr)
     return {"sprites": SPRITES, "opponent": args.opponent, "seed": args.seed, "budget": args.budget, "turns": turns,
@@ -187,7 +202,7 @@ def play(args):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--opponent", choices=sorted(POLICIES), default="greedy")
+    p.add_argument("--opponent", choices=sorted(POLICIES) + ["mcts"], default="mcts")
     p.add_argument("--pick", choices=["best", "sample"], default="best",
                    help="best: play MCTS's top option (default); sample: draw from its mix")
     p.add_argument("--seed", type=int, default=1)
