@@ -7,6 +7,7 @@ walks down the tree that way, adds one new node, plays the rest of the game with
 and backs the result up the path. The root's mean table is solved at the end like any matrix game, but the mix
 returned is the average strategy the two sides played, which is what regret matching converges on.
 
+The options at every node are the top 2 damaging moves, Protect and every switch per slot (rollout.ROOT).
 Positions that differ only by a damage roll share a node (node_key rounds HP up to tenths).
 """
 from __future__ import annotations

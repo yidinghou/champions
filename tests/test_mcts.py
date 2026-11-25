@@ -2,7 +2,9 @@ import random
 import unittest
 
 from champions.solver import mcts, rollout
-from tests.test_rollout import doubles, won_singles
+from champions.engine.actions import Switch
+from champions.solver import prior
+from tests.test_rollout import OLD_ROOT, doubles, has_protect, protect_or_lose, won_singles
 
 
 class NodeKey(unittest.TestCase):
@@ -53,7 +55,23 @@ class SolveMcts(unittest.TestCase):
     def test_no_illegal_choice_is_ever_played(self):
         # play_turn validates its choices and raises ValueError on a bad one, in the tree and in playouts alike
         for seed in range(6):
-            mcts.solve_mcts(doubles(seed), iterations=100, seed=seed, policy="greedy")
+            for protect in (False, True):
+                mcts.solve_mcts(doubles(seed, protect), iterations=100, seed=seed, policy="greedy")
+
+    def test_it_finds_protect(self):
+        r = mcts.solve_mcts(protect_or_lose(), iterations=300, seed=1)
+        got = {row: m[0] for row, m in zip(r.rows, r.matrix)}
+        self.assertEqual(got, {"protect": 1.0, "gigadrain": -1.0})
+        self.assertEqual(r.rows[max(range(len(r.rows)), key=lambda i: r.row_mix[i])], "protect")
+        self.assertLess(r.value, 1.0)                  # the average mix starts uniform, so it is not all on Protect
+        old = mcts.solve_mcts(protect_or_lose(), iterations=300, seed=1, root=OLD_ROOT)
+        self.assertEqual(old.value, -1.0)
+
+    def test_the_root_has_protect_and_every_switch(self):
+        r = mcts.solve_mcts(doubles(1, protect=True), iterations=20)
+        self.assertTrue(has_protect(r.row_actions))
+        pairs = {(c.slot, c.to) for joint in r.row_actions for c in joint if isinstance(c, Switch)}
+        self.assertEqual(len(pairs), 4)
 
 
 if __name__ == "__main__":

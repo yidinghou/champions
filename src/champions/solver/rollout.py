@@ -6,7 +6,7 @@ actions: play the pair's first turn on a copy of the position, then let a playou
 somebody wins (or MAX_PLAYOUT_TURNS pass). Solve the table as a matrix game, so the answer is a mix, like the live
 solver's.
 
-The root options are the top 2 damaging moves and the best switch per slot (see ROOT).
+The root options are the top 2 damaging moves, Protect and every switch per slot (see ROOT).
 """
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ from .prior import candidate_joint_actions, pressure
 from .search import Result, get_pool
 
 MAX_PLAYOUT_TURNS = 60
-ROOT = dict(moves=2, status=0, switches=1)        # search.LIVE's root filter
+ROOT = dict(moves=2, status=0, switches=2, protect=1)     # bring-4 doubles has at most 2 on the bench: every switch
 
 
 def _pick_slots(battle, side, rnd, choose):

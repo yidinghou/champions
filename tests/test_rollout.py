@@ -21,9 +21,14 @@ POOL = [("incineroar", ["fakeout", "flamethrower", "closecombat", "nightslash"],
         ("salamence", ["dragonclaw", "flamethrower", "earthquake", "rockslide"], "intimidate")]
 
 
-def doubles(seed):
+OLD_ROOT = dict(moves=2, status=0, switches=1)
+
+
+def doubles(seed, protect=False):
+    """A random doubles position; with protect=True each mon's last move becomes Protect."""
     mons = random.Random(seed).sample(POOL, 8)
-    return game.start([[sp(*m) for m in mons[:4]], [sp(*m) for m in mons[4:]]], seed=1, format="doubles")
+    fix = (lambda m: [m[0], m[1][:3] + ["protect"], m[2]]) if protect else (lambda m: list(m))
+    return game.start([[sp(*fix(m)) for m in mons[:4]], [sp(*fix(m)) for m in mons[4:]]], seed=1, format="doubles")
 
 
 def won_singles(flip=False):
@@ -32,11 +37,24 @@ def won_singles(flip=False):
     return game.start([b, a] if flip else [a, b], seed=1, format="singles")
 
 
+def protect_or_lose():
+    """Singles, a known answer: a 1 HP Venusaur [gigadrain, protect] faces a 1 HP burned Dragonite [extremespeed].
+    Protect (+4) blocks Extreme Speed (+2) and the burn KOs Dragonite at the end of the turn, so Protect wins and
+    Giga Drain loses."""
+    a = [sp("venusaur", ["gigadrain", "protect"], "overgrow", hp=1)]
+    b = [sp("dragonite", ["extremespeed"], "innerfocus", hp=1, status="brn")]
+    return game.start([a, b], seed=1, format="singles")
+
+
+def has_protect(actions):
+    return any(prior.is_protect(c) for joint in actions for c in joint)
+
+
 class Policies(unittest.TestCase):
     def test_policies_stay_legal_through_whole_games(self):
         for name, policy in rollout.POLICIES.items():
-            for seed in range(3):
-                b = doubles(seed)
+            for seed, protect in ((0, False), (1, False), (2, False), (0, True), (1, True)):
+                b = doubles(seed, protect)
                 rnd = random.Random(seed)
                 for _ in range(40):
                     if b.winner is not None:
@@ -106,6 +124,44 @@ class SolveRollout(unittest.TestCase):
         self.assertIsNotNone(b.winner)
         r = rollout.solve_rollout(b)
         self.assertEqual((r.label, len(r.rows), len(r.cols), r.value), ("no choices", 1, 1, 1.0))
+
+
+class ProtectAndSwitches(unittest.TestCase):
+    def test_protect_is_kept_whatever_the_status_setting(self):
+        b = doubles(0, protect=True)
+        for status in (0, 1):
+            kept = prior.candidate_slot_choices(b, 0, moves=2, status=status, switches=0, protect=1)
+            for choices in kept.values():
+                self.assertEqual(sum(prior.is_protect(c) for c in choices), 1)
+
+    def test_without_the_setting_protect_ranks_with_the_status_moves(self):
+        b = doubles(0, protect=True)
+        kept = prior.candidate_slot_choices(b, 0, moves=2, status=0, switches=0)
+        self.assertFalse(any(prior.is_protect(c) for cs in kept.values() for c in cs))
+
+    def test_wide_guard_is_not_a_protect(self):
+        b = game.start([[sp("venusaur", ["wideguard", "endure", "quickguard", "gigadrain"], "overgrow")],
+                        [sp("dragonite", ["extremespeed"], "innerfocus")]], seed=1, format="singles")
+        self.assertFalse(any(prior.is_protect(c) for cs in slot_choices(b, 0).values() for c in cs))
+
+    def test_the_root_offers_a_switch_to_each_bench_mon(self):
+        b = doubles(1)
+        rows = prior.candidate_joint_actions(b, 0, **rollout.ROOT)
+        for slot in (0, 1):
+            switched = {c.to for joint in rows for c in joint if isinstance(c, Switch) and c.slot == slot}
+            self.assertEqual(len(switched), 2)
+
+    def test_it_finds_protect(self):
+        r = rollout.solve_rollout(protect_or_lose(), per_cell=3)
+        self.assertEqual(r.value, 1.0)
+        self.assertEqual(r.rows[max(range(len(r.rows)), key=lambda i: r.row_mix[i])], "protect")
+        old = rollout.solve_rollout(protect_or_lose(), per_cell=3, root=OLD_ROOT)
+        self.assertEqual(old.value, -1.0)
+
+    def test_the_rows_include_protect_on_a_protect_team(self):
+        r = rollout.solve_rollout(doubles(2, protect=True), per_cell=1)
+        self.assertTrue(has_protect(r.row_actions))
+        self.assertFalse(has_protect(rollout.solve_rollout(doubles(2), per_cell=1).row_actions))
 
 
 if __name__ == "__main__":

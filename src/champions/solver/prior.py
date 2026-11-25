@@ -10,6 +10,7 @@ import itertools
 
 from ..calc.damage import damage
 from ..engine.actions import Move, Switch
+from ..engine.effects_table import move_effects
 from ..engine.pipeline.accuracy import final_accuracy
 from ..engine.teams import moves_data
 from .actions import slot_choices
@@ -17,6 +18,9 @@ from .actions import slot_choices
 AVG_ROLL = 92
 STATUS_SCORE = 0.10
 PRIORITY_BONUS = 0.10
+# move_effects(m)["protect"] for Protect, Detect, King's Shield, Spiky Shield and Baneful Bunker. Endure, Wide Guard and
+# Quick Guard are not here: they do not simply block the turn.
+SELF_SHIELDS = (True, "kingsshield", "spikyshield", "banefulbunker")
 
 
 def _targets(battle, user, choice, data):
@@ -70,21 +74,29 @@ def _switch_score(battle, side, choice):
     return _best_attack(battle, me, foes) - threat
 
 
-def candidate_slot_choices(battle, side, moves=2, status=1, switches=1):
+def is_protect(choice):
+    """True for a Move that shields its user (Protect, Detect, King's Shield, Spiky Shield, Baneful Bunker)."""
+    return isinstance(choice, Move) and move_effects(choice.move).get("protect") in SELF_SHIELDS
+
+
+def candidate_slot_choices(battle, side, moves=2, status=1, switches=1, protect=0):
     """{slot: [choices]}: the top `moves` damaging moves, the best `status` status moves and the best `switches`
-    switches per slot. Slots with no damaging or status candidate keep all their choices."""
+    switches per slot. protect=n keeps the first n Protect choices whatever `status` is; with protect=0 they rank with
+    the other status moves. Slots with no damaging or status candidate keep all their choices."""
     out = {}
     for slot, choices in slot_choices(battle, side).items():
         user = battle.sides[side].mon_at(slot)
-        dmg, stat, sw = [], [], []
+        dmg, stat, shield, sw = [], [], [], []
         for c in choices:
             if isinstance(c, Switch):
                 sw.append((_switch_score(battle, side, c), c))
+            elif protect and is_protect(c):
+                shield.append((STATUS_SCORE, c))
             else:
                 p = pressure(battle, user, c)
                 (stat if p is None else dmg).append((STATUS_SCORE if p is None else p, c))
         rank = lambda items, n: [c for _, c in sorted(items, key=lambda t: -t[0])[:n]]
-        picked = rank(dmg, moves) + rank(stat, status) + rank(sw, switches)
+        picked = rank(dmg, moves) + rank(stat, status) + rank(shield, protect) + rank(sw, switches)
         out[slot] = picked or choices
     return out
 
