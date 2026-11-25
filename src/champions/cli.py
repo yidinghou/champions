@@ -9,6 +9,7 @@ COMMANDS = {
     "live": ("champions.live.cli", "live-game tracker page: live --team FILE"),
     "belief": ("champions.belief.cli", "opponent set belief: belief <species> [--seen-move M]"),
     "recommend": ("champions.solver.cli", "recommend a play vs a partly-known opponent: recommend --mine team.json --opp ... --leads ..."),
+    "scan": ("champions.vision.scan", "read the opponent's six from a team-select screenshot: scan shot.png [--json] [--megas]"),
     "check-roster": ("champions.fetch.roster_check", "verify new_in_mc tags against Showdown (network)"),
 }
 FETCHERS = {
