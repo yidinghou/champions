@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live solver, rollouts and MCTS</title>
+<style>
+  :root { --bg:#fbfaf8; --fg:#1d1d1f; --muted:#5f6368; --line:#dcd9d2; --card:#fff; --accent:#2f5fd0; --soft:#eef2fc; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#17181b; --fg:#ececec; --muted:#a0a4ab; --line:#33363b; --card:#1f2024; --accent:#7ea2ff; --soft:#23283a; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 80px; }
+  h1 { font-size: 1.8rem; margin: 0 0 .3rem; }
+  h2 { font-size: 1.2rem; margin: 2rem 0 .4rem; }
+  .lede { color: var(--muted); margin: 0 0 1.4rem; }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .88em; background: var(--soft); padding: .08em .35em; border-radius: 4px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; margin: 10px 0; }
+  details[open] { padding-bottom: 14px; }
+  summary { cursor: pointer; font-weight: 600; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; margin: 8px 0; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .note { color: var(--muted); font-size: .9rem; }
+  .tldr { background: var(--soft); border-radius: 10px; padding: 12px 16px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Live solver, rollouts and MCTS</h1>
+<p class="lede">Three ways to choose a move in doubles, built on the same engine and the same one-turn table, and how they compare. <a href="engine-explained.html">How the engine works</a>.</p>
+
+<div class="tldr"><b>Short version.</b> On 4 positions all three game-playing methods mostly agree with the live solver's top pick (2–3 of 4) and give up about 0.06–0.08 of guaranteed value by its own table. Reruns of the same method disagree about as often, so most of the difference is noise. Six-game matches show nothing.</div>
+
+<details open><summary>The three methods</summary>
+<table>
+<tr><th>Method</th><th>How it fills the table</th><th>Answer is</th></tr>
+<tr><td><b>Live solver</b> (<code>search.solve_budget</code>)</td><td>Resolves every pair of actions under every chance outcome, then does it again one turn deeper. Exact probabilities, but it can only afford a few options per side.</td><td>The mix that guarantees the most, from the solved matrix.</td></tr>
+<tr><td><b>Rollouts</b> (<code>rollout.solve_rollout</code>)</td><td>For each pair of actions, plays the first turn and then random (or greedy) games to the end. A cell is the mean result.</td><td>The solved matrix of those means.</td></tr>
+<tr><td><b>MCTS</b> (<code>mcts.solve_mcts</code>)</td><td>Grows a tree: each node has the same kind of table, each side picks by regret matching, and playouts score new nodes. The first turn's table is the mean over all iterations.</td><td>The average strategy the two sides played at the root.</td></tr>
+</table>
+</details>
+
+<details open><summary>Same table, three ways</summary>
+<p>All three use <code>prior.candidate_joint_actions</code> at the root: the top two damaging moves and the best switch per slot, no status moves (the live setting's root filter). So they fill an identical table of rows × columns, and a difference in the answer comes from how the cells are valued, not from which actions were considered.</p>
+</details>
+
+<details><summary>Audit: do they agree with the live solver?</summary>
+<p>4 positions, 8 s per method on one core (the live solve took about 25 s each, also one core), each method run twice with seeds 1 and 2. Games per cell is about 9,000 playouts ÷ the 8×8 table for rollouts and about 6,000–8,000 iterations for MCTS.</p>
+<table>
+<tr><th>Method</th><th>Games per cell</th><th>Same top pick on its own rerun</th><th>Same top pick as the live solver</th><th>Mean gap vs live</th></tr>
+<tr><td>Rollouts</td><td class="n">≈140</td><td class="n">2/4</td><td class="n">3/4</td><td class="n">0.081</td></tr>
+<tr><td>MCTS</td><td class="n">≈110</td><td class="n">3/4</td><td class="n">3/4</td><td class="n">0.084</td></tr>
+<tr><td>MCTS, greedy playouts</td><td class="n">≈110</td><td class="n">2/4</td><td class="n">2/4</td><td class="n">0.061</td></tr>
+</table>
+<p class="note">"Gap" is how much guaranteed value the live solver's own table says is lost by following the other method's mix. Positions come from <code>scripts/position_audit.py</code>; rerun with <code>python scripts/compare_solvers.py [n] [seed] --budget S</code>.</p>
+</details>
+
+<details><summary>Where they disagree</summary>
+<p>Position 2: MCTS with greedy playouts prefers <code>Venusaur earthquake</code> to the live solver's <code>sludgebomb->Dragonite</code>, and its own rerun agrees with neither. Position 3: rollouts and both MCTS runs switch Salamence to Gengar where the live solver attacks Garchomp, by a gap of about 0.06–0.10. These are the cases where playing games to the end sees something a 2-turn score does not, or where noise decides.</p>
+</details>
+
+<details><summary>Head to head</summary>
+<p>6 games per pairing, 2 s per move on one core, 4-mon teams drawn from the same 8-mon pool, sides swapped on each team pair, games capped at 40 turns. Each bot samples its move from its mix.</p>
+<table>
+<tr><th>Pairing</th><th>Result</th></tr>
+<tr><td>MCTS with greedy playouts vs MCTS</td><td class="n">2–4</td></tr>
+<tr><td>MCTS vs the 1-turn solver</td><td class="n">3–3</td></tr>
+<tr><td>MCTS vs rollouts</td><td class="n">4–2</td></tr>
+</table>
+<p class="note">Six games is far too few to call a winner. Reproduce with <code>python scripts/compare_solvers.py --match N --bots a,b --budget S</code>.</p>
+</details>
+
+<details><summary>What to take from it</summary>
+<ul>
+<li>The live solver is exact on the options it considers, but a deeper search costs seconds on every core.</li>
+<li>Playing games sees whole games, not two turns, so it can value things the 2-turn score misses. Its noise is large at a few seconds, and a rerun often picks something else.</li>
+<li>MCTS spends its games where they matter, which makes its pick steadier than plain rollouts on the same budget.</li>
+<li>None of these results is a winner: the match counts are far too small to rank the methods.</li>
+</ul>
+</details>
+</main>
+</body>
+</html>

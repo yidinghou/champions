@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The engine, explained</title>
+<style>
+  :root { --bg:#fbfaf8; --fg:#1d1d1f; --muted:#5f6368; --line:#dcd9d2; --card:#fff; --accent:#2f5fd0; --soft:#eef2fc; --warn:#a4400f; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#17181b; --fg:#ececec; --muted:#a0a4ab; --line:#33363b; --card:#1f2024; --accent:#7ea2ff; --soft:#23283a; --warn:#f0a070; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 80px; }
+  h1 { font-size: 1.9rem; margin: 0 0 .3rem; }
+  h2 { font-size: 1.25rem; margin: 2.4rem 0 .4rem; }
+  .lede { color: var(--muted); margin: 0 0 1.6rem; }
+  code, pre { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .88em; }
+  code { background: var(--soft); padding: .08em .35em; border-radius: 4px; }
+  pre { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 12px 0; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; margin: 10px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .num { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .note { color: var(--muted); font-size: .9rem; }
+  label { display: block; margin: 8px 0; }
+  input[type=range] { width: 100%; }
+  .row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+  .big { font-size: 1.5rem; font-weight: 700; }
+  nav a { margin-right: 10px; color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+<h1>The engine, explained</h1>
+<p class="lede">How a battle is simulated, how the solver uses that to pick a move, and why picking one takes seconds. Every number on this page was measured on this repo with <code>scripts/compare_solvers.py</code> and <code>scripts/position_audit.py</code>, on one core of the machine that built it (a Mac, Darwin 25.6); rerun them and yours will differ.</p>
+
+<nav class="note">Jump to: <a href="#s1">1</a><a href="#s3">3</a><a href="#s6">6</a><a href="#s7">7</a><a href="#s8">8</a><a href="#s9">9</a><a href="#s10">10</a></nav>
+
+<h2 id="s1">1 · A game is a pure function</h2>
+<p>Same teams, same seed, same choices: same log. Nothing in the engine reads a clock or global state; all randomness goes through one <code>Rng</code> object (<code>engine/rng.py</code>). That is what lets the solver copy a position, try a pair of choices, throw the copy away and try another.</p>
+<pre>game.start(teams, seed, format)           -> Battle
+game.play_turn(battle, [choice, choice, ...])   changes the Battle, returns it
+game.legal_choices(battle, side)          -> every Move and Switch the side could pick
+battle.clone(rng=..., record=False)       -> an independent copy for search</pre>
+
+<h2 id="s2">2 · Battle → Side → Mon</h2>
+<p>A <code>Battle</code> holds two <code>Side</code>s, the <code>arena</code> (weather, Trick Room, terrain), the turn number, the winner and the RNG. A <code>Side</code> holds its team (up to six <code>Mon</code>s), which team indexes are active, and side conditions (Tailwind, screens). A <code>Mon</code> holds species, moves, stats, HP, status, stat stages, volatile flags, item and ability.</p>
+<details><summary>What counts as "the same position"</summary>
+<p><code>engine/resolve.state_key</code> lists every field that affects the future. Two outcomes with the same key are merged and their probabilities added. <code>tests/test_resolve.py</code> fails if a field is added to the state without being placed in the key or in the list of fixed fields.</p></details>
+
+<h2 id="s3">3 · <code>play_turn</code></h2>
+<ol>
+<li><code>validate</code> every choice (a bad one raises before anything changes).</li>
+<li><code>order_actions</code>: sort by kind (switch, Mega, move), then priority, then Speed (Trick Room reverses Speed, not priority). Exact ties are broken with the RNG.</li>
+<li>Run the queue. Speed is re-read after every action. A fainted mon loses its action.</li>
+<li>End of turn: residual damage and healing, field timers, replacements for fainted mons, winner check.</li>
+</ol>
+
+<h2 id="s4">4 · The move pipeline</h2>
+<p><code>pipeline.run_move</code> runs one move through ordered stages. Each stage can stop it.</p>
+<table>
+<tr><th>Stage</th><th>File</th><th>Stops the move when…</th></tr>
+<tr><td>can move</td><td><code>pipeline/can_move.py</code></td><td>asleep, frozen, paralysed (full), flinched, confused (self-hit)</td></tr>
+<tr><td>targets</td><td><code>pipeline/targets.py</code></td><td>no target is left (redirects such as Follow Me apply here)</td></tr>
+<tr><td>protect</td><td><code>pipeline/protect.py</code></td><td>the target is shielded</td></tr>
+<tr><td>immunity / absorb</td><td><code>immunity.py</code>, <code>absorb.py</code></td><td>type immunity, an ability that absorbs the move</td></tr>
+<tr><td>accuracy</td><td><code>accuracy.py</code></td><td>the move misses</td></tr>
+<tr><td>hit</td><td><code>hit.py</code></td><td>— (damage, then effects)</td></tr>
+<tr><td>after</td><td><code>after.py</code></td><td>— (recoil, drain, items that react)</td></tr>
+</table>
+
+<h2 id="s5">5 · Hooks</h2>
+<p>Abilities, items, statuses and move effects are not special-cased in the pipeline. A handler registers itself for a named hook and a cause, and the pipeline fires the hook:</p>
+<pre>@on("on_hit", "effect:protect")
+def protect(battle, ctx): ...
+
+fire(battle, "on_switch_in", mon, [f"ability:{mon.ability}"])</pre>
+<p><code>engine/effects_table.py</code> maps every supported move to its effects, and <code>is_supported_move</code> / <code>is_supported_ability</code> / <code>items.is_supported_item</code> tell the live page what the engine cannot play.</p>
+
+<h2 id="s6">6 · Randomness</h2>
+<p>Random draws are labelled (<code>"damage_roll"</code>, <code>"protect"</code>, <code>"hit_count"</code>…). Two kinds of RNG sit behind the same interface:</p>
+<ul>
+<li><code>Rng</code>: samples, for playing a game.</li>
+<li><code>EnumRng</code>: walks a decision tree. Each draw is a branch point; <code>resolve(battle, choices)</code> runs the turn again for every branch and returns <code>[(probability, battle after)]</code>. A damage roll is split into a few buckets, and branches that end in the same state are merged.</li>
+</ul>
+<p>The solver uses <code>EnumRng</code> (exact probabilities); rollouts and MCTS use <code>Rng</code> (one sampled future per playout).</p>
+
+<h2 id="s7">7 · How the solver picks</h2>
+<p>For one turn, list our joint actions (rows) and theirs (columns), <code>resolve</code> every pair under every chance outcome, score each outcome, and average by probability. The result is a matrix game, solved by linear programming (<code>solver/matrix.py</code>) for the mix that guarantees the most. Two turns deep, each outcome is itself solved one level down before averaging. <code>prior.py</code> cuts the actions first, so the table is a few rows and columns, not hundreds.</p>
+
+<h2 id="s8">8 · Why it's slow</h2>
+<p>Measured on this repo:</p>
+<div class="card">
+<table>
+<tr><td>One turn (clone + <code>play_turn</code>)</td><td class="n num">0.16 ms</td></tr>
+<tr><td>One random game, to the end (7.2 turns on average)</td><td class="n num">0.9 ms</td></tr>
+<tr><td>Random games per second, one core</td><td class="n num">≈1,100</td></tr>
+<tr><td>Chance outcomes to resolve for one live 2-turn decision (mean of 6 positions)</td><td class="n num">≈33,600</td></tr>
+<tr><td>… the same on the cheapest setting (1 turn, 1 move per slot)</td><td class="n num">≈4</td></tr>
+<tr><td>Live 2-turn solve on one core (mean; the live page uses 10 workers)</td><td class="n num">≈25 s</td></tr>
+</table>
+</div>
+<p>The cost is the product of the settings. Try it:</p>
+<div class="card" id="calc">
+  <label><div class="row"><span>Options per side at the root</span><b id="o-rows"></b></div><input id="rows" type="range" min="1" max="30" value="8"></label>
+  <label><div class="row"><span>Turns searched</span><b id="o-turns"></b></div><input id="turns" type="range" min="1" max="3" value="2"></label>
+  <label><div class="row"><span>Chance outcomes per cell kept</span><b id="o-outs"></b></div><input id="outs" type="range" min="1" max="8" value="2"></label>
+  <label><div class="row"><span>Options per side below the root</span><b id="o-deep"></b></div><input id="deep" type="range" min="1" max="12" value="3"></label>
+  <p class="note">Turn replays = Σ over levels of (options² × outcomes) × (the product of the levels above). At 0.16 ms a turn:</p>
+  <div class="big"><span id="o-replays">–</span> replays ≈ <span id="o-time">–</span></div>
+</div>
+
+<h2 id="s9">9 · Fixes, ranked by payoff</h2>
+<ol>
+<li><b>Try the likelier chance outcome first</b> in <code>EnumRng</code> and stop low-probability branches early. In a test this made the live solve 6–9× faster. <i>Not applied.</i></li>
+<li>Cache <code>resolve</code> across the two turns of a search (the same position is reached by several pairs).</li>
+<li>Fewer, better options: <code>prior.py</code> already does this; its error is measured by <code>scripts/position_audit.py</code>.</li>
+<li>Skip the search: play games instead (see <a href="rollout-vs-live.html">the comparison page</a>).</li>
+</ol>
+
+<h2 id="s10">10 · File map</h2>
+<table>
+<tr><th>Path</th><th>What is in it</th></tr>
+<tr><td><code>engine/game.py</code></td><td><code>start</code>, <code>play_turn</code>, <code>legal_choices</code>, <code>validate</code></td></tr>
+<tr><td><code>engine/turn.py</code></td><td>order, Speed, residuals</td></tr>
+<tr><td><code>engine/pipeline/</code></td><td>the move stages</td></tr>
+<tr><td><code>engine/handlers/</code></td><td>effects, abilities, items, statuses</td></tr>
+<tr><td><code>engine/rng.py</code></td><td><code>Rng</code>, <code>EnumRng</code></td></tr>
+<tr><td><code>engine/resolve.py</code></td><td>all outcomes of one turn, <code>state_key</code></td></tr>
+<tr><td><code>solver/search.py</code></td><td><code>solve</code>, <code>solve_budget</code>, <code>LIVE</code>, <code>FALLBACK</code></td></tr>
+<tr><td><code>solver/prior.py</code></td><td>which options to keep</td></tr>
+<tr><td><code>solver/matrix.py</code></td><td>the matrix game</td></tr>
+<tr><td><code>solver/evaluate.py</code></td><td>how a position is scored</td></tr>
+<tr><td><code>solver/rollout.py</code>, <code>mcts.py</code></td><td>pick by playing games</td></tr>
+<tr><td><code>live/</code></td><td>the live page and <code>/api/solve</code></td></tr>
+</table>
+</main>
+<script>
+(function () {
+  var TURN_MS = 0.16;
+  var $ = function (id) { return document.getElementById(id); };
+  function fmt(n) { return n >= 1e9 ? (n / 1e9).toFixed(1) + " billion" : n >= 1e6 ? (n / 1e6).toFixed(1) + " million" : n >= 1e3 ? Math.round(n).toLocaleString() : String(Math.round(n)); }
+  function time(s) { return s < 1 ? (s * 1000).toFixed(0) + " ms" : s < 120 ? s.toFixed(1) + " s" : s < 7200 ? (s / 60).toFixed(1) + " min" : (s / 3600).toFixed(1) + " h"; }
+  function update() {
+    var r = +$("rows").value, t = +$("turns").value, o = +$("outs").value, d = +$("deep").value;
+    $("o-rows").textContent = r; $("o-turns").textContent = t; $("o-outs").textContent = o; $("o-deep").textContent = d;
+    var total = 0, mult = 1;
+    for (var level = 1; level <= t; level++) {
+      var opts = level === 1 ? r : d;
+      total += mult * opts * opts * o;
+      mult *= opts * opts * o;
+    }
+    $("o-replays").textContent = fmt(total);
+    $("o-time").textContent = time(total * TURN_MS / 1000);
+  }
+  ["rows", "turns", "outs", "deep"].forEach(function (id) { $(id).addEventListener("input", update); });
+  update();
+})();
+</script>
+</body>
+</html>
