@@ -7,9 +7,9 @@ twice (seeds 1 and 2), and report how often the top pick agrees and how much gua
 
 Match: bots play whole games against each other.
 
-    python scripts/compare_solvers.py --match N --bots mcts,live [--budget S] [--workers W] [--shard I/N] [--json FILE]
+    python scripts/compare_solvers.py --match N --bots mcts,live [--budget S] [--workers W] [--shard I/N] [--json FILE] [--top]
 
-Bots: live (solve_budget), fallback (the 1-turn solve), rollout, mcts, mcts-greedy, random, and rollout-old / mcts-old
+Bots: live (solve_budget), fallback (the 1-turn solve), rollout, mcts, mcts-greedy, random, and rollout-old / mcts-old / mcts-greedy-old
 (the same with the old root options, no Protect and one switch). --protect gives every mon Protect in place of its last move.
 """
 import argparse, json, random, sys, time
@@ -17,7 +17,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from champions.engine import game
-from champions.solver import mcts, rollout, search
+from champions.engine.actions import Switch
+from champions.solver import mcts, prior, rollout, search
 from position_audit import POOL, B, position, sp, with_protect
 
 MAX_TURNS = 40
@@ -26,7 +27,8 @@ METHODS = {"rollout": lambda b, a: rollout.solve_rollout(b, budget=a.budget, wor
            "mcts": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random"),
            "mcts-greedy": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="greedy")}
 OLD = {"rollout-old": lambda b, a: rollout.solve_rollout(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random", root=OLD_ROOT),
-       "mcts-old": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random", root=OLD_ROOT)}
+       "mcts-old": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="random", root=OLD_ROOT),
+       "mcts-greedy-old": lambda b, a: mcts.solve_mcts(b, budget=a.budget, workers=a.workers, seed=a.seed, policy="greedy", root=OLD_ROOT)}
 BOTS = {**METHODS, **OLD}
 
 
@@ -110,7 +112,8 @@ def decide(bot, b, side, args, rnd):
     mix, actions = (r.row_mix, r.row_actions) if side == 0 else (r.col_mix, r.col_actions)
     if not actions:
         return []
-    return list(actions[sample(mix, rnd)])
+    k = max(range(len(mix)), key=lambda i: mix[i]) if args.top else sample(mix, rnd)   # --top: the best option, not a draw
+    return list(actions[k])
 
 
 def teams(rnd, protect=False):
@@ -125,16 +128,21 @@ def play(bots, g, args):
     swap = g % 2
     order = [bots[1], bots[0]] if swap else list(bots)           # order[side] = the bot playing that side
     b = game.start(pair, seed=g + 1, format="doubles")
+    picks = {bot: [0, 0, 0] for bot in bots}           # per bot: slot choices, Protects, switches
     while b.winner is None and b.turn < MAX_TURNS:
         choices = []
         for side in (0, 1):
             mine = decide(order[side], b, side, args, rnd)
+            t = picks[order[side]]
+            t[0] += len(mine)
+            t[1] += sum(prior.is_protect(c) for c in mine)
+            t[2] += sum(isinstance(c, Switch) for c in mine)
             choices += mine
         if not choices:
             break
         game.play_turn(b, choices)
     win = None if b.winner in (None, -1) else order[b.winner]
-    return {"game": g, "winner": win, "turns": b.turn, "order": order}
+    return {"game": g, "winner": win, "turns": b.turn, "order": order, "picks": picks}
 
 
 def match(args):
@@ -153,6 +161,10 @@ def match(args):
     wins = {b: sum(r["winner"] == b for r in games) for b in bots}
     draws = sum(r["winner"] is None for r in games)
     print(f"{bots[0]} {wins[bots[0]]} - {wins[bots[1]]} {bots[1]}  ({draws} draws, {len(games)} games)")
+    for bot in bots:
+        n = sum(r["picks"][bot][0] for r in games) or 1
+        print(f"{bot}: {n} choices, Protect {sum(r['picks'][bot][1] for r in games) / n:.0%}, "
+              f"switch {sum(r['picks'][bot][2] for r in games) / n:.0%}")
     if args.json:
         Path(args.json).write_text(json.dumps({"bots": bots, "wins": wins, "draws": draws, "games": games}))
 
@@ -167,6 +179,7 @@ def main():
     p.add_argument("--workers", type=int, default=1)
     p.add_argument("--shard", default="0/1")
     p.add_argument("--json")
+    p.add_argument("--top", action="store_true", help="play the option with the highest mix weight instead of sampling")
     p.add_argument("--protect", action="store_true", help="every mon gets Protect in place of its last move")
     args = p.parse_args()
     args.seed0 = args.seed
