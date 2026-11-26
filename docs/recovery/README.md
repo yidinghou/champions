@@ -13,12 +13,9 @@ from that computer.
 | `ISSUE_DRAFT_root_filter_switches.md` | The shortlist doesn't anticipate switches | Not started |
 | `SPIKE_mcts_no_shortlist.md` | MCTS shortlist experiments (its `.tmp/` scripts are lost) | No scripts |
 | `charge-moves-decisions.html` | Charge-move choices and Showdown rules, with citations | No |
-| `explorer_template.html` | Front end of the MCTS explorer, from a saved copy of the page. `__DATA__` stands for the embedded data. | No server |
-
-A sample of the explorer's data is in `tests/fixtures/explorer_data_sample.json`. It is trimmed (no images, and only a
-few catalog entries), so it shows the shape of the data and can't run the page by itself.
+| `explorer_template.html` | Front end of the MCTS explorer, from a saved copy of the page, with its data removed. Kept as a design reference (#29); we don't plan to rebuild it. | No server |
 
 `engine-explained.html` and `rollout-vs-live.html` matched the copies in `docs/`, so they aren't repeated.
 
 The current docs are still `docs/DECISIONS.md` and `docs/ENGINE.md`. Move each newer section there when its code is
-rebuilt. The rebuild stages are tracked in the local `TODO.md`.
+rebuilt. Rebuild work is tracked in GitHub issues.
