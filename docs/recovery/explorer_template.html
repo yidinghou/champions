@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCTS explorer</title>
+<style>
+  :root {
+    --bg: #f6f6f3; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e3e2dc; --track: #ecebe5;
+    --me: #5b43c7; --foe: #c2335a; --good: #2f9e5b; --warn: #d9a21b; --bad: #d4571b; --red: #d03b3b;
+    --me-soft: rgba(91,67,199,.10); --foe-soft: rgba(194,51,90,.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151514; --panel: #1f1f1d; --ink: #ecebe6; --muted: #9a9993; --line: #34332f; --track: #2c2b28;
+      --me: #9b8cf5; --foe: #f0698f; --good: #54c283; --warn: #e0b84a; --bad: #f0a05a; --red: #e5534b;
+      --me-soft: rgba(155,140,245,.16); --foe-soft: rgba(240,105,143,.16);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1280px; margin: 0 auto; padding: 20px 16px 64px; }
+  h1 { font-size: 22px; margin: 0; }
+  h2 { font-size: 12px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+  .head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .sub { color: var(--muted); font-size: 13px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+          --halo: var(--panel); }    /* --halo: the gap colour around a target wire, matching what is behind it */
+  .tag { font-size: 12px; color: var(--muted); }
+
+  /* turn strip */
+  .strip { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+  .strip button { width: 34px; height: 34px; padding: 0; border-radius: 8px; font-size: 12px; font-weight: 600;
+                  border: 2px solid transparent; color: #fff; cursor: pointer; }
+  .strip button.cur { border-color: var(--ink); }
+  .strip .lbl { font-size: 12px; color: var(--muted); margin-right: 4px; }
+
+  /* chips */
+  .chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; font-size: 13px;
+          font-weight: 600; color: #fff; white-space: nowrap; vertical-align: middle; line-height: 1.5; }
+  .chip.mon { background: var(--track); color: var(--ink); padding: 2px 9px 2px 3px; }
+  .chip.mon.me { background: var(--me); color: #fff; } .chip.mon.foe { background: var(--foe); color: #fff; }
+  @media (prefers-color-scheme: dark) { .chip.mon.me, .chip.mon.foe { color: #151514; } }
+  .chip.mon img, .mon-card img { width: 28px; height: 28px; image-rendering: pixelated; }
+  .chip.mon img { background: rgba(255,255,255,.9); border-radius: 50%; }
+  .chip.mon.mini { font-size: 12px; padding: 1px 8px 1px 2px; } .chip.mon.mini img { width: 22px; height: 22px; }
+  .chip.mon.mini.nosprite { padding: 1px 8px; }
+  .chip.type { font-size: 11px; padding: 0 7px 0 4px; gap: 3px; text-transform: uppercase; letter-spacing: .04em; }
+  .chip.type img { width: 11px; height: 11px; }
+  /* a move sits on a type-coloured arrow from its user to its target (no arrow when it has no target to show) */
+  .mv { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .mv .ico { flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--ty);
+             display: inline-flex; align-items: center; justify-content: center; }
+  .mv .ico img { width: 12px; height: 12px; }
+  .mv .cat { font-size: 10px; font-weight: 600; color: var(--muted); letter-spacing: .03em; }
+  .mv.to { position: relative; padding: 0 4px 2px; border-bottom: 2px solid var(--ty); margin: 0 8px 0 2px; }
+  .mv.to::after { content: ''; position: absolute; right: -8px; bottom: -6px;
+                  border: 5px solid transparent; border-right: 0; border-left: 8px solid var(--ty); }
+  .slot { display: flex; gap: 4px; align-items: center; height: 30px; white-space: nowrap; }
+  .mv.line, .mv.plain { padding: 0 4px; margin-left: 2px; }
+  /* an option's targets: its user rows, then the other side's active Pokémon in board order, joined by SVG wires */
+  .tgtrow { position: relative; display: flex; align-items: center; flex: 1; min-width: 0; }
+  .users, .tcol { display: flex; flex-direction: column; gap: 18px; }
+  .tcol { align-items: flex-start; } .tcol > span { height: 30px; display: flex; align-items: center; }
+  .tcol .idle { opacity: .6; }
+  .lane { flex: 1; min-width: 40px; }
+  svg.wires { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .swap { display: inline-flex; flex-direction: column; font-size: 10px; line-height: 9px; color: var(--muted); margin: 0 2px; }
+
+  /* boards */
+  .boards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .boards { grid-template-columns: 1fr; } }
+  .side-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .side-title.me { color: var(--me); } .side-title.foe { color: var(--foe); }
+  .mon-card { display: grid; grid-template-columns: 34px 1fr; gap: 8px; align-items: start; padding: 6px 8px; border-radius: 10px;
+              margin-bottom: 6px; border: 1px solid var(--line); }
+  .mon-card.active.me { background: var(--me-soft); border-color: var(--me); }
+  .mon-card.active.foe { background: var(--foe-soft); border-color: var(--foe); }
+  .mon-card.bench { opacity: .6; }
+  .mon-card.fainted { opacity: .35; filter: grayscale(1); }
+  .mon-card img { width: 34px; height: 34px; }
+  .mon-card > img { margin-top: 2px; }
+  .mon-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 13px; }
+  .mon-top b { font-weight: 650; }
+  .abil { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .mset { display: grid; grid-template-columns: 1fr 1fr; gap: 1px 14px; margin-top: 6px; }
+  .mrow { display: flex; align-items: center; gap: 6px; height: 22px; min-width: 0; }
+  .pp { font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .bar { height: 9px; border-radius: 5px; background: var(--track); overflow: hidden; position: relative; margin-top: 3px; }
+  .bar i { display: block; height: 100%; }
+  .bar i.ghost { position: absolute; left: 0; top: 0; background: var(--bad); opacity: .45; }
+  .bar.mini { height: 6px; width: 70px; display: inline-block; margin: 0 0 1px 6px; vertical-align: middle; }
+  .hp { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .status { font-size: 10px; padding: 0 6px; border-radius: 4px; background: var(--warn); color: #fff; font-weight: 700; }
+
+  /* picks */
+  .picks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .picks { grid-template-columns: 1fr; } }
+  .opt { padding: 10px 8px; }
+  .optrow { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .pct { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 13px; }
+  .val { display: inline-block; padding: 1px 8px; border-radius: 6px; font-weight: 700; font-size: 13px; color: #fff; }
+
+  /* what happened */
+  .step { display: flex; gap: 8px 10px; flex-wrap: wrap; align-items: center; padding: 7px 10px; border-radius: 10px;
+          margin-bottom: 6px; border-left: 4px solid var(--line); background: var(--track); }
+  .step.me { border-left-color: var(--me); } .step.foe { border-left-color: var(--foe); }
+  .step.faint { background: transparent; border-left-style: dashed; color: var(--muted); }
+  .step.note { background: transparent; padding: 2px 10px; font-size: 12px; color: var(--muted); }
+  .dmg { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--bad); }
+  .dmg small { font-weight: 600; color: var(--muted); }
+  .badge { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 5px; color: #fff; }
+  .badge.ko { background: #b22; } .badge.immune, .badge.protected, .badge.missed, .badge.blocked { background: #7a7a75; }
+  .badge.crit { background: var(--warn); }
+  .target { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  details { margin-top: 8px; } summary { cursor: pointer; font-size: 12px; color: var(--muted); }
+  pre.log { margin: 6px 0 0; white-space: pre-wrap; font: 12px/1.5 ui-monospace, Menlo, monospace; color: var(--muted); }
+  .verdict { font-weight: 700; } .win { color: var(--good); } .loss { color: var(--bad); }
+
+  /* expected score of each pairing: Player 1's options down the side, Player 2's across the top, each row / column
+     as big as its share of the mix but never smaller than its label; and a bar under each option */
+  .hy-wrap { overflow-x: auto; padding: 0 5px 5px 0; }          /* the padding holds the end dividers and the outline */
+  .hybrid { display: grid; gap: 7px; width: max-content; max-width: 100%;
+            --divider: color-mix(in srgb, var(--ink) 24%, transparent); }
+  .hy-title { font-size: 13px; font-weight: 700; padding: 6px 8px 0; white-space: nowrap; }
+  .hy-title.me { color: var(--me); align-self: end; padding-bottom: 6px; } .hy-title.foe { color: var(--foe); }
+  .hy-title .tag { font-weight: 500; }
+  .hy-ch { align-self: end; padding: 2px 4px 6px; border-radius: 8px; cursor: pointer; }
+  .hy-rh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 4px; border-radius: 8px; cursor: pointer; }
+  .hy-rh:hover, .hy-ch:hover { background: var(--track); }
+  .hy-rh.pin, .hy-rh.pin:hover { background: var(--me-soft); box-shadow: inset 3px 0 0 var(--me); }
+  .hy-ch.pin, .hy-ch.pin:hover { background: var(--foe-soft); box-shadow: inset 0 -3px 0 var(--foe); }
+  .hybrid.focusing .hy-cell:not(.lit) { opacity: .28; }
+  .hy-ch .p, .hy-rh .p { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .hy-ch.dim, .hy-rh.dim { opacity: .55; }
+  .hy-cell { min-width: 58px; min-height: 36px; padding: 0 8px; border-radius: 6px; display: flex; align-items: center;
+             justify-content: center; font-weight: 700; font-size: 13px; color: var(--ink); transition: opacity .12s; }
+  .hy-cell.strong { color: #fff; }
+  .hy-cell.untried { color: var(--muted); font-weight: 500; background: repeating-linear-gradient(45deg, var(--track) 0 6px, transparent 6px 12px); }
+  .hy-cell.click { cursor: pointer; } .hy-cell.click:hover { box-shadow: inset 0 0 0 2px var(--ink); }
+  .hy-cell.played { outline: 2px solid var(--ink); outline-offset: 2px; }
+  /* dividers: 1px, centred in the 7px gap before (or, for .end, after) their track */
+  .hy-vl, .hy-hl { pointer-events: none; border: 0 solid var(--divider); }
+  .hy-vl { border-left-width: 1px; margin-left: -4px; } .hy-vl.end { border-left-width: 0; border-right-width: 1px; margin: 0 -4px 0 0; }
+  .hy-hl { border-top-width: 1px; margin-top: -4px; } .hy-hl.end { border-top-width: 0; border-bottom-width: 1px; margin: 0 0 -4px 0; }
+  .hybrid.narrow .hy-ch .mini-slot { flex-wrap: wrap; height: auto; min-height: 19px; }
+  /* fold arrows: Player 2's options under 5% open to the right of its row, Player 1's below its column */
+  .hy-more { font: inherit; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 8px; background: var(--panel);
+             display: inline-flex; align-items: center; justify-content: center; gap: 4px; line-height: 1.2; white-space: nowrap; }
+  .hy-more .arr { font-size: 15px; font-weight: 700; }
+  .hy-more.c { flex-direction: column; gap: 1px; align-self: center; padding: 5px 6px; margin: 0 6px 0 0; text-align: center;
+               color: var(--foe); border: 1.5px solid var(--foe); }
+  .hy-more.r { justify-self: center; padding: 2px 10px; margin: 0 0 6px; color: var(--me); border: 1.5px solid var(--me); }
+  .hy-more.c:hover { background: color-mix(in srgb, var(--foe) 18%, var(--panel)); }
+  .hy-more.r:hover { background: color-mix(in srgb, var(--me) 18%, var(--panel)); }
+  .mini-slot { display: flex; align-items: center; gap: 3px; font-size: 11px; white-space: nowrap; height: 19px; }
+  .mini-slot .g { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+  .mini-slot img { width: 18px; height: 18px; image-rendering: pixelated; }
+  .mini-slot .g + .g { margin-left: 1px; }
+  .mini-slot img.sd { background: rgba(255,255,255,.9); border-radius: 50%; box-shadow: 0 0 0 2px var(--me); margin: 0 1px; }
+  .mini-slot img.sd.foe { box-shadow: 0 0 0 2px var(--foe); }
+  .mini-slot .ico { width: 13px; height: 13px; border-radius: 50%; background: var(--ty); display: inline-flex; align-items: center; justify-content: center; }
+  .mini-slot .ico img { width: 9px; height: 9px; }
+  .mini-slot .to { color: var(--muted); }
+  .scale-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+  .scale-row label { display: inline-flex; gap: 4px; align-items: center; cursor: pointer; color: var(--ink); font-size: 12px; }
+  .legend { display: inline-flex; align-items: center; gap: 8px; }
+  .legend .grad { width: 200px; height: 10px; border-radius: 5px; border: 1px solid var(--line); }
+  .hatch { display: inline-block; width: 22px; height: 12px; border-radius: 3px; vertical-align: middle; border: 1px solid var(--line);
+           background: repeating-linear-gradient(45deg, var(--track) 0 4px, transparent 4px 8px); }
+  .ev-bar { position: relative; height: 8px; border-radius: 4px; background: var(--track); margin-top: 4px; }
+  .ev-bar::before { content: ''; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); }
+  .ev-bar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+  .ev-txt { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .ev-txt b { color: var(--ink); }
+  /* an option drawn in full: floating by a hovered grid header, or pinned under the grid (one per player) */
+  .optpop { position: absolute; z-index: 10; display: none; background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+         padding: 10px 12px 8px; box-shadow: 0 10px 30px rgba(0,0,0,.18); pointer-events: none; width: 440px; max-width: 94vw; --halo: var(--panel); }
+  .optpop.on { display: block; }
+  .optpop .opt { padding: 2px 0 0; }
+  .optpop .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .pinned { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .pinned .empty { font-size: 12px; color: var(--muted); padding: 10px 8px; }
+  .together { font-size: 12px; color: var(--muted); margin: 8px 8px 0; }
+  .together b { color: var(--ink); }
+
+  /* explorer */
+  .strip .crumb { width: auto; padding: 0 12px; background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+  .strip .crumb.cur { border: 2px solid var(--ink); }
+  .crumb-pair { font-size: 11px; color: var(--muted); margin: 0 4px; max-width: 360px; }
+  .explore-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .explore-bar button { font: inherit; font-weight: 600; padding: 6px 14px; border-radius: 8px; border: 1px solid var(--ink);
+                        background: var(--ink); color: var(--panel); cursor: pointer; }
+  .explore-bar button:disabled { opacity: .45; cursor: default; }
+  .explore-bar input { width: 64px; font: inherit; padding: 3px 6px; border-radius: 6px; border: 1px solid var(--line);
+                       background: var(--panel); color: var(--ink); }
+  .err { color: var(--bad); font-size: 13px; font-weight: 600; }
+
+  /* how we got here: the turn played out on a battle field (steps and boards from server.py turn_steps) */
+  .anim { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 14px; align-items: start; margin-top: 8px; }
+  @media (max-width: 900px) { .anim { grid-template-columns: minmax(0, 1fr); } }
+  .steps .step { cursor: pointer; transition: opacity .2s; }
+  .steps .step.future { opacity: .38; } .steps .step.cur { box-shadow: 0 0 0 2px var(--ink); }
+  .step .num { font-size: 11px; font-weight: 700; color: var(--muted); width: 14px; }
+  .bs { font-size: 10px; font-weight: 700; padding: 0 5px; border-radius: 4px; color: #fff; background: var(--bad); }
+  .bs.up { background: var(--good); }
+  .pop { position: absolute; left: 50%; top: 4px; font-weight: 800; font-size: 16px; pointer-events: none; white-space: nowrap;
+         opacity: 0; z-index: 3; text-shadow: 0 0 3px var(--panel), 0 0 3px var(--panel), 0 0 3px var(--panel); }
+  .pop.dmg { color: var(--bad); } .pop.out { color: var(--muted); font-size: 13px; } .pop.up { color: var(--good); font-size: 13px; }
+  .pop.down { color: var(--bad); font-size: 13px; }
+  svg.ov { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 2; }
+  .fd { position: relative; height: 390px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line);
+        background: linear-gradient(180deg, color-mix(in srgb, var(--foe) 9%, var(--panel)), var(--panel) 50%, color-mix(in srgb, var(--me) 9%, var(--panel))); }
+  .fd .row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; gap: 90px; }
+  .fd .row.foe { top: 22px; } .fd .row.me { bottom: 22px; }
+  .fslot { width: 172px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .fslot.me { --sidec: var(--me); } .fslot.foe { --sidec: var(--foe); }
+  .fslot .plate { width: 100%; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--sidec);
+                  border-radius: 8px; padding: 3px 8px 5px; font-size: 12px; }
+  .fslot .plate .top { display: flex; justify-content: space-between; gap: 4px; align-items: center; }
+  .fslot .plate .top > span:first-child { display: inline-flex; gap: 4px; align-items: center; }
+  .fslot .spw { position: relative; width: 88px; height: 88px; }
+  .fslot .spw::before { content: ''; position: absolute; left: 6px; right: 6px; bottom: 4px; height: 14px; border-radius: 50%;
+                        background: color-mix(in srgb, var(--sidec) 22%, transparent); }
+  .fslot img.spr { position: relative; width: 88px; height: 88px; image-rendering: pixelated; }
+  .hpb { height: 7px; border-radius: 4px; background: var(--track); overflow: hidden; position: relative; margin-top: 3px; }
+  .hpb i { position: absolute; left: 0; top: 0; bottom: 0; } .hpb .lag { background: var(--bad); opacity: .85; }
+  .fd .bench { position: absolute; display: flex; gap: 6px; z-index: 1; }
+  .fd .bench.foe { top: 10px; right: 12px; } .fd .bench.me { bottom: 10px; left: 12px; }
+  .fd .bench .lab { font-size: 10px; color: var(--muted); align-self: center; }
+  .bmini { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 4px; border-radius: 8px;
+           background: var(--panel); border: 1px solid var(--line); }
+  .bmini img { width: 28px; height: 28px; image-rendering: pixelated; }
+  .bmini .mb { width: 28px; height: 4px; background: var(--track); border-radius: 2px; overflow: hidden; }
+  .bmini .mb i { display: block; height: 100%; }
+  .bmini.down { opacity: .35; filter: grayscale(1); }
+  .banner { margin-top: 10px; min-height: 46px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 15px; font-weight: 600; }
+  .banner .n { font-size: 11px; color: var(--muted); font-weight: 700; margin-right: 4px; }
+  .player { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .player .ctl { width: 34px; height: 30px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel);
+                 color: var(--ink); cursor: pointer; font-size: 12px; padding: 0; }
+  .player .ctl.play { width: 44px; background: var(--ink); color: var(--panel); border-color: var(--ink); }
+  .player .ends { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .player .pos { font-size: 12px; color: var(--muted); min-width: 84px; text-align: right; font-variant-numeric: tabular-nums; }
+  .scrub { flex: 1; height: 24px; display: flex; gap: 2px; cursor: pointer; user-select: none; touch-action: none; }
+  .scrub .sg { position: relative; height: 100%; border-radius: 5px; background: var(--track); overflow: hidden; }
+  .scrub .sg i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--sc); opacity: .5; }
+  .scrub .sg.me { --sc: var(--me); } .scrub .sg.foe { --sc: var(--foe); }
+  .scrub .sg span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+                    font-size: 10px; font-weight: 700; color: var(--ink); }
+  .speeds { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .speeds button { font: inherit; font-size: 11px; padding: 4px 7px; border: 0; background: var(--panel); color: var(--ink); cursor: pointer; }
+  .speeds button.on { background: var(--ink); color: var(--panel); font-weight: 700; }
+  /* the pairing preview window */
+  dialog#preview { width: min(1080px, 96vw); max-height: 94vh; border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px;
+                   background: var(--panel); color: var(--ink); --halo: var(--panel); box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+  dialog#preview::backdrop { background: rgba(20,20,18,.5); }
+  .pv-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .pv-head h2 { margin: 0; text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--ink); }
+  .pv-x { font: inherit; font-size: 20px; line-height: 1; border: 0; background: none; color: var(--muted); cursor: pointer; padding: 2px 6px; }
+  #pv-sub { margin: 6px 0 4px; }
+  .pv-foot { margin: 12px 0 0; }
+  .explore-bar button.ghost { background: var(--panel); color: var(--ink); border-color: var(--line); }
+
+  /* the set editor: a board card opens its set in a window; edits wait in the bar above the board until applied */
+  .btn { font: inherit; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--ink);
+         background: var(--ink); color: var(--panel); cursor: pointer; white-space: nowrap; }
+  .btn.ghost { background: var(--panel); color: var(--ink); border-color: var(--line); }
+  .btn.sm { font-size: 11px; padding: 2px 8px; display: inline-flex; align-items: center; gap: 5px; }
+  .btn:disabled { opacity: .45; cursor: default; }
+  svg.die { flex: none; vertical-align: -2px; }
+  .side-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .side-head .side-title { margin: 0; }
+  .mon-card.click { cursor: pointer; } .mon-card.click:hover { box-shadow: 0 0 0 2px var(--ink); }
+  .mon-card.swapped { border-style: dashed; border-color: var(--warn); }
+  .mon-card .pen { font-size: 12px; color: var(--muted); margin-left: 6px; }
+  .mon-card .ed { outline: 1.5px dashed var(--warn); outline-offset: 2px; border-radius: 6px; }
+  .was { font-size: 10px; color: var(--muted); font-weight: 500; }
+  .badtag { font-size: 10px; font-weight: 700; color: var(--red); white-space: nowrap; }
+  .nomove, .none { font-size: 12px; color: var(--muted); font-style: italic; }
+  .pending { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 36px; margin: 0 0 10px; padding: 4px 6px 4px 10px;
+             border-radius: 9px; font-size: 12px; background: var(--track); color: var(--muted); }
+  .pending.has { background: color-mix(in srgb, var(--warn) 18%, var(--panel)); color: var(--ink); }
+  .chg { display: inline-flex; align-items: center; gap: 2px; padding: 1px 3px 1px 9px; border-radius: 999px; font-size: 12px;
+         background: var(--panel); border: 1px solid var(--line); font-weight: 600; white-space: nowrap; }
+  .chg button { border: 0; background: none; cursor: pointer; color: var(--muted); font-size: 15px; line-height: 1; padding: 0 4px; }
+  .chg button:hover { color: var(--ink); }
+  .pending .go { margin-left: auto; display: flex; gap: 6px; }
+  .block { color: var(--red); font-weight: 600; font-size: 12px; }
+  dialog#ed { width: min(1040px, 96vw); height: min(680px, 92vh); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px;
+              background: var(--panel); color: var(--ink); box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+  dialog#ed[open] { display: flex; flex-direction: column; gap: 10px; }
+  dialog#ed::backdrop { background: rgba(20,20,18,.5); }
+  #ed .pv-head h2 { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+  #ed .pv-head h2 img { width: 40px; height: 40px; image-rendering: pixelated; }
+  #ed .pv-head .right { display: flex; align-items: center; gap: 8px; }
+  #ed .body { flex: 1; min-height: 0; display: grid; grid-template-columns: 300px 1fr; gap: 16px; }
+  #ed .set { display: flex; flex-direction: column; gap: 4px; overflow-y: auto; padding: 2px; }
+  #ed .lab { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: 8px; }
+  #ed .lab:first-child { margin-top: 0; }
+  #ed .slotb { font-size: 13px; display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 8px; min-height: 36px; flex-wrap: wrap;
+               border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+  #ed .slotb:hover { background: var(--track); }
+  #ed .slotb.on { border: 2px solid var(--ink); padding: 3px 3px 3px 7px; }
+  #ed .slotb.ed { outline: 1.5px dashed var(--warn); outline-offset: 1px; }
+  #ed .slotb img { width: 28px; height: 28px; image-rendering: pixelated; }
+  #ed .slotb .pp, #ed .slotb .badtag { margin-left: auto; }
+  #ed .roll { margin-left: auto; flex: none; width: 28px; height: 26px; border-radius: 7px; border: 1px solid transparent; background: none;
+              color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+  #ed .slotb .pp + .roll, #ed .slotb .badtag + .roll { margin-left: 0; }
+  #ed .roll:hover { color: var(--ink); border-color: var(--line); background: var(--panel); }
+  #ed .browse { display: flex; flex-direction: column; min-height: 0; border: 1px solid var(--line); border-radius: 10px; }
+  #ed .bh { padding: 9px 12px 2px; font-size: 13px; } #ed .bh .tag { margin-left: 6px; }
+  #ed .src { padding: 0 12px; font-size: 11px; color: var(--muted); }
+  #ed .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 6px 12px 9px; border-bottom: 1px solid var(--line); }
+  #ed .filters select { font: inherit; font-size: 12px; padding: 3px 4px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
+  #ed input.q { flex: 1; font: inherit; font-size: 13px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line);
+                background: var(--bg); color: var(--ink); min-width: 0; }
+  #ed .rows { flex: 1; overflow-y: auto; padding: 4px; }
+  #ed .hid { border-top: 1px solid var(--line); padding: 5px 12px; font-size: 12px; min-height: 30px; }
+  #ed .hid button { font: inherit; font-size: 12px; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+  #ed .row { display: grid; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 6px; cursor: pointer; font-size: 13px; min-height: 30px; }
+  #ed .row.mvrow { grid-template-columns: 200px 64px 34px 40px minmax(0, 1fr) auto; }
+  #ed .row.sprow { grid-template-columns: 28px 104px 132px 64px 30px minmax(0, 1fr) auto; }
+  #ed .row.abrow, #ed .row.itrow { grid-template-columns: 150px 64px minmax(0, 1fr) auto; }
+  #ed .row.sprd { grid-template-columns: 220px 64px minmax(0, 1fr); }
+  #ed .row.hi { background: var(--track); }
+  #ed .row.now { box-shadow: inset 3px 0 0 var(--ink); }
+  #ed .row.off { opacity: .4; cursor: default; }
+  #ed .row img { width: 28px; height: 28px; image-rendering: pixelated; }
+  #ed .row .desc { min-width: 0; font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #ed .row .tag { font-size: 11px; white-space: nowrap; }
+  #ed .row .num { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  #ed .empty { padding: 10px; font-size: 12px; color: var(--muted); }
+  /* how common: a bar with the share on it */
+  #ed .use { position: relative; height: 16px; border-radius: 4px; background: var(--track); overflow: hidden; }
+  #ed .use i { position: absolute; left: 0; top: 0; bottom: 0; background: color-mix(in srgb, var(--me) 35%, transparent); }
+  #ed .use b { position: relative; display: block; text-align: right; padding-right: 4px; font-size: 10px; line-height: 16px; font-variant-numeric: tabular-nums; }
+  #ed .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; flex: none; }
+  #ed .seg button { font: inherit; font-size: 11px; font-weight: 600; padding: 3px 8px; border: 0; background: var(--panel); color: var(--ink); cursor: pointer; }
+  #ed .seg button + button { border-left: 1px solid var(--line); }
+  #ed .seg button.on { background: var(--ink); color: var(--panel); }
+  #ed .tys { display: flex; gap: 3px; flex-wrap: wrap; }
+  #ed .tys button { width: 22px; height: 22px; border-radius: 50%; background: var(--ty); border: 2px solid transparent; padding: 0; cursor: pointer;
+                    display: inline-flex; align-items: center; justify-content: center; }
+  #ed .tys button img { width: 12px; height: 12px; }
+  #ed .tys button.on { border-color: var(--ink); } #ed .tys.picked button:not(.on) { opacity: .3; }
+  #ed .foot { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; min-height: 32px; }
+  #ed .foot .chg { padding-right: 9px; }
+</style></head>
+<body>
+<main>
+  <div class="head"><h1>MCTS explorer</h1><span class="sub">both players MCTS · click a pairing to play it, then Analyze the state it leads to</span></div>
+  <div class="strip" id="strip"></div>
+  <div id="view"><div id="anim"></div><div id="rest"></div></div>
+</main>
+<dialog id="preview">
+  <div class="pv-head"><h2 id="pv-title"></h2><button class="pv-x" onclick="$('#preview').close()" title="close (Esc)">×</button></div>
+  <p class="tag" id="pv-sub"></p>
+  <div id="pv-body"></div>
+  <div class="pv-foot explore-bar"><span class="tag" id="pv-seed"></span><span class="err" id="pv-err"></span>
+    <span style="flex:1"></span>
+    <button id="pv-reroll" class="ghost" onclick="previewRoll()">Re-roll the luck</button>
+    <button id="pv-go" onclick="previewGo()"></button></div>
+</dialog>
+<dialog id="ed"></dialog>
+<div class="optpop" id="optpop"></div>
+<script>
+const D = __DATA__;
+const TYPE = {normal:'#8a8a78',fire:'#e8602a',water:'#3b82e8',electric:'#e8b81a',grass:'#4aa83c',ice:'#4cb8c8',
+  fighting:'#b8312b',poison:'#9a3fa8',ground:'#c9a24a',flying:'#7b8fe0',psychic:'#e8457a',bug:'#8aa31a',
+  rock:'#a89438',ghost:'#6a4a8a',dragon:'#5b3fd8',dark:'#5a4a40',steel:'#8a8aa0',fairy:'#e883b4'};
+const CAT = {physical:'PHY', special:'SPE', status:'STA'};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = x => (x * 100).toFixed(x < .1 ? 1 : 0) + '%';
+const sc = (v) => `hsl(${Math.round(((v + 1) / 2) * 120)} 55% 42%)`;      // -1 red .. +1 green
+const SIDE = ['me', 'foe'];
+const PLAYER = ['Player 1', 'Player 2'];
+const sideTitle = s => `${PLAYER[s]} <span class="tag">MCTS</span>`;
+const num = v => (Math.abs(v) < .005 ? '0.00' : (v > 0 ? '+' : '') + v.toFixed(2));
+
+// a species icon: embedded once a state has it, else served (the editor lists every species)
+const ICON = new Set(D.catalog.species.filter(s => s.icon).map(s => s.id));
+const spriteSrc = sp => D.sprites[sp] || (ICON.has(sp) ? `/icon/${sp}.png` : '');
+const sprite = sp => (spriteSrc(sp) ? `<img src="${spriteSrc(sp)}" alt="">` : '');
+const monChip = (name, sp, side, attr = '') => `<span class="chip mon ${SIDE[side]}" ${attr}>${sprite(sp)}${esc(name)}</span>`;
+const tyIcon = ty => (D.typeicons[ty] ? `<img src="${D.typeicons[ty]}" alt="">` : '');
+const typeChip = ty => `<span class="chip type" style="background:${TYPE[ty] || '#888'}">${tyIcon(ty)}${esc(ty)}</span>`;
+const moveChip = (m, cls = '', attr = '') => `<span class="mv ${cls}" ${attr} style="--ty:${TYPE[m.type] || '#888'}" title="${esc(m.type)}">
+  <span class="ico">${tyIcon(m.type)}</span>${esc(m.move)}<span class="cat">${CAT[m.cat] || ''}${m.bp ? ' ' + m.bp : ''}</span></span>`;
+
+// One option: its user rows (board order), then a column of the other side's active Pokémon in board order. Each move
+// wires from its right end to whoever it is aimed at (c.hits: [side, team index]); a wire to the partner U-turns back
+// through the gap between the rows. Moves aimed at the user, its side or the field have no wire. drawWires() draws them.
+function wiredCombo(combo, side, teams) {
+  const foes = teams[1 - side].map((m, i) => ({...m, i})).filter(m => m.active && m.hp > 0);
+  const here = new Set([...foes.map(m => 'f' + m.i), ...combo.map(c => 'u' + c.user)]), wires = [], hit = new Set();
+  const rows = [...combo].sort((a, b) => a.user - b.user).map(c => {
+    const u = `data-u="${c.user}"`;
+    if (c.switch) return `<span class="slot">${monChip(c.mon, c.species, side, u)}<span class="swap"><span>&rarr;</span><span>&larr;</span></span>
+      ${monChip(c.switch, c.to, side)}</span>`;
+    const to = (c.hits || []).map(([s, i]) => (s === side ? 'u' : 'f') + i).filter(k => here.has(k) && k !== 'u' + c.user);
+    to.forEach(k => hit.add(k));
+    if (to.length) wires.push({u: c.user, color: TYPE[c.type] || '#888', to});
+    return `<span class="slot">${monChip(c.mon, c.species, side, u)}${c.mega ? '<span class="badge crit">MEGA</span>' : ''}${
+      moveChip(c, to.length ? 'line' : 'plain', `data-src="${c.user}"`)}</span>`;
+  });
+  const col = foes.map(m => `<span><span class="chip mon mini ${SIDE[1 - side]} ${hit.has('f' + m.i) ? '' : 'idle'}" data-dst="f${m.i}">${
+    sprite(m.species)}${esc(m.name)}</span></span>`).join('');
+  return `<div class="tgtrow" data-wires='${JSON.stringify(wires)}'><div class="users">${rows.join('')}</div>
+    <div class="lane"></div><div class="tcol">${col}</div><svg class="wires"></svg></div>`;
+}
+
+function drawWires() {
+  document.querySelectorAll('.tgtrow').forEach(row => {
+    const R = row.getBoundingClientRect();
+    const box = el => { const r = el.getBoundingClientRect();
+      return {l: r.left - R.left, r: r.right - R.left, t: r.top - R.top, b: r.bottom - R.top, m: (r.top + r.bottom) / 2 - R.top}; };
+    const at = sel => box(row.querySelector(sel)), src = w => at(`.mv[data-src="${w.u}"]`);
+    const wires = JSON.parse(row.dataset.wires);
+    const lines = [...row.querySelectorAll('.mv.line')].map(box);
+    const xc = lines.length ? Math.max(...lines.map(b => b.r)) + 10 : 0;     // where every foe wire starts to bend
+    // wires sharing a foe: the one level with it stays straight, the others land offset toward their own row
+    const ends = {};
+    wires.forEach(w => w.to.forEach(k => { if (k[0] === 'f') (ends[k] = ends[k] || []).push({w, y0: src(w).m}); }));
+    Object.entries(ends).forEach(([k, arr]) => {
+      const t = at(`[data-dst="${k}"]`), lim = Math.min(9, (t.b - t.t) / 2 - 2);
+      const want = g => t.m + (arr.length > 1 ? Math.max(-lim, Math.min(lim, (g.y0 - t.m) * .3)) : 0);
+      arr.sort((a, b) => a.y0 - b.y0);
+      let a = 0;
+      arr.forEach((g, i) => { if (Math.abs(g.y0 - t.m) < Math.abs(arr[a].y0 - t.m)) a = i; });
+      arr[a].y1 = want(arr[a]);
+      for (let i = a + 1; i < arr.length; i++) arr[i].y1 = Math.max(want(arr[i]), arr[i - 1].y1 + 8);
+      for (let i = a - 1; i >= 0; i--) arr[i].y1 = Math.min(want(arr[i]), arr[i + 1].y1 - 8);
+    });
+    const head = (x, y, dx, dy, col) => {                // tip at (x, y), pointing along (dx, dy)
+      const bx = x - dx * 8, by = y - dy * 8, px = -dy * 4.5, py = dx * 4.5;
+      return `<path d="M${bx + px} ${by + py}L${x} ${y}L${bx - px} ${by - py}Z" fill="${col}"/>`;
+    };
+    let svg = '';
+    // one group per move: its halos, then its strokes, so a spread move's fork never cuts itself but a later move's wire
+    // visibly passes over an earlier one where they cross
+    wires.forEach(w => {
+      const paths = [], heads = [], s = src(w);
+      w.to.forEach(k => {
+        if (k[0] === 'f') {
+          const t = at(`[data-dst="${k}"]`), y1 = ends[k].find(g => g.w === w).y1, x1 = t.l - 3, e = x1 - 7, h = Math.max(8, (e - xc) / 2);
+          paths.push(`M${s.r + 2} ${s.m}H${xc}C${xc + h} ${s.m} ${e - h} ${y1} ${e} ${y1}`);
+          heads.push([x1, y1, 1, 0]);
+          return;
+        }
+        // the partner: U-turn off the move's right end, run back along the gap, turn into the partner's edge.
+        // dir: which side of that edge the run sits (+1 = below it); the two directions turn in at different x
+        const t = at(`[data-u="${k.slice(1)}"]`), up = t.m < s.m, dir = up ? 1 : -1;
+        const tip = up ? t.b + 1 : t.t - 1, x1 = t.r - (up ? 14 : 32), sx = s.r + 2, sy = s.m;
+        const run = tip + dir * 11, yb = tip + dir * 8, k2 = Math.abs(run - sy) * .67;
+        paths.push(`M${sx} ${sy}H${sx + 3}C${sx + 3 + k2} ${sy} ${sx + 3 + k2} ${run} ${sx + 3} ${run}H${x1 + 3}Q${x1} ${run} ${x1} ${yb}`);
+        heads.push([x1, tip, 0, -dir]);
+      });
+      svg += paths.map(d => `<path d="${d}" fill="none" style="stroke:var(--halo)" stroke-width="6"/>`).join('') +
+             paths.map(d => `<path d="${d}" fill="none" stroke="${w.color}" stroke-width="2"/>`).join('') +
+             heads.map(([x, y, dx, dy]) => head(x, y, dx, dy, w.color)).join('');
+    });
+    row.querySelector('svg.wires').innerHTML = svg;
+  });
+}
+
+// T.table.cells[i][j]: MCTS's mean result (Player 1's view: +1 = Player 1 won every simulated game, -1 = Player 2 did)
+// when Player 1 plays T.options[i] and Player 2 T.table.cols[j]; T.table.tries[i][j]: how many iterations tried that
+// pair (0 = untried: the cell only holds the position's average).
+const NEG = 'var(--red)', POS = 'var(--good)';   // not --bad: that's the orange damage colour
+function evColor(v) {
+  return `color-mix(in srgb, ${v < 0 ? NEG : POS} ${Math.round(Math.min(1, Math.abs(v)) * 100)}%, var(--panel))`;
+}
+const favours = v => (Math.abs(v) < .1 ? 'about even' : `favours Player ${v > 0 ? 1 : 2}`);
+function vsBar(o, side) {                            // the option's expected score against the other side's mix
+  const v = side === 0 ? o.score : -o.score;         // Player 2's options are scored from its own view
+  const w = Math.min(1, Math.abs(v)) * 50;
+  return `<div class="ev-bar"><i style="left:${v < 0 ? 50 - w : 50}%;width:${w}%;background:${evColor(v < 0 ? -1 : 1)}"></i></div>
+    <div class="ev-txt">against ${PLAYER[1 - side]}'s mix: <b>${num(v)}</b> &middot; ${favours(v)}</div>`;
+}
+const SHORT = {'both foes': 'both', 'everyone else': 'all'};
+// side: whose option this is; a target sprite carries its own side (c.target_side) for its ring, which is all it needs
+// (no arrow). Each slot is two unbreakable groups (user + move, then target) so a narrow column can wrap it after the move
+const ring = (sp, s) => (D.sprites[sp] ? `<img class="sd ${SIDE[s]}" src="${D.sprites[sp]}" alt="">` : '');
+const miniCombo = (combo, side) => combo.map(c => `<div class="mini-slot">${c.switch
+  ? `<span class="g">${ring(c.species, side)}<span class="to">&#8644;</span>${ring(c.to, side)}</span>`
+  : `<span class="g">${ring(c.species, side)}<span class="ico" style="--ty:${TYPE[c.type] || '#888'}">${tyIcon(c.type)}</span>${esc(c.move)}</span>${c.target
+    ? `<span class="g">${c.target_species && D.sprites[c.target_species] ? ring(c.target_species, c.target_side)
+      : `<span class="to">&rarr; ${esc(SHORT[c.target] || c.target)}</span>`}</span>` : ''}`}</div>`).join('');
+const comboText = combo => combo.map(c => c.switch ? `${c.mon} ⇄ ${c.switch}` : `${c.mon} ${c.move}${c.target ? ' → ' + c.target : ''}`).join(' + ');
+// one line: the position's score, the iterations and the colour scale; the longer wording is in tooltips
+function matrixHead(T) {
+  return `<div class="scale-row"><span title="the position's expected score: +1 = Player 1 wins, &minus;1 = Player 2 wins"><b style="color:var(--me);font-size:12px">${
+      PLAYER[0]}</b> ${val(T.value)}</span>
+    <span>${T.iterations.toLocaleString()} iterations</span>
+    <span class="legend" title="&minus;1 = Player 2 won every simulated game, +1 = Player 1 won every one"><span>&minus;1</span>
+      <span class="grad" style="width:120px;background:linear-gradient(90deg, ${NEG}, var(--panel), ${POS})"></span><span>+1</span></span>
+    <span><span class="hatch"></span> untried</span></div>`;
+}
+// The grid's rows: side titles, Player 2's options, one per shown Player 1 option (then its fold arrow); its columns:
+// Player 1's options, one per shown Player 2 option (then its fold arrow). Options under CUT of their side's mix fold
+// away, except the top 2 and the played one.
+const CUT = .05, WEIGHT = .5, ROWS = 320, GOPEN = new Set();   // GOPEN: 'r' / 'c' = Player 1's / 2's folded options shown
+function gridMore(k) { GOPEN.has(k) ? GOPEN.delete(k) : GOPEN.add(k); render(); }
+function pickIdx(ps, played, k) {
+  const all = ps.map((_, i) => i), main = all.filter(i => ps[i] >= CUT || i < 2 || i === played);
+  return {shown: GOPEN.has(k) ? all : main, hid: all.filter(i => !main.includes(i))};
+}
+function cell(T, i, j, played, click) {
+  const v = T.table.cells[i][j], n = T.table.tries[i][j], hit = !!played && played[0] === i && played[1] === j;
+  const tip = `${comboText(T.options[i].combo)}  vs  ${comboText(T.table.cols[j].combo)}\n` +
+    (n ? `${num(v)}: average of ${n} simulated game${n > 1 ? 's' : ''} starting with this pair` : 'MCTS never tried this pair');
+  return {v, n, tip: esc(tip), cls: `${hit ? 'played' : ''} ${click ? 'click' : ''}`, on: click ? ` onclick="openPreview(${i}, ${j})"` : ''};
+}
+// played: [row, col] of the outlined cell (or null); click: cells are buttons that call openPreview(row, col);
+// pin: [row, col] of the options drawn in full under the grid (either can be null); teams: the board they were chosen on.
+// A header shows its option in full on hover (showOpt) and pins it on a click (pinOpt).
+function gridCard(T, played, click, pin, teams) {
+  const R = pickIdx(T.options.slice(0, T.table.cells.length).map(o => o.p), played ? played[0] : -1, 'r');
+  const C = pickIdx(T.table.cols.map(c => c.p), played ? played[1] : -1, 'c');
+  const rp = R.shown.map(i => T.options[i].p), cp = C.shown.map(j => T.table.cols[j].p);
+  const m = R.shown.length, n = C.shown.length, xr = R.hid.length > 0, xc = C.hid.length > 0;
+  const head = (cls, place, o, side, k) => `<div class="${cls} ${o.p < .02 ? 'dim' : ''} ${pin[side] === k ? 'pin' : ''}" style="${place}"
+    onmouseenter="showOpt(this, ${side}, ${k})" onmouseleave="hideOpt()" onclick="pinOpt(${side}, ${k})">
+    <div>${miniCombo(o.combo, side)}</div><span class="p">${pct(o.p)}</span></div>`;
+  const cells = R.shown.map((i, a) => C.shown.map((j, b) => {
+    const c = cell(T, i, j, played, click), place = `grid-row:${a + 3};grid-column:${b + 2}`, rc = `data-r="${i}" data-c="${j}"`;
+    return c.n ? `<div class="hy-cell ${Math.abs(c.v) > .55 ? 'strong' : ''} ${c.cls}"${c.on} ${rc} style="${place};background:${evColor(c.v)}" title="${c.tip}">${num(c.v)}</div>`
+      : `<div class="hy-cell untried ${c.cls}"${c.on} ${rc} style="${place}" title="${c.tip}">untried</div>`;
+  }).join('')).join('');
+  // a line in every gap, out through both header areas but not into the fold arrows' tracks
+  const lines = [...C.shown.map((_, b) => `<i class="hy-vl" style="grid-row:2 / ${m + 3};grid-column:${b + 2}"></i>`),
+    `<i class="hy-vl end" style="grid-row:2 / ${m + 3};grid-column:${n + 1}"></i>`,
+    ...R.shown.map((_, a) => `<i class="hy-hl" style="grid-column:1 / ${n + 2};grid-row:${a + 3}"></i>`),
+    `<i class="hy-hl end" style="grid-column:1 / ${n + 2};grid-row:${m + 2}"></i>`].join('');
+  const more = (k, hid, pOf, who, place) => {
+    const open = GOPEN.has(k), share = pct(hid.reduce((s, i) => s + pOf(i), 0)), arr = k === 'c' ? ['&rarr;', '&larr;'] : ['&darr;', '&uarr;'];
+    return `<button class="hy-more ${k}" style="${place}" onclick="gridMore('${k}')" title="${open ? `Hide ${who}'s options under ${CUT * 100}%`
+      : `Show ${hid.length} more ${who} option${hid.length > 1 ? 's' : ''} (${share} of the mix)`}"><span class="arr">${arr[+open]}</span><span>view${
+      k === 'c' ? '<br>' : ' '}${open ? 'less' : 'more'}</span></button>`;
+  };
+  const arrows = (xc ? more('c', C.hid, j => T.table.cols[j].p, 'Player 2', `grid-row:2;grid-column:${n + 2}`) : '') +
+    (xr ? more('r', R.hid, i => T.options[i].p, 'Player 1', `grid-row:${m + 3};grid-column:1`) : '');
+  const how = `Each cell: the average result of MCTS's simulated games starting with that pair. Outlined: the pair you went with. ` +
+    `Hover a row or column header to see its option, click it to pin it below.${click ? ' Click a cell to watch it play out.' : ''}`;
+  return `<div class="card"><h2 title="${how}">Matrix</h2>${matrixHead(T)}
+    <div class="hy-wrap"><div class="hybrid" data-rp="${rp.join(',')}" data-cp="${cp.join(',')}" data-xr="${+xr}" data-xc="${+xc}"
+      style="${hyTemplate(rp, cp.map(() => 'max-content').join(' '), xr, xc)}">${lines}
+      <div class="hy-title foe" style="grid-row:1;grid-column:2 / -1">${sideTitle(1)} <span class="tag">&middot; % = its mix</span></div>
+      <div class="hy-title me" style="grid-row:1 / 3;grid-column:1">${sideTitle(0)}<br><span class="tag">% = its mix</span></div>
+      ${C.shown.map((j, b) => head('hy-ch', `grid-row:2;grid-column:${b + 2}`, T.table.cols[j], 1, j)).join('')}
+      ${R.shown.map((i, a) => head('hy-rh', `grid-row:${a + 3};grid-column:1`, T.options[i], 0, i)).join('')}${cells}${arrows}</div></div>
+    ${pinnedHtml(T, pin, teams)}</div>`;
+}
+const optHtml = (o, side, teams) => `<div class="opt ${SIDE[side]}"><div class="optrow">${wiredCombo(o.combo, side, teams)}<span class="pct">${
+  pct(o.p)}</span></div>${vsBar(o, side)}</div>`;
+function pinnedHtml(T, pin, teams) {
+  const one = s => {
+    const k = pin[s], o = k == null ? null : s ? T.table.cols[k] : T.options[k];
+    return `<div><div class="side-title ${SIDE[s]}">${sideTitle(s)}${o ? ' <span class="tag">&middot; pinned</span>' : ''}</div>${o ? optHtml(o, s, teams)
+      : `<div class="empty">Click one of ${PLAYER[s]}'s ${s ? 'column' : 'row'} headers to see that option here.</div>`}</div>`;
+  };
+  const [i, j] = pin, n = i != null && j != null ? T.table.tries[i][j] : -1;
+  const both = n < 0 ? '' : n ? `These two together: <b>${num(T.table.cells[i][j])}</b> &middot; average of ${n} simulated game${n > 1 ? 's' : ''}`
+    : 'These two together: MCTS never tried this pair';
+  return `<div class="pinned"><div class="picks">${one(0)}${one(1)}</div>${both ? `<div class="together">${both}</div>` : ''}</div>`;
+}
+// the pinned pair: the user's pick, else the pair last played from here, else each side's top option
+const pinOf = node => node.pin || node.next || [0, 0];
+function pinOpt(s, k) {
+  const node = nodes[cur], p = [...pinOf(node)];
+  p[s] = p[s] === k ? null : k;
+  node.pin = p;
+  hideOpt();
+  render();
+}
+// a hovered header: its option in full beside it (right of a row, below a column) and only its row / column of cells lit
+function showOpt(h, s, k) {
+  const node = nodes[cur], T = node.analysis, o = s ? T.table.cols[k] : T.options[k], pop = $('#optpop');
+  pop.innerHTML = `<div class="side-title ${SIDE[s]}">${sideTitle(s)}</div>${optHtml(o, s, node.board)}
+    <div class="hint">${pinOf(node)[s] === k ? 'pinned below &middot; click to unpin' : 'click to pin it below the grid'}</div>`;
+  pop.classList.add('on');
+  const r = h.getBoundingClientRect(), W = pop.offsetWidth, H = pop.offsetHeight;
+  const x = s === 0 ? r.right + 10 : r.left + r.width / 2 - W / 2, y = s === 0 ? r.top + r.height / 2 - H / 2 : r.bottom + 10;
+  pop.style.left = clamp(x, 8, innerWidth - W - 8) + scrollX + 'px';
+  pop.style.top = clamp(y, 8, innerHeight - H - 8) + scrollY + 'px';
+  drawWires();
+  const g = h.closest('.hybrid');
+  g.classList.add('focusing');
+  g.querySelectorAll('.hy-cell').forEach(c => c.classList.toggle('lit', +c.dataset[s ? 'c' : 'r'] === k));
+}
+function hideOpt() {
+  $('#optpop').classList.remove('on');
+  document.querySelectorAll('.hybrid.focusing').forEach(g => g.classList.remove('focusing'));
+}
+// Rows: max(label, WEIGHT x share x ROWS). Columns share the card's width left after Player 1's options: each gets
+// max(label, k x share), with k as close to WEIGHT x that width as fits. If the labels alone are too wide, .narrow wraps
+// Player 2's labels after the move name and the columns split the width (.hy-wrap scrolls only if even that can't fit).
+// minmax() drops a max below its min, which is what makes "max(label, ...)" work. xr / xc: the fold arrows' tracks.
+const fit = px => `minmax(max-content, ${Math.round(px)}px)`;
+const hyTemplate = (rp, cols, xr, xc) => `grid-template-columns:max-content ${cols}${xc ? ' max-content' : ''};` +
+  `grid-template-rows:auto max-content ${rp.map(p => fit(WEIGHT * p * ROWS)).join(' ')}${xr ? ' max-content' : ''}`;
+function sizeHybrid() {
+  document.querySelectorAll('.hybrid').forEach(g => {
+    const rp = g.dataset.rp.split(',').map(Number), cp = g.dataset.cp.split(',').map(Number);
+    const xr = g.dataset.xr === '1', xc = g.dataset.xc === '1', set = cols => { g.style.cssText = hyTemplate(rp, cols.join(' '), xr, xc); };
+    g.classList.remove('narrow');
+    set(cp.map(() => 'max-content'));                                                // labels only, to measure them
+    const tracks = getComputedStyle(g).gridTemplateColumns.split(' ').map(parseFloat);
+    const first = tracks[0], label = tracks.slice(1, 1 + cp.length), arrow = xc ? tracks[1 + cp.length] + 7 : 0;
+    const room = g.parentElement.clientWidth - 5 - first - 7 * cp.length - arrow;    // 5: .hy-wrap's right padding
+    const need = k => cp.reduce((s, p, j) => s + Math.max(label[j], k * p), 0);
+    if (need(0) > room) { g.classList.add('narrow'); set(cp.map(() => 'minmax(min-content, max-content)')); return; }
+    let lo = 0, hi = WEIGHT * room;
+    if (need(hi) > room) { for (let i = 0; i < 24; i++) { const k = (lo + hi) / 2; if (need(k) > room) hi = k; else lo = k; } hi = lo; }
+    set(cp.map(p => fit(hi * p)));
+  });
+}
+
+// a Pokémon's moves in a 2x2 grid; PP shows once a move has been used. In a draft a slot can be empty, or hold a move
+// a swapped-in species can't learn.
+const moveRow = (mv, wrap = h => h) => `<span class="mrow">${wrap(!mv ? '<span class="nomove">empty</span>' : moveChip(mv))}${!mv ? '' : mv.bad
+  ? '<span class="badtag" title="this Pokémon can\'t learn it">can\'t learn</span>' : mv.pp < mv.max ? `<span class="pp" title="PP left">${mv.pp}/${mv.max}</span>` : ''}</span>`;
+// ed: {o (the Pokémon as the state has it), i} makes the card open the set editor, marking what the draft changed
+function monCard(m, side, ghost, ed) {
+  const f = m.hp / m.max, g = ghost ? ghost.hp / ghost.max : 0;
+  const col = f > .5 ? 'var(--good)' : f > .2 ? 'var(--warn)' : 'var(--bad)';
+  const lost = g > f ? `<i class="ghost" style="width:${g * 100}%"></i>` : '';
+  const lostTxt = ghost && ghost.hp > m.hp ? ` <span style="color:var(--bad)">&minus;${ghost.hp - m.hp}</span>` : '';
+  const swapped = ed && m.species !== ed.o.species;
+  const part = (kind, k, html) => (ed ? `<span class="${edMark(ed.o, m, kind, k) ? 'ed' : ''}" data-part="${kind}" data-k="${k ?? ''}">${html}</span>` : html);
+  return `<div class="mon-card ${SIDE[side]} ${m.active ? 'active' : 'bench'} ${m.hp <= 0 ? 'fainted' : ''} ${ed ? 'click' : ''} ${swapped ? 'swapped' : ''}"${
+      ed ? ` data-s="${side}" data-i="${ed.i}"` : m.mega ? ' title="It has Mega Evolved, so its set can\'t change now."' : ''}>
+    ${part('species', null, sprite(m.species))}
+    <div><div class="mon-top"><span>${part('species', null, `<b>${esc(m.name)}</b>`)}${swapped ? ` <span class="was">was ${esc(ed.o.name)}</span>` : ''} ${
+        m.types.map(typeChip).join(' ')}${m.status ? ` <span class="status">${esc(m.status)}</span>` : ''}
+        <span class="abil">${part('ability', null, esc(m.ability))}${m.item ? ' &middot; ' + part('item', null, esc(m.item)) : ''}</span></span>
+      <span class="hp">${m.hp}/${m.max}${lostTxt}${ed ? '<span class="pen">&#9998; edit</span>' : ''}</span></div>
+    <div class="bar">${lost}<i style="width:${f * 100}%;background:${col}"></i></div>
+    <div class="mset">${[0, 1, 2, 3].filter(k => m.moves[k] || (ed && ed.o.moves[k])).map(k => moveRow(m.moves[k], h => part('move', k, h))).join('')}</div></div></div>`;
+}
+// the current state's board, drawn from the draft when there is one; a card opens the set editor unless the game is
+// over or it has Mega Evolved. ghosts: the board before the turn that led here (faded red = HP lost on the way).
+function boardCard(node) {
+  const edited = node.via && node.via.edit, ghosts = node.parent >= 0 && !edited ? node.before : null, open = node.winner == null && !busy;
+  const sub = `${node.winner == null ? `before turn ${node.turn + 1}` : 'game over'}${
+    edited ? ` &middot; edited from ${stateName(node.parent)}` : ghosts ? ' &middot; faded red = HP lost getting here' : ''}`;
+  const team = s => work()[s].map((m, i) => { const o = node.board[s][i], g = ghosts && ghosts[s][i].species === m.species ? ghosts[s][i] : null;
+                                             return monCard(m, s, g, open && !o.mega ? {o, i} : null); }).join('');
+  return `<div class="card"><h2>${stateName(cur)} &middot; ${sub}</h2>${pendingHtml(node)}
+    <div class="boards">${[0, 1].map(s => `<div><div class="side-head"><div class="side-title ${SIDE[s]}">${sideTitle(s)}</div>
+        <button class="btn ghost sm" onclick="randomTeam(${s})" ${busy ? 'disabled' : ''} title="${node.turn
+          ? 'a new team is a new game: this goes back to State 0 and draws it there' : '4 common Pokémon, each with a common set'}">${DIE} Random team${
+          node.turn ? ' (from State 0)' : ''}</button></div>${team(s)}</div>`).join('')}</div></div>`;
+}
+
+// ---- cards ----
+const val = v => `<span class="val" style="background:${sc(v)}">${num(v)}</span>`;
+const winnerText = w => (w === 0 ? '<span class="verdict win">Player 1 won.</span>' : w === 1 ? '<span class="verdict loss">Player 2 won.</span>'
+  : w === -1 ? '<span class="verdict">Draw.</span>' : '<span class="verdict">No winner (turn limit).</span>');
+
+// ---- how we got here: the turn played out on a battle field ----
+// node.steps come from server.py turn_steps, each with `board`: the engine's board right after it, so the page only
+// tweens between consecutive boards (boards[0] = node.before). Pokémon are [side, team index].
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (p, a, b) => clamp((p - a) / (b - a));
+const ease = x => (x < .5 ? 2 * x * x : 1 - (-2 * x + 2) ** 2 / 2);
+const lerp = (a, b, x) => a + (b - a) * x;
+const bump = (p, a, b) => Math.sin(Math.PI * seg(p, a, b));
+const hpCol = f => (f > .5 ? 'var(--good)' : f > .2 ? 'var(--warn)' : 'var(--bad)');
+const STAT = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe', accuracy: 'Acc', evasion: 'Eva'};
+const OUT = {protected: 'Protected', immune: 'Immune', missed: 'Missed', blocked: 'Blocked', failed: 'Failed'};
+const DUR = {move: 1500, self: 950, switch: 1100, ability: 1300, faint: 900, cant: 950, residual: 1050, note: 1000};
+const DRAIN = {move: [.42, .72], residual: [.3, .65]};          // when HP moves within a step (others: .3 - .7)
+const K = ([s, i]) => s + ',' + i;
+const title = s => String(s || '').replace(/(^|[\s-])\w/g, c => c.toUpperCase());
+const boostTxt = (stat, c) => `${STAT[stat] || stat} ${c > 0 ? '+' : '−'}${Math.abs(c)}`;
+const boostChips = b => Object.entries(b || {}).filter(([, v]) => v).map(([s, v]) => `<span class="bs ${v > 0 ? 'up' : ''}">${boostTxt(s, v)}</span>`).join('');
+const stepSide = st => (st.k === 'switch' ? st.side : (st.user || st.mon || [0])[0]);
+const chipOf = (bd, mon, mini = false) => { const m = bd[mon[0]][mon[1]];
+  return `<span class="chip mon ${SIDE[mon[0]]} ${mini ? 'mini' : ''}">${sprite(m.species)}${esc(m.name)}</span>`; };
+const slotsOf = bd => bd.map(team => { const a = []; team.forEach((m, i) => { if (m.slot != null) a[m.slot] = i; }); return a; });
+
+function prepTurn(node) {
+  const steps = node.steps, boards = [node.before, ...steps.map(s => s.board)];
+  const dur = steps.map(st => DUR[st.k === 'move' && !arrowsOf(st) ? 'self' : st.k] || 1000);
+  const start = []; let acc = 0; dur.forEach(d => { start.push(acc); acc += d; });
+  const downAt = {};                                 // the board from which a Pokémon lies fainted
+  boards[0].forEach((team, s) => team.forEach((m, i) => { if (m.hp <= 0) downAt[s + ',' + i] = 0; }));
+  steps.forEach((st, k) => { if (st.k === 'faint' && !(K(st.mon) in downAt)) downAt[K(st.mon)] = k + 1; });
+  return {steps, boards, slots: boards.map(slotsOf), dur, start, total: acc, downAt};
+}
+// t (ms into the turn) -> step k at progress p; a boundary belongs to the step just finished, so a pause between
+// steps still shows what the last one did
+function locate(T, t) {
+  if (t <= 0) return {k: 0, p: 0};
+  for (let k = 0; k < T.steps.length; k++) if (t <= T.start[k] + T.dur[k]) return {k, p: (t - T.start[k]) / T.dur[k]};
+  return {k: T.steps.length - 1, p: 1};
+}
+function arrowsOf(st) {
+  const away = (src, dst) => dst.filter(m => K(m) !== K(src));
+  if (st.k === 'move') { const dst = away(st.user, st.hits.map(h => h.mon)); return dst.length ? {src: st.user, dst, color: TYPE[st.move.type] || '#888'} : null; }
+  if (st.k === 'ability' && st.mon) { const dst = away(st.mon, [...st.boosts.map(b => b[0]), ...st.blocked]); return dst.length ? {src: st.mon, dst, color: '#8a8a84'} : null; }
+  return null;
+}
+// what every Pokémon looks like at (k, p)
+function pose(T, k, p) {
+  const st = T.steps[k], S = T.boards[k], N = T.boards[k + 1], P = {slots: p < .5 ? T.slots[k] : T.slots[k + 1], draw: 0};
+  S.forEach((team, s) => team.forEach((m, i) => {
+    const key = s + ',' + i, n = N[s][i], d = T.downAt[key], q = P[key] = {m: p < .5 ? m : n, hp: m.hp, lag: m.hp,
+      on: m.slot != null ? 1 : 0, fade: d != null && d <= k ? 1 : 0, boosts: m.boosts, status: m.status,
+      glow: 0, hop: 0, shake: 0, flash: 0, pop: null, leave: 0, enter: 1};
+    if (n.hp !== m.hp) { const [a, b] = DRAIN[st.k] || [.3, .7];
+      q.hp = lerp(m.hp, n.hp, ease(seg(p, a, b))); q.lag = lerp(m.hp, n.hp, ease(seg(p, a + .15, b + .2))); }
+    if (p >= .45) { q.boosts = n.boosts; q.status = n.status; }
+  }));
+  const pop = (mon, text, cls, a) => { P[K(mon)].pop = {text, cls, o: seg(p, a, a + .08), y: ease(seg(p, a, a + .3))}; };
+  const hitFx = (mon, a) => Object.assign(P[K(mon)], {shake: bump(p, a, a + .2), flash: bump(p, a, a + .12)});
+  const actor = mon => Object.assign(P[K(mon)], {glow: seg(p, 0, .1), hop: bump(p, 0, .22)});
+  switch (st.k) {
+    case 'move':
+      actor(st.user); P.draw = seg(p, .1, .4);
+      st.self.forEach(e => pop(st.user, e.dmg ? `−${e.dmg} ${e.why}` : `+${e.heal} ${e.why}`, e.dmg ? 'dmg' : 'up', .62));
+      st.hits.forEach(h => {
+        if (h.dmg) { hitFx(h.mon, .4); pop(h.mon, `−${h.dmg}${h.crit ? ' crit!' : ''}`, 'dmg', .4); }
+        else if (h.heal) pop(h.mon, `+${h.heal}`, 'up', .4);
+        else if (h.out !== 'hit') pop(h.mon, OUT[h.out] || h.out, 'out', .4);
+      });
+      break;
+    case 'ability':
+      if (st.mon) { actor(st.mon); pop(st.mon, title(st.ability), 'out', .05); }
+      P.draw = seg(p, .15, .42);
+      st.boosts.forEach(([mon, stat, c]) => pop(mon, boostTxt(stat, c), c > 0 ? 'up' : 'down', .42));
+      st.blocked.forEach(mon => pop(mon, 'Blocked', 'out', .42));
+      break;
+    case 'switch': {
+      const n = P[st.side + ',' + st.in], o = st.out != null ? P[st.side + ',' + st.out] : null;
+      if (o) { o.leave = ease(seg(p, 0, .45)); o.on = p < .5 ? 1 - o.leave : 0; }
+      n.enter = ease(seg(p, .55, 1)); n.on = p < .5 ? 0 : n.enter;
+      break;
+    }
+    case 'faint': P[K(st.mon)].fade = ease(seg(p, 0, .8)); pop(st.mon, 'fainted', 'out', .05); break;
+    case 'cant': Object.assign(P[K(st.mon)], {glow: seg(p, 0, .1), shake: bump(p, .1, .5) * .6}); pop(st.mon, st.why || "can't move", 'out', .1); break;
+    case 'residual':
+      if (st.dmg) { hitFx(st.mon, .25); pop(st.mon, `−${st.dmg}${st.why ? ' ' + st.why : ''}`, 'dmg', .25); }
+      else pop(st.mon, `+${st.heal}${st.why ? ' ' + st.why : ''}`, 'up', .25);
+      break;
+    case 'note': if (st.mon) actor(st.mon); break;
+  }
+  return P;
+}
+
+// one set of wires in an SVG: halo + stroke per path, an arrowhead per path, a comet at each drawing tip
+const NS = 'http://www.w3.org/2000/svg';
+function wire(svg, paths, color) {
+  const g = document.createElementNS(NS, 'g'); svg.appendChild(g);
+  const add = (tag, a, style) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]);
+    if (style) e.setAttribute('style', style); g.appendChild(e); return e; };
+  const halo = paths.map(d => add('path', {d, fill: 'none', 'stroke-width': 7.5}, 'stroke:var(--halo)'));
+  const line = paths.map(d => add('path', {d, fill: 'none', stroke: color, 'stroke-width': 3.5}));
+  const len = line.map(e => e.getTotalLength());
+  const heads = line.map((e, i) => {
+    const a = e.getPointAtLength(len[i]), b = e.getPointAtLength(Math.max(0, len[i] - 4));
+    let dx = a.x - b.x, dy = a.y - b.y; const h = Math.hypot(dx, dy) || 1; dx /= h; dy /= h;
+    const bx = a.x - dx * 12, by = a.y - dy * 12, px = -dy * 6.6, py = dx * 6.6;
+    return add('path', {d: `M${bx + px} ${by + py}L${a.x} ${a.y}L${bx - px} ${by - py}Z`, fill: color});
+  });
+  const comets = line.map(() => add('circle', {r: 6, fill: color}, `filter:drop-shadow(0 0 5px ${color})`));
+  return {set(draw) {
+    g.style.opacity = draw > 0 ? 1 : 0;
+    line.forEach((e, i) => { for (const x of [e, halo[i]]) { x.style.strokeDasharray = `${len[i]} ${len[i]}`; x.style.strokeDashoffset = len[i] * (1 - draw); } });
+    heads.forEach(h => { h.style.opacity = seg(draw, .9, 1); });
+    comets.forEach((c, i) => { const q = line[i].getPointAtLength(len[i] * draw);
+      c.setAttribute('cx', q.x); c.setAttribute('cy', q.y); c.style.opacity = draw > 0 && draw < 1 ? 1 : 0; });
+  }};
+}
+const relBox = (el, root) => { const r = el.getBoundingClientRect(), R = root.getBoundingClientRect();
+  return {cx: (r.left + r.right) / 2 - R.left, m: (r.top + r.bottom) / 2 - R.top}; };
+function setHtml(el, html) { if (el._h !== html) { el._h = html; el.innerHTML = html; } }
+function setPop(el, pop) {
+  if (!pop) { el.style.opacity = 0; return; }
+  if (el._t !== pop.text + pop.cls) { el._t = pop.text + pop.cls; el.textContent = pop.text; el.className = 'pop ' + pop.cls; }
+  el.style.opacity = pop.o; el.style.transform = `translate(-50%, ${-pop.y * 14}px)`;
+}
+
+class Field {
+  constructor(box) {
+    this.box = box;
+    const slot = (s, i) => {
+      const plate = `<div class="plate"><div class="top"><span><b class="nm"></b><span class="st"></span><span class="bst"></span></span><span class="hp"></span></div>
+        <div class="hpb"><i class="lag"></i><i class="fill"></i></div></div>`;
+      const spr = `<div class="spw"><img class="spr" alt=""><span class="pop"></span></div>`;
+      return `<div class="fslot ${SIDE[s]}" data-s="${s}" data-i="${i}">${s ? plate + spr : spr + plate}</div>`;
+    };
+    box.innerHTML = `<div class="fd"><div class="bench foe"></div><div class="row foe">${slot(1, 0)}${slot(1, 1)}</div>
+      <div class="row me">${slot(0, 0)}${slot(0, 1)}</div><div class="bench me"></div><svg class="ov"></svg></div><div class="banner"></div>`;
+    this.slots = [...box.querySelectorAll('.fslot')].map(e => {
+      e._q = Object.fromEntries(['spr', 'spw', 'nm', 'st', 'bst', 'hp', 'fill', 'lag', 'pop', 'plate'].map(c => [c, e.querySelector('.' + c)]));
+      return e; });
+    this.key = null;
+  }
+  slotEl(mon, P) { return this.slots.find(e => +e.dataset.s === mon[0] && P.slots[mon[0]][+e.dataset.i] === mon[1]); }
+  layout(A, P) {
+    const root = this.box.querySelector('.fd'), svg = root.querySelector('svg');
+    svg.innerHTML = '';
+    const src = A && this.slotEl(A.src, P);
+    if (!src) return null;
+    const c = el => { const b = relBox(el._q.spw, root); return [b.cx, b.m]; };
+    const [sx, sy] = c(src), side = A.src[0];
+    const paths = A.dst.map(mon => this.slotEl(mon, P)).filter(Boolean).map(el => {
+      const [tx, ty] = c(el);
+      if (+el.dataset.s === side) {                        // the partner: an arc bowing toward the middle
+        const bow = side ? 1 : -1, d = Math.sign(tx - sx);
+        return `M${sx + d * 30} ${sy + bow * 26}Q${(sx + tx) / 2} ${sy + bow * 90} ${tx - d * 30} ${ty + bow * 26}`;
+      }
+      const dx = tx - sx, dy = ty - sy, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+      const ax = sx + ux * 42, ay = sy + uy * 42, bx = tx - ux * 44, by = ty - uy * 44;
+      return `M${ax} ${ay}Q${(ax + bx) / 2 - uy * 30} ${(ay + by) / 2 + ux * 30} ${bx} ${by}`;
+    });
+    return paths.length ? wire(svg, paths, A.color) : null;
+  }
+  banner(T, k, t, ends) {
+    if (t <= 0) return `<span class="n">${ends[0].toUpperCase()}</span><span class="tag">press play to watch the turn</span>`;
+    const st = T.steps[k], S = T.boards[k], N = T.boards[k + 1], c = (mon, bd = N) => chipOf(bd, mon, true);
+    const txt = {
+      move: () => `${c(st.user)} used ${moveChip(st.move)}${st.notes.length ? ` <span class="tag">${esc(st.notes.join(' · '))}</span>` : ''}`,
+      ability: () => `${st.mon ? c(st.mon) + "'s " : ''}${esc(title(st.ability))} <span class="tag">${st.boosts.map(([m, s, v]) => esc(N[m[0]][m[1]].name) + ' ' + boostTxt(s, v)).join(' · ')}</span>`,
+      switch: () => st.replace || st.out == null ? `${PLAYER[st.side]} sent in ${c([st.side, st.in])}`
+        : `${PLAYER[st.side]} withdrew ${c([st.side, st.out], S)} and sent in ${c([st.side, st.in])}`,
+      faint: () => `${c(st.mon)} fainted!`,
+      cant: () => `${c(st.mon)} couldn't move <span class="tag">${esc(st.why || '')}</span>`,
+      residual: () => st.dmg ? `${c(st.mon)} is hurt${st.why ? ' by ' + esc(st.why) : ''}` : `${c(st.mon)} restored HP${st.why ? ' (' + esc(st.why) + ')' : ''}`,
+      note: () => `${st.mon ? c(st.mon) : ''}<span>${esc(st.text)}</span>`,
+    }[st.k] || (() => esc(st.k));
+    return `<span class="n">${k + 1}/${T.steps.length}</span>${txt()}${t >= T.total ? ` <span class="n" style="margin-left:auto">${ends[1].toUpperCase()}</span>` : ''}`;
+  }
+  frame(T, k, p, P, t, ends) {
+    const st = T.steps[k];
+    for (const e of this.slots) {
+      const s = +e.dataset.s, id = P.slots[s][+e.dataset.i];
+      e.style.visibility = id == null ? 'hidden' : '';
+      if (id == null) continue;
+      const key = s + ',' + id, m = P[key], q = e._q, info = m.m;
+      if (e._sp !== info.species) { e._sp = info.species; q.spr.src = D.sprites[info.species] || ''; }
+      let ty = 26 * m.fade - 10 * m.hop, sc = 1, op = 1 - .8 * m.fade;
+      if (st.k === 'switch' && st.side === s && id === st.out) { sc = 1 - .5 * m.leave; op *= 1 - m.leave; ty += (s ? -1 : 1) * 18 * m.leave; }
+      if (st.k === 'switch' && st.side === s && id === st.in) { sc = .5 + .5 * m.enter; op = m.enter; }
+      q.spr.style.transform = `translate(${Math.sin(p * 110) * 6 * m.shake}px, ${ty}px) scale(${sc})`;
+      q.spr.style.opacity = op;
+      q.spr.style.filter = `grayscale(${m.fade}) brightness(${1 + 1.4 * m.flash}) drop-shadow(0 0 ${10 * m.glow}px var(--sidec))`;
+      q.plate.style.opacity = Math.max(op, .25);
+      q.fill.style.width = (m.hp / info.max * 100) + '%'; q.fill.style.background = hpCol(m.hp / info.max);
+      q.lag.style.width = (m.lag / info.max * 100) + '%';
+      setHtml(q.nm, esc(info.name));
+      setHtml(q.hp, `${Math.round(m.hp)}/${info.max}`);
+      setHtml(q.st, m.status ? `<span class="status">${esc(m.status.toUpperCase())}</span>` : '');
+      setHtml(q.bst, boostChips(m.boosts));
+      setPop(q.pop, m.pop);
+    }
+    [0, 1].forEach(s => setHtml(this.box.querySelector(`.bench.${SIDE[s]}`), (s ? '' : '<span class="lab">bench</span>') +
+      T.boards[k][s].map((_, i) => i).filter(i => !P.slots[s].includes(i)).map(i => {
+        const m = P[s + ',' + i], f = m.hp / m.m.max;
+        return `<span class="bmini ${m.fade >= 1 || m.hp <= 0 ? 'down' : ''}" title="${esc(m.m.name)}">${sprite(m.m.species)}<span class="mb"><i style="width:${f * 100}%;background:${hpCol(f)}"></i></span></span>`;
+      }).join('') + (s ? '<span class="lab">bench</span>' : '')));
+    if (this.key !== k) { this.key = k; this.wires = this.layout(arrowsOf(st), P); }
+    if (this.wires) this.wires.set(P.draw);
+    const banner = this.box.querySelector('.banner');
+    setHtml(banner, this.banner(T, k, t, ends));
+    banner.style.opacity = t <= 0 ? 1 : .35 + .65 * seg(p, 0, .08);
+  }
+}
+
+function stepRow(T, st, i) {
+  const S = T.boards[i], N = T.boards[i + 1], c = (mon, bd = N) => chipOf(bd, mon), mini = mon => chipOf(N, mon, true);
+  const tags = a => a.map(x => `<span class="tag">${esc(x)}</span>`).join('');
+  let body, cls = SIDE[stepSide(st)];
+  if (st.k === 'move') {
+    body = c(st.user) + moveChip(st.move, st.hits.length ? 'to' : '') + st.hits.map(h => {
+      const m = N[h.mon[0]][h.mon[1]], f = m.hp / m.max;
+      return `<span class="target">${mini(h.mon)}${h.dmg ? `<span class="dmg">&minus;${h.dmg} <small>${pct(h.dmg / m.max)}</small></span>
+        <span class="bar mini"><i style="width:${f * 100}%;background:${hpCol(f)}"></i></span>` : ''}${h.heal ? `<span class="dmg" style="color:var(--good)">+${h.heal}</span>` : ''}${
+        h.out !== 'hit' ? `<span class="badge">${OUT[h.out] || esc(h.out)}${h.why ? ' &middot; ' + esc(h.why) : ''}</span>` : ''}${
+        h.crit ? '<span class="badge crit">crit</span>' : ''}${h.ko ? '<span class="badge ko">KO</span>' : ''}</span>`;
+    }).join('') + tags(st.self.map(e => `${e.dmg ? '−' + e.dmg : '+' + e.heal} ${e.why}`)) + tags(st.notes);
+  } else if (st.k === 'switch') {
+    body = st.out != null ? `${c([st.side, st.out], S)}<span class="tag">&#8644;</span>${c([st.side, st.in])}<span class="tag">${st.replace ? 'replaces the fainted Pokémon' : 'switched in'}</span>`
+      : `${c([st.side, st.in])}<span class="tag">sent in</span>`;
+  } else if (st.k === 'ability') {
+    body = `${st.mon ? c(st.mon) : ''}<span class="mv" style="--ty:var(--muted)">${esc(title(st.ability))}</span><span class="tag">&rarr;</span>${
+      st.boosts.map(([mon, s, v]) => `<span class="target">${mini(mon)}<span class="bs ${v > 0 ? 'up' : ''}">${boostTxt(s, v)}</span></span>`).join('')}${
+      st.blocked.map(mon => `<span class="target">${mini(mon)}<span class="badge">Blocked</span></span>`).join('')}`;
+  } else if (st.k === 'faint') {
+    body = `${c(st.mon)}<span class="badge ko">fainted</span>`; cls += ' faint';
+  } else if (st.k === 'cant') {
+    body = `${c(st.mon)}<span class="tag">couldn't move${st.why ? ' &middot; ' + esc(st.why) : ''}</span>`;
+  } else if (st.k === 'residual') {
+    body = `${c(st.mon)}${st.dmg ? `<span class="dmg">&minus;${st.dmg}</span>` : `<span class="dmg" style="color:var(--good)">+${st.heal}</span>`}${st.why ? `<span class="tag">${esc(st.why)}</span>` : ''}`;
+  } else {
+    body = `${st.mon ? mini(st.mon) : ''}<span class="tag">${esc(st.text)}</span>`; cls += ' note';
+  }
+  return `<div class="step ${cls}" data-i="${i}"><span class="num">${i + 1}</span>${body}</div>`;
+}
+
+// a turn player: the field, its controls and the synced step list, inside `box`. The page has one ("How we got
+// here") and the pairing preview another.
+let SPEED = +(localStorage.getItem('exploreAnimSpeed') || 1);
+function setSpeed(v) {
+  SPEED = v; localStorage.setItem('exploreAnimSpeed', v);
+  document.querySelectorAll('.speeds button').forEach(b => b.classList.toggle('on', +b.dataset.v === v));
+}
+class Player {
+  // node: {before, steps}; ends: the names of the states the turn starts from and leads to
+  constructor(box, node, ends, autoplay) {
+    const T = this.T = prepTurn(node);
+    Object.assign(this, {box, ends, t: 0, playing: false, stopAt: null, last: 0, field: null});
+    if (!T.steps.length) { box.innerHTML = '<p class="tag">Nothing happened this turn.</p>'; return; }
+    box.innerHTML = `<div class="anim"><div><div class="fieldbox"></div>
+      <div class="player">
+        <button class="ctl" data-a="first" title="${ends[0]}">&#9198;</button>
+        <button class="ctl" data-a="back" title="previous step (&larr;)">&#9664;&#9664;</button>
+        <button class="ctl play" data-a="play" title="play / pause (space)">&#9654;</button>
+        <button class="ctl" data-a="fwd" title="play the next step (&rarr;)">&#9654;&#9654;</button>
+        <button class="ctl" data-a="last" title="${ends[1]}">&#9197;</button>
+        <span class="ends">${ends[0].slice(6)}</span><div class="scrub">${T.steps.map((st, i) =>
+          `<div class="sg ${SIDE[stepSide(st)]}" style="flex:${T.dur[i]}"><i></i><span>${i + 1}</span></div>`).join('')}</div><span class="ends">${ends[1].slice(6)}</span>
+        <span class="pos"></span>
+        <span class="speeds">${[.5, 1, 2].map(v => `<button data-v="${v}" class="${v === SPEED ? 'on' : ''}">${v}&times;</button>`).join('')}</span>
+      </div></div>
+      <div class="steps steplist">${T.steps.map((st, i) => stepRow(T, st, i)).join('')}</div></div>`;
+    this.field = new Field(box.querySelector('.fieldbox'));
+    const act = {first: () => this.seek(0), back: () => this.back(), play: () => this.toggle(), fwd: () => this.fwd(), last: () => this.seek(T.total)};
+    box.querySelectorAll('[data-a]').forEach(b => { b.onclick = () => act[b.dataset.a](); });
+    box.querySelectorAll('.speeds button').forEach(b => { b.onclick = () => setSpeed(+b.dataset.v); });
+    box.querySelectorAll('.steplist .step').forEach(e => { e.onclick = () => this.step(+e.dataset.i); });
+    const scrub = box.querySelector('.scrub'), at = e => { const r = scrub.getBoundingClientRect(); this.seek(clamp((e.clientX - r.left) / r.width) * T.total); };
+    scrub.onpointerdown = e => { scrub.setPointerCapture(e.pointerId); at(e); };
+    scrub.onpointermove = e => { if (scrub.hasPointerCapture(e.pointerId)) at(e); };
+    this.tickFn = now => this.tick(now);
+    if (autoplay) this.play();
+    else { this.t = T.total; this.draw(); }                       // show where the turn ended
+  }
+  draw() {
+    if (!this.field) return;
+    const T = this.T, box = this.box, {k, p} = locate(T, this.t), P = pose(T, k, p);
+    this.field.frame(T, k, p, P, this.t, this.ends);
+    box.querySelectorAll('.steplist .step').forEach((e, i) => {
+      e.classList.toggle('cur', this.t > 0 && i === k);
+      e.classList.toggle('future', this.t === 0 || i > k);
+    });
+    box.querySelectorAll('.scrub .sg i').forEach((e, i) => { e.style.width = seg(this.t, T.start[i], T.start[i] + T.dur[i]) * 100 + '%'; });
+    box.querySelector('.pos').textContent = this.t <= 0 ? this.ends[0] : this.t >= T.total ? this.ends[1] : `step ${k + 1} of ${T.steps.length}`;
+    box.querySelector('[data-a="play"]').innerHTML = this.playing ? '&#10074;&#10074;' : '&#9654;';
+  }
+  tick(now) {
+    if (!this.playing) return;
+    this.t = Math.min(this.T.total, this.t + Math.min(64, now - this.last) * SPEED); this.last = now;
+    if (this.stopAt != null && this.t >= this.stopAt) { this.t = this.stopAt; this.playing = false; this.stopAt = null; }
+    if (this.t >= this.T.total) this.playing = false;
+    this.draw();
+    if (this.playing) requestAnimationFrame(this.tickFn);
+  }
+  play(until = null) {
+    if (!this.field) return;
+    if (this.t >= this.T.total && until == null) this.t = 0;
+    this.stopAt = until; this.playing = true; this.last = performance.now(); requestAnimationFrame(this.tickFn); this.draw();
+  }
+  stop() { this.playing = false; this.stopAt = null; }
+  pause() { this.stop(); this.draw(); }
+  toggle() { this.playing ? this.pause() : this.play(); }
+  seek(x) { this.stop(); this.t = clamp(x, 0, this.T.total); this.draw(); }
+  bounds() { return [0, ...this.T.start.map((s, i) => s + this.T.dur[i])]; }
+  back() { this.seek(Math.max(0, ...this.bounds().filter(b => b < this.t - 1))); }
+  fwd() { const b = this.bounds().find(b => b > this.t + 1); if (b != null) { this.stop(); this.play(b); } }
+  step(i) { this.stop(); this.t = this.T.start[i]; this.play(this.T.start[i] + this.T.dur[i]); }
+  relayout() { if (this.field) { this.field.key = null; this.draw(); } }
+}
+
+// the page's player, rebuilt only when the state shown (or its roll) changes
+const PAGE = {key: null, player: null};
+function buildAnim(node, key) {
+  PAGE.key = key;
+  if (PAGE.player) PAGE.player.stop();
+  PAGE.player = null;
+  if (key == null) { $('#anim').innerHTML = ''; return; }
+  $('#anim').innerHTML = `<div class="card"><h2>How we got here &middot; turn ${node.turn} from ${stateName(node.parent)}</h2>
+    <div class="explore-bar"><span class="tag">${pairText(node.via)} &middot; roll seed ${node.seed}</span>
+      <button id="reroll" onclick="reroll()">Re-roll this turn</button></div>
+    <div class="turnbox"></div>
+    <details><summary>raw battle log</summary><pre class="log">${esc(node.log.join('\n'))}</pre></details></div>`;
+  PAGE.player = new Player($('#anim .turnbox'), node, [stateName(node.parent), stateName(cur)], node.autoplay);
+  node.autoplay = false;                                          // watched once; revisits show where it ended
+}
+
+// ---- the pairing preview: a grid cell played out in a window; "Go to" makes it the next state ----
+let PV = null;          // {from (node index), i, j, key, via, s (a /api/step result), child (s is that child's roll), busy, err, player}
+const asStep = n => ({state: n.state, before: n.before, after: n.board, steps: n.steps, log: n.log, winner: n.winner, turn: n.turn, seed: n.seed});
+function openPreview(i, j) {
+  const node = nodes[cur], T = node.analysis, key = `${i},${j}`;
+  PV = {from: cur, i, j, key, s: null, child: false, busy: false, err: '', player: null,
+        via: {i, j, rowCombo: T.options[i].combo, colCombo: T.table.cols[j].combo, row: T.options[i].choices, col: T.table.cols[j].choices}};
+  $('#preview').showModal();
+  if (key in node.children) { PV.s = asStep(nodes[node.children[key]]); PV.child = true; renderPreview(true); }
+  else previewRoll();
+}
+async function previewRoll() {
+  const pv = PV;
+  pv.busy = true; pv.err = ''; renderPreview(false);
+  try {
+    const s = await api('/api/step', {state: nodes[pv.from].state, row: pv.via.row, col: pv.via.col, seed: newSeed()});
+    if (PV === pv) Object.assign(pv, {s, child: false});
+  } catch (e) { pv.err = e.message; }
+  pv.busy = false;
+  if (PV === pv) renderPreview(true);
+}
+function renderPreview(rebuild) {
+  const pv = PV, node = nodes[pv.from], T = node.analysis, ends = [stateName(pv.from), `State ${node.turn + 1}`];
+  const v = T.table.cells[pv.i][pv.j], n = T.table.tries[pv.i][pv.j];
+  $('#pv-title').innerHTML = `${ends[0]} &rarr; ${ends[1]} &middot; ${pairText(pv.via)}`;
+  $('#pv-sub').innerHTML = n ? `MCTS's average result for this pair over ${n} simulated game${n > 1 ? 's' : ''}: ${val(v)} &middot; ${favours(v)}.
+      This is one roll of its luck (damage, crits, misses); re-roll to see others.`
+    : 'MCTS never tried this pair, so its cell only holds the position\'s average. This is one roll of how it plays out.';
+  $('#pv-seed').textContent = pv.busy ? 'Playing the turn…' : pv.s ? `roll seed ${pv.s.seed}${pv.s.winner != null ? ' · ends the game' : ''}` : '';
+  $('#pv-err').textContent = pv.err;
+  $('#pv-reroll').disabled = pv.busy;
+  $('#pv-go').disabled = pv.busy || !pv.s;
+  $('#pv-go').innerHTML = `Go to ${ends[1]} &rarr;`;
+  if (rebuild && pv.s) {
+    if (pv.player) pv.player.stop();
+    pv.player = new Player($('#pv-body'), pv.s, ends, true);
+  }
+}
+function previewGo() {
+  const pv = PV, node = nodes[pv.from], k = node.children[pv.key];
+  node.next = [pv.i, pv.j];
+  if (k != null && pv.child) cur = k;
+  else if (k != null) { Object.assign(nodes[k], fromStep(pv.s, pv.from, pv.via), {autoplay: false}); cur = k; }   // a new roll replaces the old one (and its analysis)
+  else { nodes.push({...fromStep(pv.s, pv.from, pv.via), autoplay: false}); node.children[pv.key] = nodes.length - 1; cur = nodes.length - 1; }
+  $('#preview').close();
+  render();
+}
+
+addEventListener('keydown', e => {
+  const p = $('#preview').open ? PV && PV.player : PAGE.player;
+  if ($('#ed').open || !p || !p.field || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if (e.key === ' ') { e.preventDefault(); p.toggle(); }
+  else if (e.key === 'ArrowLeft') p.back();
+  else if (e.key === 'ArrowRight') p.fwd();
+});
+
+// ---- explorer: click a pairing to play it, Analyze the state it leads to (served by server.py) ----
+// Each node: {state (engine snapshot), board, before, steps, log, winner, turn, analysis, parent, seed,
+// via: the pair that led here {i, j, rowCombo, colCombo, row, col (engine choices)} or the edit {edit: [what changed]},
+// children: {"i,j": node index}, next: [i, j] of the child last opened}. The server keeps nothing.
+const nodes = [];
+let cur = 0, busy = '', note = '';
+async function api(path, body) {
+  const r = await fetch(path, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+  const out = await r.json();
+  if (!r.ok) throw new Error(out.error || r.statusText);
+  Object.assign(D.sprites, out.sprites || {});
+  return out;
+}
+async function run(label, f) {
+  busy = label; note = ''; render();
+  try { await f(); } catch (e) { note = e.message; }
+  busy = ''; render();
+}
+const newSeed = () => Math.floor(Math.random() * 2 ** 31);
+let ROLLS = 0;                   // a fresh turn (played or re-rolled) gets a new roll id and autoplays once
+const fromStep = (s, parent, via) => ({state: s.state, board: s.after, before: s.before, steps: s.steps, log: s.log,
+  winner: s.winner, turn: s.turn, seed: s.seed, analysis: null, parent, via, children: {}, next: null,
+  roll: ++ROLLS, autoplay: true});
+function reroll() {
+  const node = nodes[cur], parent = nodes[node.parent];
+  run('Re-rolling…', async () => {
+    const s = await api('/api/step', {state: parent.state, row: node.via.row, col: node.via.col, seed: newSeed()});
+    Object.assign(node, fromStep(s, node.parent, node.via));        // its analysis and children belonged to the old roll
+  });
+}
+function analyze() {
+  const node = nodes[cur], budget = Math.max(.2, +($('#budget') ? $('#budget').value : D.budget) || D.budget);
+  run(`Analyzing (${budget} s)…`, async () => {
+    node.analysis = await api('/api/analyze', {state: node.state, budget});
+    node.next = null; node.pin = null; node.children = {};          // a new analysis can order its options differently
+  });
+}
+const pathTo = k => (k < 0 ? [] : [...pathTo(nodes[k].parent), k]);
+// a state is named by the turns played to reach it, with a prime per edit since: State 0 (the start), 2, 2′, 2″
+const primes = k => (nodes[k].via && nodes[k].via.edit ? 1 + primes(nodes[k].parent) : 0);
+const stateName = (k, extra = 0) => `State ${nodes[k].turn}${'′'.repeat(primes(k) + extra)}`;
+const pairText = via => `${esc(comboText(via.rowCombo))} <i>vs</i> ${esc(comboText(via.colCombo))}`;
+const viaText = via => (via.edit ? `&#9998; ${via.edit.map(esc).join(' &middot; ')}` : pairText(via));
+function renderExplore() {
+  const path = pathTo(cur), node = nodes[cur];
+  $('#strip').innerHTML = '<span class="lbl">Path</span>' + path.map((k, d) =>
+    (d ? `<span class="crumb-pair">${viaText(nodes[k].via)}</span>&rarr;` : '') +
+    `<button class="crumb ${k === cur ? 'cur' : ''}" data-k="${k}">${stateName(k)}</button>`).join('');
+  document.querySelectorAll('#strip .crumb').forEach(b => b.onclick = () => { cur = +b.dataset.k; render(); });
+  const key = node.parent >= 0 && !node.via.edit ? `${cur}:${node.roll}` : null;
+  if (key !== PAGE.key) buildAnim(node, key);
+  if ($('#reroll')) $('#reroll').disabled = !!busy;
+  let h = '';
+  h += boardCard(node);
+  if (node.winner != null) {
+    h += `<div class="card"><h2>Result</h2><p>${winnerText(node.winner)}</p></div>`;
+  } else {
+    h += `<div class="card explore-bar"><button onclick="analyze()" ${busy ? 'disabled' : ''}>${node.analysis ? 'Analyze again' : 'Analyze'}</button>
+      <label class="tag">MCTS for <input id="budget" type="number" min="0.2" step="0.5" value="${D.budget}"> s</label>
+      <span class="tag">${busy ? esc(busy) : changes().length ? `You have changes that aren't applied: this is still ${stateName(cur)} as it was.`
+        : node.analysis ? '' : 'Run MCTS on this state to see its matrix of pairings.'}</span>
+      ${note ? `<span class="err">${esc(note)}</span>` : ''}</div>`;
+    if (node.analysis) h += gridCard(node.analysis, node.next, !busy, pinOf(node), node.board);
+  }
+  hideOpt();
+  $('#rest').innerHTML = h;
+}
+
+// ---- the set editor: a board card opens its set in a window; a die draws from usage data (server.py catalog()),
+// offering only what the engine simulates. Edits wait in a draft until Apply makes them a new state (/api/edit). ----
+const {species: SPECIES, usage: USAGE, moves: MOVES, abilities: ABIL, items: ITEMS, can: CAN, natures: NATURES, warnings: USAGE_WARN} = D.catalog;
+const SP = Object.fromEntries(SPECIES.map(s => [s.id, s]));
+const DIE = '<svg class="die" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/>'
+  + [[5, 5], [11, 5], [8, 8], [5, 11], [11, 11]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.3" fill="currentColor"/>`).join('') + '</svg>';
+const clone = x => JSON.parse(JSON.stringify(x));
+const abName = id => (ABIL[id] || {name: id}).name;
+const itName = id => (id ? (ITEMS[id] || {name: id}).name : null);
+const CAN_MV = new Set(CAN.moves), CAN_AB = new Set(CAN.abilities), CAN_IT = new Set(CAN.items);
+const isStone = id => !!id && /Mega Evolve/.test((ITEMS[id] || {}).desc || '');
+const okMove = id => CAN_MV.has(id), okAbility = id => CAN_AB.has(id);
+const okItem = (sp, id) => !id || CAN_IT.has(id) || SP[sp].stones[id] === true;
+const ownItem = (sp, id) => !isStone(id) || id in SP[sp].stones;          // another species' Mega Stone does nothing
+const learns = (sp, id) => SP[sp].learn.includes(id);
+const STATS = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe'], NO_SP = '0/0/0/0/0/0';
+const spOf = sp => String(sp || NO_SP).split('/').map(Number);
+const spTxt = sp => spOf(sp).map((v, j) => (v ? `${v} ${STATS[j]}` : '')).filter(Boolean).join(' / ') || 'no stat points';
+const natTxt = n => n[0].toUpperCase() + n.slice(1);
+const maxHp = (sp, s) => SP[sp].hp + spOf(s)[0];
+const pctOf = m => Math.round(m.hp / m.max * 100);
+const mvId = mv => (mv ? mv.id : null);
+const fresh = id => ({...MOVES[id], id, max: MOVES[id].pp});                 // a move with full PP
+
+// the draft: the current state's board (board() entries) with the edits not yet applied; a move slot may be empty (null)
+let draft = null;                    // {base: the board it edits, teams}
+const base = () => nodes[cur].board;
+const work = () => (draft && draft.base === base() ? draft.teams : base());
+function edit(s, i, f) {
+  if (!draft || draft.base !== base()) draft = {base: base(), teams: clone(base())};
+  f(draft.teams[s][i], base()[s][i]);
+  settle();
+}
+function settle() { if (!changes().length) draft = null; render(); }
+// each op changes m (a draft Pokémon); o is the same Pokémon in the state. Like /api/edit: a kept move keeps its PP, a
+// new max HP keeps the HP share, and another species starts with no status or stat changes.
+function opMove(m, o, k, id) {
+  const old = id && m.species === o.species && o.moves.find(x => mvId(x) === id);
+  m.moves[k] = !id ? null : old ? clone(old) : fresh(id);
+}
+function opAbility(m, o, id) { m.set.ability = id; m.ability = abName(id); }
+function opItem(m, o, id) { m.set.item = id || null; m.item = itName(id); }
+function withHp(m, o) {
+  const max = maxHp(m.species, m.set.sp);
+  Object.assign(m, {max, hp: max === o.max && m.species === o.species ? o.hp : o.hp && Math.max(1, Math.round(o.hp / o.max * max))});
+}
+function opSpread(m, o, nature, sp) { m.set.nature = nature; m.set.sp = sp; withHp(m, o); }
+function opSpecies(m, o, id) {
+  if (id === o.species) return Object.assign(m, clone(o));
+  const n = SP[id];
+  Object.assign(m, {species: id, name: n.name, types: n.types, status: null, boosts: {}});
+  opAbility(m, o, n.abilities.includes(m.set.ability) && okAbility(m.set.ability) ? m.set.ability : bestAbility(id));
+  if (!ownItem(id, m.set.item)) opItem(m, o, null);
+  m.moves = m.moves.map(mv => mv && {...mv, bad: !learns(id, mv.id)});
+  withHp(m, o);
+}
+function opSet(m, o, set) {          // a whole set; a move it already has stays in its slot
+  if (set.species !== m.species) opSpecies(m, o, set.species);
+  const slots = [null, null, null, null], rest = [];
+  set.moves.forEach(id => { const j = m.species === o.species ? o.moves.findIndex(x => mvId(x) === id) : -1;
+                            if (j >= 0 && !slots[j]) slots[j] = id; else rest.push(id); });
+  rest.forEach(id => { slots[slots.indexOf(null)] = id; });
+  slots.forEach((id, k) => opMove(m, o, k, id));
+  opAbility(m, o, set.ability); opItem(m, o, set.item); opSpread(m, o, set.nature, set.sp);
+}
+function monChanges(o, m) {
+  if (m.species !== o.species) return [{kind: 'species', text: `${o.name} → ${m.name}`}];
+  const out = [], a = o.set, b = m.set;
+  if (b.ability !== a.ability) out.push({kind: 'ability', text: `${m.name}: ${abName(a.ability)} → ${abName(b.ability)}`});
+  if (b.item !== a.item) out.push({kind: 'item', text: `${m.name}: ${itName(a.item) || 'no item'} → ${itName(b.item) || 'no item'}`});
+  if (b.nature !== a.nature || b.sp !== a.sp) out.push({kind: 'spread', text: `${m.name}: ${natTxt(b.nature)}, ${spTxt(b.sp)}`});
+  [0, 1, 2, 3].forEach(k => { const x = o.moves[k], y = m.moves[k];
+    if (mvId(x) !== mvId(y)) out.push({kind: 'move', k, text: `${m.name}: ${x ? x.move : 'empty'} → ${y ? y.move : 'empty'}`}); });
+  return out;
+}
+function monSummary(o, m) {          // one line per Pokémon: its change, or a list of what changed
+  const cs = monChanges(o, m), mv = cs.filter(c => c.kind === 'move');
+  if (cs.length <= 1) return cs[0] && cs[0].text;
+  return `${m.name}: ${[mv.length === 1 ? mv[0].text.split(': ')[1] : mv.length ? `${mv.length} moves` : '',
+                         ...cs.filter(c => c.kind !== 'move').map(c => c.kind)].filter(Boolean).join(', ')}`;
+}
+const drafted = () => draft && draft.base === base();
+const changes = () => (drafted() ? base().flatMap((t, s) => t.flatMap((o, i) => monChanges(o, draft.teams[s][i]))) : []);
+const edits = () => (drafted() ? base().flatMap((t, s) => t.map((o, i) => ({s, i, text: monSummary(o, draft.teams[s][i]),
+  title: monChanges(o, draft.teams[s][i]).map(c => c.text).join('\n')})).filter(e => e.text)) : []);
+const monBlockers = m => [...m.moves.filter(mv => mv && mv.bad).map(mv => `${m.name} can't learn ${mv.move}`),
+                          ...(m.moves.some(Boolean) ? [] : [`${m.name} has no moves`])];
+const blockers = () => work().flatMap(t => t.flatMap(monBlockers));
+const edMark = (o, m, kind, k) => m.species === o.species && (kind === 'move' ? mvId(m.moves[k]) !== mvId(o.moves[k])
+  : kind === 'spread' ? m.set.nature !== o.set.nature || m.set.sp !== o.set.sp : kind !== 'species' && m.set[kind] !== o.set[kind]);
+function revertMon(s, i) { edit(s, i, (m, o) => Object.assign(m, clone(o))); }
+function discard() { draft = null; render(); }
+const specOf = m => ({species: m.species, ability: m.set.ability, item: m.set.item, nature: m.set.nature, sp: m.set.sp,
+                      moves: m.moves.filter(Boolean).map(x => x.id)});
+function applyEdits() {
+  if (!changes().length || blockers().length) return;
+  const from = cur, text = edits().map(e => e.text), teams = work().map(t => t.map(specOf));
+  run('Applying your changes…', async () => {
+    const s = await api('/api/edit', {state: nodes[from].state, teams});
+    nodes.push({state: s.state, board: s.board, before: null, steps: [], log: [], winner: s.winner, turn: s.turn, seed: null,
+                analysis: null, parent: from, via: {edit: text}, children: {}, next: null, roll: ++ROLLS, autoplay: false});
+    cur = nodes.length - 1; draft = null;
+  });
+}
+function pendingHtml(node) {
+  const es = edits(), bl = blockers();
+  if (!es.length) return `<div class="pending">${node.winner != null ? 'The game is over. A random team starts a new game from State 0.'
+    : 'Click a card to edit its set, or draw a random team. Changes wait here until you apply them.'}</div>`;
+  return `<div class="pending has"><b>&#9998;</b>${es.map(e => `<span class="chg" title="${esc(e.title)}">${esc(e.text)}<button title="undo" onclick="revertMon(${e.s}, ${e.i})">&times;</button></span>`).join('')}
+    ${bl.length ? `<span class="block">${esc(bl[0])}${bl.length > 1 ? ` (+${bl.length - 1} more)` : ''}</span>` : ''}
+    <span class="go"><button class="btn ghost" onclick="discard()" ${busy ? 'disabled' : ''}>Discard</button>
+      <button class="btn" onclick="applyEdits()" ${bl.length || busy ? 'disabled' : ''}>Apply as ${stateName(cur, 1)} &rarr;</button></span></div>`;
+}
+
+// usage, and drawing by it (only what the engine simulates)
+const pickW = pairs => {             // one key of [[key, weight]], drawn in proportion to its weight
+  let r = Math.random() * pairs.reduce((a, [, w]) => a + w, 0);
+  for (const [x, w] of pairs) if ((r -= w) < 0) return x;
+  return pairs.length ? pairs[pairs.length - 1][0] : undefined;
+};
+const U = sp => USAGE[sp] || {moves: {}, tail: {}, items: {}, abilities: {}, natures: {}, spreads: {}};
+const commonMoves = (sp, skip = []) => Object.entries(U(sp).moves).filter(([id]) => okMove(id) && learns(sp, id) && !skip.includes(id));
+// where a drawn move comes from: its common moves, then Pikalytics' longer list, then (rarely) anything it can learn
+function movePool(sp, skip = []) {
+  const tail = Object.entries(U(sp).tail).filter(([id]) => !skip.includes(id));
+  const any = SP[sp].learn.filter(id => okMove(id) && !skip.includes(id)).map(id => [id, 1]);
+  return [commonMoves(sp, skip), tail, any].find(p => p.length) || [];
+}
+function bestAbility(sp, draw = false) {
+  const used = Object.entries(U(sp).abilities).filter(([a]) => okAbility(a));
+  if (used.length) return draw ? pickW(used) : used[0][0];
+  return SP[sp].abilities.find(okAbility) || 'noability';
+}
+const sampleItem = sp => pickW(Object.entries(U(sp).items).filter(([i]) => okItem(sp, i) && ownItem(sp, i))) || null;
+function sampleMoves(sp) {           // 4 moves, drawn without replacement by how often they're run
+  const out = [];
+  for (let pool = movePool(sp); out.length < 4 && pool.length; pool = movePool(sp, out)) out.push(pickW(pool));
+  return out;
+}
+// the data lists natures and spreads separately, so a draw that clashes (Modest with 32 Atk and no SpA) is drawn again
+function fits(nature, sp) {
+  const nat = NATURES[nature], v = spOf(sp);
+  if (!nat) return true;
+  const [up, down] = nat, other = {1: 3, 3: 1}[up];
+  return v[down] < 20 && !(other && v[up] === 0 && v[other] >= 20);
+}
+function sampleSpread(sp) {
+  const u = U(sp), nats = Object.entries(u.natures), sprs = Object.entries(u.spreads);
+  if (!sprs.length) return {nature: 'hardy', sp: NO_SP};
+  for (let t = 0; t < 40; t++) { const nature = pickW(nats) || 'hardy', s = pickW(sprs); if (fits(nature, s)) return {nature, sp: s}; }
+  return {nature: 'hardy', sp: pickW(sprs)};
+}
+const commonSet = sp => ({species: sp, moves: sampleMoves(sp), ability: bestAbility(sp, true), item: sampleItem(sp), ...sampleSpread(sp)});
+// "common" Pokémon: on at least 1% of tournament teams (Pikalytics), with 2+ common moves the engine plays
+const POOL = Object.entries(USAGE).filter(([sp, u]) => SP[sp] && u.use >= 1 && commonMoves(sp).length >= 2).map(([sp, u]) => [sp, u.use]);
+const sampleSpecies = skip => pickW(POOL.filter(([sp]) => !skip.includes(sp)));
+// a new team is a new game, so it is always drawn at the start: the latest State 0 on the path
+function randomTeam(s) {
+  const start = pathTo(cur).filter(k => nodes[k].turn === 0).pop();
+  if (start !== cur) {
+    if (changes().length && !confirm(`Drop the changes you haven't applied to ${stateName(cur)}?`)) return;
+    cur = start;
+  }
+  if (!drafted()) draft = {base: base(), teams: clone(base())};
+  const picked = [];
+  draft.teams[s].forEach((m, i) => { const sp = sampleSpecies(picked); picked.push(sp); opSet(m, base()[s][i], commonSet(sp)); });
+  settle();
+}
+
+// the editor browser's rows: {rows: [{id, html, off (can't pick), now (the current pick), cls}], hidden (left out: the
+// engine can't simulate them)}
+const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+const hit = (s, q) => norm(s).includes(norm(q));
+const accTxt = a => (a === true ? '&mdash;' : a + '%');
+const useCell = (p, tip) => `<span class="use" title="${tip}">${p >= .005 ? `<i style="width:${Math.min(100, p * 100)}%"></i><b>${Math.round(p * 100)}%</b>` : ''}</span>`;
+const NOT_SIM = '<span class="tag">not in the engine</span>';
+const sortRows = (list, sort, use, name) => list.sort(sort === 'common' ? (a, b) => (use(b) || 0) - (use(a) || 0) || name(a).localeCompare(name(b))
+  : (a, b) => name(a).localeCompare(name(b)));
+function moveRows(m, k, {q = '', cat = '', type = '', sort = 'common', all = false} = {}) {
+  const u = U(m.species).moves, taken = new Set(m.moves.filter((x, j) => x && j !== k).map(x => x.id));
+  const match = SP[m.species].learn.filter(id => hit(MOVES[id].move, q) && (!cat || MOVES[id].cat === cat) && (!type || MOVES[id].type === type));
+  return {hidden: match.filter(id => !okMove(id)).length, rows: sortRows(match.filter(id => all || okMove(id)), sort, id => u[id], id => MOVES[id].move).map(id => {
+    const mv = {id, ...MOVES[id]}, no = !okMove(id);
+    return {id, off: no || taken.has(id), now: id === mvId(m.moves[k]), cls: 'mvrow',
+            html: `${moveChip(mv)}${useCell(u[id], `on ${Math.round((u[id] || 0) * 100)}% of ${m.name} sets`)}<span class="num">${accTxt(mv.acc)}</span><span class="num">${
+              mv.pp} PP</span><span class="desc">${esc(mv.desc)}</span>${no ? NOT_SIM : taken.has(id) ? '<span class="tag">in the set</span>' : ''}`};
+  })};
+}
+function speciesRows(m, s, i, {q = '', sort = 'common'} = {}) {
+  const team = new Set(work()[s].filter((_, j) => j !== i).map(x => x.species)), u = sp => USAGE[sp] || {};
+  const list = sortRows(SPECIES.filter(x => hit(x.name, q)), sort, x => (u(x.id).use || 0) + (u(x.id).rank ? 1 / (1000 + u(x.id).rank) : 0), x => x.name);
+  return {hidden: 0, rows: list.map(x => ({id: x.id, off: team.has(x.id), now: x.id === m.species, cls: 'sprow',
+    html: `${sprite(x.id) || '<span></span>'}<b>${esc(x.name)}</b><span>${x.types.map(typeChip).join(' ')}</span>${useCell((u(x.id).use || 0) / 100, 'share of tournament teams (Pikalytics)')}<span class="num">${
+      u(x.id).rank ? '#' + u(x.id).rank : ''}</span><span class="desc">${x.abilities.map(a => esc(abName(a))).join(' / ')}</span>${team.has(x.id) ? '<span class="tag">on the team</span>' : ''}`}))};
+}
+function abilityRows(m, {q = '', all = false} = {}) {
+  const u = U(m.species).abilities, match = [...SP[m.species].abilities, 'noability'].filter(id => hit(abName(id), q));
+  return {hidden: match.filter(id => !okAbility(id)).length, rows: sortRows(match.filter(id => all || okAbility(id)), 'common', id => (u[id] || 0) - (id === 'noability'), abName)
+    .map(id => ({id, off: !okAbility(id), now: id === m.set.ability, cls: 'abrow',
+                 html: `<b>${esc(abName(id))}</b>${useCell(u[id], `on ${Math.round((u[id] || 0) * 100)}% of ${m.name} sets`)}<span class="desc">${esc((ABIL[id] || {}).desc || '')}</span>${okAbility(id) ? '' : NOT_SIM}`}))};
+}
+function itemRows(m, {q = '', sort = 'common', all = false} = {}) {
+  const u = U(m.species).items, sp = m.species;
+  const match = ['', ...Object.keys(ITEMS)].filter(id => ownItem(sp, id) && (id ? hit(ITEMS[id].name, q) : !q || hit('no item', q)));
+  return {hidden: match.filter(id => !okItem(sp, id)).length, rows: sortRows(match.filter(id => all || okItem(sp, id)), sort, id => u[id], id => (id ? ITEMS[id].name : ' '))
+    .map(id => ({id, off: !okItem(sp, id), now: id === (m.set.item || ''), cls: 'itrow',
+                 html: `<b>${id ? esc(ITEMS[id].name) : '<span class="none">No item</span>'}</b>${useCell(u[id], `held by ${Math.round((u[id] || 0) * 100)}% of ${m.name}`)}<span class="desc">${
+                   esc(id ? ITEMS[id].desc : '')}</span>${okItem(sp, id) ? '' : NOT_SIM}`}))};
+}
+const spreadRows = m => ({hidden: 0, rows: Object.entries(U(m.species).spreads).map(([sp, p]) => ({id: sp, now: sp === m.set.sp, cls: 'sprd',
+  html: `<b>${spTxt(sp)}</b>${useCell(p, `${Math.round(p * 100)}% of ${m.name} spreads`)}<span class="desc">${fits(m.set.nature, sp) ? '' : `clashes with ${natTxt(m.set.nature)}`}</span>`}))});
+const rowsHtml = (list, hi) => list.map((r, j) => `<div class="row ${r.cls} ${j === hi ? 'hi' : ''} ${r.off ? 'off' : ''} ${r.now ? 'now' : ''}" data-id="${
+  esc(r.id)}">${r.html}</div>`).join('') || '<div class="empty">Nothing matches.</div>';
+const firstOk = list => Math.max(0, list.findIndex(r => !r.off));
+function navKey(e, st, paint, pick) {        // arrows move the highlight, Enter picks it; st: {list, hi}
+  const ok = j => st.list[j] && !st.list[j].off;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    const d = e.key === 'ArrowDown' ? 1 : -1;
+    for (let j = st.hi + d; j >= 0 && j < st.list.length; j += d) if (ok(j)) { st.hi = j; break; }
+    paint();
+  } else if (e.key === 'Enter' && ok(st.hi)) { e.preventDefault(); pick(st.list[st.hi].id); }
+}
+const paintRows = (el, st) => { el.innerHTML = rowsHtml(st.list, st.hi); const h = el.querySelector('.hi'); if (h) h.scrollIntoView({block: 'nearest'}); };
+
+// the editor window: the set's slots on the left (each with a die), a browser of what the selected slot can take
+let ED = null;     // {s, i, m (its working copy), o (as in the state), sel, k, q, cat, type, sort, all, list, hi}
+function openEd(s, i, sel, k) {
+  ED = {s, i, m: clone(work()[s][i]), o: base()[s][i], sel: sel || 'move', k: k || 0, q: '', cat: '', type: '', sort: 'common', all: false, list: [], hi: 0};
+  renderEd(); $('#ed').showModal(); edFocus();
+}
+const edFocus = () => { if ($('#ed .q')) $('#ed .q').focus(); };
+function edSel(sel, k) { Object.assign(ED, {sel, k, q: '', cat: '', type: '', all: false}); renderEd(); edFocus(); }
+function usageSrc(sp) {
+  const u = USAGE[sp], old = (USAGE_WARN.join(' ').match(/(\d+) days old/) || [])[1];
+  if (!u) return 'No usage data for this Pokémon.';
+  return u.src === 'munchstats' ? `Usage: in-game Battle Data via MunchStats, ${String(u.as_of || '').split(' at ')[0]}${old ? ` (${old} days old)` : ''}.`
+    : 'Usage: tournament teams via Pikalytics (MunchStats lacks this Pokémon); its move shares rank moves but run low.';
+}
+function browseHead() {
+  const {m, o, k} = ED, mv = m.moves[k];
+  return {move: `Move ${k + 1}: ${mv ? `replacing <b>${esc(mv.move)}</b>` : 'empty'}<span class="tag"><span id="cnt"></span> it can learn, most used first</span>`,
+          species: `Swap ${esc(o.name)} for…<span class="tag">it takes the slot at ${pctOf(o)}% HP and keeps the moves it can learn &middot; bar: share of tournament teams, #: in-game usage rank</span>`,
+          ability: `${esc(m.name)}'s ability`, item: `${esc(m.name)}'s item<span class="tag"><span id="cnt"></span> items</span>`,
+          spread: `${esc(m.name)}'s nature and stat points<span class="tag">its most used spreads</span>`}[ED.sel];
+}
+function edFilters() {
+  const sortSeg = `<span class="seg">${[['common', 'Most used'], ['az', 'A–Z']].map(([k, l]) => `<button class="${ED.sort === k ? 'on' : ''}" data-sort="${k}">${l}</button>`).join('')}</span>`;
+  if (ED.sel === 'spread') {
+    const u = U(ED.m.species).natures, all = [...Object.keys(NATURES), 'hardy', 'docile', 'serious', 'bashful', 'quirky'];
+    return `<label class="tag">Nature <select onchange="edNature(this.value)">${[...Object.keys(u), ...all.filter(n => !(n in u)).sort()].map(n =>
+      `<option value="${n}" ${n === ED.m.set.nature ? 'selected' : ''}>${natTxt(n)}${u[n] ? ` (${Math.round(u[n] * 100)}%)` : ''}</option>`).join('')}</select></label>`;
+  }
+  const q = `<input class="q" placeholder="Search…" autocomplete="off" spellcheck="false" value="${esc(ED.q)}">`;
+  if (ED.sel !== 'move') return q + (ED.sel === 'ability' ? '' : sortSeg);
+  const types = [...new Set(SP[ED.m.species].learn.filter(okMove).map(id => MOVES[id].type))].sort();
+  return `${q}${sortSeg}<span class="seg">${['physical', 'special', 'status'].map(c => `<button class="${ED.cat === c ? 'on' : ''}" data-cat="${c}">${CAT[c]}</button>`).join('')}</span>
+    <span class="tys ${ED.type ? 'picked' : ''}">${types.map(t => `<button class="${ED.type === t ? 'on' : ''}" data-type="${t}" title="${t}" style="--ty:${TYPE[t]}">${tyIcon(t)}</button>`).join('')}</span>`;
+}
+const ROLL_TIP = {species: 'a common Pokémon, with a common set', ability: 'draw an ability by usage', item: 'draw an item by usage',
+                  spread: 'draw a nature and spread by usage', move: 'draw a common move for this slot'};
+function renderEd() {
+  const {m, o} = ED, bl = monBlockers(m), dirty = JSON.stringify(m) !== JSON.stringify(work()[ED.s][ED.i]);
+  const slot = (sel, k, html, ed) => `<div class="slotb ${ED.sel === sel && (sel !== 'move' || ED.k === k) ? 'on' : ''} ${ed ? 'ed' : ''}" onclick="edSel('${sel}', ${k})">${html}
+    <button class="roll" title="${ROLL_TIP[sel]}" onclick="event.stopPropagation(); edRoll('${sel}', ${k})">${DIE}</button></div>`;
+  const moveSlot = (mv, k) => slot('move', k, !mv ? '<span class="none">empty: pick a move</span>' : `${moveChip(mv)}${mv.bad ? '<span class="badtag">can\'t learn</span>'
+    : `<span class="pp" title="PP left">${mv.pp}/${mv.max}</span>`}`, edMark(o, m, 'move', k));
+  $('#ed').innerHTML = `
+    <div class="pv-head"><h2>${sprite(o.species)} ${PLAYER[ED.s]}'s ${esc(o.name)}<span class="tag">${stateName(cur)} &middot; ${o.hp}/${o.max} HP${o.active ? ' &middot; on the field' : ''}</span></h2>
+      <span class="right"><button class="btn ghost sm" onclick="edRoll('set')" title="keep the Pokémon; draw its moves, ability, item, nature and spread by usage">${DIE} Common set</button>
+        <button class="pv-x" onclick="$('#ed').close()" title="close (Esc)">&times;</button></span></div>
+    <div class="body">
+      <div class="set">
+        <div class="lab">Pokémon</div>${slot('species', 0, `${sprite(m.species)}<b>${esc(m.name)}</b> ${m.types.map(typeChip).join(' ')}`, m.species !== o.species)}
+        <div class="lab">Ability</div>${slot('ability', 0, esc(m.ability), edMark(o, m, 'ability'))}
+        <div class="lab">Item</div>${slot('item', 0, m.item ? esc(m.item) : '<span class="none">no item</span>', edMark(o, m, 'item'))}
+        <div class="lab">Nature &middot; stat points</div>${slot('spread', 0, `<span><b>${natTxt(m.set.nature)}</b> &middot; ${spTxt(m.set.sp)}</span>`, edMark(o, m, 'spread'))}
+        <div class="lab">Moves</div>${[0, 1, 2, 3].map(k => moveSlot(m.moves[k], k)).join('')}
+      </div>
+      <div class="browse"><div class="bh">${browseHead()}</div><div class="src">${usageSrc(m.species)}</div>
+        <div class="filters">${edFilters()}</div><div class="rows"></div><div class="hid" id="hid"></div></div>
+    </div>
+    <div class="pv-foot foot">${monChanges(o, m).map(c => `<span class="chg">${esc(c.text)}</span>`).join('') || '<span class="tag">No changes yet</span>'}
+      ${bl.length ? `<span class="block">${esc(bl[0])}</span>` : ''}<span style="flex:1"></span>
+      <button class="btn ghost" onclick="$('#ed').close()">Cancel</button>
+      <button class="btn" onclick="edDone()" ${bl.length || !dirty ? 'disabled' : ''}>Done</button></div>`;
+  const q = $('#ed .q');
+  if (q) {
+    q.oninput = () => { ED.q = q.value; edRows(); };
+    q.onkeydown = e => navKey(e, ED, () => paintRows($('#ed .rows'), ED), edPick);
+  }
+  edRows();
+}
+function edRows() {
+  const {m, q, sort, all} = ED;
+  const res = {move: () => moveRows(m, ED.k, {q, cat: ED.cat, type: ED.type, sort, all}), species: () => speciesRows(m, ED.s, ED.i, {q, sort}),
+               ability: () => abilityRows(m, {q, all}), item: () => itemRows(m, {q, sort, all}), spread: () => spreadRows(m)}[ED.sel]();
+  ED.list = res.rows;
+  ED.hi = firstOk(ED.list);
+  if ($('#cnt')) $('#cnt').textContent = ED.list.filter(r => !r.off).length;
+  const what = {move: 'moves', ability: 'abilities', item: 'items'}[ED.sel];
+  $('#hid').innerHTML = res.hidden ? `<button onclick="ED.all = !ED.all; edRows()">${all ? 'Hide' : 'Show'} the ${res.hidden} ${what} the engine can't simulate yet</button>` : '';
+  paintRows($('#ed .rows'), ED);
+}
+function edPick(id) {
+  const {m, o} = ED;
+  ({move: () => opMove(m, o, ED.k, id), species: () => opSpecies(m, o, id), ability: () => opAbility(m, o, id), item: () => opItem(m, o, id),
+    spread: () => opSpread(m, o, m.set.nature, id)})[ED.sel]();
+  const next = m.moves.findIndex(mv => !mv || mv.bad);          // lead the way to an empty slot or a move it can't learn any more
+  if (next >= 0 && (ED.sel === 'move' || ED.sel === 'species')) Object.assign(ED, {sel: 'move', k: next});
+  Object.assign(ED, {q: '', cat: '', type: '', all: false});
+  renderEd(); edFocus();
+}
+function edNature(n) { opSpread(ED.m, ED.o, n, ED.m.set.sp); renderEd(); }
+function edRoll(kind, k) {
+  const {m, o} = ED, sp = m.species;
+  if (kind === 'set') opSet(m, o, commonSet(sp));
+  else if (kind === 'species') { const to = sampleSpecies([...work()[ED.s].filter((_, j) => j !== ED.i).map(x => x.species), sp]); if (to) opSet(m, o, commonSet(to)); }
+  else if (kind === 'move') {
+    const id = pickW(movePool(sp, m.moves.filter(Boolean).map(x => x.id)));
+    if (id) opMove(m, o, k, id);
+    Object.assign(ED, {sel: 'move', k});
+  } else {
+    if (kind === 'ability') opAbility(m, o, bestAbility(sp, true));
+    else if (kind === 'item') opItem(m, o, sampleItem(sp));
+    else { const x = sampleSpread(sp); opSpread(m, o, x.nature, x.sp); }
+    ED.sel = kind;
+  }
+  renderEd();
+}
+function edDone() { const {s, i, m} = ED; $('#ed').close(); edit(s, i, mm => Object.assign(mm, clone(m))); }
+$('#ed').addEventListener('click', e => {
+  const r = e.target.closest('.rows .row'), f = e.target.closest('[data-cat], [data-type], [data-sort]');
+  if (r && !r.classList.contains('off')) return edPick(r.dataset.id);
+  if (!f) return;
+  if (f.dataset.cat) ED.cat = ED.cat === f.dataset.cat ? '' : f.dataset.cat;
+  if (f.dataset.type) ED.type = ED.type === f.dataset.type ? '' : f.dataset.type;
+  if (f.dataset.sort) ED.sort = f.dataset.sort;
+  renderEd(); edFocus();
+});
+document.addEventListener('click', e => {
+  const card = e.target.closest('.mon-card.click');
+  if (!card || $('#ed').open || busy) return;
+  const part = e.target.closest('[data-part]');
+  openEd(+card.dataset.s, +card.dataset.i, part && part.dataset.part, part ? +part.dataset.k || 0 : 0);
+});
+
+const render = () => { renderExplore(); drawWires(); sizeHybrid(); };
+addEventListener('resize', () => { drawWires(); sizeHybrid(); [PAGE.player, PV && PV.player].forEach(p => p && p.relayout()); });
+$('#preview').addEventListener('close', () => { if (PV && PV.player) PV.player.stop(); PV = null; });
+nodes.push({...D.start, analysis: null, parent: -1, via: null, seed: null, children: {}, next: null});
+render();
+</script>
+</body></html>

@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charge moves: decisions</title>
+<style>
+  :root { --bg:#fbfaf8; --fg:#1d1d1f; --muted:#5f6368; --line:#dcd9d2; --card:#fff; --accent:#2f5fd0; --soft:#eef2fc;
+          --p1:#6a4fd8; --p2:#d0453a; --elec:#e0b400; --rock:#b69e31; --grass:#5fae3d; --changed:#b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#17181b; --fg:#ececec; --muted:#a0a4ab; --line:#33363b; --card:#1f2024; --accent:#7ea2ff; --soft:#23283a; --changed:#ff8a80; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 80px; }
+  h1 { font-size: 1.8rem; margin: 0 0 .3rem; }
+  h2 { font-size: 1.15rem; margin: 0 0 .6rem; }
+  h3 { font-size: 1rem; margin: 0 0 .2rem; }
+  .lede { color: var(--muted); margin: 0 0 1.2rem; }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .86em; background: var(--soft); padding: .06em .32em; border-radius: 4px; }
+  .tldr { background: var(--soft); border-radius: 10px; padding: 12px 16px; margin: 0 0 1.4rem; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 18px 0; }
+  .q { padding: 14px 0; border-top: 3px solid var(--line); }
+  .q:first-of-type { border-top: none; padding-top: 4px; }
+  .why { color: var(--muted); font-size: .92rem; margin: 0 0 .5rem; }
+  .touches { color: var(--muted); font-size: .8rem; margin: .4rem 0 0; }
+  .opt { display: flex; gap: 10px; align-items: flex-start; padding: 7px 10px; margin: 4px 0; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+  .opt:hover { border-color: var(--accent); }
+  .opt.on { border-color: var(--accent); background: var(--soft); }
+  .opt input { margin-top: .3rem; }
+  .opt .d { color: var(--muted); font-size: .88rem; display: block; }
+  .tag { display: inline-block; font-size: .7rem; font-weight: 600; letter-spacing: .02em; padding: 0 .45em; border-radius: 99px; border: 1px solid var(--accent); color: var(--accent); margin-left: .35em; vertical-align: .1em; }
+  .tag.changed { border-color: var(--changed); color: var(--changed); }
+  input.note, textarea { width: 100%; font: inherit; font-size: .9rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; margin-top: 6px; }
+  textarea { min-height: 90px; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  td.n { color: var(--muted); width: 1.6em; }
+  td.f { width: 5.2em; white-space: nowrap; }
+  .src { color: var(--muted); font-size: .8rem; display: block; margin-top: 2px; }
+  tr.off td { background: color-mix(in srgb, var(--changed) 8%, transparent); }
+  .bar { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--line); padding: 10px 0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  button { font: inherit; padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--accent); }
+  #status { color: var(--muted); font-size: .88rem; }
+  #md { min-height: 220px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .8rem; }
+
+  /* toy mockups for Q8: not the explorer's real CSS */
+  .mocks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 4px; }
+  .mock { border: 1px solid var(--line); border-radius: 10px; padding: 8px; font-size: .74rem; background: var(--bg); }
+  .mock b.t { display: block; font-size: .78rem; margin-bottom: 4px; }
+  .mcard { border: 1px solid var(--line); border-radius: 8px; padding: 6px; background: var(--card); }
+  .mon { display: inline-flex; align-items: center; gap: 4px; background: var(--p1); color: #fff; border-radius: 99px; padding: 1px 8px 1px 2px; font-weight: 600; }
+  .mon i { width: 14px; height: 14px; border-radius: 50%; background: #fff; display: inline-block; }
+  .mon.foe { background: var(--p2); }
+  .hp { height: 5px; border-radius: 3px; background: linear-gradient(90deg, #3aa757 82%, var(--line) 82%); margin: 5px 0; }
+  .mv { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+  .mv span { border: 1.5px solid var(--line); border-radius: 5px; padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mv .e { border-color: var(--elec); }
+  .chg { display: inline-block; margin-top: 5px; border: 1.5px dashed var(--elec); border-radius: 99px; padding: 0 7px; }
+  .crow { margin-top: 7px; border-top: 3px solid var(--line); padding-top: 5px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .arrow { border-bottom: 2px solid var(--elec); padding: 0 3px; }
+  .forced { font-size: .66rem; border: 1px solid var(--muted); color: var(--muted); border-radius: 99px; padding: 0 5px; }
+  .glow { box-shadow: 0 0 0 2px var(--elec), 0 0 12px 2px var(--elec); }
+  @media (max-width: 640px) { .mocks { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Charge moves: decisions</h1>
+<p class="lede">The design choices left open by <a href="ISSUE_DRAFT_charge_moves.md">ISSUE_DRAFT_charge_moves.md</a>. Each one is
+pre-set to Showdown's behaviour or to the smallest change. Change only what you disagree with, then press <b>Copy answers</b>
+at the bottom and paste the result into chat. Answers are saved in this browser as you go.</p>
+
+<div class="tldr"><b>What Showdown does</b> (checked 2026-11-26 against <code>smogon/pokemon-showdown</code> master).
+The charge is a <code>twoturnmove</code> volatile that lasts 2 turns. It stores the target <i>slot</i>, and it is dropped
+if the release is stopped. The release turn is a hard lock: no switch, no Mega Evolution, and no PP spent. Every
+rule below cites the file it came from.</div>
+
+<div id="form"></div>
+
+<div class="panel">
+  <h2>Your answers (Markdown)</h2>
+  <p class="why">This updates as you click. If Copy is blocked, select it and copy it by hand.</p>
+  <textarea id="md" readonly></textarea>
+</div>
+
+<div class="bar">
+  <button id="copy">Copy answers</button>
+  <button id="reset" class="ghost">Reset to defaults</button>
+  <span id="status"></span>
+</div>
+</main>
+
+<script>
+const KEY = "charge-moves-decisions-v1";
+
+const MOCKS = `
+<div class="mocks">
+  <div class="mock"><b class="t">(a) Nothing extra</b>
+    <div class="mcard"><span class="mon"><i></i>Archaludon</span><div class="hp"></div>
+      <div class="mv"><span class="e">Electro Shot · 11</span><span>Flash Cannon</span><span>Draco Meteor</span><span>Protect</span></div></div>
+    <div class="crow"><span class="mon"><i></i>Archaludon</span><span class="arrow">Electro Shot</span>→<span class="mon foe"><i></i>Incineroar</span></div>
+  </div>
+  <div class="mock"><b class="t">(b) Charging chip + "forced"</b>
+    <div class="mcard"><span class="mon"><i></i>Archaludon</span><div class="hp"></div>
+      <div class="mv"><span class="e">Electro Shot · 11</span><span>Flash Cannon</span><span>Draco Meteor</span><span>Protect</span></div>
+      <span class="chg">⚡ charging Electro Shot → Incineroar's slot</span></div>
+    <div class="crow"><span class="mon"><i></i>Archaludon</span><span class="arrow">Electro Shot</span>→<span class="mon foe"><i></i>Incineroar</span><span class="forced">forced</span></div>
+  </div>
+  <div class="mock"><b class="t">(c) (b) + a glow in the Field view</b>
+    <div class="mcard glow"><span class="mon"><i></i>Archaludon</span><div class="hp"></div>
+      <div class="mv"><span class="e">Electro Shot · 11</span><span>Flash Cannon</span><span>Draco Meteor</span><span>Protect</span></div>
+      <span class="chg">⚡ charging Electro Shot → Incineroar's slot</span></div>
+    <div class="crow"><span class="mon"><i></i>Archaludon</span><span class="arrow">Electro Shot</span>→<span class="mon foe"><i></i>Incineroar</span><span class="forced">forced</span></div>
+  </div>
+</div>
+<p class="touches">Toy drawings, not the explorer's real CSS. Once you pick, I'd make a static POC from the real card code, the way the other explorer choices were made.</p>`;
+
+const SECTIONS = [
+  { title: "1 · Scope", items: [
+    { id: "q1", kind: "radio", title: "Which moves go in the first batch?",
+      why: "In the metagame only Electro Shot (Archaludon, 96% of its sets) and Solar Beam (Charizard 63%, Meganium 97%) matter much. The other three in the draft's first batch reuse the same charge-then-release code.",
+      touches: "effects_table.MOVES (effects_table.py:14-106); tests/test_weather.py:153 and tests/test_items.py:205 assert that Solar Beam is unsupported and must switch to a move that still is",
+      options: [
+        { v: "five", def: true, label: "The draft's five: Electro Shot, Meteor Beam, Solar Beam, Solar Blade, Sky Attack", d: "One code path. The extra three cost a MOVES entry and a test each." },
+        { v: "two", label: "Only Electro Shot and Solar Beam", d: "Smallest change that fixes the two Pokémon people actually bring." },
+        { v: "ten", label: "All ten, semi-invulnerable included", d: "One bigger change. See Q2 for what that adds." } ] },
+    { id: "q2", kind: "radio", title: "Dig, Fly, Dive, Bounce, Phantom Force (semi-invulnerable)?",
+      why: "During the charge turn the user can only be hit by certain moves (Earthquake hits Dig, Surf hits Dive, Thunder and Hurricane hit Fly and Bounce), and Phantom Force breaks Protect. Only Dragapult (38% of sets, 2% of teams) and Annihilape (22%, 3%) run one at 5%+.",
+      touches: "a new accuracy/immunity step in pipeline/__init__.py:55; pipeline/protect.py for Phantom Force",
+      options: [
+        { v: "later", def: true, label: "A second issue later, with the full Showdown rules", d: "Ships the common case first. The charge lock built here is reused." },
+        { v: "never", label: "Leave them unsupported for now, no follow-up issue", d: "They stay behind the explorer's \"can't simulate\" button." },
+        { v: "now", label: "In this change", d: "Only consistent with Q1 = all ten." } ] },
+  ]},
+  { title: "2 · How the lock works (engine and RL)", items: [
+    { id: "q3", kind: "radio", title: "What does a charging slot offer on the release turn?",
+      why: "This is the action space the solver and a future RL agent see. Showdown sends a single forced move and no switch (pokemon.ts:1104-1161, side.ts:683-695).",
+      touches: "game.legal_choices (game.py:52-71); solver/actions.slot_choices (solver/actions.py:11-22); solver/rollout.py _pick_slots",
+      options: [
+        { v: "one", def: true, label: "Exactly one legal choice: the stored move at the stored slot", d: "legal_choices returns one Move for that slot, with no switches and no Mega. MCTS branches by 1 there, and an RL action mask has one action set." },
+        { v: "override", label: "Keep every choice legal; the engine swaps in the release when it runs (as Encore does now)", d: "No change to legal_choices. But MCTS spends visits on options that all play out the same, and an RL agent learns over actions that do nothing." },
+        { v: "none", label: "No choice at all for that slot", d: "The slot drops out of the joint action and the engine plays the release itself. Cleanest for RL, but every consumer of choices (solver, rollout, explorer combos, replays) must handle a missing slot." } ] },
+    { id: "q4", kind: "radio", title: "If validate() is handed something other than the release, what happens?",
+      why: "Refusing catches bugs in the solver or the UI. Replacing quietly matches what Encore does today.",
+      touches: "game.validate (game.py:73-99); volatiles.py:102 notes that validate doesn't check Encore",
+      options: [
+        { v: "refuse", def: true, label: "Refuse it, like any other illegal choice" },
+        { v: "replace", label: "Replace it with the release without complaint" } ],
+      extra: { id: "q4enc", label: "Also make validate() enforce Encore the same way (not needed for charge moves)", def: false } },
+    { id: "q5", kind: "radio", title: "Where does the charge live in the state?",
+      why: "The research found that run_action (game.py:129) and the turn-order re-sort (turn.py:111-121) read the chosen move, not the forced one, so whatever we pick must feed those too.",
+      touches: "Mon.volatiles (state.py:37); clear_on_switch (state.py:115-124); the MCTS key includes volatiles automatically (resolve.py:10)",
+      options: [
+        { v: "volatile", def: true, label: "A charging volatile {move, target: [side, slot]}, plus one locked_move(mon) helper", d: "One place answers \"is this slot locked, and into what?\". legal_choices, validate, run_action and the turn order all ask it. Encore keeps its own code." },
+        { v: "generic", label: "One generic lock volatile shared by Encore and charging", d: "Less duplication, but it rewrites Encore, which works today and has tests." } ] },
+  ]},
+  { title: "3 · Solver and display", items: [
+    { id: "q6", kind: "radio", title: "Does the solver's evaluator value a charging Pokémon?",
+      why: "The +1 SpA from Electro Shot already counts through stat stages. A charging Solar Beam gets no boost, so at a search horizon it looks like a wasted turn.",
+      touches: "solver/evaluate.py:30 (W[\"volatile\"]) and :93",
+      options: [
+        { v: "none", def: true, label: "No hand weight; let the search play the release", d: "Fits \"learned over hardcoded\". Leaves can undervalue a pending Solar Beam." },
+        { v: "weight", label: "Add a charging weight to W[\"volatile\"]", d: "One more hand-tuned number to measure with compare_solvers." } ] },
+    { id: "q7", kind: "radio", title: "What does the charge turn write to the log?",
+      why: "Showdown logs \"X used Electro Shot!\" (battle-actions.ts:525) before the charge (:554), then the game's line: \"absorbed electricity!\" (Electro Shot), \"is overflowing with space power!\" (Meteor Beam), \"absorbed light!\" (Solar Beam and Blade), \"became cloaked in a harsh light!\" (Sky Attack).",
+      touches: "events.EVENT_KINDS (events.py:22-27); pretty.VOLATILE_WORDS (pretty.py:38); explore.py turn_steps (:194-310)",
+      options: [
+        { v: "volatile", def: true, label: "The usual move event, then a volatile event for charging", d: "No new event kind. The explorer already shows a volatile inside a move group as a note under that move. The note can carry the game's line for each move." },
+        { v: "prepare", label: "A new prepare event kind", d: "Mirrors Showdown's -prepare. Needs EVENT_KINDS, pretty, the viewer recorder and a step kind in turn_steps." } ] },
+    { id: "q8", kind: "radio", title: "How does the explorer show a charging Pokémon?", html: MOCKS,
+      why: "The Choices card lists joint actions, so a forced slot already shows the same move in every row. The question is whether to say why.",
+      touches: "scripts/explore_template.html: choicesCard (:612-630), board cards, Field animation (:848-867)",
+      options: [
+        { v: "a", label: "(a) Nothing extra" },
+        { v: "b", def: true, label: "(b) A charging chip on the board card and a \"forced\" tag in Choices" },
+        { v: "c", label: "(c) (b) plus a charge glow in the Field animation (no comet on the charge turn)" } ] },
+  ]},
+];
+
+const MECH = [
+  { rule: "PP is spent on the charge turn only. The release turn costs nothing.",
+    src: "battle-actions.ts:337-339: deductPP runs only when getLockedMove() is empty",
+    eng: "pipeline/__init__.py:103 must skip the release turn" },
+  { rule: "Weather is read on the charge turn, when the move is used. In rain Electro Shot, and in sun Solar Beam and Solar Blade, skip the charge and hit at once. Electro Shot still gets its +1 SpA first.",
+    src: "moves.ts onTryMove for each move; Mega Sol counts as sun (pokemon.ts effectiveWeather)",
+    eng: "arena.weather_for already treats a Mega Sol user as in sun" },
+  { rule: "Electro Shot and Meteor Beam raise SpA by 1 on the charge turn, and keep it even if the release never lands.",
+    src: "moves.ts: this.boost({spa: 1}) comes before addVolatile('twoturnmove')" },
+  { rule: "Solar Beam and Solar Blade hit at half power in rain, sand or snow.",
+    src: "moves.ts onBasePower: weakWeathers = rain, primordial sea, sand, hail, snow",
+    eng: "new code, in arena.adjust_move next to Weather Ball" },
+  { rule: "If the user can't move on the charge turn (sleep, freeze, full paralysis, flinch, confusion self-hit), nothing starts: no charge, no PP and no boost.",
+    src: "battle-actions.ts:312-341: BeforeMove fails before deductPP and before TryMove",
+    eng: "can_move.check already runs before PP is spent" },
+  { rule: "If the user can't move on the release turn, the charge is lost. PP stays spent and the boost stays.",
+    src: "conditions.ts twoturnmove.onMoveAborted removes it; duration 2 means it can't carry over" },
+  { rule: "The charge turn can't be blocked or miss. Protect and accuracy apply only on the turn it hits, and a Protect then blocks it and uses up the charge.",
+    src: "the charge happens in TryMove (battle-actions.ts:554), before the protect and accuracy steps" },
+  { rule: "The release goes at the slot picked on turn 1, so a Pokémon that switched into that slot takes the hit. If the slot is empty or its Pokémon fainted, it retargets with the engine's existing rule.",
+    src: "conditions.ts twoturnmove stores targetLoc; side.ts:683-695 reuses it",
+    eng: "targets.py:24-31 picks the first living foe, where Showdown picks at random. That difference already applies to every move." },
+  { rule: "On the release turn the user can't switch and can't Mega Evolve.",
+    src: "pokemon.ts:1104-1161: a hard lock sets trapped, and canMegaEvo is offered only when not locked" },
+  { rule: "Leaving the field clears the charge: a forced switch (Roar, Whirlwind, Dragon Tail, Red Card, Eject Button) or fainting.",
+    src: "volatiles are cleared on switch-out",
+    eng: "clear_on_switch (state.py:115-124) and take() (state.py:64-66) already do this" },
+  { rule: "Choice Scarf locks on the charge turn, into the same move.",
+    src: "conditions.ts choicelock.onStart takes the active move",
+    eng: "pipeline/__init__.py:101-102 sets it when the move is used" },
+  { rule: "Charge moves can be Encored. While charging, the lock comes first. Afterwards Encore forces the same move, which charges again.",
+    src: "moves.ts encore: fails only on failencore moves, and no charge move has that flag (the order is partly inferred)" },
+  { rule: "Sky Attack has a raised crit ratio (critRatio 2), a 30% flinch on the hit, and target \"any\" (any foe, or the partner).",
+    src: "moves.ts skyattack; Champions PP 8 comes from moves.json" },
+  { rule: "A charge turn reveals the move to the opponent's belief, because \"X used Y\" is public.",
+    src: "the move line is logged before the charge (battle-actions.ts:525)",
+    eng: "check that belief MoveSeen fires on the charge turn" },
+];
+
+const VERIFY = [
+  { id: "v1", def: true, label: "Unit tests for each rule above (the draft's \"Done when\" list), in the style of tests/test_volatiles.py" },
+  { id: "v2", def: true, label: "Scripted cases in data/mechanics.json, like encore-locks" },
+  { id: "v3", def: true, label: "Random self-play fuzz on charge-move teams, checking: a charging slot has exactly one legal choice, PP drops by exactly 1 over the two turns, nothing crashes" },
+  { id: "v4", def: false, label: "A compare_solvers match on Archaludon and Charizard teams, to see whether MCTS uses the moves" },
+];
+
+function defaults() {
+  const s = { pick: {}, check: {}, note: {}, mech: MECH.map(() => ({ follow: true, note: "" })), free: "" };
+  for (const sec of SECTIONS) for (const q of sec.items) {
+    s.pick[q.id] = q.options.find(o => o.def).v;
+    if (q.extra) s.check[q.extra.id] = q.extra.def;
+  }
+  for (const v of VERIFY) s.check[v.id] = v.def;
+  return s;
+}
+
+function load() {
+  const d = defaults();
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (!saved) return d;
+    return { pick: { ...d.pick, ...saved.pick }, check: { ...d.check, ...saved.check }, note: { ...saved.note },
+             mech: d.mech.map((m, i) => ({ ...m, ...(saved.mech || [])[i] })), free: saved.free || "" };
+  } catch { return d; }
+}
+
+let S = load();
+
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") e.className = v; else if (k === "html") e.innerHTML = v; else if (k.startsWith("on")) e[k] = v; else e.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) e.append(k);
+  return e;
+}
+
+function noteBox(id) {
+  return el("input", { class: "note", type: "text", placeholder: "Note (optional)", value: S.note[id] || "",
+    oninput: e => { S.note[id] = e.target.value; save(); } });
+}
+
+function render() {
+  const root = document.getElementById("form");
+  root.replaceChildren();
+  for (const sec of SECTIONS) {
+    const p = el("section", { class: "panel" }, el("h2", {}, sec.title));
+    for (const q of sec.items) {
+      const box = el("div", { class: "q" }, el("h3", {}, q.title), el("p", { class: "why" }, q.why));
+      if (q.html) box.append(el("div", { html: q.html }));
+      for (const o of q.options) {
+        const on = S.pick[q.id] === o.v;
+        const lab = el("label", { class: "opt" + (on ? " on" : "") },
+          el("input", { type: "radio", name: q.id, value: o.v, onchange: () => { S.pick[q.id] = o.v; save(); render(); } }),
+          el("span", {}, o.label, o.def ? el("span", { class: "tag" }, "default") : null, o.d ? el("span", { class: "d" }, o.d) : null));
+        if (on) lab.querySelector("input").checked = true;
+        box.append(lab);
+      }
+      if (q.extra) {
+        const cb = el("input", { type: "checkbox", onchange: e => { S.check[q.extra.id] = e.target.checked; save(); } });
+        cb.checked = !!S.check[q.extra.id];
+        box.append(el("label", { class: "opt" }, cb, el("span", {}, q.extra.label)));
+      }
+      box.append(noteBox(q.id), el("p", { class: "touches" }, "Touches: " + q.touches));
+      p.append(box);
+    }
+    root.append(p);
+  }
+
+  const mp = el("section", { class: "panel" }, el("h2", {}, "4 · Mechanics rulings"),
+    el("p", { class: "why" }, "Each row is what Showdown does. Untick a row to rule otherwise, and say how in its note. The grey line under each rule names its Showdown source, then what it means for the engine."));
+  const tb = el("table", {}, el("tr", {}, el("th", {}, "#"), el("th", {}, "Rule"), el("th", {}, "Follow")));
+  MECH.forEach((m, i) => {
+    const cb = el("input", { type: "checkbox", onchange: e => { S.mech[i].follow = e.target.checked; save(); render(); } });
+    cb.checked = S.mech[i].follow;
+    const cell = el("td", {}, m.rule, el("span", { class: "src" }, "Showdown: " + m.src), m.eng ? el("span", { class: "src" }, "Engine: " + m.eng) : null);
+    if (!S.mech[i].follow) {
+      cell.append(el("input", { class: "note", type: "text", placeholder: "What should happen instead?", value: S.mech[i].note,
+        oninput: e => { S.mech[i].note = e.target.value; save(); } }));
+    }
+    tb.append(el("tr", { class: S.mech[i].follow ? "" : "off" }, el("td", { class: "n" }, String(i + 1)), cell,
+      el("td", { class: "f" }, el("label", {}, cb, " Showdown"))));
+  });
+  mp.append(tb);
+  root.append(mp);
+
+  const vp = el("section", { class: "panel" }, el("h2", {}, "5 · How we check it"),
+    el("p", { class: "why" }, "Automated checks, so you don't have to verify mechanics by hand."));
+  for (const v of VERIFY) {
+    const cb = el("input", { type: "checkbox", onchange: e => { S.check[v.id] = e.target.checked; save(); } });
+    cb.checked = !!S.check[v.id];
+    vp.append(el("label", { class: "opt" }, cb, el("span", {}, v.label, v.def ? el("span", { class: "tag" }, "default on") : null)));
+  }
+  root.append(vp);
+
+  const fp = el("section", { class: "panel" }, el("h2", {}, "6 · Anything else"),
+    el("textarea", { placeholder: "Edge cases, priorities, anything the questions above missed", oninput: e => { S.free = e.target.value; save(); } }));
+  fp.querySelector("textarea").value = S.free;
+  root.append(fp);
+
+  markdown();
+}
+
+function markdown() {
+  const D = defaults();
+  const L = ["## Charge moves: decisions", ""];
+  for (const sec of SECTIONS) {
+    L.push("### " + sec.title);
+    for (const q of sec.items) {
+      const o = q.options.find(x => x.v === S.pick[q.id]);
+      L.push(`- **${q.id.toUpperCase()} ${q.title}** ${o.label}${S.pick[q.id] === D.pick[q.id] ? " (default)" : " **(changed)**"}`);
+      if (q.extra) L.push(`  - ${q.extra.label}: ${S.check[q.extra.id] ? "yes" : "no"}`);
+      if ((S.note[q.id] || "").trim()) L.push(`  - Note: ${S.note[q.id].trim()}`);
+    }
+    L.push("");
+  }
+  L.push("### 4 · Mechanics rulings");
+  const off = MECH.map((m, i) => ({ m, i, s: S.mech[i] })).filter(x => !x.s.follow);
+  L.push(off.length ? `Follow Showdown on all except: ${off.map(x => x.i + 1).join(", ")}.` : "Follow Showdown on all " + MECH.length + " rulings.");
+  for (const x of off) L.push(`- **${x.i + 1}.** ${x.m.rule}\n  - Instead: ${x.s.note.trim() || "(no note given)"}`);
+  L.push("", "### 5 · How we check it");
+  for (const v of VERIFY) L.push(`- [${S.check[v.id] ? "x" : " "}] ${v.label}`);
+  if (S.free.trim()) L.push("", "### 6 · Anything else", S.free.trim());
+  document.getElementById("md").value = L.join("\n");
+}
+
+function save() { localStorage.setItem(KEY, JSON.stringify(S)); markdown(); }
+
+document.getElementById("copy").onclick = async () => {
+  const t = document.getElementById("md");
+  try { await navigator.clipboard.writeText(t.value); }
+  catch { t.select(); document.execCommand("copy"); }
+  document.getElementById("status").textContent = "Copied. Paste it into chat.";
+};
+document.getElementById("reset").onclick = () => {
+  if (!confirm("Reset every answer to its default?")) return;
+  S = defaults(); save(); render();
+  document.getElementById("status").textContent = "Reset to defaults.";
+};
+
+render();
+</script>
+</body>
+</html>
